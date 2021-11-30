@@ -9,6 +9,10 @@ var schema = buildSchema(`
   }
 `);
 
+ const loggingMiddleware = (req, res, next) => {
+    console.log('vote:', req.data);
+    next();
+ }
 // The root provides the top-level API endpoints
 var root = {
   vote: (way) => {
@@ -21,6 +25,15 @@ var root = {
 }
 
 var app = express();
+//app.use(loggingMiddleware);
+app.use(function (req, res, next) {
+    let originalSend = res.send;
+    res.send = function (data) {
+        console.log(data);
+        originalSend.apply(res, Array.from(arguments));
+    }
+    next();
+});
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
