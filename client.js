@@ -11,10 +11,10 @@ import fetch from "node-fetch";
 
 const response = await fetch('http://localhost:4000/graphql', {
 	method: 'post',
-  //body: JSON.stringify({ query: '{ newPullRequest(id: "c", contributor_id: "c", side: true) {side} }' }),
-  //body: JSON.stringify({ query: '{ getVote(contributor_id: "default") {side} }' }),
-  body: JSON.stringify({ query: '{ getVoteAll }'}),
-  //body: JSON.stringify({ query: '{ setVote(contributor_id: "a", side: true ) {side} }' }),
+  body: JSON.stringify({ query: '{ newPullRequest(pr_id: "a", contributor_id: "1", side: 1) { vote_code } }' }),
+  //body: JSON.stringify({ query: '{ getVote(pr_id: "a", contributor_id: 1) {side} }' }),
+  //body: JSON.stringify({ query: '{ getVoteAll(pr_id: "a") {side} }' }),
+  //body: JSON.stringify({ query: '{ setVote(pr_id: "a" contributor_id: "2", side: 0 ) {side} }' }),
 	headers: {'Content-Type': 'application/json'}
 });
 const data = await response.json();

@@ -3,24 +3,24 @@ import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
 
 // Construct a schema, using GraphQL schema language
+// vote_code = contributor_id + "%" + side
+// side = 0 || 1
 var schema = buildSchema(`
   type PullRequest {
-    contributor_id: String
-    side: Boolean
+    vote_code: String
   }
   type Query {
-    newPullRequest(id: String, side: Boolean, contributor_id: String): PullRequest,
-    getVote(side: Boolean, contributor_id: String): PullRequest,
-    getVoteAll: String,
-    setVote(side: Boolean, contributor_id: String): PullRequest
+    newPullRequest(pr_id: String, contributor_id: String, side: Int!): PullRequest,
+    getVote(pr_id: String, contributor_id: String): String,
+    getVoteAll(pr_id: String): PullRequest,
+    setVote(pr_id: String, contributor_id: String, side: Int!): PullRequest
   }
 `);
 // Maps id to User object
 var fakeDatabase = {}
 var fakeDatabase = {
   'default': {
-    contributor_id: 'default',
-    side: true,
+    vote_code: 'default',
   }
 };
 
@@ -30,25 +30,23 @@ var fakeDatabase = {
  }
 // The root provides the top-level API endpoints
 var root = {
-  getVote: (args) => {
-    return fakeDatabase[args.contributor_id]
-  },
-  getVoteAll: () => {
-    return JSON.stringify(fakeDatabase)
+  //getVote: (args) => {
+  //  return fakeDatabase[args.contributor_id]
+  //},
+  getVoteAll: (pr_id) => {
+    return fakeDatabase[pr_id]
   },
   setVote: (args) => {
-    fakeDatabase[args.id] = {
-      contributor_id: args.contributor_id,
-      side: args.side
-    }
-    return fakeDatabase[args.contributor_id]
+    const vote_code = args.contributor_id + "%" + args.side
+    fakeDatabase[args.pr_id].push(vote_code)
+    return fakeDatabase[args.pr_id]
   },
   newPullRequest: (args) => {
-    fakeDatabase[args.id] = {
-      contributor_id: args.contributor_id,
-      side: args.side
+    const vote_code = args.contributor_id + "%" + args.side
+    fakeDatabase[args.pr_id] = {
+      vote_code: vote_code
     }
-    return fakeDatabase[args.id]
+    return fakeDatabase[args.pr_id]
   }
 }
 
