@@ -9,7 +9,7 @@ var schema = buildSchema(`
     side: Boolean
   }
   type Query {
-    vote(side: Boolean, contributor_id: String): PullRequest
+    getVote(side: Boolean, contributor_id: String): PullRequest
   }
 `);
 // Maps id to User object
@@ -30,7 +30,7 @@ var fakeDatabase = {
  }
 // The root provides the top-level API endpoints
 var root = {
-  vote: (args) => {
+  getVote: (args) => {
     return fakeDatabase[args.contributor_id]
   }
 }
