@@ -9,6 +9,7 @@ var schema = buildSchema(`
     side: Boolean
   }
   type Query {
+    newPullRequest(id: String, side: Boolean, contributor_id: String): PullRequest,
     getVote(side: Boolean, contributor_id: String): PullRequest,
     setVote(side: Boolean, contributor_id: String): PullRequest
   }
@@ -35,11 +36,18 @@ var root = {
     return fakeDatabase[args.contributor_id]
   },
   setVote: (args) => {
-    fakeDatabase[args.contributor_id] = {
+    fakeDatabase[args.id] = {
       contributor_id: args.contributor_id,
       side: args.side
     }
     return fakeDatabase[args.contributor_id]
+  },
+  newPullRequest: (args) => {
+    fakeDatabase[args.id] = {
+      contributor_id: args.contributor_id,
+      side: args.side
+    }
+    return fakeDatabase[args.id]
   }
 }
 
