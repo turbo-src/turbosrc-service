@@ -5,7 +5,7 @@ import { buildSchema } from 'graphql';
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
   type Query {
-    vote(side: Boolean): Boolean
+    vote(side: Boolean, contributor_id: String): Boolean
   }
 `);
 
