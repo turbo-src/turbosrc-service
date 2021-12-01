@@ -11,6 +11,7 @@ var schema = buildSchema(`
   type Query {
     newPullRequest(id: String, side: Boolean, contributor_id: String): PullRequest,
     getVote(side: Boolean, contributor_id: String): PullRequest,
+    getVoteAll: String,
     setVote(side: Boolean, contributor_id: String): PullRequest
   }
 `);
@@ -31,6 +32,9 @@ var fakeDatabase = {
 var root = {
   getVote: (args) => {
     return fakeDatabase[args.contributor_id]
+  },
+  getVoteAll: () => {
+    return JSON.stringify(fakeDatabase)
   },
   setVote: (args) => {
     fakeDatabase[args.id] = {
