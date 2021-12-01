@@ -15,15 +15,12 @@ var schema = buildSchema(`
   }
 `);
 // Maps id to User object
+var fakeDatabase = {}
 var fakeDatabase = {
-  'a': {
-    contributor_id: 'a',
+  'default': {
+    contributor_id: 'default',
     side: true,
-  },
-  'b': {
-    contributor_id: 'b',
-    side: false,
-  },
+  }
 };
 
  const loggingMiddleware = (req, res, next) => {
