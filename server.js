@@ -5,18 +5,18 @@ import { buildSchema } from 'graphql';
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
   type Query {
-    hello: String
+    vote: Boolean
   }
 `);
 
  const loggingMiddleware = (req, res, next) => {
-    console.log('hello:', req.data);
+    console.log('vote:', req.data);
     next();
  }
 // The root provides the top-level API endpoints
 var root = {
-  hello: () => {
-    return "hello"
+  vote: () => {
+    return true
   }
 }
 
