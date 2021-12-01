@@ -4,10 +4,25 @@ import { buildSchema } from 'graphql';
 
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
+  type PullRequest {
+    contributor_id: String
+    side: Boolean
+  }
   type Query {
-    vote(side: Boolean, contributor_id: String): Boolean
+    vote(side: Boolean, contributor_id: String): PullRequest
   }
 `);
+// Maps id to User object
+var fakeDatabase = {
+  'a': {
+    contributor_id: 'a',
+    side: true,
+  },
+  'b': {
+    contributor_id: 'b',
+    side: false,
+  },
+};
 
  const loggingMiddleware = (req, res, next) => {
     console.log('vote:', req.data);
@@ -15,8 +30,8 @@ var schema = buildSchema(`
  }
 // The root provides the top-level API endpoints
 var root = {
-  vote: (arg) => {
-    return arg.side
+  vote: (args) => {
+    return fakeDatabase[args.contributor_id]
   }
 }
 
