@@ -16,11 +16,7 @@ var schema = buildSchema(`
 // The root provides the top-level API endpoints
 var root = {
   vote: (arg) => {
-    if ( arg.side === true) {
-      return true
-    } else {
-      return false
-    }
+    return arg.side
   }
 }
 
