@@ -5,7 +5,7 @@ import { buildSchema } from 'graphql';
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
   type Query {
-    vote: Boolean
+    vote(side: Boolean): Boolean
   }
 `);
 
@@ -15,7 +15,7 @@ var schema = buildSchema(`
  }
 // The root provides the top-level API endpoints
 var root = {
-  vote: () => {
+  vote: (side) => {
     return true
   }
 }
