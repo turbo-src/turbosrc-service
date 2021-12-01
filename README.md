@@ -1,5 +1,5 @@
 
-A javascript client that makes a graphql request to a locahost graphql-express server.
+A javascript client that makes a graphql request to a localhost graphql-express server.
 
 Start the server.
 `node server.js`
