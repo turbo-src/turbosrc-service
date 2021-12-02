@@ -1,6 +1,7 @@
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
+const cors = require('cors');
 
 // Construct a schema, using GraphQL schema language
 // vote_code = contributor_id + "%" + side
@@ -53,10 +54,12 @@ var root = {
 
 var app = express();
 //app.use(loggingMiddleware);
+app.use(cors());
 app.use(function (req, res, next) {
     let originalSend = res.send;
     res.send = function (data) {
         console.log(data);
+        //console.log(res)
         originalSend.apply(res, Array.from(arguments));
     }
     next();
