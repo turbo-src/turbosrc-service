@@ -7,21 +7,20 @@ import { buildSchema } from 'graphql';
 // side = 0 || 1
 var schema = buildSchema(`
   type PullRequest {
-    vote_code: String
+    vote_code: [String]
   }
   type Query {
     newPullRequest(pr_id: String, contributor_id: String, side: Int!): PullRequest,
     getVote(pr_id: String, contributor_id: String): String,
     getVoteAll(pr_id: String): PullRequest,
+    getVoteEverything: String,
     setVote(pr_id: String, contributor_id: String, side: Int!): PullRequest
   }
 `);
 // Maps id to User object
 var fakeDatabase = {}
 var fakeDatabase = {
-  'default': {
-    vote_code: 'default',
-  }
+  'default': ['default']
 };
 
  const loggingMiddleware = (req, res, next) => {
@@ -36,16 +35,18 @@ var root = {
   getVoteAll: (pr_id) => {
     return fakeDatabase[pr_id]
   },
+  getVoteEverything: () => {
+    return JSON.stringify(fakeDatabase)
+  },
   setVote: (args) => {
     const vote_code = args.contributor_id + "%" + args.side
-    fakeDatabase[args.pr_id].push(vote_code)
-    return fakeDatabase[args.pr_id]
+    const pr_id = args.pr_id
+    fakeDatabase[pr_id].push(vote_code)
+    return fakeDatabase[pr_id]
   },
   newPullRequest: (args) => {
     const vote_code = args.contributor_id + "%" + args.side
-    fakeDatabase[args.pr_id] = {
-      vote_code: vote_code
-    }
+    fakeDatabase[args.pr_id] = [vote_code]
     return fakeDatabase[args.pr_id]
   }
 }
