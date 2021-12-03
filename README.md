@@ -8,3 +8,5 @@ Start the server.
 Run the example.
 
 `node client.js`
+
+See tags for which versions of the extension it's compatible with.
