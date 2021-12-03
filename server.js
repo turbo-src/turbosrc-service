@@ -15,13 +15,13 @@ var schema = buildSchema(`
     getVote(pr_id: String, contributor_id: String): String,
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
-    setVote(pr_id: String, contributor_id: String, side: Int!): PullRequest
+    setVote(pr_id: String, contributor_id: String, side: Int!): String
   }
 `);
 // Maps id to User object
 var fakeDatabase = {}
 var fakeDatabase = {
-  'default': ['default']
+  'default': ['vote_code']
 };
 
  const loggingMiddleware = (req, res, next) => {
@@ -29,6 +29,13 @@ var fakeDatabase = {
     next();
  }
 // The root provides the top-level API endpoints
+
+function newPullRequest(args) {
+  const vote_code = args.contributor_id + "%" + args.side
+  fakeDatabase[args.pr_id] = [vote_code]
+  return fakeDatabase[args.pr_id]
+};
+
 var root = {
   //getVote: (args) => {
   //  return fakeDatabase[args.contributor_id]
@@ -40,10 +47,17 @@ var root = {
     return JSON.stringify(fakeDatabase)
   },
   setVote: (args) => {
-    const vote_code = args.contributor_id + "%" + args.side
     const pr_id = args.pr_id
-    fakeDatabase[pr_id].push(vote_code)
-    return fakeDatabase[pr_id]
+    //If pull request doesn't exist, we have to make one to set a vote.
+    if (typeof fakeDatabase[pr_id] === 'undefined') {
+      newPullRequest(args);
+      const vote_code = args.contributor_id + "%" + args.side
+      fakeDatabase[args.pr_id] = [vote_code]
+    } else {
+      const vote_code = args.contributor_id + "%" + args.side
+      fakeDatabase[pr_id].push(vote_code)
+    }
+    return JSON.stringify(fakeDatabase)
   },
   newPullRequest: (args) => {
     const vote_code = args.contributor_id + "%" + args.side
