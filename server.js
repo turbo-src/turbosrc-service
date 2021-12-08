@@ -21,6 +21,7 @@ var schema = buildSchema(`
     getVoteEverything: String,
     setVote(pr_id: String, contributor_id: String, side: String): String,
     getRepoStatus(repo_id: String): Boolean,
+    getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean
   }
 `);
 
@@ -40,6 +41,16 @@ var fakeTurboSrcReposDB = [
   'NixOS/nix',
   'NixOS/nixpkgs'
 ]
+
+const fakeAuthorizedContributors = {
+  'default': ['default'],
+  'turbo-src/extension': ['emmanuel','mary', 'joseph', 'john'],
+  'turbo-src/graphql_express_server': ['emmanuel','mary', 'joseph', 'john'],
+  '7db9a/dir_contract': ['7db9a','emmanuel','mary', 'joseph', 'john'],
+  'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
+  'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
+  'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john']
+}
 
 // The object representing authorized repos and contributors.
 var pullRequestsDB = {
@@ -64,6 +75,10 @@ var root = {
   //},
   getRepoStatus: (arg) => {
     return fakeTurboSrcReposDB.includes(arg.repo_id)
+  },
+  getAuthorizedContributor: (args) => {
+    //return fakeAuthorizedContributors[args.repo_id].includes(args.contributor_id);
+    return true
   },
   getVoteAll: (pr_id) => {
     return pullRequestsDB[pr_id]

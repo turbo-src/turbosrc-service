@@ -13,7 +13,7 @@ superagent
     //{ query: '{ getVote(pr_id: "default", contributor_id: 1) {side} }' }
     //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
     //{ query: '{ getVoteEverything }' }
-    { query: '{ getRepoStatus(repo_id: "default") }' }
+    { query: '{ getAuthorizedContributor(contributor_id: "default", repo_id: "default") }' }
     //{ query: '{ setVote(pr_id: "default" contributor_id: "1", side: 0 ) { vote_code } }' }
     //{ query: '{ setVote(pr_id: "default" contributor_id: "2", side: 1 ) { vote_code }' }
   ) // sends a JSON post body
