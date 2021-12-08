@@ -19,11 +19,40 @@ var schema = buildSchema(`
     getVote(pr_id: String, contributor_id: String): String,
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
-    setVote(pr_id: String, contributor_id: String, side: String): String
+    setVote(pr_id: String, contributor_id: String, side: String): String,
+    getRepoStatus(repo_id: String): Boolean,
+    getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean
   }
 `);
 
+// From extension/src/utils/commonUtil.js
+//getUsernameWithReponameFromGithubURL()
+// returns  { user: user, repo: repo }
+// user is the owner of the repo, not contributors.
+
 // The object representing pullRequests for a specific repository.
+var fakeTurboSrcReposDB = [
+  //repo_id
+  'default',
+  'turbo-src/extension',
+  'turbo-src/graphql_express_server',
+  '7db9a/dir_contract',
+  'vim/vim',
+  'NixOS/nix',
+  'NixOS/nixpkgs'
+]
+
+const fakeAuthorizedContributors = {
+  'default': ['default'],
+  'turbo-src/extension': ['emmanuel','mary', 'joseph', 'john'],
+  'turbo-src/graphql_express_server': ['emmanuel','mary', 'joseph', 'john'],
+  '7db9a/dir_contract': ['7db9a','emmanuel','mary', 'joseph', 'john'],
+  'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
+  'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
+  'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john']
+}
+
+// The object representing authorized repos and contributors.
 var pullRequestsDB = {
    'default': ['vote_code']
 };
@@ -44,6 +73,13 @@ var root = {
   //getVote: (args) => {
   //  return pullRequestsDB[args.contributor_id]
   //},
+  getRepoStatus: (arg) => {
+    return fakeTurboSrcReposDB.includes(arg.repo_id)
+  },
+  getAuthorizedContributor: (args) => {
+    //return fakeAuthorizedContributors[args.repo_id].includes(args.contributor_id);
+    return true
+  },
   getVoteAll: (pr_id) => {
     return pullRequestsDB[pr_id]
   },
@@ -89,7 +125,6 @@ app.use(function (req, res, next) {
     let originalSend = res.send;
     res.send = function (data) {
         console.log(data + "\n");
-        //console.log(res)
         originalSend.apply(res, Array.from(arguments));
     }
     next();
