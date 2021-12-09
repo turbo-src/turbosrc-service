@@ -2,6 +2,7 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
+const { createClient } = require('redis');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -10,6 +11,9 @@ const cors = require('cors');
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
+
+(async () => {
+
 var schema = buildSchema(`
   type PullRequest {
     vote_code: [String]
@@ -109,6 +113,7 @@ var root = {
       pullRequest.push(vote_code)
     }
 
+    // Push to redis here for newVoteStream
     return JSON.stringify(pullRequestsDB)
   },
   newPullRequest: (args) => {
@@ -144,3 +149,18 @@ var way = false;
 //}
 app.listen(4000);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
+
+const client = createClient({
+  url: 'redis://@172.17.0.2:6379'
+  //host: '172.17.0.2',
+  //port: '6379'
+});
+
+client.on('error', (err) => console.log('Redis Client Error', err));
+
+await client.connect();
+
+await client.set('key', 'value');
+const value = await client.get('key');
+console.log(value);
+})();
