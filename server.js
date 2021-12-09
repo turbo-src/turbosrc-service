@@ -128,7 +128,9 @@ var root = {
 
       // Push to redis here for newVoteStream
       // key = pr_id, value = vote_code
-      await client.set(pr_id, vote_code);
+      await client.publish("vote", `{${pr_id}: ${vote_code}}`
+      );
+      //await client.publish(pr_id, vote_code);
     })();
 
     return JSON.stringify(pullRequestsDB)
