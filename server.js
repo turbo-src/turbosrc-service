@@ -2,6 +2,7 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
+const { createClient } = require('redis');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -10,6 +11,19 @@ const cors = require('cors');
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
+
+(async () => {
+
+const client = createClient({
+  url: 'redis://@172.17.0.2:6379'
+  //host: '172.17.0.2',
+  //port: '6379'
+});
+
+client.on('error', (err) => console.log('Redis Client Error', err));
+
+await client.connect();
+
 var schema = buildSchema(`
   type PullRequest {
     vote_code: [String]
@@ -87,27 +101,38 @@ var root = {
     return JSON.stringify(pullRequestsDB)
   },
   setVote: (args) => {
-    const pr_id = args.pr_id
-    var exists = false
+    (async () => {
+      const pr_id = args.pr_id
+      var exists = false
 
-    //If pull request doesn't exist, we have to make one to set a vote.
-    var pullRequest = pullRequestsDB[pr_id]
-    if (typeof pullRequest === 'undefined') {
-      newPullRequest(args);
-      const vote_code = args.contributor_id + "%" + args.side
-      pullRequest = [vote_code]
-    }
-      // Prevent duplicate votes by same contributor on same pull request
-    for (var i = 0; i < pullRequest.length; i++) {
-      var vote_codes = pullRequest[i]
-      if (vote_codes.split("%")[0] === args.contributor_id) {
-        exists = true
+      var vote_code = "undefined";
+
+      //If pull request doesn't exist, we have to make one to set a vote.
+      var pullRequest = pullRequestsDB[pr_id]
+      if (typeof pullRequest === 'undefined') {
+        newPullRequest(args);
+        vote_code = args.contributor_id + "%" + args.side
+        pullRequest = [vote_code]
       }
-    }
-    if (exists === false) {
-      const vote_code = args.contributor_id + "%" + args.side
-      pullRequest.push(vote_code)
-    }
+        // Prevent duplicate votes by same contributor on same pull request
+      for (var i = 0; i < pullRequest.length; i++) {
+        const vote_codes = pullRequest[i]
+        if (vote_codes.split("%")[0] === args.contributor_id) {
+          exists = true
+        }
+      }
+      if (exists === false) {
+        vote_code = args.contributor_id + "%" + args.side
+        pullRequest.push(vote_code)
+      }
+
+      // Push to redis here for newVoteStream
+      // key = pr_id, value = vote_code
+      if (vote_code !== "undefined") {
+        await client.lPush("vote", `{${pr_id}: ${vote_code}}`);
+      }
+      //await client.publish(pr_id, vote_code);
+    })();
 
     return JSON.stringify(pullRequestsDB)
   },
@@ -144,3 +169,4 @@ var way = false;
 //}
 app.listen(4000);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
+})();
