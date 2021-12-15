@@ -129,7 +129,10 @@ var root = {
       // Push to redis here for newVoteStream
       // key = pr_id, value = vote_code
       if (vote_code !== "undefined") {
+        console.log('send to redis)')
         await client.lPush("vote", `{${pr_id}: ${vote_code}}`);
+        //Unlocks newVotes schema loop.
+        await client.lPush("newvoteschemalock", "1");
       }
       //await client.publish(pr_id, vote_code);
     })();
