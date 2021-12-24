@@ -5,6 +5,7 @@ const cors = require('cors');
 const { createClient } = require('redis');
 const { pullForkUtil } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
+const { gitHeadUtil } = require('./gitHeadUtil');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -48,55 +49,48 @@ var schema = buildSchema(`
 // user is the owner of the repo, not contributors.
 
 // The object representing pullRequests for a specific repository.
-var fakeTurboSrcReposDB = {
-  //repo_id
-  'default': {
-    'supply': 1_000_000,
-    'head':'default:default',
-    'contributors': {
-      'default':  1_000_0000
-    },
-  },
-  'turbo-src/extension': {
-    'supply': 1_000_000,
-    'head':'',
-    'contributors': {
-      'emmanuel': 290_000,
-      'mary': 290_000,
-      'joseph': 200_000,
-      'john': 200_000,
-      '7db9a': 20_000,
+
+var fakeTurboSrcReposDB = {};
+//const head = await gitHeadUtil('turbo-src', 'extension', 0)
+const repoAccounts = [
+  'default/default',
+  'turbo-src/extension',
+  'turbo-src/graphql_express_server',
+  '7db9a/dir-contract',
+  'vim/vim',
+  'NixOS/nix',
+  'NixOS/nixpkgs',
+]
+//const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
+
+var head;
+var owner;
+var repo;
+for (i in repoAccounts) {
+  if (repoAccounts[i] !== "default/default") {
+    repoPath = repoAccounts[i].split('/')
+    owner = repoPath[0]
+    repo = repoPath[1]
+    head = await gitHeadUtil(owner, repo, 0)
+    fakeTurboSrcReposDB[repoAccounts[i]] = {
+      'head': head,
+      'supply': 1_000_000,
+      'contributors': {
+        'emmanuel': 290_000,
+        'mary': 290_000,
+        'joseph': 200_000,
+        'john': 200_000,
+        '7db9a': 20_000,
+      }
     }
-  },
-  'vim/vim': {
-    'supply': 1_000_000,
-    'head':'',
-    'contributors': {
-      'emmanuel': 290_000,
-      'mary': 290_000,
-      'joseph': 200_000,
-      'john': 200_000,
-      '7db9a': 20_000,
-    }
-  },
-  'NixOS/nixpkgs': {
-    'supply': 1_000_000,
-    'head':'',
-    'contributors': {
-      'emmanuel': 290_000,
-      'mary': 290_000,
-      'joseph': 200_000,
-      'john': 200_000,
-      '7db9a': 20_000,
-    }
-  },
-}
+  }
+};
 
 const fakeAuthorizedContributors = {
   'default': ['default'],
   'turbo-src/extension': ['emmanuel','mary', 'joseph', 'john'],
   'turbo-src/graphql_express_server': ['emmanuel','mary', 'joseph', 'john'],
-  '7db9a/dir_contract': ['7db9a','emmanuel','mary', 'joseph', 'john'],
+  '7db9a/dir-contract': ['7db9a','emmanuel','mary', 'joseph', 'john'],
   'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
   'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
   'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john']
@@ -104,7 +98,7 @@ const fakeAuthorizedContributors = {
 
 // The object representing authorized repos and contributors.
 var pullRequestsDB = {
-   'default': ['vote_code']
+   'default/default': ['vote_code']
 };
 
  const loggingMiddleware = (req, res, next) => {
