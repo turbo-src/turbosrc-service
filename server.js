@@ -48,16 +48,49 @@ var schema = buildSchema(`
 // user is the owner of the repo, not contributors.
 
 // The object representing pullRequests for a specific repository.
-var fakeTurboSrcReposDB = [
+var fakeTurboSrcReposDB = {
   //repo_id
-  'default',
-  'turbo-src/extension',
-  'turbo-src/graphql_express_server',
-  '7db9a/dir_contract',
-  'vim/vim',
-  'NixOS/nix',
-  'NixOS/nixpkgs'
-]
+  'default': {
+    'supply': 1_000_000,
+    'head':'default:default',
+    'contributors': {
+      'default':  1_000_0000
+    },
+  },
+  'turbo-src/extension': {
+    'supply': 1_000_000,
+    'head':'',
+    'contributors': {
+      'emmanuel': 290_000,
+      'mary': 290_000,
+      'joseph': 200_000,
+      'john': 200_000,
+      '7db9a': 20_000,
+    }
+  },
+  'vim/vim': {
+    'supply': 1_000_000,
+    'head':'',
+    'contributors': {
+      'emmanuel': 290_000,
+      'mary': 290_000,
+      'joseph': 200_000,
+      'john': 200_000,
+      '7db9a': 20_000,
+    }
+  },
+  'NixOS/nixpkgs': {
+    'supply': 1_000_000,
+    'head':'',
+    'contributors': {
+      'emmanuel': 290_000,
+      'mary': 290_000,
+      'joseph': 200_000,
+      'john': 200_000,
+      '7db9a': 20_000,
+    }
+  },
+}
 
 const fakeAuthorizedContributors = {
   'default': ['default'],
@@ -100,11 +133,14 @@ var root = {
     //return fakeTurboSrcReposDB.includes(arg.repo_id)
   },
   getRepoStatus: (arg) => {
-    return fakeTurboSrcReposDB.includes(arg.repo_id)
+    return Object.keys(fakeTurboSrcReposDB).includes(arg.repo_id)
   },
   getAuthorizedContributor: (args) => {
-    //return fakeAuthorizedContributors[args.repo_id].includes(args.contributor_id);
-    return true
+    console.log(args.repo_id)
+    console.log(args.contributor_id)
+    const contributors = fakeTurboSrcReposDB[args.repo_id].contributors;
+    const contributor_exists = Object.keys(contributors).includes(args.contributor_id)
+    return contributor_exists
   },
   getVoteAll: (pr_id) => {
     return pullRequestsDB[pr_id]
