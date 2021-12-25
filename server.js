@@ -5,7 +5,7 @@ const cors = require('cors');
 const { createClient } = require('redis');
 const { pullForkUtil } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
-const { gitHeadUtil } = require('./gitHeadUtil');
+const { gitHeadUtil } = require('../git_server/gitHeadUtil');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -157,37 +157,49 @@ var root = {
       // repo
       var forkSha256;
       var oid;
-      let res1 = await client.get('github_' + pr_id);
-      console.log('null ' + res1)
-      if (res1 === null) {
-         console.log('owner ' + args.owner)
-         console.log('repo ' + args.repo)
-         let res = await getPullRequest(args.owner, args.repo, pr_id.split('_')[1])
-         console.log('contributor :' + res.contributor)
-         console.log('repo :' + res.repo)
-         forkSha256 = await pullForkUtil(
-           args.owner,
-           args.repo + '_' + pr_id,
-           `https://github.com/${res.contributor}/${args.repo}`,
-           res.forkBranch
-         )
-         // Saving by github issue id, then later by oid.
-         await client.set(
-           'github_' + pr_id,
-           `${res.oid} ${forkSha256}`
-         );
 
-         // Hypothetically there could be an oid (sha-1) collision,
-         // so we save the sha256 for dealing with those corner cases.
-         await client.set(
-           'oid_' + res.oid,
-           `${forkSha256}`
-         );
-      } else {
-        // use this to add into pullRequestDB later.
-        const resArray = res1.split(' ')
-        oid = resArray[0]
-        forkSha256 = resArray[1]
+      //let res1 = await client.get('github_' + pr_id);
+      //const redisForkSha256 = await client.git('oid_' + baseRepoHead)
+
+      // User should do this instead and pass it in request so we don't overuse our github api.
+      const resGetPR = await getPullRequest(args.owner, args.repo, pr_id.split('_')[1]);
+
+      var pullReqRepoHead = await gitHeadUtil(resGetPR.owner, resGetPR.repo, 0);
+      const baseDir = 'repos/' + args.repo;
+      const pullForkDir = baseDir + '/' + pullReqRepoHead;
+
+      console.log('pullReqRepoHead ' + pullReqRepoHead);
+
+      // 404 means the repo doesn't exist on github, per api call.
+      if (resGetPR === 404) {
+      // Check if there is already a dir for the pull fork.
+        if (!fs.existsSync(pullForkDir)) {
+           console.log('owner ' + args.owner)
+           console.log('repo ' + args.repo)
+           console.log('pull contributor :' + resGetPR.contributor)
+           console.log('pull fork repo :' + resGetPR.repo)
+
+           forkSha256 = await pullForkUtil(
+             args.owner,
+             pullReqRepoHead,
+             `https://github.com/${resGetPR.contributor}/${args.repo}`,
+             resGetRepo.forkBranch
+           )
+           // Saving by github issue id, then later by oid.
+           //await client.set(
+           //  'github_' + pr_id,
+           //  `${res.oid} ${forkSha256}`
+           //);
+
+           // Hypothetically there could be an oid (sha-1) collision,
+           // so we save the sha256 for dealing with those corner cases.
+           //await client.set(
+           //  'oid_' + res.oid,
+           //  `${forkSha256}`
+           //);
+        } else {
+          // Nothing for now, pull request is already cryptographically verified.
+        }
       }
 
       ////If pull request doesn't exist, we have to make one to set a vote.

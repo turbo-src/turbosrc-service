@@ -53,9 +53,9 @@ async function tarRepo(baseDir, fork) {
 
 const pullForkUtil = {
   // Fork is the issue_id or other uuid of fork from pull request.
-  pullForkUtil: async function(repo, fork, url, branch) {
+  pullForkUtil: async function(repo, forkOid, url, branch) {
     const baseDir = 'repos/' + repo
-    const dir = baseDir + '/' + fork;
+    const dir = baseDir + '/' + forkOid;
 
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir, { recursive: true });
@@ -85,9 +85,9 @@ const pullForkUtil = {
     });
 
     //await new Promise(resolve => setTimeout(resolve, 3000));
-    await tarRepo(baseDir, fork)
+    await tarRepo(baseDir, forkOid)
     //await new Promise(resolve => setTimeout(resolve, 5000));
-    const forkSha256 = await getSha256Fork(baseDir, fork)
+    const forkSha256 = await getSha256Fork(baseDir, forkOid)
 
 
     // const sha256 = sha256(dir) // This is git service agnostic - gitlab extension or turbo cli will always use this
