@@ -176,7 +176,7 @@ var root = {
       console.log('pullReqRepoHead ' + pullReqRepoHead);
 
       // 404 means the repo doesn't exist on github, per api call.
-      if (resGetPR !== 404) {
+      if (resGetPR !== 404 && pullReqRepoHead !== 404) {
       // Check if there is already a dir for the pull fork.
         if (!fs.existsSync(pullForkDir)) {
            console.log('pull contributor :' + resGetPR.contributor)
@@ -206,35 +206,37 @@ var root = {
       }
 
       ////If pull request doesn't exist, we have to make one to set a vote.
-      var pullRequest = pullRequestsDB[pr_id]
-      if (typeof pullRequest === 'undefined') {
-        newPullRequest(args);
-        vote_code = args.contributor_id + "%" + args.side
-        pullRequest = [vote_code]
-      }
-        // Prevent duplicate votes by same contributor on same pull request
-      for (var i = 0; i < pullRequest.length; i++) {
-        const vote_codes = pullRequest[i]
-        if (vote_codes.split("%")[0] === args.contributor_id) {
-          exists = true
+      if (resGetPR !== 404 && pullReqRepoHead !== 404) {
+        var pullRequest = pullRequestsDB[pr_id]
+        if (typeof pullRequest === 'undefined') {
+          newPullRequest(args);
+          vote_code = args.contributor_id + "%" + args.side
+          pullRequest = [vote_code]
         }
-      }
-      if (exists === false) {
-        vote_code = args.contributor_id + "%" + args.side
-        pullRequest.push(vote_code)
-      }
+          // Prevent duplicate votes by same contributor on same pull request
+        for (var i = 0; i < pullRequest.length; i++) {
+          const vote_codes = pullRequest[i]
+          if (vote_codes.split("%")[0] === args.contributor_id) {
+            exists = true
+          }
+        }
+        if (exists === false) {
+          vote_code = args.contributor_id + "%" + args.side
+          pullRequest.push(vote_code)
+        }
 
-      // Push to redis here for newVoteStream
-      // key = pr_id, value = vote_code
-      if (vote_code !== "undefined") {
-        console.log('send to redis)')
-        var newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
-        while (newvoteschemalock.length > 1) {
-           newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
+        // Push to redis here for newVoteStream
+        // key = pr_id, value = vote_code
+        if (vote_code !== "undefined") {
+          console.log('send to redis)')
+          var newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
+          while (newvoteschemalock.length > 0) {
+             newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
+          }
+          await client.lPush("vote", `{${pr_id}: ${vote_code}}`);
+          //Unlocks newVotes schema loop.
+          await client.lPush("newvoteschemalock", "1");
         }
-        await client.lPush("vote", `{${pr_id}: ${vote_code}}`);
-        //Unlocks newVotes schema loop.
-        await client.lPush("newvoteschemalock", "1");
       }
       //await client.publish(pr_id, vote_code);
     })();
