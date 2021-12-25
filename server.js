@@ -1,3 +1,4 @@
+const fs = require('fs')
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
@@ -162,20 +163,22 @@ var root = {
       //const redisForkSha256 = await client.git('oid_' + baseRepoHead)
 
       // User should do this instead and pass it in request so we don't overuse our github api.
-      const resGetPR = await getPullRequest(args.owner, args.repo, pr_id.split('_')[1]);
-
-      var pullReqRepoHead = await gitHeadUtil(resGetPR.owner, resGetPR.repo, 0);
+      console.log('owner ' + args.owner)
+      console.log('repo ' + args.repo)
+      console.log('pr_id ' + pr_id.split('_')[1])
+      var baseRepoName = args.repo
+      var baseRepoOwner = args.owner
+      const resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1]);
+      var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0);
       const baseDir = 'repos/' + args.repo;
       const pullForkDir = baseDir + '/' + pullReqRepoHead;
 
       console.log('pullReqRepoHead ' + pullReqRepoHead);
 
       // 404 means the repo doesn't exist on github, per api call.
-      if (resGetPR === 404) {
+      if (resGetPR !== 404) {
       // Check if there is already a dir for the pull fork.
         if (!fs.existsSync(pullForkDir)) {
-           console.log('owner ' + args.owner)
-           console.log('repo ' + args.repo)
            console.log('pull contributor :' + resGetPR.contributor)
            console.log('pull fork repo :' + resGetPR.repo)
 
@@ -183,7 +186,7 @@ var root = {
              args.owner,
              pullReqRepoHead,
              `https://github.com/${resGetPR.contributor}/${args.repo}`,
-             resGetRepo.forkBranch
+             resGetPR.forkBranch
            )
            // Saving by github issue id, then later by oid.
            //await client.set(

@@ -22,6 +22,7 @@ const gitHubUtil = {
     //  repo: 'hello-world',
     //  pull_number: 42
     //})
+    console.log(res)
 
     const data = res.data
     const head = data.head
