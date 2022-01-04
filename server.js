@@ -4,6 +4,7 @@ const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
 const { createClient } = require('redis');
+const superagent = require('superagent');
 const { pullForkUtil } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('../git_server/gitHeadUtil');
@@ -28,11 +29,15 @@ client.on('error', (err) => console.log('Redis Client Error', err));
 
 await client.connect();
 
+    //getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    //pullFork(owner: String, repo: String, pr_id: String, contributor_id: String),
 var schema = buildSchema(`
   type PullRequest {
     vote_code: [String]
   }
   type Query {
+    pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     newPullRequest(pr_id: String, contributor_id: String, side: String): PullRequest,
     getVote(pr_id: String, contributor_id: String): String,
     getVoteAll(pr_id: String): PullRequest,
@@ -118,7 +123,7 @@ var root = {
   //getVote: (args) => {
   //  return pullRequestsDB[args.contributor_id]
   //},
-  verifyPullRequest: (arg) => {
+  verifyPullRequest: async (arg) => {
     // Check if it's in our database
     // If not, fetch it.
 
@@ -127,24 +132,69 @@ var root = {
     //return status
     //return fakeTurboSrcReposDB.includes(arg.repo_id)
   },
-  getRepoStatus: (arg) => {
+  getRepoStatus: async (arg) => {
     return Object.keys(fakeTurboSrcReposDB).includes(arg.repo_id)
   },
-  getAuthorizedContributor: (args) => {
+  getAuthorizedContributor: async (args) => {
     console.log(args.repo_id)
     console.log(args.contributor_id)
     const contributors = fakeTurboSrcReposDB[args.repo_id].contributors;
     const contributor_exists = Object.keys(contributors).includes(args.contributor_id)
     return contributor_exists
   },
-  getVoteAll: (pr_id) => {
+  getVoteAll: async (pr_id) => {
     return pullRequestsDB[pr_id]
   },
-  getVoteEverything: () => {
+  getVoteEverything: async () => {
     return JSON.stringify(pullRequestsDB)
   },
-  setVote: (args) => {
-    (async () => {
+  getPRforkStatus: async (args) => {
+    var res;
+    const pr_id = args.pr_id
+    // User should do this instead and pass it in request so we don't overuse our github api.
+    console.log('owner ' + args.owner)
+    console.log('repo ' + args.repo)
+    console.log('pr_id ' + pr_id.split('_')[1])
+    var baseRepoName = args.repo
+    var baseRepoOwner = args.owner
+    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1])
+    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0)
+    const baseDir = 'repos/' + args.repo;
+    const pullForkDir = baseDir + '/' + pullReqRepoHead;
+
+    console.log('pullReqRepoHead ' + pullReqRepoHead);
+
+    // 404 means the repo doesn't exist on github, per api call.
+    if (resGetPR !== 404 && pullReqRepoHead !== 404) {
+    // Check if there is already a dir for the pull fork.
+      if (!fs.existsSync(pullForkDir)) {
+        res = "pull"
+        console.log("pull")
+      } else {
+         res =  "valid"
+         console.log("valid")
+      }
+    } else {
+      res = "notOnGithub"
+      console.log("notOnGithub")
+    }
+    console.log("final result")
+    console.log(res)
+    return res
+  },
+  pullFork: async (args) => {
+    superagent
+      .post('http://localhost:4001/graphql')
+      .send(
+        { query: `{ getPRfork(owner: "${args.owner}", repo: "${args.repo}", pr_id: "${args.pr_id}", contributor_id: "${args.contributor_id}") }` }
+      ) // sends a JSON post body
+      .set('accept', 'json')
+      .end((err, res) => {
+        // Calling the end function will send the request
+      });
+    return "something"
+  },
+  setVote: async (args) => {
       const pr_id = args.pr_id
       var exists = false
 
@@ -174,36 +224,6 @@ var root = {
       const pullForkDir = baseDir + '/' + pullReqRepoHead;
 
       console.log('pullReqRepoHead ' + pullReqRepoHead);
-
-      // 404 means the repo doesn't exist on github, per api call.
-      if (resGetPR !== 404 && pullReqRepoHead !== 404) {
-      // Check if there is already a dir for the pull fork.
-        if (!fs.existsSync(pullForkDir)) {
-           console.log('pull contributor :' + resGetPR.contributor)
-           console.log('pull fork repo :' + resGetPR.repo)
-
-           forkSha256 = await pullForkUtil(
-             args.owner,
-             pullReqRepoHead,
-             `https://github.com/${resGetPR.contributor}/${args.repo}`,
-             resGetPR.forkBranch
-           )
-           // Saving by github issue id, then later by oid.
-           //await client.set(
-           //  'github_' + pr_id,
-           //  `${res.oid} ${forkSha256}`
-           //);
-
-           // Hypothetically there could be an oid (sha-1) collision,
-           // so we save the sha256 for dealing with those corner cases.
-           //await client.set(
-           //  'oid_' + res.oid,
-           //  `${forkSha256}`
-           //);
-        } else {
-          // Nothing for now, pull request is already cryptographically verified.
-        }
-      }
 
       ////If pull request doesn't exist, we have to make one to set a vote.
       if (resGetPR !== 404 && pullReqRepoHead !== 404) {
@@ -239,11 +259,10 @@ var root = {
         }
       }
       //await client.publish(pr_id, vote_code);
-    })();
 
     return JSON.stringify(pullRequestsDB)
   },
-  newPullRequest: (args) => {
+  newPullRequest: async (args) => {
     const vote_code = args.contributor_id + "%" + args.side
     pullRequestsDB[args.pr_id] = [vote_code]
     return pullRequestsDB[args.pr_id]
