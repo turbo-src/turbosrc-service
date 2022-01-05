@@ -28,7 +28,7 @@ var root = {
 
     console.log('pullReqRepoHead ' + pullReqRepoHead);
 
-    await pullForkUtil(
+    pullForkUtil(
       args.owner,
       pullReqRepoHead,
       `https://github.com/${resGetPR.contributor}/${args.repo}`,
