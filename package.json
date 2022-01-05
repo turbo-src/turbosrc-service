@@ -24,5 +24,8 @@
     "simple-git": "^2.48.0",
     "superagent": "^6.1.0",
     "tar": "^6.1.11"
+  },
+  "devDependencies": {
+    "uuid": "^8.3.2"
   }
 }
