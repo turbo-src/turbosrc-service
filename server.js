@@ -38,7 +38,6 @@ var schema = buildSchema(`
   type Query {
     pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    newPullRequest(pr_id: String, contributor_id: String, side: String): PullRequest,
     getVote(pr_id: String, contributor_id: String): String,
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
@@ -114,7 +113,8 @@ var pullRequestsDB = {
 // The root provides the top-level API endpoints
 
 function newPullRequest(args) {
-  const vote_code = args.contributor_id + "%" + args.side
+  const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
+  const vote_code = args.contributor_id + "%" + tokens + "%" + args.side
   pullRequestsDB[args.pr_id] = [vote_code]
   return pullRequestsDB[args.pr_id]
 };
@@ -213,9 +213,14 @@ var root = {
       //const redisForkSha256 = await client.git('oid_' + baseRepoHead)
 
       // User should do this instead and pass it in request so we don't overuse our github api.
+      const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
+      console.log('\ntoken\n')
+      console.log('tokens\n' + tokens)
+
       console.log('owner ' + args.owner)
       console.log('repo ' + args.repo)
       console.log('pr_id ' + pr_id.split('_')[1])
+      console.log('tokens ' + tokens)
       var baseRepoName = args.repo
       var baseRepoOwner = args.owner
       const resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1]);
@@ -225,12 +230,14 @@ var root = {
 
       console.log('pullReqRepoHead ' + pullReqRepoHead);
 
+      //console.log('\nvote code:\n' + vote_code)
+
       ////If pull request doesn't exist, we have to make one to set a vote.
       if (resGetPR !== 404 && pullReqRepoHead !== 404) {
         var pullRequest = pullRequestsDB[pr_id]
         if (typeof pullRequest === 'undefined') {
           newPullRequest(args);
-          vote_code = args.contributor_id + "%" + args.side
+          vote_code = args.contributor_id + "%" + tokens + "%" + args.side
           pullRequest = [vote_code]
         }
           // Prevent duplicate votes by same contributor on same pull request
@@ -241,7 +248,7 @@ var root = {
           }
         }
         if (exists === false) {
-          vote_code = args.contributor_id + "%" + args.side
+          vote_code = args.contributor_id + "%" + tokens + "%" + args.side
           pullRequest.push(vote_code)
         }
 
@@ -259,6 +266,7 @@ var root = {
         }
       }
       //await client.publish(pr_id, vote_code);
+
 
     return JSON.stringify(pullRequestsDB)
   },
