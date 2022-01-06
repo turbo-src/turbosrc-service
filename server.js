@@ -114,7 +114,7 @@ var pullRequestsDB = {
 
 function newPullRequest(args) {
   const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
-  const vote_code = args.contributor_id + "%" + tokens + "%" + args.side
+  const vote_code = args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
   pullRequestsDB[args.pr_id] = [vote_code]
   return pullRequestsDB[args.pr_id]
 };
@@ -198,8 +198,6 @@ var root = {
       const pr_id = args.pr_id
       var exists = false
 
-      var vote_code = "undefined";
-
       // See if pull request is verified or needs to be.
       // verfify(pr_id)
 
@@ -214,6 +212,9 @@ var root = {
 
       // User should do this instead and pass it in request so we don't overuse our github api.
       const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
+
+      const vote_code = args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
+
       console.log('\ntoken\n')
       console.log('tokens\n' + tokens)
 
@@ -237,7 +238,6 @@ var root = {
         var pullRequest = pullRequestsDB[pr_id]
         if (typeof pullRequest === 'undefined') {
           newPullRequest(args);
-          vote_code = args.contributor_id + "%" + tokens + "%" + args.side
           pullRequest = [vote_code]
         }
           // Prevent duplicate votes by same contributor on same pull request
@@ -248,7 +248,6 @@ var root = {
           }
         }
         if (exists === false) {
-          vote_code = args.contributor_id + "%" + tokens + "%" + args.side
           pullRequest.push(vote_code)
         }
 
@@ -271,7 +270,7 @@ var root = {
     return JSON.stringify(pullRequestsDB)
   },
   newPullRequest: async (args) => {
-    const vote_code = args.contributor_id + "%" + args.side
+    const vote_code = args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
     pullRequestsDB[args.pr_id] = [vote_code]
     return pullRequestsDB[args.pr_id]
   }
