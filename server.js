@@ -8,6 +8,7 @@ const superagent = require('superagent');
 const { pullForkUtil } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('../git_server/gitHeadUtil');
+const { update } = require('tar');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -82,21 +83,34 @@ for (i in repoAccounts) {
     //  '$prID': $status,
     //  '$prID': $status,
     //}
+
     fakeTurboSrcReposDB[repoAccounts[i]] = {
       'head': head,
       'supply': 1_000_000,
       'quorum': 0.50,
-      'votedTokens': 0,
       'contributors': {
-        'emmanuel': 290_000,
-        'mary': 290_000,
-        'joseph': 200_000,
-        'john': 200_000,
-        '7db9a': 20_000,
+        'mary': 500_001,
+        '7db9a': 499_999,
       },
-      'pullRequestStatus': {
+      'pullRequests': {
       }
     }
+
+    //fakeTurboSrcReposDB[repoAccounts[i]] = {
+    //  'head': head,
+    //  'supply': 1_000_000,
+    //  'quorum': 0.50,
+    //  'votedTokens': 0,
+    //  'contributors': {
+    //    'emmanuel': 290_000,
+    //    'mary': 290_000,
+    //    'joseph': 200_000,
+    //    'john': 200_000,
+    //    '7db9a': 20_000,
+    //  },
+    //  'pullRequestStatus': {
+    //  }
+    //}
   }
 };
 
@@ -122,16 +136,47 @@ var pullRequestsDB = {
 // The root provides the top-level API endpoints
 
 // Also a root 'methods' in graphql query, by the same name
+
 function getPRvoteStatus(args) {
+    const prID = args.pr_id.split('_')[1]
+
     const supply = fakeTurboSrcReposDB[args.owner + "/" + args.repo].supply
     const quorum = fakeTurboSrcReposDB[args.owner + "/" + args.repo].quorum
-    const votedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].votedTokens
-    const percentVoted = votedTokens/supply
-    if (percentVoted > quorum) {
-      return 'closed'
+
+    const prFields = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
+
+    if (prFields) {
+      const votedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+      const percentVoted = votedTokens/supply
+      if (percentVoted >= quorum) {
+        return 'closed'
+      } else {
+        return 'open'
+      }
     } else {
-      return 'open'
+      return 'none'
     }
+}
+
+function updatePRvoteStatus(standardArgs, tokensVoted) {
+  const prID = standardArgs.pr_id.split('_')[1]
+  const prVoteStatusNow = getPRvoteStatus(standardArgs)
+  if (prVoteStatusNow === 'none') {
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID] = {}
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].pullRequestStatus = 'open'
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens = 0
+  }
+
+  const votedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens
+
+  //Add to vote tally. Creates pull request fields if needed.
+  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens = votedTokens + tokensVoted
+
+  const prVoteStatusUpdated = getPRvoteStatus(standardArgs)
+
+  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
+
+  return prVoteStatusUpdated
 }
 
 // Probably unnecessary as setting vote will open pull
@@ -176,14 +221,14 @@ var root = {
   },
   getPRforkStatus: async (args) => {
     var res;
-    const pr_id = args.pr_id
+    const prID = (args.pr_id).split('_')[1]
     // User should do this instead and pass it in request so we don't overuse our github api.
     console.log('owner ' + args.owner)
     console.log('repo ' + args.repo)
-    console.log('pr_id ' + pr_id.split('_')[1])
+    console.log('pr_id ' + prID)
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
-    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1])
+    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, prID)
     var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0)
     const baseDir = 'repos/' + args.repo;
     const pullForkDir = baseDir + '/' + pullReqRepoHead;
@@ -208,17 +253,6 @@ var root = {
     console.log(res)
     return res
   },
-  getPRvoteStatus: async (args) => {
-    const supply = fakeTurboSrcReposDB[args.owner + "/" + args.repo].supply
-    const quorum = fakeTurboSrcReposDB[args.owner + "/" + args.repo].quorum
-    const votedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].votedTokens
-    const percentVoted = votedTokens/supply
-    if (percentVoted > quorum) {
-      return 'closed'
-    } else {
-      return 'open'
-    }
-  },
   pullFork: async (args) => {
     superagent
       .post('http://localhost:4001/graphql')
@@ -232,7 +266,7 @@ var root = {
     return "something"
   },
   setVote: async (args) => {
-      const pr_id = args.pr_id
+      const prID = (args.pr_id).split('_')[1]
       var exists = false
 
       // See if pull request is verified or needs to be.
@@ -250,35 +284,29 @@ var root = {
       // User should do this instead and pass it in request so we don't overuse our github api.
       const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
 
+      const prVoteStatusNow = getPRvoteStatus(args)
 
-      const prID = pr_id.split('_')[1]
-      const prVoteStatus = getPRvoteStatus(args)
+      // We can only use the function if there asking for about a
+      // specific pull request.
+      console.log('owner ' + args.owner)
+      console.log('repo ' + args.repo)
+      console.log('pr_id ' + prID)
+      console.log('tokens ' + tokens)
 
-      // Only process if pull request voting hasn't closed.
-      if (prVoteStatus === 'open') {
-        const votedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].votedTokens
-        //Add to vote tally.
-        fakeTurboSrcReposDB[args.owner + "/" + args.repo].votedTokens = votedTokens + tokens
-
-        //Add status to specific pull request.
-        fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequestStatus[prID] = prVoteStatus
-
+      updatePRvoteStatus(args, tokens)
+      if (prVoteStatusNow !== 'closed') {
+        // Add tokens to vote tally so we can get the new
+        // pull request vote status.
+        // Vote data to sent over the wire.
+        const prVoteStatus = getPRvoteStatus(args);
         const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
-
-        console.log('\ntoken\n')
-        console.log('tokens\n' + tokens)
-
-        console.log('owner ' + args.owner)
-        console.log('repo ' + args.repo)
-        console.log('pr_id ' + prID)
-        console.log('tokens ' + tokens)
         var baseRepoName = args.repo
         var baseRepoOwner = args.owner
-        const resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1]);
+        const resGetPR = await getPullRequest(args.owner, baseRepoOwner, prID);
         var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0);
         const baseDir = 'repos/' + args.repo;
-        const pullForkDir = baseDir + '/' + pullReqRepoHead;
+        //const pullForkDir = baseDir + '/' + pullReqRepoHead;
 
         console.log('pullReqRepoHead ' + pullReqRepoHead);
 
@@ -286,21 +314,21 @@ var root = {
 
         ////If pull request doesn't exist, we have to make one to set a vote.
         if (resGetPR !== 404 && pullReqRepoHead !== 404) {
-          var pullRequest = pullRequestsDB[pr_id]
-          if (typeof pullRequest === 'undefined') {
-            newPullRequest(args);
-            pullRequest = [vote_code]
-          }
-            // Prevent duplicate votes by same contributor on same pull request
-          for (var i = 0; i < pullRequest.length; i++) {
-            const vote_codes = pullRequest[i]
-            if (vote_codes.split("%")[0] === args.contributor_id) {
-              exists = true
-            }
-          }
-          if (exists === false) {
-            pullRequest.push(vote_code)
-          }
+          //var pullRequest = pullRequestsDB[pr_id]
+          //if (typeof pullRequest === 'undefined') {
+          //  newPullRequest(args);
+          //  pullRequest = [vote_code]
+          //}
+          //  // Prevent duplicate votes by same contributor on same pull request
+          //for (var i = 0; i < pullRequest.length; i++) {
+          //  const vote_codes = pullRequest[i]
+          //  if (vote_codes.split("%")[0] === args.contributor_id) {
+          //    exists = true
+          //  }
+          //}
+          //if (exists === false) {
+          //  pullRequest.push(vote_code)
+          //}
 
           // Push to redis here for newVoteStream
           // key = pr_id, value = vote_code
@@ -310,16 +338,15 @@ var root = {
             while (newvoteschemalock.length > 0) {
                newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
             }
-            await client.lPush("vote", `{${pr_id}: ${vote_code}}`);
+            await client.lPush("vote", `{${args.pr_id}: ${vote_code}}`);
             //Unlocks newVotes schema loop.
             await client.lPush("newvoteschemalock", "1");
           }
         }
-      //await client.publish(pr_id, vote_code);
-        return 'open'
-      } else {
-        return 'closed'
       }
+
+      //await client.publish(pr_id, vote_code);
+      return getPRvoteStatus(args)
       //return JSON.stringify(pullRequestsDB)
   },
   newPullRequest: async (args) => {
