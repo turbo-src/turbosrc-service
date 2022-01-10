@@ -325,7 +325,15 @@ var root = {
 
     console.log('op pr status: ' + openPullRequestStatus)
 
-    if (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus) {
+    var [res, pullReqRepoHead] = await getPRhead(args)
+    const alreadyHead = (pullReqRepoHead === fakeTurboSrcReposDB[args.owner + "/" + args.repo].head)
+
+    console.log('pullReqHead')
+    console.log(pullReqRepoHead)
+    console.log(fakeTurboSrcReposDB[args.owner + "/" + args.repo].head)
+    console.log(alreadyHead)
+
+    if (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead) {
       const prVoteStatus = updatePRvoteStatus(args, tokens)
       // Add tokens to vote tally so we can get the new
       // pull request vote status.
@@ -377,7 +385,7 @@ var root = {
 
         // If vote close it out, open it up for other PRs.
         if (prVoteStatus === 'closed') {
-          const pullReqRepoHead = await getPRhead(args)
+          [res,pullReqRepoHead] = await getPRhead(args)
 
           // Update HEAD to repo.
           fakeTurboSrcReposDB[args.owner + "/" + args.repo].head = pullReqRepoHead
