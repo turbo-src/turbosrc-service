@@ -4,6 +4,8 @@ const fs = require('fs')
 const tar = require('tar');
 const { exec } = require('child_process');
 const childProcess = require("child_process");
+const { getPullRequest } = require('./gitHubUtil');
+const { gitHeadUtil } = require('./gitHeadUtil');
 
 /**
  * @param {string} command A shell command to execute
@@ -101,6 +103,19 @@ const pullForkUtil = {
   },
   getPullRequestSha256: async function(repo, fork, branch) {
      // sha256
+  },
+  getPRhead: async(args) => {
+    const pr_id = args.pr_id
+    // User should do this instead and pass it in request so we don't overuse our github api.
+    console.log('owner ' + args.owner)
+    console.log('repo ' + args.repo)
+    console.log('pr_id ' + pr_id.split('_')[1])
+    var baseRepoName = args.repo
+    var baseRepoOwner = args.owner
+    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1])
+    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0)
+
+    return [resGetPR, pullReqRepoHead]
   }
 }
 

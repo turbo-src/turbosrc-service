@@ -5,7 +5,7 @@ const { buildSchema } = require('graphql');
 const cors = require('cors');
 const { createClient } = require('redis');
 const superagent = require('superagent');
-const { pullForkUtil } = require('./pullForkUtil');
+const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('../git_server/gitHeadUtil');
 const { update } = require('tar');
@@ -88,6 +88,7 @@ for (i in repoAccounts) {
       'head': head,
       'supply': 1_000_000,
       'quorum': 0.50,
+      'openPullRequest': '',
       'contributors': {
         'mary': 500_001,
         '7db9a': 499_999,
@@ -146,6 +147,8 @@ function getPRvoteStatus(args) {
     const prFields = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
 
     if (prFields) {
+      // Check if pull is halted
+      // If no
       const totalVotedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
       const percentVoted = totalVotedTokens/supply
       if (percentVoted >= quorum) {
@@ -272,97 +275,124 @@ var root = {
     return "something"
   },
   setVote: async (args) => {
-      const prID = (args.pr_id).split('_')[1]
-      var exists = false
+    const prID = (args.pr_id).split('_')[1]
+    var exists = false
 
-      // See if pull request is verified or needs to be.
-      // verfify(pr_id)
+    // See if pull request is verified or needs to be.
+    // verfify(pr_id)
 
-      // Need:
-      // owner
-      // repo
-      var forkSha256;
-      var oid;
-      var votedAlready;
+    // Need:
+    // owner
+    // repo
+    var forkSha256;
+    var oid;
+    var votedAlready;
 
-      //let res1 = await client.get('github_' + pr_id);
-      //const redisForkSha256 = await client.git('oid_' + baseRepoHead)
+    //let res1 = await client.get('github_' + pr_id);
+    //const redisForkSha256 = await client.git('oid_' + baseRepoHead)
 
-      // User should do this instead and pass it in request so we don't overuse our github api.
+    // User should do this instead and pass it in request so we don't overuse our github api.
 
-      const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
+    const activePullRequests = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests
+    const numberActivePullRequests = Object.keys(activePullRequests).length
 
-      // We can only use the function if there asking for about a
-      // specific pull request.
-      console.log('owner ' + args.owner)
-      console.log('repo ' + args.repo)
-      console.log('pr_id ' + prID)
-      console.log('tokens ' + tokens)
+    if (numberActivePullRequests === 0) {
+       fakeTurboSrcReposDB[args.owner + "/" + args.repo].openPullRequest = prID
+    }
 
-      const prVoteStatusNow = getPRvoteStatus(args)
-      if (prVoteStatusNow === 'none') {
-         votedAlready = false
-      } else {
-        const votedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
-        votedAlready = Object.keys(votedTokens).includes(args.contributor_id)
-        console.log(args.contributor_id + ' voted already: ' + votedAlready)
-      }
+    const openPullRequest = fakeTurboSrcReposDB[args.owner + "/" + args.repo].openPullRequest
 
-      if (prVoteStatusNow !== 'closed' && !votedAlready) {
-        const prVoteStatus = updatePRvoteStatus(args, tokens)
-        // Add tokens to vote tally so we can get the new
-        // pull request vote status.
-        // Vote data to sent over the wire.
-        //const prVoteStatus = getPRvoteStatus(args);
+    const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
 
-        var baseRepoName = args.repo
-        var baseRepoOwner = args.owner
-        const resGetPR = await getPullRequest(args.owner, baseRepoOwner, prID);
-        var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0);
-        const baseDir = 'repos/' + args.repo;
-        //const pullForkDir = baseDir + '/' + pullReqRepoHead;
+    // We can only use the function if there asking for about a
+    // specific pull request.
+    console.log('owner ' + args.owner)
+    console.log('repo ' + args.repo)
+    console.log('pr_id ' + prID)
+    console.log('tokens ' + tokens)
 
-        console.log('pullReqRepoHead ' + pullReqRepoHead);
 
-        //console.log('\nvote code:\n' + vote_code)
+    const prVoteStatusNow = getPRvoteStatus(args)
+    if (prVoteStatusNow === 'none') {
+       votedAlready = false
+    } else {
+      const votedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+      votedAlready = Object.keys(votedTokens).includes(args.contributor_id)
+      console.log(args.contributor_id + ' voted already: ' + votedAlready)
+    }
 
-        ////If pull request doesn't exist, we have to make one to set a vote.
-        if (resGetPR !== 404 && pullReqRepoHead !== 404) {
-          const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
-          //var pullRequest = pullRequestsDB[pr_id]
-          //if (typeof pullRequest === 'undefined') {
-          //  newPullRequest(args);
-          //  pullRequest = [vote_code]
-          //}
-          //  // Prevent duplicate votes by same contributor on same pull request
-          //for (var i = 0; i < pullRequest.length; i++) {
-          //  const vote_codes = pullRequest[i]
-          //  if (vote_codes.split("%")[0] === args.contributor_id) {
-          //    exists = true
-          //  }
-          //}
-          //if (exists === false) {
-          //  pullRequest.push(vote_code)
-          //}
+    const openPullRequestStatus = (openPullRequest === prID || openPullRequest === '');
 
-          // Push to redis here for newVoteStream
-          // key = pr_id, value = vote_code
-          if (vote_code !== "undefined") {
-            console.log('send to redis)')
-            var newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
-            while (newvoteschemalock.length > 0) {
-               newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
-            }
-            await client.lPush("vote", `{${args.pr_id}: ${vote_code}}`);
-            //Unlocks newVotes schema loop.
-            await client.lPush("newvoteschemalock", "1");
+    console.log('op pr status: ' + openPullRequestStatus)
+
+    if (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus) {
+      const prVoteStatus = updatePRvoteStatus(args, tokens)
+      // Add tokens to vote tally so we can get the new
+      // pull request vote status.
+      // Vote data to sent over the wire.
+      //const prVoteStatus = getPRvoteStatus(args);
+
+      var baseRepoName = args.repo
+      var baseRepoOwner = args.owner
+      const resGetPR = await getPullRequest(args.owner, baseRepoOwner, prID);
+      var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0);
+      const baseDir = 'repos/' + args.repo;
+      //const pullForkDir = baseDir + '/' + pullReqRepoHead;
+
+      console.log('pullReqRepoHead ' + pullReqRepoHead);
+
+      //console.log('\nvote code:\n' + vote_code)
+
+      ////If pull request doesn't exist, we have to make one to set a vote.
+      if (resGetPR !== 404 && pullReqRepoHead !== 404) {
+        const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
+        //var pullRequest = pullRequestsDB[pr_id]
+        //if (typeof pullRequest === 'undefined') {
+        //  newPullRequest(args);
+        //  pullRequest = [vote_code]
+        //}
+        //  // Prevent duplicate votes by same contributor on same pull request
+        //for (var i = 0; i < pullRequest.length; i++) {
+        //  const vote_codes = pullRequest[i]
+        //  if (vote_codes.split("%")[0] === args.contributor_id) {
+        //    exists = true
+        //  }
+        //}
+        //if (exists === false) {
+        //  pullRequest.push(vote_code)
+        //}
+
+        // Push to redis here for newVoteStream
+        // key = pr_id, value = vote_code
+        if (vote_code !== "undefined") {
+          console.log('send to redis)')
+          var newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
+          while (newvoteschemalock.length > 0) {
+             newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
           }
+          await client.lPush("vote", `{${args.pr_id}: ${vote_code}}`);
+          //Unlocks newVotes schema loop.
+          await client.lPush("newvoteschemalock", "1");
+        }
+
+        // If vote close it out, open it up for other PRs.
+        if (prVoteStatus === 'closed') {
+          const pullReqRepoHead = await getPRhead(args)
+
+          // Update HEAD to repo.
+          fakeTurboSrcReposDB[args.owner + "/" + args.repo].head = pullReqRepoHead
+
+          // Delete pull request from database
+          delete fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
+
+          // Allow next pull request to be voted on.
+          fakeTurboSrcReposDB[args.owner + "/" + args.repo].openPullRequest = ''
         }
       }
+    }
 
-      //await client.publish(pr_id, vote_code);
-      return getPRvoteStatus(args)
-      //return JSON.stringify(pullRequestsDB)
+    return getPRvoteStatus(args)
+     //return JSON.stringify(pullRequestsDB)
   },
   newPullRequest: async (args) => {
     const prVoteStatus = getPRvoteStatus(args)
