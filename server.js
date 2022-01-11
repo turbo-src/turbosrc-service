@@ -7,7 +7,7 @@ const { createClient } = require('redis');
 const superagent = require('superagent');
 const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
-const { gitHeadUtil } = require('../git_server/gitHeadUtil');
+const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
 
 // pr_id is the issue_id, which are the same for now.
@@ -78,7 +78,8 @@ for (i in repoAccounts) {
     repoPath = repoAccounts[i].split('/')
     owner = repoPath[0]
     repo = repoPath[1]
-    head = await gitHeadUtil(owner, repo, 0)
+    // Don't pass forkName because it's the master or main branch.
+    head = await gitHeadUtil(owner, repo, '', 0)
     //'pullRequestStatus': {
     //  '$prID': $status,
     //  '$prID': $status,
@@ -237,8 +238,12 @@ var root = {
     console.log('pr_id ' + prID)
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
-    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, prID)
-    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0)
+    console.log(args.owner)
+    console.log(baseRepoOwner)
+    console.log(prID)
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, prID)
+    console.log(resGetPR)
+    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
     const baseDir = 'repos/' + args.repo;
     const pullForkDir = baseDir + '/' + pullReqRepoHead;
 
@@ -342,8 +347,8 @@ var root = {
 
       var baseRepoName = args.repo
       var baseRepoOwner = args.owner
-      const resGetPR = await getPullRequest(args.owner, baseRepoOwner, prID);
-      var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0);
+      const resGetPR = await getPullRequest(baseRepoOwner,baseRepoName, prID);
+      var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName,resGetPR.forkBranch, 0);
       const baseDir = 'repos/' + args.repo;
       //const pullForkDir = baseDir + '/' + pullReqRepoHead;
 

@@ -4,15 +4,28 @@ const fs = require('fs').promises;
 
 
 const gitHeadUtil = {
-  gitHeadUtil: async function(owner, repo, headMinusNum) {
+  gitHeadUtil: async function(owner, repo, forkBranch, headMinusNum) {
      const data = await fsPromises.readFile('.github-token')
                         .catch((err) => console.error('Failed to read file', err));
      const token = data.toString();
      const octokit = new Octokit({ auth: token });
+     var resCommits;
+     var dataCommits
+     var head
+     console.log('here gh14: ' + forkBranch)
      try {
-       const resCommits = await octokit.request(`GET /repos/${owner}/${repo}/commits`)
-       const dataCommits = resCommits.data
-       const head = Object.entries(dataCommits)[headMinusNum][1].sha
+       // commits/master is different than commits.
+       // What about main and if someone has a master and
+       // main branch?
+       if (forkBranch === '' || forkBranch === 'master') {
+         resCommits = await octokit.request(`GET /repos/${owner}/${repo}/commits`)
+         dataCommits = resCommits.data
+         head = Object.entries(dataCommits)[headMinusNum][1].sha
+       } else {
+         resCommits = await octokit.request(`GET /repos/${owner}/${repo}/commits/${forkBranch}`)
+         dataCommits = resCommits.data
+         head = Object.entries(dataCommits)[headMinusNum][1]
+       }
        return head
      } catch (err) {
        if (err.status === 404) {

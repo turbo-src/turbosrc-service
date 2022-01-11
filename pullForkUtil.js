@@ -72,8 +72,18 @@ const pullForkUtil = {
     const git = simpleGit(options);
 
     await git.init();
-    await git.addRemote('origin', url)
-    await git.fetch(['origin', branch]);
+    console.log(url)
+    console.log(branch)
+    try {
+       await git.addRemote('origin', url)
+    } catch {
+      console.log('remote may already exist')
+    }
+    try {
+      await git.fetch(['origin', branch]);
+    } catch {
+      console.log('fetch failed')
+    }
     await git.checkout(branch);
 
     const gitDir = dir + '/.git'
@@ -112,8 +122,8 @@ const pullForkUtil = {
     console.log('pr_id ' + pr_id.split('_')[1])
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
-    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1])
-    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0)
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, pr_id.split('_')[1])
+    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
 
     return [resGetPR, pullReqRepoHead]
   }

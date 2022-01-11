@@ -4,7 +4,7 @@ const { buildSchema } = require('graphql');
 const cors = require('cors');
 const { pullForkUtil } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
-const { gitHeadUtil } = require('../git_server/gitHeadUtil');
+const { gitHeadUtil } = require('./gitHeadUtil');
 
 (async () => {
 
@@ -23,15 +23,19 @@ var root = {
     console.log('pr_id ' + pr_id.split('_')[1])
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
-    var resGetPR = await getPullRequest(args.owner, baseRepoOwner, pr_id.split('_')[1])
-    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, 0)
+    //console.log('contributor ' + resGetPR.contributor)
+    console.log('baseRepoName ' + baseRepoName)
+    //console.log('forkBranch ' + resGetPR.forkBranch)
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, pr_id.split('_')[1])
+    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
 
     console.log('pullReqRepoHead ' + pullReqRepoHead);
 
+    console.log(resGetPR.forkBranch)
     pullForkUtil(
-      args.owner,
+      baseRepoName,
       pullReqRepoHead,
-      `https://github.com/${resGetPR.contributor}/${args.repo}`,
+      `https://github.com/${resGetPR.contributor}/${baseRepoName}`,
       resGetPR.forkBranch
     )
 
