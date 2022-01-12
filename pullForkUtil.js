@@ -53,6 +53,7 @@ async function tarRepo(baseDir, fork) {
   await execute(`tar --mtime='1999-12-25 00:00:00' -Jcf ${baseDir}/${fork}.tgz ${baseDir}/${fork}`)
 }
 
+//Right now it just makes the dir with oid as a name.
 const pullForkUtil = {
   // Fork is the issue_id or other uuid of fork from pull request.
   pullForkUtil: async function(repo, forkOid, url, branch) {
@@ -63,53 +64,46 @@ const pullForkUtil = {
         fs.mkdirSync(dir, { recursive: true });
     }
 
-    const options = {
-       baseDir: process.cwd() + '/' + dir,
-       binary: 'git',
-       maxConcurrentProcesses: 6,
-    };
+    //const options = {
+    //   baseDir: process.cwd() + '/' + dir,
+    //   binary: 'git',
+    //   maxConcurrentProcesses: 6,
+    //};
 
-    const git = simpleGit(options);
+    //const git = simpleGit(options);
 
-    await git.init();
-    console.log(url)
-    console.log(branch)
-    try {
-       await git.addRemote('origin', url)
-    } catch {
-      console.log('remote may already exist')
-    }
-    try {
-      await git.fetch(['origin', branch]);
-    } catch {
-      console.log('fetch failed')
-    }
-    await git.checkout(branch);
+    //await git.init();
+    //console.log(url)
+    //console.log(branch)
+    //try {
+    //   await git.addRemote('origin', url)
+    //} catch {
+    //  console.log('remote may already exist')
+    //}
+    //try {
+    //  await git.fetch(['origin', branch]);
+    //} catch {
+    //  console.log('fetch failed')
+    //}
+    //await git.checkout(branch);
 
-    const gitDir = dir + '/.git'
-    // delete directory recursively
-    await fs.promises.rm(gitDir, { recursive: true }, (err) => {
-      if (err) {
-          throw err;
-      }
+    //const gitDir = dir + '/.git'
+    //// delete directory recursively
+    //await fs.promises.rm(gitDir, { recursive: true }, (err) => {
+    //  if (err) {
+    //      throw err;
+    //  }
 
-      console.log(`${gitDir} is deleted!`);
-    });
+    //  console.log(`${gitDir} is deleted!`);
+    //});
 
-    //await new Promise(resolve => setTimeout(resolve, 3000));
-    await tarRepo(baseDir, forkOid)
-    //await new Promise(resolve => setTimeout(resolve, 5000));
-    const forkSha256 = await getSha256Fork(baseDir, forkOid)
-
-
-    // const sha256 = sha256(dir) // This is git service agnostic - gitlab extension or turbo cli will always use this
-
-    // redis.set(sha256)
-
-    // return sha256
+    ////await new Promise(resolve => setTimeout(resolve, 3000));
+    //await tarRepo(baseDir, forkOid)
+    ////await new Promise(resolve => setTimeout(resolve, 5000));
+    //const forkSha256 = await getSha256Fork(baseDir, forkOid)
 
 
-    return forkSha256
+    //return forkSha256
   },
   getPullRequestSha256: async function(repo, fork, branch) {
      // sha256
