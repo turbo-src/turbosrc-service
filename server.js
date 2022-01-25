@@ -50,6 +50,9 @@ var schema = buildSchema(`
   }
 `);
 
+// Basically this will be a database service until we put this on ipfs or something.
+var pullRequestsVoteCloseHistory = []
+
 // From extension/src/utils/commonUtil.js
 //getUsernameWithReponameFromGithubURL()
 // returns  { user: user, repo: repo }
@@ -102,7 +105,6 @@ for (i in repoAccounts) {
     //  'head': head,
     //  'supply': 1_000_000,
     //  'quorum': 0.50,
-    //  'votedTokens': 0,
     //  'contributors': {
     //    'emmanuel': 290_000,
     //    'mary': 290_000,
@@ -110,7 +112,16 @@ for (i in repoAccounts) {
     //    'john': 200_000,
     //    '7db9a': 20_000,
     //  },
-    //  'pullRequestStatus': {
+    //  'pullRequests': {
+    //    'prid':
+    //      'totalVotedTokens': $totalVotedTokens,
+    //      'votedTokens': {
+    //        '$contributorID': {
+    //          tokens: $tokens,
+    //          side: $side,
+    //        }
+    //       }
+    //    }
     //  }
     //}
   }
@@ -152,14 +163,18 @@ function getPRvoteStatus(args) {
       // If no
       const totalVotedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
       const percentVoted = totalVotedTokens/supply
+      var status;
       if (percentVoted >= quorum) {
-        return 'closed'
+        status = 'closed'
       } else {
-        return 'open'
+        status = 'open'
       }
     } else {
-      return 'none'
+      status = 'none'
     }
+
+    client.set(`vs-${prID}`, status)
+    return status
 }
 
 function updatePRvoteStatus(standardArgs, tokens) {
@@ -170,17 +185,23 @@ function updatePRvoteStatus(standardArgs, tokens) {
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].pullRequestStatus = 'open'
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = 0
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens = {}
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = 0
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
+      tokens: 0,
+      side: 'none'
+    }
   }
 
   const totalVotedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
 
-  const votedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id]
+  const votedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].tokens
 
   //Add to vote tally. Creates pull request fields if needed.
   fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
 
-  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = votedTokens + tokens
+  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].tokens = votedTokens + tokens
+
+  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
 
   const prVoteStatusUpdated = getPRvoteStatus(standardArgs)
 
@@ -228,6 +249,18 @@ var root = {
   },
   getVoteEverything: async () => {
     return JSON.stringify(pullRequestsDB)
+  },
+  getPRvoteStatus: async (args) => {
+    var status = getPRvoteStatus(args)
+    if (status === 'open' || status === 'none' ) {
+      const prID = (args.pr_id).split('_')[1]
+      const res = pullRequestsVoteCloseHistory.includes(prID)
+      if (res) {
+        status = 'closed'
+      }
+    }
+
+    return status
   },
   getPRforkStatus: async (args) => {
     var res;
@@ -394,6 +427,9 @@ var root = {
 
           // Update HEAD to repo.
           fakeTurboSrcReposDB[args.owner + "/" + args.repo].head = pullReqRepoHead
+
+          // Add to history
+          pullRequestsVoteCloseHistory.push(prID)
 
           // Delete pull request from database
           delete fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
