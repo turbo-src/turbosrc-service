@@ -44,6 +44,7 @@ var schema = buildSchema(`
     getVoteEverything: String,
     setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getRepoStatus(repo_id: String): Boolean,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(pr_id: String): String,
@@ -149,6 +150,26 @@ var pullRequestsDB = {
 // The root provides the top-level API endpoints
 
 // Also a root 'methods' in graphql query, by the same name
+function getPRvoteTotals(args) {
+    const prID = args.pr_id.split('_')[1]
+
+    const supply = fakeTurboSrcReposDB[args.owner + "/" + args.repo].supply
+    const quorum = fakeTurboSrcReposDB[args.owner + "/" + args.repo].quorum
+
+    const prFields = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
+
+    var percentVotedQuorum
+
+    if (prFields) {
+      // Check if pull is halted
+      // If no
+      const totalVotedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+      percentVotedQuorum = totalVotedTokens/supply
+      c= totalVotedTokens/(supply*quorum)
+    }
+
+    return percentVotedQuorum
+}
 
 function getPRvoteStatus(args) {
     const prID = args.pr_id.split('_')[1]
@@ -261,6 +282,9 @@ var root = {
     }
 
     return status
+  },
+  getPRvoteTotals: async (args) => {
+    return getPRvoteTotals(args)
   },
   getPRforkStatus: async (args) => {
     var res;
