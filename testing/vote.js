@@ -84,9 +84,6 @@ describe('Vote', function () {
           //}
 
           //testing
-          if (repoAccounts[i] !== '7db9a/dir-contract') {
-              dirContractHead = head
-          }
           testFakeTurboSrcReposDB = fakeTurboSrcReposDB
         }
       };
@@ -131,16 +128,6 @@ describe('Vote', function () {
 
             assert.equal(true, true, "test vote operations" );
             //assert.equal(true, true);
-        });
-
-        it("Should fetch dir-contract's head.", async () => {
-            await snooze(snooze_ms);
-
-            assert.equal(
-                dirContractHead,
-                "26d8898eaa55e1bbac650eff5f9dca738de90dea",
-                "test head fetch"
-            );
         });
     });
 });
