@@ -39,12 +39,6 @@ describe('Vote', function () {
 
           // Don't pass forkName because it's the master or main branch.
           head = await gitHeadUtil(owner, repo, '', 0)
-          //'pullRequestStatus': {
-          //  '$prID': $status,
-          //  '$prID': $status,
-          //}
-
-          console.log(head)
 
           fakeTurboSrcReposDB[repoAccounts[i]] = {
             'head': head,
@@ -59,30 +53,6 @@ describe('Vote', function () {
             }
           }
 
-          //fakeTurboSrcReposDB[repoAccounts[i]] = {
-          //  'head': head,
-          //  'supply': 1_000_000,
-          //  'quorum': 0.50,
-          //  'contributors': {
-          //    'emmanuel': 290_000,
-          //    'mary': 290_000,
-          //    'joseph': 200_000,
-          //    'john': 200_000,
-          //    '7db9a': 20_000,
-          //  },
-          //  'pullRequests': {
-          //    'prid':
-          //      'totalVotedTokens': $totalVotedTokens,
-          //      'votedTokens': {
-          //        '$contributorID': {
-          //          tokens: $tokens,
-          //          side: $side,
-          //        }
-          //       }
-          //    }
-          //  }
-          //}
-
           //testing
           testFakeTurboSrcReposDB = fakeTurboSrcReposDB
         }
@@ -92,35 +62,36 @@ describe('Vote', function () {
       var pullRequestsDB = {
          'default/default': ['vote_code']
       };
-        console.log("\nbefore Vote:\n");
+
+    });
+    describe('For tests, initialize fake database', function () {
+      it("Should populate fake turbo-src db.", async () => {
+          await snooze(snooze_ms);
+          const dirContractEntry =
+            testFakeTurboSrcReposDB[
+                "7db9a/dir-contract"
+            ]
+          assert.equal(
+              JSON.stringify(dirContractEntry),
+              JSON.stringify({
+                head: "11d8638887e27ec4612da2a334b1b70850758cd3",
+                supply: 1000000,
+                quorum: 0.5,
+                openPullRequest: "",
+                contributors: {
+                  mary: 500001,
+                  '7db9a': 499999,
+                },
+                pullRequests: {},
+              }),
+              "test fake turbo-src db"
+          );
+      });
     });
 
 
     describe('Vote operations', function () {
         beforeEach(async() => {
-        });
-
-        it("Should populate fake turbo-src db.", async () => {
-            await snooze(snooze_ms);
-            const dirContractEntry =
-              testFakeTurboSrcReposDB[
-                  "7db9a/dir-contract"
-              ]
-            assert.equal(
-                JSON.stringify(dirContractEntry),
-                JSON.stringify({
-                  head: "11d8638887e27ec4612da2a334b1b70850758cd3",
-                  supply: 1000000,
-                  quorum: 0.5,
-                  openPullRequest: "",
-                  contributors: {
-                    mary: 500001,
-                    '7db9a': 499999,
-                  },
-                  pullRequests: {},
-                }),
-                "test fake turbo-src db"
-            );
         });
 
         it('Should vote on entry.', async () => {
