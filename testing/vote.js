@@ -110,18 +110,18 @@ describe('Vote', function () {
                   "7db9a/dir-contract"
               ]
             assert.equal(
-                dirContractEntry,
-                {
-                  "contributors": {
-                    "7db9a": 499999,
-                    "mary": 500001,
+                JSON.stringify(dirContractEntry),
+                JSON.stringify({
+                  head: "11d8638887e27ec4612da2a334b1b70850758cd3",
+                  supply: 1000000,
+                  quorum: 0.5,
+                  openPullRequest: "",
+                  contributors: {
+                    mary: 500001,
+                    '7db9a': 499999,
                   },
-                  "head": "11d8638887e27ec4612da2a334b1b70850758cd3",
-                  "openPullRequest": "",
-                  "pullRequests": {},
-                  "quorum": 0.5,
-                  "supply": 1000000,
-                },
+                  pullRequests: {},
+                }),
                 "test fake turbo-src db"
             );
         });
