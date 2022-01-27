@@ -111,8 +111,11 @@ describe('Vote', function () {
         it("Should fetch dir-contract's head.", async () => {
             await snooze(snooze_ms);
 
-            assert.equal(dirContractHead, "", "test head fetch" );
-            //assert.equal(true, true);
+            assert.equal(
+                dirContractHead,
+                "26d8898eaa55e1bbac650eff5f9dca738de90dea",
+                "test head fetch"
+            );
         });
     });
 });
