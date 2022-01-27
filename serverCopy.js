@@ -11,11 +11,55 @@ const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
 
 var pullRequestsVoteCloseHistory;
-
 var fakeTurboSrcReposDB;
-
-
 var pullRequestsDB;
+var repoAccounts;
+var repoPath;
+
+pullRequestsVoteCloseHistory = []
+
+fakeTurboSrcReposDB = {};
+
+repoAccounts = [
+  'default/default',
+  '7db9a/dir-contract',
+  'vim/vim',
+  'NixOS/nixpkgs',
+];
+
+var head;
+var owner;
+var repo;
+for (i in repoAccounts) {
+  if (repoAccounts[i] !== "default/default") {
+    repoPath = repoAccounts[i].split('/');
+    owner = repoPath[0];
+    repo = repoPath[1];
+
+    // Don't pass forkName because it's the master or main branch.
+    (async () => {
+      head = await gitHeadUtil(owner, repo, '', 0)
+    })();
+
+      fakeTurboSrcReposDB[repoAccounts[i]] = {
+        'head': head,
+        'supply': 1_000_000,
+        'quorum': 0.50,
+        'openPullRequest': '',
+        'contributors': {
+          'mary': 500_001,
+          '7db9a': 499_999,
+        },
+        'pullRequests': {
+        }
+      }
+  }
+};
+
+// The object representing authorized repos and contributors.
+var pullRequestsDB = {
+   'default/default': ['vote_code']
+};
 
 // Also a root 'methods' in graphql query, by the same name
 function getPRvoteTotals(args) {

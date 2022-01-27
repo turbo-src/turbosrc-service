@@ -3,10 +3,10 @@ const { gitHeadUtil } = require('./../gitHeadUtil');
 const { setVote } = require('./../serverCopy');
 
 var snooze_ms = 300;
-var testDirContractHead;
-var testPullRequestsVoteCloseHistory;
-var testFakeTurboSrcReposDB;
-var testRepoAccounts;
+var dirContractHead;
+var pullRequestsVoteCloseHistory;
+var fakeTurboSrcReposDB;
+var repoAccounts;
 
 
 // We call this at the top of each test case, otherwise nodeosd could
@@ -18,11 +18,11 @@ describe('Vote', function () {
     this.timeout(15000);
 
     before(async () => {
-      var pullRequestsVoteCloseHistory = []
+      pullRequestsVoteCloseHistory = []
 
-      var fakeTurboSrcReposDB = {};
+      fakeTurboSrcReposDB = {};
 
-      const repoAccounts = [
+      repoAccounts = [
         'default/default',
         '7db9a/dir-contract',
         'vim/vim',
@@ -54,8 +54,6 @@ describe('Vote', function () {
             }
           }
 
-          //testing
-          testFakeTurboSrcReposDB = fakeTurboSrcReposDB
         }
       };
 
@@ -69,7 +67,7 @@ describe('Vote', function () {
       it("Should populate fake turbo-src db.", async () => {
           await snooze(snooze_ms);
           const dirContractEntry =
-            testFakeTurboSrcReposDB[
+            fakeTurboSrcReposDB[
                 "7db9a/dir-contract"
             ]
           assert.equal(
@@ -95,11 +93,28 @@ describe('Vote', function () {
         beforeEach(async() => {
         });
 
-        it('Should vote on entry.', async () => {
+        it('Should vote yes on pull request w/out closing.', async () => {
             await snooze(snooze_ms);
+            console.log(
+                fakeTurboSrcReposDB['vim/vim']
+            )
 
-            assert.equal(true, true, "test vote operations" );
-            //assert.equal(true, true);
+            statusVote = await
+              setVote(
+                {
+                  owner: "vim",
+                  repo: "vim",
+                  pr_id: "issue_8949",
+                  contributor_id: "79b9a",
+                  side: "yes",
+                }
+              );
+
+            assert.equal(
+                statusVote,
+                "open",
+                "Fail to stay open even the votes less than quorum"
+            );
         });
     });
 });
