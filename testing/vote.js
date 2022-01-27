@@ -2,7 +2,11 @@ const assert = require('assert');
 const { gitHeadUtil } = require('./../gitHeadUtil');
 
 var snooze_ms = 300;
-var dirContractHead;
+var testDirContractHead;
+var testPullRequestsVoteCloseHistory;
+var testFakeTurboSrcReposDB;
+var testRepoAccounts;
+
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
@@ -83,6 +87,7 @@ describe('Vote', function () {
           if (repoAccounts[i] !== '7db9a/dir-contract') {
               dirContractHead = head
           }
+          testFakeTurboSrcReposDB = fakeTurboSrcReposDB
         }
       };
 
@@ -96,6 +101,29 @@ describe('Vote', function () {
 
     describe('Vote operations', function () {
         beforeEach(async() => {
+        });
+
+        it("Should populate fake turbo-src db.", async () => {
+            await snooze(snooze_ms);
+            const dirContractEntry =
+              testFakeTurboSrcReposDB[
+                  "7db9a/dir-contract"
+              ]
+            assert.equal(
+                dirContractEntry,
+                {
+                  "contributors": {
+                    "7db9a": 499999,
+                    "mary": 500001,
+                  },
+                  "head": "11d8638887e27ec4612da2a334b1b70850758cd3",
+                  "openPullRequest": "",
+                  "pullRequests": {},
+                  "quorum": 0.5,
+                  "supply": 1000000,
+                },
+                "test fake turbo-src db"
+            );
         });
 
         it('Should vote on entry.', async () => {
