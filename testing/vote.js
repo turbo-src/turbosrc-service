@@ -1,5 +1,6 @@
 const assert = require('assert');
 const { gitHeadUtil } = require('./../gitHeadUtil');
+const { setVote } = require('./../serverCopy');
 
 var snooze_ms = 300;
 var testDirContractHead;
