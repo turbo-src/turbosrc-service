@@ -1,5 +1,7 @@
 const assert = require('assert');
-const { postSetVote } = require('./../graphQLrequests')
+const { postSetVote,
+        postGetPRvoteStatus
+      } = require('./../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 300;
@@ -17,6 +19,28 @@ describe('Vote', function () {
     });
     describe('Vote up but do not close', function () {
       it("Should increment vote", async () => {
+        await postSetVote(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "79b9a",
+            /*side:*/ "yes",
+        );
+        const status = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "79b9a",
+            /*side:*/ "yes",
+        );
+
+        //console.log(status)
+
+        assert.equal(
+            status,
+            "open",
+            "Fail to stay open even the votes less than quorum"
+        );
       });
     });
 });
