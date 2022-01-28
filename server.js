@@ -500,6 +500,6 @@ var way = false;
 //     console.log("false");
 //     return false;
 //}
-app.listen(4000);
+app.listen(8080);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
 })();
