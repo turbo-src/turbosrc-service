@@ -43,4 +43,23 @@ describe('Vote', function () {
         );
       });
     });
+    describe.only('Check status before vote open', function () {
+      it("Should do something", async () => {
+        const status = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "79b9a",
+            /*side:*/ "yes",
+        );
+
+        //console.log(status)
+
+        assert.equal(
+            status,
+            "open",
+            "Fail to stay open even the votes less than quorum"
+        );
+      });
+    });
 });
