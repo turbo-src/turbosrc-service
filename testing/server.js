@@ -17,7 +17,7 @@ describe('Vote', function () {
     before(async () => {
 
     });
-    describe('Vote up but do not close', function () {
+    describe.only('Vote up but do not close', function () {
       it("Should increment vote", async () => {
         await postSetVote(
             /*owner:*/ "vim",
@@ -43,7 +43,7 @@ describe('Vote', function () {
         );
       });
     });
-    describe.only('Check status before vote open', function () {
+    describe('Check status before vote open', function () {
       it("Should do something", async () => {
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
