@@ -31,16 +31,10 @@ build-servers() {
     docker build -t turbo-src-pfserver:0.0.1 -f dockerfile.pfserver .
 }
 
-test-server() {
+test-vote-to-close() {
   echo "server test run"
   echo ""
-  npm test testing/server.js
-}
-
-test-vote() {
-  echo "vote test run"
-  echo ""
-  npm test testing/vote.js
+  npm test testing/voteToClose.js
 }
 
 cycle() {
@@ -52,16 +46,16 @@ run-test() {
     stop-servers
     build-servers
     start-servers
-    if [ "$1" = "server" ]; then
-        echo "run tests"
+    if [ "$1" = "vote-to-close" ]; then
+        echo "run test vote-to-close"
         echo ""
-        test-server
+        test-vote-to-close
     fi
 
     if [ "$1" = "vote" ]; then
         echo "server test run"
         echo ""
-        test-vote
+        test-all
     fi
     stop-servers
 }
