@@ -3,7 +3,7 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
-const { createClient } = require('redis');
+//const { createClient } = require('redis');
 const superagent = require('superagent');
 const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
@@ -20,15 +20,15 @@ const { update } = require('tar');
 
 (async () => {
 
-const client = createClient({
-  url: 'redis://@172.17.0.2:6379'
-  //host: '172.17.0.2',
-  //port: '6379'
-});
-
-client.on('error', (err) => console.log('Redis Client Error', err));
-
-await client.connect();
+//const client = createClient({
+//  url: 'redis://@172.17.0.2:6379'
+//  //host: '172.17.0.2',
+//  //port: '6379'
+//});
+//
+//client.on('error', (err) => console.log('Redis Client Error', err));
+//
+//await client.connect();
 
     //getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     //pullFork(owner: String, repo: String, pr_id: String, contributor_id: String),
@@ -194,7 +194,7 @@ function getPRvoteStatus(args) {
       status = 'none'
     }
 
-    client.set(`vs-${prID}`, status)
+    //client.set(`vs-${prID}`, status)
     return status
 }
 
@@ -434,16 +434,16 @@ var root = {
 
         // Push to redis here for newVoteStream
         // key = pr_id, value = vote_code
-        if (vote_code !== "undefined") {
-          console.log('send to redis)')
-          var newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
-          while (newvoteschemalock.length > 0) {
-             newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
-          }
-          await client.lPush("vote", `{${args.pr_id}: ${vote_code}}`);
-          //Unlocks newVotes schema loop.
-          await client.lPush("newvoteschemalock", "1");
-        }
+        //if (vote_code !== "undefined") {
+        //  console.log('send to redis)')
+        //  var newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
+        //  while (newvoteschemalock.length > 0) {
+        //     newvoteschemalock = await client.lRange("newvoteschemalock", 0, -1)
+        //  }
+        //  await client.lPush("vote", `{${args.pr_id}: ${vote_code}}`);
+        //  //Unlocks newVotes schema loop.
+        //  await client.lPush("newvoteschemalock", "1");
+        //}
 
         // If vote close it out, open it up for other PRs.
         if (prVoteStatus === 'closed') {
