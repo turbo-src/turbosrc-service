@@ -84,6 +84,12 @@ if [ "$1" == "start" ]; then
     start-servers
 fi
 
+if [ "$1" == "stop" ]; then
+    echo "stop servers"
+    echo ""
+    stop-servers
+fi
+
 if [ "$1" == "test" ]; then
     echo "test"
     echo ""
