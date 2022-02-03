@@ -195,39 +195,40 @@ function getPRvoteStatus(args) {
     }
 
     //client.set(`vs-${prID}`, status)
+    console.log('198')
+    console.log(fakeTurboSrcReposDB)
     return status
 }
 
 function updatePRvoteStatus(standardArgs, tokens) {
   const prID = standardArgs.pr_id.split('_')[1]
   const prVoteStatusNow = getPRvoteStatus(standardArgs)
-  if (prVoteStatusNow === 'none') {
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID] = {}
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].pullRequestStatus = 'open'
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = 0
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens = {}
+  console.log(fakeTurboSrcReposDB)
+  prVoteStatusUpdated = prVoteStatusNow
+
+  if (prVoteStatusNow === 'open') {
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
       tokens: 0,
       side: 'none'
     }
+
+    console.log('upr 212')
+    const totalVotedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
+
+    //Add to vote tally. Creates pull request fields if needed.
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
+
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
+
+    prVoteStatusUpdated = getPRvoteStatus(standardArgs)
+
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
+
+    console.log('upr 228')
   }
 
-  const totalVotedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
-
-  const votedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].tokens
-
-  //Add to vote tally. Creates pull request fields if needed.
-  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
-
-  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].tokens = votedTokens + tokens
-
-  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
-
-  const prVoteStatusUpdated = getPRvoteStatus(standardArgs)
-
-  fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
-
+  // Maybe should have index increment to know if updated or not
   return prVoteStatusUpdated
 }
 
@@ -235,10 +236,29 @@ function updatePRvoteStatus(standardArgs, tokens) {
 // request automatically if non exists, including same
 // root 'method' for query.
 function newPullRequest(args) {
+  const prID = args.pr_id.split('_')[1]
+
   const prVoteStatus = getPRvoteStatus(args)
   const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
   const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
+
   pullRequestsDB[args.pr_id] = [vote_code]
+
+  console.log('npr 239')
+  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID] = {}
+
+  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
+
+  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
+  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
+  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
+  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+    tokens: 0,
+    side: 'none'
+  }
+
+  console.log('npr 247')
+
   return pullRequestsDB[args.pr_id]
 };
 
@@ -395,8 +415,18 @@ var root = {
     console.log(fakeTurboSrcReposDB[args.owner + "/" + args.repo].head)
     console.log(alreadyHead)
 
+    console.log("s 391")
+    console.log((prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead))
+
     if (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead) {
+      var pullRequest = pullRequestsDB[args.pr_id]
+      if (typeof pullRequest === 'undefined') {
+        newPullRequest(args);
+      }
       const prVoteStatus = updatePRvoteStatus(args, tokens)
+      console.log('408')
+      console.log(prVoteStatus)
+      console.log(fakeTurboSrcReposDB)
       // Add tokens to vote tally so we can get the new
       // pull request vote status.
       // Vote data to sent over the wire.
@@ -464,6 +494,7 @@ var root = {
       }
     }
 
+    console.log('475')
     return getPRvoteStatus(args)
      //return JSON.stringify(pullRequestsDB)
   },
@@ -472,6 +503,15 @@ var root = {
     const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
     const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
     pullRequestsDB[args.pr_id] = [vote_code]
+
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = 0
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens = {}
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
+    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
+      tokens: 0,
+      side: 'none'
+    }
+
     return pullRequestsDB[args.pr_id]
   }
 }
