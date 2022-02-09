@@ -171,18 +171,18 @@ function getPRvoteTotals(args) {
     return percentVotedQuorum
 }
 
-function getPRvoteStatus(args) {
+function getPRvoteStatus(database, args) {
     const prID = args.pr_id.split('_')[1]
 
-    const supply = fakeTurboSrcReposDB[args.owner + "/" + args.repo].supply
-    const quorum = fakeTurboSrcReposDB[args.owner + "/" + args.repo].quorum
+    const supply = database[args.owner + "/" + args.repo].supply
+    const quorum = database[args.owner + "/" + args.repo].quorum
 
-    const prFields = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
+    const prFields = database[args.owner + "/" + args.repo].pullRequests[prID]
 
     if (prFields) {
       // Check if pull is halted
       // If no
-      const totalVotedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+      const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
       const percentVoted = totalVotedTokens/supply
       var status;
       if (percentVoted >= quorum) {
@@ -196,9 +196,11 @@ function getPRvoteStatus(args) {
 
     //client.set(`vs-${prID}`, status)
     console.log('198')
-    console.log(fakeTurboSrcReposDB)
+    console.log(database)
+
     return status
 }
+
 
 async function setVote(database, args) {
   const prID = (args.pr_id).split('_')[1]
@@ -238,7 +240,7 @@ async function setVote(database, args) {
   console.log('tokens ' + tokens)
 
 
-  const prVoteStatusNow = getPRvoteStatus(args)
+  const prVoteStatusNow = getPRvoteStatus(database, args)
   if (prVoteStatusNow === 'none') {
      votedAlready = false
   } else {
@@ -342,13 +344,13 @@ async function setVote(database, args) {
 
   return {
            db: database,
-           prVoteStatus: getPRvoteStatus(args)
+           prVoteStatus: getPRvoteStatus(database, args)
   }
 }
 
 function updatePRvoteStatus(standardArgs, tokens) {
   const prID = standardArgs.pr_id.split('_')[1]
-  const prVoteStatusNow = getPRvoteStatus(standardArgs)
+  const prVoteStatusNow = getPRvoteStatus(fakeTurboSrcReposDB, standardArgs)
   console.log(fakeTurboSrcReposDB)
   prVoteStatusUpdated = prVoteStatusNow
 
@@ -367,7 +369,7 @@ function updatePRvoteStatus(standardArgs, tokens) {
 
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
 
-    prVoteStatusUpdated = getPRvoteStatus(standardArgs)
+    prVoteStatusUpdated = getPRvoteStatus(fakeTurboSrcReposDB, standardArgs)
 
     fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
 
@@ -384,7 +386,7 @@ function updatePRvoteStatus(standardArgs, tokens) {
 function newPullRequest(args) {
   const prID = args.pr_id.split('_')[1]
 
-  const prVoteStatus = getPRvoteStatus(args)
+  const prVoteStatus = getPRvoteStatus(fakeTurboSrcReposDB, args)
   const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
   const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
@@ -438,7 +440,7 @@ var root = {
     return JSON.stringify(pullRequestsDB)
   },
   getPRvoteStatus: async (args) => {
-    var status = getPRvoteStatus(args)
+    var status = getPRvoteStatus(fakeTurboSrcReposDB, args)
     if (status === 'open' || status === 'none' ) {
       const prID = (args.pr_id).split('_')[1]
       const res = pullRequestsVoteCloseHistory.includes(prID)
@@ -510,7 +512,7 @@ var root = {
     return resultSetVote.prVoteStatus
   },
   newPullRequest: async (args) => {
-    const prVoteStatus = getPRvoteStatus(args)
+    const prVoteStatus = getPRvoteStatus(fakeTurboSrcReposDB, args)
     const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
     const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
     pullRequestsDB[args.pr_id] = [vote_code]
