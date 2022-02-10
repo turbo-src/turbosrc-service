@@ -274,7 +274,8 @@ async function setVote(database, args) {
   if (resultPullAndVoteStatus) {
     var pullRequest = pullRequestsDB[args.pr_id]
     if (typeof pullRequest === 'undefined') {
-      newPullRequest(args);
+      const resNewPullRequest = newPullRequest(database, args);
+      fakeTurboSrcReposDB = resNewPullRequest.db
     }
     const resUpdatePRvoteStatus = updatePRvoteStatus(fakeTurboSrcReposDB,args, tokens)
     fakeTurboSrcReposDB = resUpdatePRvoteStatus.db
@@ -367,31 +368,34 @@ function updatePRvoteStatus(database, standardArgs, tokens) {
 // Probably unnecessary as setting vote will open pull
 // request automatically if non exists, including same
 // root 'method' for query.
-function newPullRequest(args) {
+function newPullRequest(database, args) {
   const prID = args.pr_id.split('_')[1]
 
-  const prVoteStatus = getPRvoteStatus(fakeTurboSrcReposDB, args)
-  const tokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor_id]
+  const prVoteStatus = getPRvoteStatus(database, args)
+  const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
   const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
   pullRequestsDB[args.pr_id] = [vote_code]
 
   console.log('npr 239')
-  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID] = {}
+  database[args.owner + "/" + args.repo].pullRequests[prID] = {}
 
-  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
+  database[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
 
-  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
-  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
-  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
-  fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+  database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
+  database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
+  database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
+  database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
     tokens: 0,
     side: 'none'
   }
 
   console.log('npr 247')
 
-  return pullRequestsDB[args.pr_id]
+  return {
+           prID: pullRequestsDB[args.pr_id],
+           db: database
+  }
 };
 
 var root = {
