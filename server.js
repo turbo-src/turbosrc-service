@@ -269,7 +269,10 @@ async function setVote(database, args) {
     if (typeof pullRequest === 'undefined') {
       newPullRequest(args);
     }
-    const prVoteStatus = updatePRvoteStatus(args, tokens)
+    const resUpdatePRvoteStatus = updatePRvoteStatus(fakeTurboSrcReposDB, args, tokens)
+    fakeTurboSrcReposDB = resUpdatePRvoteStatus.db
+    prVoteStatus =resUpdatePRvoteStatus.prVoteStatusUpdated
+
     console.log('408')
     console.log(prVoteStatus)
     console.log(database)
@@ -348,36 +351,39 @@ async function setVote(database, args) {
   }
 }
 
-function updatePRvoteStatus(standardArgs, tokens) {
+function updatePRvoteStatus(database, standardArgs, tokens) {
   const prID = standardArgs.pr_id.split('_')[1]
-  const prVoteStatusNow = getPRvoteStatus(fakeTurboSrcReposDB, standardArgs)
-  console.log(fakeTurboSrcReposDB)
+  const prVoteStatusNow = getPRvoteStatus(database, standardArgs)
+  console.log(database)
   prVoteStatusUpdated = prVoteStatusNow
 
   if (prVoteStatusNow === 'open') {
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
+    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
+    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
       tokens: 0,
       side: 'none'
     }
 
     console.log('upr 212')
-    const totalVotedTokens = fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
+    const totalVotedTokens = database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
 
     //Add to vote tally. Creates pull request fields if needed.
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
+    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
 
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
+    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
 
-    prVoteStatusUpdated = getPRvoteStatus(fakeTurboSrcReposDB, standardArgs)
+    prVoteStatusUpdated = getPRvoteStatus(database, standardArgs)
 
-    fakeTurboSrcReposDB[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
+    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
 
     console.log('upr 228')
   }
 
   // Maybe should have index increment to know if updated or not
-  return prVoteStatusUpdated
+  return {
+           db: database,
+           prVoteStatusUpdated : prVoteStatusUpdated
+  }
 }
 
 // Probably unnecessary as setting vote will open pull
