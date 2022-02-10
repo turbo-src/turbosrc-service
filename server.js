@@ -150,20 +150,20 @@ var pullRequestsDB = {
 // The root provides the top-level API endpoints
 
 // Also a root 'methods' in graphql query, by the same name
-function getPRvoteTotals(args) {
+function getPRvoteTotals(database, args) {
     const prID = args.pr_id.split('_')[1]
 
-    const supply = fakeTurboSrcReposDB[args.owner + "/" + args.repo].supply
-    const quorum = fakeTurboSrcReposDB[args.owner + "/" + args.repo].quorum
+    const supply = database[args.owner + "/" + args.repo].supply
+    const quorum = database[args.owner + "/" + args.repo].quorum
 
-    const prFields = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID]
+    const prFields = database[args.owner + "/" + args.repo].pullRequests[prID]
 
     var percentVotedQuorum
 
     if (prFields) {
       // Check if pull is halted
       // If no
-      const totalVotedTokens = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+      const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
       percentVotedQuorum = totalVotedTokens/supply
       c= totalVotedTokens/(supply*quorum)
     }
@@ -436,7 +436,7 @@ var root = {
     return status
   },
   getPRvoteTotals: async (args) => {
-    return getPRvoteTotals(args)
+    return getPRvoteTotals(fakeTurboSrcReposDB, args)
   },
   getPRforkStatus: async (args) => {
     var res;
