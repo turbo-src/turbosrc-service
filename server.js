@@ -9,7 +9,10 @@ const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
-const { getPRvoteTotals } = require('./actions')
+const {
+  getPRvoteTotals,
+  getPRvoteStatus
+} = require('./actions')
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -164,36 +167,6 @@ var pullRequestsDB = {
   console.log('Running a GraphQL API server at localhost:4000/graphql');
 })();
 // The root provides the top-level API endpoints
-
-function getPRvoteStatus(database, args) {
-    const prID = args.pr_id.split('_')[1]
-
-    const supply = database[args.owner + "/" + args.repo].supply
-    const quorum = database[args.owner + "/" + args.repo].quorum
-
-    const prFields = database[args.owner + "/" + args.repo].pullRequests[prID]
-
-    if (prFields) {
-      // Check if pull is halted
-      // If no
-      const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
-      const percentVoted = totalVotedTokens/supply
-      var status;
-      if (percentVoted >= quorum) {
-        status = 'closed'
-      } else {
-        status = 'open'
-      }
-    } else {
-      status = 'none'
-    }
-
-    //client.set(`vs-${prID}`, status)
-    console.log('198')
-    console.log(database)
-
-    return status
-}
 
 async function pullAndVoteStatus(database, args) {
   const prID = (args.pr_id).split('_')[1]
