@@ -11,7 +11,8 @@ const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
 const {
   getPRvoteTotals,
-  getPRvoteStatus
+  getPRvoteStatus,
+  pullAndVoteStatus
 } = require('./actions')
 
 // pr_id is the issue_id, which are the same for now.
@@ -168,67 +169,11 @@ var pullRequestsDB = {
 })();
 // The root provides the top-level API endpoints
 
-async function pullAndVoteStatus(database, args) {
-  const prID = (args.pr_id).split('_')[1]
-  var votedAlready;
-
-  const activePullRequests = database[args.owner + "/" + args.repo].pullRequests
-  const numberActivePullRequests = Object.keys(activePullRequests).length
-
-  if (numberActivePullRequests === 0) {
-     database[args.owner + "/" + args.repo].openPullRequest = prID
-  }
-
-  const openPullRequest = database[args.owner + "/" + args.repo].openPullRequest
-
-  const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
-
-  // We can only use the function if there asking for about a
-  // specific pull request.
-  console.log('owner ' + args.owner)
-  console.log('repo ' + args.repo)
-  console.log('pr_id ' + prID)
-  console.log('tokens ' + tokens)
-
-  const prVoteStatusNow = getPRvoteStatus(database, args)
-  if (prVoteStatusNow === 'none') {
-     votedAlready = false
-  } else {
-    const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
-    votedAlready = Object.keys(votedTokens).includes(args.contributor_id)
-    console.log(args.contributor_id + ' voted already: ' + votedAlready)
-  }
-
-  const openPullRequestStatus = (openPullRequest === prID || openPullRequest === '');
-
-  console.log('op pr status: ' + openPullRequestStatus)
-
-  var [res, pullReqRepoHead] = await getPRhead(args)
-  const alreadyHead = (pullReqRepoHead === database[args.owner + "/" + args.repo].head)
-
-  console.log('pullReqHead')
-  console.log(pullReqRepoHead)
-  console.log(database[args.owner + "/" + args.repo].head)
-  console.log(alreadyHead)
-
-  console.log("s 391")
-  console.log((prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead))
-
-  const pullAndVoteStatus = (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead)
-
-  return pullAndVoteStatus
-  //return {
-  //         prVoteStatusNow: prVoteStatusNow,
-  //         votedAlready: votedAlready,
-  //         openPullRequestStatus: openPullRequestStatus,
-  //         alreadyHead: alreadyHead
-  //}
-
-}
-
 async function setVote(database, args) {
   const prID = (args.pr_id).split('_')[1]
   const resultPullAndVoteStatus = await pullAndVoteStatus(database, args)
+  database = resultPullAndVoteStatus.db
+  const status = resultPullAndVoteStatus.pullAndVoteStatus
 
   //const resultVoteStatus = await voteStatus(database, standardArgs)
   //const prVoteStatusNow = resultVoteStatus.prVoteStatusNow
@@ -238,14 +183,14 @@ async function setVote(database, args) {
 
   const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
 
-  if (resultPullAndVoteStatus) {
+  if (status) {
     var pullRequest = pullRequestsDB[args.pr_id]
     if (typeof pullRequest === 'undefined') {
       const resNewPullRequest = newPullRequest(database, args);
-      fakeTurboSrcReposDB = resNewPullRequest.db
+      database = resNewPullRequest.db
     }
-    const resUpdatePRvoteStatus = updatePRvoteStatus(fakeTurboSrcReposDB,args, tokens)
-    fakeTurboSrcReposDB = resUpdatePRvoteStatus.db
+    const resUpdatePRvoteStatus = updatePRvoteStatus(database,args, tokens)
+    database = resUpdatePRvoteStatus.db
     prVoteStatus =resUpdatePRvoteStatus.prVoteStatusUpdated
 
     console.log('408')

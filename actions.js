@@ -1,3 +1,5 @@
+const { getPRhead } = require('./pullForkUtil');
+
 const root = {
   // Also a root 'methods' in graphql query, by the same name
   getPRvoteTotals: function (database, args) {
@@ -71,7 +73,7 @@ const root = {
     console.log('pr_id ' + prID)
     console.log('tokens ' + tokens)
 
-    const prVoteStatusNow = getPRvoteStatus(database, args)
+    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args)
     if (prVoteStatusNow === 'none') {
        votedAlready = false
     } else {
@@ -97,7 +99,10 @@ const root = {
 
     const pullAndVoteStatus = (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead)
 
-    return pullAndVoteStatus
+    return {
+      pullAndVoteStatus: pullAndVoteStatus,
+      db: database
+    }
     //return {
     //         prVoteStatusNow: prVoteStatusNow,
     //         votedAlready: votedAlready,
@@ -108,7 +113,7 @@ const root = {
   },
   setVote: async function(database, args) {
     const prID = (args.pr_id).split('_')[1]
-    const resultPullAndVoteStatus = await pullAndVoteStatus(database, args)
+    const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, args)
 
     //const resultVoteStatus = await voteStatus(database, standardArgs)
     //const prVoteStatusNow = resultVoteStatus.prVoteStatusNow
@@ -173,12 +178,12 @@ const root = {
 
     return {
              db: database,
-             prVoteStatus: getPRvoteStatus(database, args)
+             prVoteStatus: module.exports.getPRvoteStatus(database, args)
     }
   },
   updatePRvoteStatus: async function(database, standardArgs, tokens) {
     const prID = standardArgs.pr_id.split('_')[1]
-    const prVoteStatusNow = getPRvoteStatus(database, standardArgs)
+    const prVoteStatusNow = module.exports.getPRvoteStatus(database, standardArgs)
     console.log(database)
     prVoteStatusUpdated = prVoteStatusNow
 
@@ -197,7 +202,7 @@ const root = {
 
       database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
 
-      prVoteStatusUpdated = getPRvoteStatus(database, standardArgs)
+      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, standardArgs)
 
       database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
 
@@ -213,7 +218,7 @@ const root = {
   newPullRequest: function(database, args) {
     const prID = args.pr_id.split('_')[1]
 
-    const prVoteStatus = getPRvoteStatus(database, args)
+    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
     const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
