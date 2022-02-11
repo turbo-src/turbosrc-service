@@ -9,6 +9,7 @@ const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
+const { getPRvoteTotals } = require('./actions')
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -163,28 +164,6 @@ var pullRequestsDB = {
   console.log('Running a GraphQL API server at localhost:4000/graphql');
 })();
 // The root provides the top-level API endpoints
-
-// Also a root 'methods' in graphql query, by the same name
-function getPRvoteTotals(database, args) {
-    const prID = args.pr_id.split('_')[1]
-
-    const supply = database[args.owner + "/" + args.repo].supply
-    const quorum = database[args.owner + "/" + args.repo].quorum
-
-    const prFields = database[args.owner + "/" + args.repo].pullRequests[prID]
-
-    var percentVotedQuorum
-
-    if (prFields) {
-      // Check if pull is halted
-      // If no
-      const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
-      percentVotedQuorum = totalVotedTokens/supply
-      c= totalVotedTokens/(supply*quorum)
-    }
-
-    return percentVotedQuorum
-}
 
 function getPRvoteStatus(database, args) {
     const prID = args.pr_id.split('_')[1]
