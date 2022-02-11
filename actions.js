@@ -111,9 +111,10 @@ const root = {
     //}
 
   },
-  setVote: async function(database, args) {
+  setVote: async function(database, pullRequestsDB, args) {
     const prID = (args.pr_id).split('_')[1]
     const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, args)
+    database = resultPullAndVoteStatus.db
 
     //const resultVoteStatus = await voteStatus(database, standardArgs)
     //const prVoteStatusNow = resultVoteStatus.prVoteStatusNow
@@ -124,13 +125,16 @@ const root = {
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
 
     if (resultPullAndVoteStatus) {
+      console.log('128')
       var pullRequest = pullRequestsDB[args.pr_id]
+      console.log('130')
       if (typeof pullRequest === 'undefined') {
-        const resNewPullRequest = newPullRequest(database, args);
-        fakeTurboSrcReposDB = resNewPullRequest.db
+        const resNewPullRequest = module.exports.newPullRequest(database, pullRequestsDB, args);
+        database = resNewPullRequest.db
+        pullRequestsDB = resNewPullRequest.pullRequestsDB
       }
-      const resUpdatePRvoteStatus = updatePRvoteStatus(fakeTurboSrcReposDB,args, tokens)
-      fakeTurboSrcReposDB = resUpdatePRvoteStatus.db
+      const resUpdatePRvoteStatus = module.exports.updatePRvoteStatus(database,args, tokens)
+      database = resUpdatePRvoteStatus.db
       prVoteStatus =resUpdatePRvoteStatus.prVoteStatusUpdated
 
       console.log('408')
@@ -215,7 +219,7 @@ const root = {
              prVoteStatusUpdated: prVoteStatusUpdated
     }
   },
-  newPullRequest: function(database, args) {
+  newPullRequest: function(database, pullRequestsDB, args) {
     const prID = args.pr_id.split('_')[1]
 
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
@@ -240,8 +244,8 @@ const root = {
     console.log('npr 247')
 
     return {
-             prID: pullRequestsDB[args.pr_id],
-             db: database
+             pullRequestsDB: pullRequestsDB,
+             db: database,
     }
   }
 };
