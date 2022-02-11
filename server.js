@@ -18,20 +18,6 @@ const { update } = require('tar');
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
 
-(async () => {
-
-//const client = createClient({
-//  url: 'redis://@172.17.0.2:6379'
-//  //host: '172.17.0.2',
-//  //port: '6379'
-//});
-//
-//client.on('error', (err) => console.log('Redis Client Error', err));
-//
-//await client.connect();
-
-    //getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    //pullFork(owner: String, repo: String, pr_id: String, contributor_id: String),
 var schema = buildSchema(`
   type PullRequest {
     vote_code: [String]
@@ -74,60 +60,6 @@ const repoAccounts = [
 ]
 //const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
 
-var head;
-var owner;
-var repo;
-for (i in repoAccounts) {
-  if (repoAccounts[i] !== "default/default") {
-    repoPath = repoAccounts[i].split('/')
-    owner = repoPath[0]
-    repo = repoPath[1]
-    // Don't pass forkName because it's the master or main branch.
-    head = await gitHeadUtil(owner, repo, '', 0)
-    //'pullRequestStatus': {
-    //  '$prID': $status,
-    //  '$prID': $status,
-    //}
-
-    fakeTurboSrcReposDB[repoAccounts[i]] = {
-      'head': head,
-      'supply': 1_000_000,
-      'quorum': 0.50,
-      'openPullRequest': '',
-      'contributors': {
-        'mary': 500_001,
-        '7db9a': 499_999,
-      },
-      'pullRequests': {
-      }
-    }
-
-    //fakeTurboSrcReposDB[repoAccounts[i]] = {
-    //  'head': head,
-    //  'supply': 1_000_000,
-    //  'quorum': 0.50,
-    //  'contributors': {
-    //    'emmanuel': 290_000,
-    //    'mary': 290_000,
-    //    'joseph': 200_000,
-    //    'john': 200_000,
-    //    '7db9a': 20_000,
-    //  },
-    //  'pullRequests': {
-    //    'prid':
-    //      'totalVotedTokens': $totalVotedTokens,
-    //      'votedTokens': {
-    //        '$contributorID': {
-    //          tokens: $tokens,
-    //          side: $side,
-    //        }
-    //       }
-    //    }
-    //  }
-    //}
-  }
-};
-
 const fakeAuthorizedContributors = {
   'default': ['default'],
   'turbo-src/extension': ['emmanuel','mary', 'joseph', 'john'],
@@ -147,6 +79,89 @@ var pullRequestsDB = {
     console.log('vote:', req.data);
     next();
  }
+
+(async () => {
+  var head;
+  var owner;
+  var repo;
+  for (i in repoAccounts) {
+    if (repoAccounts[i] !== "default/default") {
+      repoPath = repoAccounts[i].split('/')
+      owner = repoPath[0]
+      repo = repoPath[1]
+      // Don't pass forkName because it's the master or main branch.
+      head = await gitHeadUtil(owner, repo, '', 0)
+      //'pullRequestStatus': {
+      //  '$prID': $status,
+      //  '$prID': $status,
+      //}
+
+      fakeTurboSrcReposDB[repoAccounts[i]] = {
+        'head': head,
+        'supply': 1_000_000,
+        'quorum': 0.50,
+        'openPullRequest': '',
+        'contributors': {
+          'mary': 500_001,
+          '7db9a': 499_999,
+        },
+        'pullRequests': {
+        }
+      }
+
+      //fakeTurboSrcReposDB[repoAccounts[i]] = {
+      //  'head': head,
+      //  'supply': 1_000_000,
+      //  'quorum': 0.50,
+      //  'contributors': {
+      //    'emmanuel': 290_000,
+      //    'mary': 290_000,
+      //    'joseph': 200_000,
+      //    'john': 200_000,
+      //    '7db9a': 20_000,
+      //  },
+      //  'pullRequests': {
+      //    'prid':
+      //      'totalVotedTokens': $totalVotedTokens,
+      //      'votedTokens': {
+      //        '$contributorID': {
+      //          tokens: $tokens,
+      //          side: $side,
+      //        }
+      //       }
+      //    }
+      //  }
+      //}
+    }
+  };
+
+  var app = express();
+  //app.use(loggingMiddleware);
+  app.use(cors());
+  app.use(function (req, res, next) {
+      let originalSend = res.send;
+      res.send = function (data) {
+          console.log(data + "\n");
+          originalSend.apply(res, Array.from(arguments));
+      }
+      next();
+  });
+  app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  }));
+  var way = false;
+  //if (way === true) {
+  //     console.log("true");
+  //     return true;
+  //   } else {
+  //     console.log("false");
+  //     return false;
+  //}
+  app.listen(8080);
+  console.log('Running a GraphQL API server at localhost:4000/graphql');
+})();
 // The root provides the top-level API endpoints
 
 // Also a root 'methods' in graphql query, by the same name
@@ -516,31 +531,3 @@ var root = {
     return pullRequestsDB[args.pr_id]
   }
 }
-
-var app = express();
-//app.use(loggingMiddleware);
-app.use(cors());
-app.use(function (req, res, next) {
-    let originalSend = res.send;
-    res.send = function (data) {
-        console.log(data + "\n");
-        originalSend.apply(res, Array.from(arguments));
-    }
-    next();
-});
-app.use('/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: true,
-}));
-var way = false;
-//if (way === true) {
-//     console.log("true");
-//     return true;
-//   } else {
-//     console.log("false");
-//     return false;
-//}
-app.listen(8080);
-console.log('Running a GraphQL API server at localhost:4000/graphql');
-})();
