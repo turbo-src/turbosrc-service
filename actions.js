@@ -212,7 +212,7 @@ const root = {
     // Maybe should have index increment to know if updated or not
     return {
              db: database,
-             prVoteStatusUpdated : prVoteStatusUpdated
+             prVoteStatusUpdated: prVoteStatusUpdated
     }
   },
   newPullRequest: function(database, args) {

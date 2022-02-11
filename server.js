@@ -12,7 +12,8 @@ const { update } = require('tar');
 const {
   getPRvoteTotals,
   getPRvoteStatus,
-  pullAndVoteStatus
+  pullAndVoteStatus,
+  updatePRvoteStatus
 } = require('./actions')
 
 // pr_id is the issue_id, which are the same for now.
@@ -239,41 +240,6 @@ async function setVote(database, args) {
   return {
            db: database,
            prVoteStatus: getPRvoteStatus(database, args)
-  }
-}
-
-function updatePRvoteStatus(database, standardArgs, tokens) {
-  const prID = standardArgs.pr_id.split('_')[1]
-  const prVoteStatusNow = getPRvoteStatus(database, standardArgs)
-  console.log(database)
-  prVoteStatusUpdated = prVoteStatusNow
-
-  if (prVoteStatusNow === 'open') {
-    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
-    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
-      tokens: 0,
-      side: 'none'
-    }
-
-    console.log('upr 212')
-    const totalVotedTokens = database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
-
-    //Add to vote tally. Creates pull request fields if needed.
-    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
-
-    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
-
-    prVoteStatusUpdated = getPRvoteStatus(database, standardArgs)
-
-    database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
-
-    console.log('upr 228')
-  }
-
-  // Maybe should have index increment to know if updated or not
-  return {
-           db: database,
-           prVoteStatusUpdated : prVoteStatusUpdated
   }
 }
 
