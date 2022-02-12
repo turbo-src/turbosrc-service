@@ -10,7 +10,7 @@ var snooze_ms = 1000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote to stay open, then vote to close', function () {
+describe('Vote to stay open, then close', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
@@ -24,30 +24,16 @@ describe('Vote to stay open, then vote to close', function () {
         );
 
     });
-    describe('Check status after vote open', function () {
+    describe('Check status after vote close', function () {
       it("Should do something", async () => {
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-
-        //console.log(status)
-
-        assert.equal(
-            status,
-            "open",
-            "Fail to stay open even the votes are below the quorum"
-        );
-      });
-    });
-
-    describe('Check status after vote open', function () {
-      it("Should close vote after exceeding quorum", async () => {
-        await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
@@ -55,9 +41,8 @@ describe('Vote to stay open, then vote to close', function () {
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
-
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
@@ -65,10 +50,17 @@ describe('Vote to stay open, then vote to close', function () {
             /*side:*/ "yes",
         );
 
+        //console.log(status)
         assert.equal(
-            status,
+            openStatus,
             "open",
-            "Fail to stay open even the votes are below the quorum"
+            "Fail to close even the votes exceed the quorum"
+        );
+
+        assert.equal(
+            closeStatus,
+            "closed",
+            "Fail to close even the votes exceed the quorum"
         );
       });
     });
