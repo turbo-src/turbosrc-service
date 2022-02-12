@@ -1,4 +1,6 @@
 const { getPRhead } = require('./pullForkUtil');
+const { getPullRequest } = require('./gitHubUtil');
+const { gitHeadUtil } = require('./gitHeadUtil');
 
 const root = {
   // Also a root 'methods' in graphql query, by the same name
