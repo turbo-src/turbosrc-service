@@ -72,7 +72,7 @@ const fakeAuthorizedContributors = {
   'turbo-src/extension': ['emmanuel','mary', 'joseph', 'john'],
   'turbo-src/graphql_express_server': ['emmanuel','mary', 'joseph', 'john'],
   '7db9a/dir-contract': ['7db9a','emmanuel','mary', 'joseph', 'john'],
-  'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
+  'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john', 'am', 'jc', 'pc', 'mb', 'np', 'nn', 'jp', 'ts', 'af', 'aj', 'ds', 'ri' ],
   'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
   'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john']
 }
@@ -110,7 +110,18 @@ var pullRequestsDB = {
         'openPullRequest': '',
         'contributors': {
           'mary': 500_001,
-          '7db9a': 499_999,
+          '7db9a': 33_999,
+          'am': 15_000,
+          'jc': 10_000,
+          'pc': 75_000,
+          'mb': 75_000,
+          'np': 5_000,
+          'nn': 100_000,
+          'jp': 50_000,
+          'ts': 50_000,
+          'af': 10_000,
+          'ds': 75_000,
+          'ri': 1_000
         },
         'pullRequests': {
         }
