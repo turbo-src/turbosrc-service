@@ -13,7 +13,8 @@ const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 describe('Vote duplicate with minority stake voter', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
-    before(async () => {
+    describe('Check status after vote duplicate', function () {
+      it("Should do something", async () => {
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
@@ -22,10 +23,6 @@ describe('Vote duplicate with minority stake voter', function () {
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-
-    });
-    describe('Check status after vote duplicate', function () {
-      it("Should do something", async () => {
         await snooze(1500);
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
@@ -34,6 +31,7 @@ describe('Vote duplicate with minority stake voter', function () {
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
+        await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
@@ -54,7 +52,7 @@ describe('Vote duplicate with minority stake voter', function () {
         assert.equal(
             openStatus,
             "open",
-            "Fail to close even the votes exceed the quorum"
+            "Fail open on initial vote below quorum"
         );
 
         assert.equal(
