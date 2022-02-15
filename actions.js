@@ -4,6 +4,18 @@ const { gitHeadUtil } = require('./gitHeadUtil');
 
 const root = {
   // Also a root 'methods' in graphql query, by the same name
+  getPRvote: function (database, args) {
+    const prID = args.pr_id.split('_')[1]
+
+    const pullRequest = database[args.owner + "/" + args.repo].pullRequests[prID]
+
+    if (typeof pullRequest === 'undefined') {
+      return undefined
+    } else {
+      const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id]
+      return votedTokens
+    }
+  },
   getPRvoteTotals: function (database, args) {
       const prID = args.pr_id.split('_')[1]
 
@@ -60,6 +72,7 @@ const root = {
     const activePullRequests = database[args.owner + "/" + args.repo].pullRequests
     const numberActivePullRequests = Object.keys(activePullRequests).length
 
+    //Fix: shouldn't make state changes in status check.
     if (numberActivePullRequests === 0) {
        database[args.owner + "/" + args.repo].openPullRequest = prID
     }
@@ -126,7 +139,7 @@ const root = {
 
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
 
-    if (resultPullAndVoteStatus) {
+    if (resultPullAndVoteStatus.pullAndVoteStatus) {
       console.log('128')
       var pullRequest = pullRequestsDB[args.pr_id]
       console.log('130')
@@ -135,9 +148,10 @@ const root = {
         database = resNewPullRequest.db
         pullRequestsDB = resNewPullRequest.pullRequestsDB
       }
-      const resUpdatePRvoteStatus = module.exports.updatePRvoteStatus(database,args, tokens)
+      debugger
+      const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
       database = resUpdatePRvoteStatus.db
-      prVoteStatus =resUpdatePRvoteStatus.prVoteStatusUpdated
+      prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated
 
       console.log('408')
       console.log(prVoteStatus)
@@ -181,6 +195,8 @@ const root = {
     }
 
     console.log('475')
+
+    debugger
 
     return {
              db: database,

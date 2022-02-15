@@ -11,6 +11,7 @@ const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
 const {
   getPRvoteTotals,
+  getPRvote,
   getPRvoteStatus,
   newPullRequest,
   setVote
@@ -268,11 +269,17 @@ var root = {
     return "something"
   },
   setVote: async (args) => {
-    const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, args)
+    // Check user votes. If voted, don't set vote.
+    const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
+    if ( votedTokens > 0) {
+      return "duplicate"
+    } else if (typeof votedTokens === 'undefined') {
+      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, args)
 
-    fakeTurboSrcReposDB = resultSetVote.db
+      fakeTurboSrcReposDB = resultSetVote.db
+      return resultSetVote.prVoteStatus
+    }
 
-    return resultSetVote.prVoteStatus
   },
   newPullRequest: async (args) => {
     const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
