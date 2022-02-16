@@ -269,6 +269,32 @@ describe('Vote and get tally', function () {
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
+
+        //Now close vote.
+        await snooze(1500);
+        await postSetVote(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6519",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const closeStatus = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6519",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const maryVoteCumm = await postGetPRvoteTotals(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6519",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
         assert.equal(
             riVoteCumm,
             "0.499999",
@@ -278,6 +304,16 @@ describe('Vote and get tally', function () {
             openStatus,
             "open",
             "Fail to stay open even the votes are below the quorum"
+        );
+        assert.equal(
+            maryVoteCumm,
+            "1",
+            "Fail to add votes."
+        );
+        assert.equal(
+            closeStatus,
+            "closed",
+            "Fail to stay close even the votes are above the quorum"
         );
       });
     });
