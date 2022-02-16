@@ -285,7 +285,7 @@ var root = {
     if ( votedTokens > 0) {
       return "duplicate"
     } else if (typeof votedTokens === 'undefined') {
-      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, args)
+      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, pullRequestsVoteCloseHistory, args)
 
       fakeTurboSrcReposDB = resultSetVote.db
       return resultSetVote.prVoteStatus

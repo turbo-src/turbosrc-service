@@ -126,7 +126,7 @@ const root = {
     //}
 
   },
-  setVote: async function(database, pullRequestsDB, args) {
+  setVote: async function(database, pullRequestsDB, pullRequestsVoteCloseHistory, args) {
     const prID = (args.pr_id).split('_')[1]
     const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, args)
     database = resultPullAndVoteStatus.db
@@ -148,7 +148,6 @@ const root = {
         database = resNewPullRequest.db
         pullRequestsDB = resNewPullRequest.pullRequestsDB
       }
-      debugger
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
       database = resUpdatePRvoteStatus.db
       prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated
@@ -182,6 +181,8 @@ const root = {
           // Update HEAD to repo.
           database[args.owner + "/" + args.repo].head = pullReqRepoHead
 
+          debugger
+
           // Add to history
           pullRequestsVoteCloseHistory.push(prID)
 
@@ -195,8 +196,6 @@ const root = {
     }
 
     console.log('475')
-
-    debugger
 
     return {
              db: database,
