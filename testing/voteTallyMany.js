@@ -262,10 +262,22 @@ describe('Vote and get tally', function () {
         //    "0.499999",
         //    "Fail to add votes."
         //);
+        const openStatus = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6519",
+            /*contributor_id:*/ "ri",
+            /*side:*/ "yes",
+        );
         assert.equal(
             riVoteCumm,
             "0.499999",
             "Fail to add votes."
+        );
+        assert.equal(
+            openStatus,
+            "open",
+            "Fail to stay open even the votes are below the quorum"
         );
       });
     });
