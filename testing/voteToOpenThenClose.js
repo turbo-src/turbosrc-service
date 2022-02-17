@@ -18,7 +18,7 @@ describe('Vote to stay open, then close', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -30,14 +30,14 @@ describe('Vote to stay open, then close', function () {
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6598",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -45,7 +45,7 @@ describe('Vote to stay open, then close', function () {
         const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6598",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
