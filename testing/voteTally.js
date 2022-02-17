@@ -20,7 +20,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -28,7 +28,7 @@ describe('Vote and get tally', function () {
         const afterVoteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -36,7 +36,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -44,20 +44,40 @@ describe('Vote and get tally', function () {
         const duplicateVoteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
+        await postSetVote(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6772",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const closeStatus = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6772",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
         assert.equal(
             afterVoteTotals,
-            "0.499999",
+            "0.033999",
             "Fail to add votes."
         );
         assert.equal(
             duplicateVoteTotals,
-            "0.499999",
+            "0.033999",
             "Fail to add votes."
+        );
+        assert.equal(
+            closeStatus,
+            "closed",
+            "Fail to close even the votes exceed the quorum"
         );
       });
     });
