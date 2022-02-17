@@ -48,6 +48,25 @@ describe('Vote duplicate with minority stake voter', function () {
             /*side:*/ "yes",
         );
 
+        // Close vote otherwise other tests on same server instance won't work.
+        // Only one vote round at a time.
+        await snooze(1500);
+        await postSetVote(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const closeStatus = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+
         //console.log(status)
         assert.equal(
             openStatus,
@@ -58,6 +77,11 @@ describe('Vote duplicate with minority stake voter', function () {
         assert.equal(
             duplicateStatus,
             "open",
+            "Fail keep open even though initial vote below quorum"
+        );
+        assert.equal(
+            closeStatus,
+            "closed",
             "Fail to close even the votes exceed the quorum"
         );
       });
