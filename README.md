@@ -28,6 +28,20 @@ docker run -p 4001:8080 -d \
 turbo-src-pfserver:0.0.1
 ```
 
+Test.
+
+```
+npm test testing/voteDuplicate.js && \
+sleep 10 && \
+npm test testing/voteTally.js && \
+sleep 10 && \
+npm test testing/voteTallyMany.js && \
+sleep 10 && \
+npm test testing/voteToClose.js &&\
+sleep 10 && \
+npm test testing/voteToOpenThenClose.js && \
+```
+
 To see server logs.
 
 `docker logs turbo-src-server`
