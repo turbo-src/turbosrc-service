@@ -65,7 +65,7 @@ const root = {
 
       return status
   },
-  pullAndVoteStatus: async function(database, args) {
+  pullAndVoteStatus: async function(database, pullReqRepoHead, args) {
     const prID = (args.pr_id).split('_')[1]
     var votedAlready;
 
@@ -101,7 +101,6 @@ const root = {
 
     console.log('op pr status: ' + openPullRequestStatus)
 
-    var [res, pullReqRepoHead] = await getPRhead(args)
     const alreadyHead = (pullReqRepoHead === database[args.owner + "/" + args.repo].head)
 
     console.log('pullReqHead')
@@ -128,8 +127,11 @@ const root = {
   },
   setVote: async function(database, pullRequestsDB, pullRequestsVoteCloseHistory, args) {
     const prID = (args.pr_id).split('_')[1]
-    const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, args)
+    var [_res, pullReqRepoHead] = await getPRhead(args)
+    const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, pullReqRepoHead, args)
     database = resultPullAndVoteStatus.db
+
+    //other function
 
     //const resultVoteStatus = await voteStatus(database, standardArgs)
     //const prVoteStatusNow = resultVoteStatus.prVoteStatusNow
@@ -175,7 +177,7 @@ const root = {
         const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
         // If vote close it out, open it up for other PRs.
         if (prVoteStatus === 'closed') {
-          [res,pullReqRepoHead] = await getPRhead(args)
+          [_res,pullReqRepoHead] = await getPRhead(args)
 
           // Update HEAD to repo.
           database[args.owner + "/" + args.repo].head = pullReqRepoHead
