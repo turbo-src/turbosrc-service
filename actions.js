@@ -137,10 +137,9 @@ const root = {
     //const openPullRequestStatus = resultVoteStatus.openPullRequestStatus
     //const alreadyHead = resultVoteStatus.alreadyHead
 
-    const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
-
     if (resultPullAndVoteStatus.pullAndVoteStatus) {
       console.log('128')
+      const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
       var pullRequest = pullRequestsDB[args.pr_id]
       console.log('130')
       if (typeof pullRequest === 'undefined') {
