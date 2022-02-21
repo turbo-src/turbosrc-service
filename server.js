@@ -226,8 +226,13 @@ var root = {
 
     return status
   },
+  getPRpercentVotedQuorum: async (args) => {
+    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
+    return voteTotals.percentVotedQuorum
+  },
   getPRvoteTotals: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
+    //return voteTotals.totalVotedTokens
     return voteTotals.percentVotedQuorum
   },
   getPRforkStatus: async (args) => {

@@ -18,6 +18,7 @@ const root = {
   },
   getPRvoteTotals: function (database, args) {
       const prID = args.pr_id.split('_')[1]
+      var totalVotedTokens = 0;
 
       const supply = database[args.owner + "/" + args.repo].supply
       const quorum = database[args.owner + "/" + args.repo].quorum
@@ -29,12 +30,14 @@ const root = {
       if (prFields) {
         // Check if pull is halted
         // If no
-        const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+        totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
         percentVotedQuorum = totalVotedTokens/supply
         c= totalVotedTokens/(supply*quorum)
       }
 
-      return { percentVotedQuorum: percentVotedQuorum
+      return {
+        percentVotedQuorum: percentVotedQuorum,
+        totalVotedTokens: totalVotedTokens,
       }
   },
   getPRvoteStatus: function(database, args) {
