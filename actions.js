@@ -45,6 +45,8 @@ const root = {
       return {
         percentVotedQuorum: percentVotedQuorum,
         totalVotedTokens: totalVotedTokens,
+        totalVotedYesTokens: totalVotedYesTokens,
+        totalVotedNoTokens: totalVotedNoTokens
       }
   },
   getPRvoteStatus: function(database, args) {
