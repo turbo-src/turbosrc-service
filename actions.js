@@ -34,7 +34,8 @@ const root = {
         c= totalVotedTokens/(supply*quorum)
       }
 
-      return percentVotedQuorum
+      return { percentVotedQuorum: percentVotedQuorum
+      }
   },
   getPRvoteStatus: function(database, args) {
       const prID = args.pr_id.split('_')[1]

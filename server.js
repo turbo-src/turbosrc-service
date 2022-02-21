@@ -227,7 +227,8 @@ var root = {
     return status
   },
   getPRvoteTotals: async (args) => {
-    return getPRvoteTotals(fakeTurboSrcReposDB, args)
+    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
+    return voteTotals.percentVotedQuorum
   },
   getPRforkStatus: async (args) => {
     var res;
