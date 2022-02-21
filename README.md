@@ -39,7 +39,7 @@ npm test testing/voteTallyMany.js && \
 sleep 10 && \
 npm test testing/voteToClose.js &&\
 sleep 10 && \
-npm test testing/voteToOpenThenClose.js && \
+npm test testing/voteToOpenThenClose.js
 ```
 
 To see server logs.
