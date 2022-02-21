@@ -18,7 +18,12 @@ const root = {
   },
   getPRvoteTotals: function (database, args) {
       const prID = args.pr_id.split('_')[1]
+      //This is a little weird because it should
+      //Already have a value but leaving here just
+      // in case. It will get resolved below.
       var totalVotedTokens = 0;
+      var totalVotedYesTokens = 0;
+      var totalVotedNoTokens = 0;
 
       const supply = database[args.owner + "/" + args.repo].supply
       const quorum = database[args.owner + "/" + args.repo].quorum
@@ -31,6 +36,8 @@ const root = {
         // Check if pull is halted
         // If no
         totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+        totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
+        totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
         percentVotedQuorum = totalVotedTokens/supply
         c= totalVotedTokens/(supply*quorum)
       }
