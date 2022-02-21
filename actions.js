@@ -221,10 +221,20 @@ const root = {
       console.log('upr 212')
       const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
 
+      const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
+      const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
+
       //Add to vote tally. Creates pull request fields if needed.
       database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
 
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
+
+      //Add yes and not votes to tally.
+      if (args.side === "yes") {
+        database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
+      } else {
+        database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = totalVotedNoTokens + tokens
+      }
 
       prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args)
 
@@ -254,6 +264,8 @@ const root = {
     database[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
 
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = 0
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
