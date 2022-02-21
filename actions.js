@@ -182,8 +182,6 @@ const root = {
           // Update HEAD to repo.
           database[args.owner + "/" + args.repo].head = pullReqRepoHead
 
-          debugger
-
           // Add to history
           pullRequestsVoteCloseHistory.push(prID)
 
@@ -203,30 +201,30 @@ const root = {
              prVoteStatus: module.exports.getPRvoteStatus(database, args)
     }
   },
-  updatePRvoteStatus: async function(database, standardArgs, tokens) {
-    const prID = standardArgs.pr_id.split('_')[1]
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, standardArgs)
+  updatePRvoteStatus: async function(database, args, tokens) {
+    const prID = args.pr_id.split('_')[1]
+    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args)
     console.log(database)
     prVoteStatusUpdated = prVoteStatusNow
 
     if (prVoteStatusNow === 'open') {
-      database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens.contributorID = {}
-      database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id] = {
-        tokens: 0,
-        side: 'none'
+      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
+      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+        tokens: tokens,
+        side: args.side
       }
 
       console.log('upr 212')
-      const totalVotedTokens = database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens
+      const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
 
       //Add to vote tally. Creates pull request fields if needed.
-      database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
+      database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
 
-      database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID].votedTokens[standardArgs.contributor_id].side = standardArgs.side
+      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
 
-      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, standardArgs)
+      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args)
 
-      database[standardArgs.owner + "/" + standardArgs.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
+      database[args.owner + "/" + args.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
 
       console.log('upr 228')
     }
