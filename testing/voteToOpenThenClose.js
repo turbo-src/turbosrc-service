@@ -1,6 +1,8 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus
+        postGetPRvoteStatus,
+        postGetPRvoteYesTotals,
+        postGetPRvoteNoTotals,
       } = require('./../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -27,6 +29,23 @@ describe('Vote to stay open, then close', function () {
     describe('Check status after vote close', function () {
       it("Should do something", async () => {
         await snooze(1500);
+        const voteYesTotals = await postGetPRvoteYesTotals(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6598",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const voteNoTotals = await postGetPRvoteNoTotals(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6598",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
@@ -51,6 +70,16 @@ describe('Vote to stay open, then close', function () {
         );
 
         //console.log(status)
+        assert.equal(
+            voteYesTotals,
+            "0",
+            "Fail to add votes yes."
+        );
+        assert.equal(
+            voteNoTotals,
+            "1000",
+            "Fail to add votes no."
+        );
         assert.equal(
             openStatus,
             "open",
