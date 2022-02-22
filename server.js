@@ -38,6 +38,8 @@ var schema = buildSchema(`
     setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    getPRvoteNoTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getRepoStatus(repo_id: String): Boolean,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(pr_id: String): String,
@@ -229,6 +231,16 @@ var root = {
   getPRpercentVotedQuorum: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
     return voteTotals.percentVotedQuorum
+  },
+  getPRvoteYesTotals: async (args) => {
+    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
+    return voteTotals.totalVotedYesTokens
+    //return voteTotals.percentVotedQuorum
+  },
+  getPRvoteNoTotals: async (args) => {
+    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
+    return voteTotals.totalVotedNoTokens
+    //return voteTotals.percentVotedQuorum
   },
   getPRvoteTotals: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)

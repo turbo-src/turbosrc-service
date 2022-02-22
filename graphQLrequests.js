@@ -162,7 +162,7 @@ var root = {
      //});
    const json = JSON.parse(res.text)
    console.log(json)
-   return json.data.getPRvoteNoTotals
+   return json.data.getPRvoteTotals
   }
 }
 
