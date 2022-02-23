@@ -239,6 +239,7 @@ const root = {
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
 
       //Add yes and not votes to tally.
+      database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = tokens
       if (args.side === "yes") {
         database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
       } else {
