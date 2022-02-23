@@ -1,6 +1,8 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus
+        postGetPRvoteStatus,
+        postGetPRvoteYesTotals,
+        postGetPRvoteNoTotals,
       } = require('./../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -34,6 +36,22 @@ describe('Vote to close', function () {
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
+        await snooze(1500);
+        const voteYesTotals = await postGetPRvoteYesTotals(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6772",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const voteNoTotals = await postGetPRvoteNoTotals(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
 
         //console.log(status)
 
@@ -41,6 +59,17 @@ describe('Vote to close', function () {
             status,
             "closed",
             "Fail to stay close even the votes exceed the quorum"
+        );
+
+        assert.equal(
+            voteYesTotals,
+            "0",
+            "Fail to add votes yes."
+        );
+        assert.equal(
+            voteNoTotals,
+            "0",
+            "Fail to zero out voteNoTotals after vote close."
         );
       });
     });
