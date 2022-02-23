@@ -141,7 +141,7 @@ var root = {
        // Calling the end function will send the request
      //});
    const json = JSON.parse(res.text)
-   console.log(json)
+   //console.log(json)
    return json.data.getPRvoteYesTotals
   },
   postGetPRvoteNoTotals: async (owner, repo, issue_id, contributor_id, side) => {
@@ -161,8 +161,8 @@ var root = {
        // Calling the end function will send the request
      //});
    const json = JSON.parse(res.text)
-   console.log(json)
-   return json.data.getPRvoteTotals
+   //console.log(json)
+   return json.data.getPRvoteNoTotals
   }
 }
 
