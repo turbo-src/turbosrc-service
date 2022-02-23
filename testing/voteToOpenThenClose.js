@@ -45,7 +45,6 @@ describe('Vote to stay open, then close', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
@@ -53,6 +52,7 @@ describe('Vote to stay open, then close', function () {
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
+        await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
@@ -72,12 +72,12 @@ describe('Vote to stay open, then close', function () {
         //console.log(status)
         assert.equal(
             voteYesTotals,
-            "0",
+            '33999',
             "Fail to add votes yes."
         );
         assert.equal(
             voteNoTotals,
-            "1000",
+            '0',
             "Fail to add votes no."
         );
         assert.equal(
