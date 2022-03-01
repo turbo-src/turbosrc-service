@@ -36,11 +36,16 @@ const root = {
         // Check if pull is halted
         // If no
         totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+
         totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
         totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
         percentVotedQuorum = totalVotedTokens/supply
         c= totalVotedTokens/(supply*quorum)
+      } else {
+
       }
+
+      debugger
 
       return {
         percentVotedQuorum: percentVotedQuorum,
@@ -220,6 +225,7 @@ const root = {
     console.log(database)
     prVoteStatusUpdated = prVoteStatusNow
 
+    debugger
     if (prVoteStatusNow === 'open') {
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
@@ -239,7 +245,7 @@ const root = {
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
 
       //Add yes and not votes to tally.
-      database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = tokens
+      database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
       if (args.side === "yes") {
         database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
       } else {
