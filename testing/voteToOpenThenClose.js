@@ -3,6 +3,7 @@ const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
+        postGetPRvoteTotals,
       } = require('./../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -44,6 +45,13 @@ describe('Vote to stay open, then close', function () {
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
+        const voteTotals = await postGetPRvoteTotals(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6598",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
         await snooze(1500);
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
@@ -77,6 +85,11 @@ describe('Vote to stay open, then close', function () {
         );
         assert.equal(
             voteNoTotals,
+            '0',
+            "Fail to add votes no."
+        );
+        assert.equal(
+            voteTotals,
             '0',
             "Fail to add votes no."
         );
