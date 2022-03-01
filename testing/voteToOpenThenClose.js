@@ -90,7 +90,7 @@ describe('Vote to stay open, then close', function () {
         );
         assert.equal(
             voteTotals,
-            '0',
+            '0.033999',
             "Fail to add votes no."
         );
         assert.equal(
