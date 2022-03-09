@@ -1,7 +1,9 @@
 const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
-const { createRepo } = require('./state');
+const { createRepo,
+        createTokenSupply
+ } = require('./state');
 
 const root = {
   // Also a root 'methods' in graphql query, by the same name
@@ -270,11 +272,12 @@ const root = {
   newPullRequest: function(database, pullRequestsDB, args) {
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
-    const resultState = createRepo(database, pullRequestsDB, args, prVoteStatus)
+    const resCreateRepo = createRepo(database, pullRequestsDB, args, prVoteStatus)
+    database = createTokenSupply(resCreateRepo.db, 1_000_000, args)
 
     return {
-             pullRequestsDB: resultState.pullRequestsDB,
-             db: resultState.database
+             pullRequestsDB: resCreateRepo.pullRequestsDB,
+             db: database
     }
   }
 };

@@ -14,7 +14,6 @@ const root = {
 
     database[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply = 1_000_000
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
@@ -27,10 +26,15 @@ const root = {
 
     return {
              pullRequestsDB: pullRequestsDB,
-             database,
+             db: database,
     }
   },
-  createTokenSupply: function (database, pullRequestsDB, args, prVoteStatus) {
+  createTokenSupply: function (database, tokens, args) {
+    const prID = args.pr_id.split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply = tokens
+
+    return  database
   }
 
 }
