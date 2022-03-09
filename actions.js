@@ -1,6 +1,7 @@
 const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
+const { createRepo } = require('./state');
 
 const root = {
   // Also a root 'methods' in graphql query, by the same name
@@ -266,34 +267,13 @@ const root = {
     }
   },
   newPullRequest: function(database, pullRequestsDB, args) {
-    const prID = args.pr_id.split('_')[1]
-
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
-    const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
-    const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
-    pullRequestsDB[args.pr_id] = [vote_code]
-
-    console.log('npr 239')
-    database[args.owner + "/" + args.repo].pullRequests[prID] = {}
-
-    database[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
-
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = 0
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
-      tokens: 0,
-      side: 'none'
-    }
-
-    console.log('npr 247')
+    const resultState = createRepo(database, pullRequestsDB, args, prVoteStatus)
 
     return {
-             pullRequestsDB: pullRequestsDB,
-             db: database,
+             pullRequestsDB: resultState.pullRequestsDB,
+             db: resultState.database
     }
   }
 };
