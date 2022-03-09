@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { postSetVote,
         postGetPRvoteStatus
-      } = require('./../graphQLrequests')
+      } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
