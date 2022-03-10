@@ -2,7 +2,8 @@ const { getPRhead } = require('./pullForkUtil');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { createRepo,
-        createTokenSupply
+        createTokenSupply,
+        setQuorum
  } = require('./state');
 
 const root = {
@@ -37,7 +38,7 @@ const root = {
         // If no
 
         const supply = database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply
-        const quorum = database[args.owner + "/" + args.repo].quorum
+        const quorum = database[args.owner + "/" + args.repo].pullRequests.quorum
 
         totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
 
@@ -67,7 +68,7 @@ const root = {
         // Check if pull is halted
         // If no
         const supply = database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply
-        const quorum = database[args.owner + "/" + args.repo].quorum
+        const quorum = database[args.owner + "/" + args.repo].pullRequests.quorum
 
         const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
         const percentVoted = totalVotedTokens/supply
@@ -274,6 +275,7 @@ const root = {
 
     const resCreateRepo = createRepo(database, pullRequestsDB, args, prVoteStatus)
     database = createTokenSupply(resCreateRepo.db, 1_000_000, args)
+    database = setQuorum(database, 0.50, args)
 
     return {
              pullRequestsDB: resCreateRepo.pullRequestsDB,

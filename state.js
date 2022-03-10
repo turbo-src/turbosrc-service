@@ -10,6 +10,9 @@ const root = {
 
     pullRequestsDB[args.pr_id] = [vote_code]
 
+    // Default quorum is 50%
+    database[args.owner + "/" + args.repo].pullRequests.quorum = 0.50
+
     database[args.owner + "/" + args.repo].pullRequests[prID] = {}
 
     database[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
@@ -33,6 +36,13 @@ const root = {
     const prID = args.pr_id.split('_')[1]
 
     database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply = tokens
+
+    return  database
+  },
+  setQuorum: function (database, quorum, args) {
+    const prID = args.pr_id.split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests.quorum = quorum
 
     return  database
   }
