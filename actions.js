@@ -38,8 +38,8 @@ const root = {
         // Check if pull is halted
         // If no
 
-        const supply = database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply
-        const quorum = database[args.owner + "/" + args.repo].pullRequests.quorum
+        const supply = database[args.owner + "/" + args.repo].tokenSupply
+        const quorum = database[args.owner + "/" + args.repo].quorum
 
         totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
 
@@ -68,8 +68,8 @@ const root = {
       if (prFields) {
         // Check if pull is halted
         // If no
-        const supply = database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply
-        const quorum = database[args.owner + "/" + args.repo].pullRequests.quorum
+        const supply = database[args.owner + "/" + args.repo].tokenSupply
+        const quorum = database[args.owner + "/" + args.repo].quorum
 
         const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
         const percentVoted = totalVotedTokens/supply

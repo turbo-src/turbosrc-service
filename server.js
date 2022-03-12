@@ -107,6 +107,7 @@ var pullRequestsDB = {
 
       fakeTurboSrcReposDB[repoAccounts[i]] = {
         'head': head,
+        'tokenSupply': 1_000_000,
         'openPullRequest': '',
         'contributors': {
           'mary': 500_001,
