@@ -3,7 +3,8 @@ const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { createRepo,
         createTokenSupply,
-        setQuorum
+        setQuorum,
+        newPullRequest
  } = require('./state');
 
 const root = {
@@ -271,14 +272,21 @@ const root = {
     }
   },
   newPullRequest: function(database, pullRequestsDB, args) {
+    debugger
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
     const resCreateRepo = createRepo(database, pullRequestsDB, args, prVoteStatus)
-    database = createTokenSupply(resCreateRepo.db, 1_000_000, args)
+    database = resCreateRepo.db
+    pullRequestsDB = resCreateRepo.pullRequestsDB
+    database = createTokenSupply(database, 1_000_000, args)
     database = setQuorum(database, 0.50, args)
 
+    const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)
+    database = resNewPullRequest.db
+    pullRequestsDB = resNewPullRequest.pullRequestsDB
+
     return {
-             pullRequestsDB: resCreateRepo.pullRequestsDB,
+             pullRequestsDB: pullRequestsDB,
              db: database
     }
   }

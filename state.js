@@ -5,13 +5,38 @@ const root = {
     const prID = args.pr_id.split('_')[1]
 
 
+    // Default token supply is 1mm.
+    database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply = 1_000_000
+
+    // Default quorum is 50%
+    database[args.owner + "/" + args.repo].pullRequests.quorum = 0.50
+
+    return {
+             pullRequestsDB: pullRequestsDB,
+             db: database,
+    }
+  },
+  createTokenSupply: function (database, tokens, args) {
+    const prID = args.pr_id.split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply = tokens
+
+    return  database
+  },
+  setQuorum: function (database, quorum, args) {
+    const prID = args.pr_id.split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests.quorum = quorum
+
+    return  database
+  },
+  newPullRequest: function (database, pullRequestsDB, args, prVoteStatus) {
+    const prID = args.pr_id.split('_')[1]
+
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
     const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
     pullRequestsDB[args.pr_id] = [vote_code]
-
-    // Default quorum is 50%
-    database[args.owner + "/" + args.repo].pullRequests.quorum = 0.50
 
     database[args.owner + "/" + args.repo].pullRequests[prID] = {}
 
@@ -32,20 +57,6 @@ const root = {
              db: database,
     }
   },
-  createTokenSupply: function (database, tokens, args) {
-    const prID = args.pr_id.split('_')[1]
-
-    database[args.owner + "/" + args.repo].pullRequests[prID].tokenSupply = tokens
-
-    return  database
-  },
-  setQuorum: function (database, quorum, args) {
-    const prID = args.pr_id.split('_')[1]
-
-    database[args.owner + "/" + args.repo].pullRequests.quorum = quorum
-
-    return  database
-  }
 
 }
 
