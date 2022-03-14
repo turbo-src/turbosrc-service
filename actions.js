@@ -169,6 +169,10 @@ const root = {
       var pullRequest = pullRequestsDB[args.pr_id]
       console.log('130')
       if (typeof pullRequest === 'undefined') {
+        const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args)
+        database = resCreateRepo.db
+        pullRequestsDB = resCreateRepo.pullRequestsDB
+
         const resNewPullRequest = module.exports.newPullRequest(database, pullRequestsDB, args);
         database = resNewPullRequest.db
         pullRequestsDB = resNewPullRequest.pullRequestsDB
@@ -272,9 +276,6 @@ const root = {
     }
   },
   createRepo: function(database, pullRequestsDB, args) {
-    // Is this how it checks if repo already exists?
-    module.exports.getPRvoteStatus(database, args)
-
     const resCreateRepo = createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
@@ -287,10 +288,6 @@ const root = {
     }
   },
   newPullRequest: function(database, pullRequestsDB, args) {
-    const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args)
-    database = resCreateRepo.db
-    pullRequestsDB = resCreateRepo.pullRequestsDB
-
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
     const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)

@@ -14,7 +14,8 @@ const {
   getPRvote,
   getPRvoteStatus,
   newPullRequest,
-  setVote
+  setVote,
+  createRepo
 } = require('./actions')
 
 // pr_id is the issue_id, which are the same for now.
@@ -311,6 +312,10 @@ var root = {
 
   },
   newPullRequest: async (args) => {
+    const resCreateRepo = createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
+    fakeTurboSrcReposDB = resCreateRepo.db
+    pullRequestsDB = resCreateRepo.pullRequestsDB
+
     const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
 
     fakeTurboSrcReposDB = resNewPullRequest.db
