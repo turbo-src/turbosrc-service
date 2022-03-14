@@ -287,11 +287,11 @@ const root = {
     }
   },
   newPullRequest: function(database, pullRequestsDB, args) {
-    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
-
     const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
+
+    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
     const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)
     database = resNewPullRequest.db
