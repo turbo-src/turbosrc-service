@@ -272,8 +272,10 @@ const root = {
     }
   },
   createRepo: function(database, pullRequestsDB, args) {
-    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
-    const resCreateRepo = createRepo(database, pullRequestsDB, args, prVoteStatus)
+    // Is this how it checks if repo already exists?
+    module.exports.getPRvoteStatus(database, args)
+
+    const resCreateRepo = createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
     database = createTokenSupply(database, 1_000_000, args)
