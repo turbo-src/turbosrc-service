@@ -1,9 +1,7 @@
 // state
 
 const root = {
-  createRepo: function (database, pullRequestsDB, args, prVoteStatus) {
-    const prID = args.pr_id.split('_')[1]
-
+  createRepo: function (database, pullRequestsDB, args) {
     database[args.owner + "/" + args.repo].quorum = 0.50
 
     return {
