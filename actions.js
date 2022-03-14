@@ -271,15 +271,24 @@ const root = {
              prVoteStatusUpdated: prVoteStatusUpdated
     }
   },
-  newPullRequest: function(database, pullRequestsDB, args) {
-    debugger
-    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
-
+  createRepo: function(database, pullRequestsDB, args, prVoteStatus) {
     const resCreateRepo = createRepo(database, pullRequestsDB, args, prVoteStatus)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
     database = createTokenSupply(database, 1_000_000, args)
     database = setQuorum(database, 0.50, args)
+
+    return {
+             pullRequestsDB: pullRequestsDB,
+             db: database
+    }
+  },
+  newPullRequest: function(database, pullRequestsDB, args) {
+    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
+
+    const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args, prVoteStatus)
+    database = resCreateRepo.db
+    pullRequestsDB = resCreateRepo.pullRequestsDB
 
     const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)
     database = resNewPullRequest.db
