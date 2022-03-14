@@ -271,7 +271,8 @@ const root = {
              prVoteStatusUpdated: prVoteStatusUpdated
     }
   },
-  createRepo: function(database, pullRequestsDB, args, prVoteStatus) {
+  createRepo: function(database, pullRequestsDB, args) {
+    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
     const resCreateRepo = createRepo(database, pullRequestsDB, args, prVoteStatus)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
@@ -286,7 +287,7 @@ const root = {
   newPullRequest: function(database, pullRequestsDB, args) {
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
-    const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args, prVoteStatus)
+    const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
 
