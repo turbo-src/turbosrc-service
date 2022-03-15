@@ -2,7 +2,8 @@ const assert = require('assert');
 const {
         postCreateRepo,
         postSetVote,
-        postGetPRvoteStatus
+        postGetPRvoteStatus,
+        postNewPullRequest
       } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -18,6 +19,14 @@ describe('Vote duplicate with minority stake voter', function () {
     describe('Check status after vote duplicate', function () {
       it("Should do something", async () => {
         await postCreateRepo(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
