@@ -169,9 +169,7 @@ const root = {
       var pullRequest = pullRequestsDB[args.pr_id]
       console.log('130')
       if (typeof pullRequest === 'undefined') {
-        const resNewPullRequest = module.exports.newPullRequest(database, pullRequestsDB, args);
-        database = resNewPullRequest.db
-        pullRequestsDB = resNewPullRequest.pullRequestsDB
+         //return some error
       }
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
       database = resUpdatePRvoteStatus.db
