@@ -37,6 +37,7 @@ var schema = buildSchema(`
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
     setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
@@ -322,6 +323,13 @@ var root = {
     console.log('356')
     pullRequestsDB = resNewPullRequest.pullRequestsDB
     console.log('358')
+
+    return pullRequestsDB[args.pr_id]
+  },
+  createRepo (args) {
+    const resCreateRepo = createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
+    fakeTurboSrcReposDB = resCreateRepo.db
+    pullRequestsDB = resCreateRepo.pullRequestsDB
 
     return pullRequestsDB[args.pr_id]
   }

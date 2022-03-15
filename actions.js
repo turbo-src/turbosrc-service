@@ -169,10 +169,6 @@ const root = {
       var pullRequest = pullRequestsDB[args.pr_id]
       console.log('130')
       if (typeof pullRequest === 'undefined') {
-        const resCreateRepo = module.exports.createRepo(database, pullRequestsDB, args)
-        database = resCreateRepo.db
-        pullRequestsDB = resCreateRepo.pullRequestsDB
-
         const resNewPullRequest = module.exports.newPullRequest(database, pullRequestsDB, args);
         database = resNewPullRequest.db
         pullRequestsDB = resNewPullRequest.pullRequestsDB
