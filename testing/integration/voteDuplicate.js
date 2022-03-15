@@ -17,6 +17,13 @@ describe('Vote duplicate with minority stake voter', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Check status after vote duplicate', function () {
       it("Should do something", async () => {
+        await postCreateRepo(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
