@@ -1,5 +1,7 @@
 const assert = require('assert');
-const { postSetVote,
+const {
+        postCreateRepo,
+        postSetVote,
         postGetPRvoteStatus
       } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
