@@ -4,6 +4,8 @@ const { postSetVote,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
+        postCreateRepo,
+        postNewPullRequest
       } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
