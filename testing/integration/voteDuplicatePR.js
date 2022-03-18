@@ -43,8 +43,8 @@ describe('Vote to close', function () {
         );
 
     });
-    describe.only('Check status after vote open', function () {
-      it("Should do something", async () => {
+    describe.only('Duplicate pull request.', function () {
+      it("Should not allow reopen a closed pull request.", async () => {
         await snooze(1500);
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
@@ -86,7 +86,7 @@ describe('Vote to close', function () {
 
         assert.equal(
             statusDuplicatePR,
-            "open",
+            "closed",
             "Duplicate pull request."
         );
 
