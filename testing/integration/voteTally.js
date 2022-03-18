@@ -1,7 +1,9 @@
 const assert = require('assert');
 const { postSetVote,
         postGetPRvoteStatus,
-        postGetPRvoteTotals
+        postGetPRvoteTotals,
+        postCreateRepo,
+        postNewPullRequest
       } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -16,6 +18,21 @@ describe('Vote and get tally', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Check status after vote duplicate', function () {
       it("Should do something", async () => {
+        await postCreateRepo(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6772",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        await postNewPullRequest(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_6772",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",

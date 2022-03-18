@@ -3,6 +3,8 @@ const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
+        postCreateRepo,
+        postNewPullRequest
       } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -16,6 +18,21 @@ describe('Vote to close', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
+        await postCreateRepo(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        await postNewPullRequest(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
