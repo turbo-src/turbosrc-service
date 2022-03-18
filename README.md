@@ -30,6 +30,8 @@ turbo-src-pfserver:0.0.1
 
 Test.
 ```
+npm test testing/integration/noRepo.js && \
+sleep 10 && \
 npm test testing/integration/voteCreateRepo.js && \
 sleep 10 && \
 npm test testing/integration/voteDuplicate.js && \
