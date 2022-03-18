@@ -171,6 +171,12 @@ const root = {
       if (typeof pullRequest === 'undefined') {
          //return some error
       }
+
+      //database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
+      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+        tokens: 0,
+        side: 'none'
+      }
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
       database = resUpdatePRvoteStatus.db
       prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated

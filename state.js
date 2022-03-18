@@ -39,11 +39,6 @@ const root = {
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
-      tokens: 0,
-      side: 'none'
-    }
 
     return {
              pullRequestsDB: pullRequestsDB,
