@@ -30,15 +30,19 @@ turbo-src-pfserver:0.0.1
 
 Test.
 ```
+npm test testing/integration/voteCreateRepo.js && \
+sleep 10 && \
 npm test testing/integration/voteDuplicate.js && \
 sleep 10 && \
 npm test testing/integration/voteTally.js && \
 sleep 10 && \
 npm test testing/integration/voteTallyMany.js && \
 sleep 10 && \
-npm test testing/integration/voteToClose.js &&\
+npm test testing/integration/voteToClose.js && \
 sleep 10 && \
-npm test testing/integration/voteToOpenThenClose.js
+npm test testing/integration/voteToOpenThenClose.js && \
+sleep 10 && \
+npm test testing/integration/voteDuplicatePR.js
 ```
 
 To see server logs.
