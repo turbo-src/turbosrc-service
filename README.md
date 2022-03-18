@@ -32,7 +32,7 @@ Test.
 ```
 npm test testing/integration/noRepo.js && \
 sleep 10 && \
-npm test testing/integration/voteCreateRepo.js && \
+npm test testing/integration/createRepo.js && \
 sleep 10 && \
 npm test testing/integration/voteDuplicate.js && \
 sleep 10 && \
