@@ -1,6 +1,9 @@
 const assert = require('assert');
-const { postSetVote,
-        postGetPRvoteStatus
+const {
+        postCreateRepo,
+        postSetVote,
+        postGetPRvoteStatus,
+        postNewPullRequest
       } = require('./../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -10,27 +13,34 @@ var snooze_ms = 1000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote to stay open', function () {
+describe('Create repo', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        await snooze(1500);
-        await postSetVote(
+        await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_8457",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-
+        await snooze(1500);
+        await postNewPullRequest(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8457",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
     });
-    describe.only('Check status after vote open', function () {
+    describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
         await snooze(1500);
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_8457",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
