@@ -41,8 +41,8 @@ describe('Create repo', function () {
 
         assert.equal(
             status,
-            "open",
-            "Fail to stay open even the votes are below the quorum"
+            "none",
+            "Has a closed or open status even though repo wasn't created."
         );
       });
     });
