@@ -101,7 +101,7 @@ var pullRequestsDB = {
       //  '$prID': $status,
       //}
 
-      fakeTurboSrcReposDB[repoAccounts[i]] = {
+      fakeTurboSrcReposDB["default/default"] = {
         'head': head,
         'tokenSupply': 1_000_000,
         'openPullRequest': '',
