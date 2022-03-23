@@ -4,10 +4,6 @@ const root = {
   createRepo: function (database, prDB, args) {
       const pullRequestsDB = prDB
       var head
-      repoName = "vim/vim"
-      repoPath = repoName.split('/')
-      owner = repoPath[0]
-      repo = repoPath[1]
       // Don't pass forkName because it's the master or main branch.
       //head = await gitHeadUtil(owner, repo, '', 0)
       head = 'c20e46a4e3efcd408ef132872238144ea34f7ae5'
@@ -16,7 +12,7 @@ const root = {
       //  '$prID': $status,
       //}
 
-      database[repoName] = {
+      database[args.owner + "/" + args.repo] = {
         'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
         'openPullRequest': '',
