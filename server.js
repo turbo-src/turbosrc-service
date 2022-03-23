@@ -63,12 +63,6 @@ var fakeTurboSrcReposDB = {};
 //const head = await gitHeadUtil('turbo-src', 'extension', 0)
 const repoAccounts = [
   'default/default',
-  'turbo-src/extension',
-  'turbo-src/graphql_express_server',
-  '7db9a/dir-contract',
-  //'vim/vim',
-  'NixOS/nix',
-  'NixOS/nixpkgs',
 ]
 //const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
 
@@ -97,7 +91,6 @@ var pullRequestsDB = {
   var owner;
   var repo;
   for (i in repoAccounts) {
-    if (repoAccounts[i] !== "default/default") {
       repoPath = repoAccounts[i].split('/')
       owner = repoPath[0]
       repo = repoPath[1]
@@ -154,7 +147,6 @@ var pullRequestsDB = {
       //    }
       //  }
       //}
-    }
   };
 
   var app = express();
