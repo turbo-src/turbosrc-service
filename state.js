@@ -9,16 +9,15 @@ const root = {
       owner = repoPath[0]
       repo = repoPath[1]
       // Don't pass forkName because it's the master or main branch.
-      //(async () => {
-      //  head = await gitHeadUtil(owner, repo, '', 0)
-      //  //'pullRequestStatus': {
-      //  //  '$prID': $status,
-      //  //  '$prID': $status,
-      //  //}
-      //});
+      //head = await gitHeadUtil(owner, repo, '', 0)
+      head = 'c20e46a4e3efcd408ef132872238144ea34f7ae5'
+      //'pullRequestStatus': {
+      //  '$prID': $status,
+      //  '$prID': $status,
+      //}
 
       database[repoName] = {
-        'head': 'c20e46a4e3efcd408ef132872238144ea34f7ae5',
+        'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
         'openPullRequest': '',
         'contributors': {
