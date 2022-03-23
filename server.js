@@ -66,7 +66,7 @@ const repoAccounts = [
   'turbo-src/extension',
   'turbo-src/graphql_express_server',
   '7db9a/dir-contract',
-  'vim/vim',
+  //'vim/vim',
   'NixOS/nix',
   'NixOS/nixpkgs',
 ]
