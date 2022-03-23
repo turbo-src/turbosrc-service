@@ -86,51 +86,6 @@ var pullRequestsDB = {
     next();
  }
 
-(async () => {
-  var head;
-  var owner;
-  var repo;
-  for (i in repoAccounts) {
-      repoPath = repoAccounts[i].split('/')
-      owner = repoPath[0]
-      repo = repoPath[1]
-      // Don't pass forkName because it's the master or main branch.
-      head = await gitHeadUtil(owner, repo, '', 0)
-      //'pullRequestStatus': {
-      //  '$prID': $status,
-      //  '$prID': $status,
-      //}
-
-      fakeTurboSrcReposDB["default/default"] = {}
-  };
-
-  var app = express();
-  //app.use(loggingMiddleware);
-  app.use(cors());
-  app.use(function (req, res, next) {
-      let originalSend = res.send;
-      res.send = function (data) {
-          console.log(data + "\n");
-          originalSend.apply(res, Array.from(arguments));
-      }
-      next();
-  });
-  app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-  }));
-  var way = false;
-  //if (way === true) {
-  //     console.log("true");
-  //     return true;
-  //   } else {
-  //     console.log("false");
-  //     return false;
-  //}
-  app.listen(8080);
-  console.log('Running a GraphQL API server at localhost:4000/graphql');
-})();
 // The root provides the top-level API endpoints
 
 // Probably unnecessary as setting vote will open pull
@@ -276,3 +231,30 @@ var root = {
     return pullRequestsDB[args.pr_id]
   }
 }
+
+var app = express();
+//app.use(loggingMiddleware);
+app.use(cors());
+app.use(function (req, res, next) {
+    let originalSend = res.send;
+    res.send = function (data) {
+        console.log(data + "\n");
+        originalSend.apply(res, Array.from(arguments));
+    }
+    next();
+});
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
+var way = false;
+//if (way === true) {
+//     console.log("true");
+//     return true;
+//   } else {
+//     console.log("false");
+//     return false;
+//}
+app.listen(8080);
+console.log('Running a GraphQL API server at localhost:4000/graphql');
