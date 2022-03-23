@@ -1,7 +1,45 @@
-// state
+const { gitHeadUtil } = require('./gitHeadUtil');
 
 const root = {
-  createRepo: function (database, pullRequestsDB, args) {
+  createRepo: function (database, prDB, args) {
+      const pullRequestsDB = prDB
+      var head
+      repoName = "vim/vim"
+      repoPath = repoName.split('/')
+      owner = repoPath[0]
+      repo = repoPath[1]
+      // Don't pass forkName because it's the master or main branch.
+      //(async () => {
+      //  head = await gitHeadUtil(owner, repo, '', 0)
+      //  //'pullRequestStatus': {
+      //  //  '$prID': $status,
+      //  //  '$prID': $status,
+      //  //}
+      //});
+
+      database[repoName] = {
+        'head': 'c20e46a4e3efcd408ef132872238144ea34f7ae5',
+        'tokenSupply': 1_000_000,
+        'openPullRequest': '',
+        'contributors': {
+          'mary': 500_001,
+          '7db9a': 33_999,
+          'am': 15_000,
+          'jc': 10_000,
+          'pc': 75_000,
+          'mb': 75_000,
+          'np': 5_000,
+          'nn': 100_000,
+          'jp': 50_000,
+          'ts': 50_000,
+          'af': 10_000,
+          'ds': 75_000,
+          'ri': 1_000
+        },
+        'pullRequests': {
+        }
+      }
+
     database[args.owner + "/" + args.repo].quorum = 0.50
 
     return {
