@@ -101,52 +101,7 @@ var pullRequestsDB = {
       //  '$prID': $status,
       //}
 
-      fakeTurboSrcReposDB["default/default"] = {
-        'head': head,
-        'tokenSupply': 1_000_000,
-        'openPullRequest': '',
-        'contributors': {
-          'mary': 500_001,
-          '7db9a': 33_999,
-          'am': 15_000,
-          'jc': 10_000,
-          'pc': 75_000,
-          'mb': 75_000,
-          'np': 5_000,
-          'nn': 100_000,
-          'jp': 50_000,
-          'ts': 50_000,
-          'af': 10_000,
-          'ds': 75_000,
-          'ri': 1_000
-        },
-        'pullRequests': {
-        }
-      }
-
-      //fakeTurboSrcReposDB[repoAccounts[i]] = {
-      //  'head': head,
-      //  'supply': 1_000_000,
-      //  'quorum': 0.50,
-      //  'contributors': {
-      //    'emmanuel': 290_000,
-      //    'mary': 290_000,
-      //    'joseph': 200_000,
-      //    'john': 200_000,
-      //    '7db9a': 20_000,
-      //  },
-      //  'pullRequests': {
-      //    'prid':
-      //      'totalVotedTokens': $totalVotedTokens,
-      //      'votedTokens': {
-      //        '$contributorID': {
-      //          tokens: $tokens,
-      //          side: $side,
-      //        }
-      //       }
-      //    }
-      //  }
-      //}
+      fakeTurboSrcReposDB["default/default"] = {}
   };
 
   var app = express();
