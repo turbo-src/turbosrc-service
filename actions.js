@@ -278,6 +278,10 @@ const root = {
   createRepo: async (database, pullRequestsDB, args) => {
     const resCreateRepo = await createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
+    // Add tip of OID to repo db.
+    const head = await gitHeadUtil(args.owner, args.repo, '', 0)
+    database[args.owner + "/" + args.repo].head = head
+
     pullRequestsDB = resCreateRepo.pullRequestsDB
     database = createTokenSupply(database, 1_000_000, args)
     database = setQuorum(database, 0.50, args)

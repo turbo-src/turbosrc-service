@@ -1,19 +1,9 @@
-const { gitHeadUtil } = require('./gitHeadUtil');
-
 const root = {
   createRepo: async (database, prDB, args) => {
       const pullRequestsDB = prDB
-      var head
-      // Don't pass forkName because it's the master or main branch.
-      head = await gitHeadUtil(args.owner, args.repo, '', 0)
-      //head = 'c20e46a4e3efcd408ef132872238144ea34f7ae5'
-      //'pullRequestStatus': {
-      //  '$prID': $status,
-      //  '$prID': $status,
-      //}
 
       database[args.owner + "/" + args.repo] = {
-        'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
+        //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
         'openPullRequest': '',
         'contributors': {
