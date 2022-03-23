@@ -275,8 +275,8 @@ const root = {
              prVoteStatusUpdated: prVoteStatusUpdated
     }
   },
-  createRepo: function(database, pullRequestsDB, args) {
-    const resCreateRepo = createRepo(database, pullRequestsDB, args)
+  createRepo: async (database, pullRequestsDB, args) => {
+    const resCreateRepo = await createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
     database = createTokenSupply(database, 1_000_000, args)

@@ -321,8 +321,8 @@ var root = {
 
     return pullRequestsDB[args.pr_id]
   },
-  createRepo (args) {
-    const resCreateRepo = createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
+  createRepo: async (args) => {
+    const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
     fakeTurboSrcReposDB = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB
 
