@@ -14,6 +14,12 @@ start-servers() {
     --name turbo-src-pfserver \
     --mount source=vol-turbo-src-server,target=/usr/src/app/repos \
     turbo-src-pfserver:0.0.1
+
+    # the github server
+    docker run -p 4001:8080 -d \
+    --name turbo-src-ghserver \
+    --mount source=vol-turbo-src-server,target=/usr/src/app/repos \
+    turbo-src-ghserver:0.0.1
 }
 
 stop-servers() {
@@ -23,12 +29,17 @@ stop-servers() {
     # the pull fork server
     docker container stop turbo-src-pfserver
     docker container rm turbo-src-pfserver
+    # the github server
+    docker container stop turbo-src-ghserver
+    docker container rm turbo-src-ghserver
 }
 
 build-servers() {
     docker build -t turbo-src-server:0.0.1 -f dockerfile.server .
 
     docker build -t turbo-src-pfserver:0.0.1 -f dockerfile.pfserver .
+
+    docker build -t turbo-src-ghserver:0.0.1 -f dockerfile.ghserver .
 }
 
 test-vote-to-close() {
