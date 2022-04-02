@@ -16,7 +16,7 @@ start-servers() {
     turbo-src-pfserver:0.0.1
 
     # the github server
-    docker run -p 4001:8080 -d \
+    docker run -p 4002:8080 -d \
     --name turbo-src-ghserver \
     --mount source=vol-turbo-src-server,target=/usr/src/app/repos \
     turbo-src-ghserver:0.0.1
