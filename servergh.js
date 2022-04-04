@@ -6,22 +6,6 @@ const cors = require('cors');
 //const { createClient } = require('redis');
 const superagent = require('superagent');
 const {
-  getPRvoteTotals,
-  getPRvote,
-  getPRvoteStatus,
-  newPullRequest,
-  setVote,
-  createRepo
-} = require('./actions')
-
-const { postSetVote,
-        postGetPRvoteStatus,
-        postGetPRvoteTotals,
-        postCreateRepo,
-        postNewPullRequest
-      } = require('./../../graphQLrequests')
-
-const {
        getPullRequest,
        closePullRequest,
        //mergePullRequest
@@ -29,9 +13,6 @@ const {
 
 var schema = buildSchema(`
   type Query {
-    getPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getAllOpenPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    (owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
   }
@@ -51,7 +32,7 @@ var root = {
   closePullRequest: async (args) => {
     await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
   },
-  mergePullRequest  : async (arg) => {
+  mergePullRequest  : async (args) => {
   },
 }
 
