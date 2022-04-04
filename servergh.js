@@ -18,92 +18,27 @@ const {
   createRepo
 } = require('./actions')
 
-// pr_id is the issue_id, which are the same for now.
-// issue_id !== pr_uid in the future.
-// The pr_uid will be the OID of the HEAD from the pull requesters linked repository.
-// We may actually choose to calculate the sha256 of the repo at said HEAD to eliminate all doubt of collisions in OID (sha) and to be able to verify that the pull requester and the merger have the absolute identical versions.
-
-// side is refers to the said of the vote, yes or no.
-// The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
-
 var schema = buildSchema(`
-  type PullRequest {
-    vote_code: [String]
-  }
   type Query {
-    pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getVote(pr_id: String, contributor_id: String): String,
-    getVoteAll(pr_id: String): PullRequest,
-    getVoteEverything: String,
-    setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteNoTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getRepoStatus(repo_id: String): Boolean,
-    getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
-    verifyPullRequest(pr_id: String): String,
+    getPR(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    getAllOpenPRs(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    (owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    closePR(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    mergePR(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
   }
 `);
 
-// Basically this will be a database service until we put this on ipfs or something.
-var pullRequestsVoteCloseHistory = []
-
-// From extension/src/utils/commonUtil.js
-//getUsernameWithReponameFromGithubURL()
-// returns  { user: user, repo: repo }
-// user is the owner of the repo, not contributors.
-
-// The object representing pullRequests for a specific repository.
-
 var fakeTurboSrcReposDB = {};
-//const head = await gitHeadUtil('turbo-src', 'extension', 0)
-const repoAccounts = [
-  'default/default',
-]
-//const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
-
-const fakeAuthorizedContributors = {
-  'default': ['default'],
-  'turbo-src/extension': ['emmanuel','mary', 'joseph', 'john'],
-  'turbo-src/graphql_express_server': ['emmanuel','mary', 'joseph', 'john'],
-  '7db9a/dir-contract': ['7db9a','emmanuel','mary', 'joseph', 'john'],
-  'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john', 'am', 'jc', 'pc', 'mb', 'np', 'nn', 'jp', 'ts', 'af', 'aj', 'ds', 'ri' ],
-  'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
-  'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john']
-}
-
-// The object representing authorized repos and contributors.
-var pullRequestsDB = {
-   'default/default': ['vote_code']
-};
 
  const loggingMiddleware = (req, res, next) => {
     console.log('vote:', req.data);
     next();
  }
 
-// The root provides the top-level API endpoints
-
-// Probably unnecessary as setting vote will open pull
-// request automatically if non exists, including same
 // root 'method' for query.
+// voting service calls this server to change github
 var root = {
-  //getVote: (args) => {
-  //  return pullRequestsDB[args.contributor_id]
-  //},
-  verifyPullRequest: async (arg) => {
-    // Check if it's in our database
-    // If not, fetch it.
-
-    // redis.get(sha256)
-
-    //return status
-    //return fakeTurboSrcReposDB.includes(arg.repo_id)
-  },
+  //
   getRepoStatus: async (arg) => {
     return Object.keys(fakeTurboSrcReposDB).includes(arg.repo_id)
   },
@@ -113,12 +48,6 @@ var root = {
     const contributors = fakeTurboSrcReposDB[args.repo_id].contributors;
     const contributor_exists = Object.keys(contributors).includes(args.contributor_id)
     return contributor_exists
-  },
-  getVoteAll: async (pr_id) => {
-    return pullRequestsDB[pr_id]
-  },
-  getVoteEverything: async () => {
-    return JSON.stringify(pullRequestsDB)
   },
   getPRvoteStatus: async (args) => {
     var status = getPRvoteStatus(fakeTurboSrcReposDB, args)
@@ -131,25 +60,6 @@ var root = {
     }
 
     return status
-  },
-  getPRpercentVotedQuorum: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    return voteTotals.percentVotedQuorum
-  },
-  getPRvoteYesTotals: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    return voteTotals.totalVotedYesTokens
-    //return voteTotals.percentVotedQuorum
-  },
-  getPRvoteNoTotals: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    return voteTotals.totalVotedNoTokens
-    //return voteTotals.percentVotedQuorum
-  },
-  getPRvoteTotals: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    //return voteTotals.totalVotedTokens
-    return voteTotals.percentVotedQuorum
   },
   getPRforkStatus: async (args) => {
     var res;
@@ -201,35 +111,6 @@ var root = {
       });
     return "something"
   },
-  setVote: async (args) => {
-    // Check user votes. If voted, don't set vote.
-    debugger
-    const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
-    if ( votedTokens > 0) {
-      return "duplicate"
-    } else if (typeof votedTokens === 'undefined') {
-      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, pullRequestsVoteCloseHistory, args)
-
-      fakeTurboSrcReposDB = resultSetVote.db
-      return resultSetVote.prVoteStatus
-    }
-
-  },
-  newPullRequest: async (args) => {
-    const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
-
-    fakeTurboSrcReposDB = resNewPullRequest.db
-    pullRequestsDB = resNewPullRequest.pullRequestsDB
-
-    return pullRequestsDB[args.pr_id]
-  },
-  createRepo: async (args) => {
-    const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
-    fakeTurboSrcReposDB = resCreateRepo.db
-    pullRequestsDB = resCreateRepo.pullRequestsDB
-
-    return pullRequestsDB[args.pr_id]
-  }
 }
 
 var app = express();
@@ -257,4 +138,4 @@ var way = false;
 //     return false;
 //}
 app.listen(8080);
-console.log('Running a GraphQL API server at localhost:4000/graphql');
+console.log('Running a GraphQL API server at localhost:4002/graphql');
