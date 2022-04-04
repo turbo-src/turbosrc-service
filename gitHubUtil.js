@@ -49,10 +49,8 @@ const gitHubUtil = {
     console.log(pull)
 
     await octokit.request(`PATCH /repos/${owner}/${repo}/pulls/${pull}`, {
-      title: "new title",
-      body: "updated body",
       state: "closed",
-      base: 'master'
+      //base: 'master'
     })
     //await octokit.request('PATCH /repos/{owner}/{repo}/pulls/{pull_number}', {
     //  owner: 'octocat',
