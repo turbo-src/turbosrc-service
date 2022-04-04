@@ -197,7 +197,24 @@ var root = {
    const json = JSON.parse(res.text)
    //console.log(json)
    return json.data.getPRvoteNoTotals
-  }
+  },
+  postClosePullRequest: async (owner, repo, issue_id, contributor_id, side) => {
+   superagent
+     .post('http://localhost:4002/graphql')
+     .send(
+       //{ query: '{ name: 'Manny', species: 'cat' }' }
+       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
+       //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
+       //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
+       //{ query: `{ getVoteEverything }` }
+       { query: `{ closePullRequest(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}") }` }
+       //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
+     ) // sends a JSON post body
+     .set('accept', 'json')
+     .end((err, res) => {
+       // Calling the end function will send the request
+     });
+  },
 }
 
 module.exports = root

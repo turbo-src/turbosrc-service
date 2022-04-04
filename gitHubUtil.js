@@ -38,7 +38,30 @@ const gitHubUtil = {
     console.log(label)
 
     return { oid, contributor, forkBranch }
-  }
+  },
+  closePullRequest: async function(owner, repo, pull) {
+    let tokenBuffer = await getGithubToken();
+    let token = tokenBuffer.toString();
+    const octokit = new Octokit({ auth: token });
+    console.log('gh 46')
+    console.log(owner)
+    console.log(repo)
+    console.log(pull)
+
+    await octokit.request(`PATCH /repos/${owner}/${repo}/pulls/${pull}`, {
+      title: "new title",
+      body: "updated body",
+      state: "closed",
+      base: 'master'
+    })
+    //await octokit.request('PATCH /repos/{owner}/{repo}/pulls/{pull_number}', {
+    //  owner: 'octocat',
+    //  repo: 'hello-world',
+    //  pull_number: 42,
+    //  title: 'title'
+    //})
+    console.log('gh 51`')
+  },
 }
 
 module.exports = gitHubUtil
