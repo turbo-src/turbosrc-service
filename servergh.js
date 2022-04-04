@@ -8,7 +8,7 @@ const superagent = require('superagent');
 const {
        getPullRequest,
        closePullRequest,
-       //mergePullRequest
+       mergePullRequest
       } = require('./gitHubUtil');
 
 var schema = buildSchema(`
@@ -32,7 +32,8 @@ var root = {
   closePullRequest: async (args) => {
     await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
   },
-  mergePullRequest  : async (args) => {
+  mergePullRequest: async (args) => {
+    await mergePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
   },
 }
 

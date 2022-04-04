@@ -60,6 +60,25 @@ const gitHubUtil = {
     //})
     console.log('gh 51`')
   },
+  mergePullRequest: async function(owner, repo, pull) {
+    let tokenBuffer = await getGithubToken();
+    let token = tokenBuffer.toString();
+    const octokit = new Octokit({ auth: token });
+    console.log('gh 67')
+    console.log(owner)
+    console.log(repo)
+    console.log(pull)
+
+    await octokit.request(`PUT /repos/${owner}/${repo}/pulls/${pull}/merge`, //{
+      //owner: 'octocat',
+      //repo: 'hello-world',
+      //pull_number: 42,
+      //commit_title: 'commit_title'
+    //}
+    )
+
+    console.log('gh 83`')
+  },
 }
 
 module.exports = gitHubUtil

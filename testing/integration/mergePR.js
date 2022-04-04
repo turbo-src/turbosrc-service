@@ -28,20 +28,20 @@ describe('Pull requests', function () {
     //        /*side:*/ "yes",
     //    );
     //});
-    describe.only('Close pull request.', function () {
-      it("Should close pull request.", async () => {
+    describe.only('Merge pull request.', function () {
+      it("Should merge pull request.", async () => {
         await snooze(1500);
-        await postClosePullRequest(
+        await postMergePullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         assert.equal(
             true,
             false,
-            "fail to close pull request"
+            "fail to merge pull request"
         );
 
         //assert.equal(
