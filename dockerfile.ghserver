@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 8080
-CMD [ "node", "pullForkServer.js" ]
+CMD [ "node", "servergh.js" ]
