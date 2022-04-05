@@ -5,7 +5,7 @@ const { postSetVote,
         postGetPRvoteNoTotals,
         postCreateRepo,
         postNewPullRequest
-      } = require('./../../graphQLrequests')
+      } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
@@ -43,8 +43,8 @@ describe('Vote to close', function () {
         );
 
     });
-    describe.only('Check status after vote open', function () {
-      it("Should do something", async () => {
+    describe.only('Duplicate pull request.', function () {
+      it("Should not allow reopen a closed pull request.", async () => {
         await snooze(1500);
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
@@ -54,23 +54,29 @@ describe('Vote to close', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const voteYesTotals = await postGetPRvoteYesTotals(
+        await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const voteNoTotals = await postGetPRvoteNoTotals(
+        await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-
-        //console.log(status)
+        await snooze(1500);
+        const statusDuplicatePR = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
 
         assert.equal(
             status,
@@ -79,15 +85,11 @@ describe('Vote to close', function () {
         );
 
         assert.equal(
-            voteYesTotals,
-            "0",
-            "Fail to add votes yes."
+            statusDuplicatePR,
+            "closed",
+            "Duplicate pull request."
         );
-        assert.equal(
-            voteNoTotals,
-            "0",
-            "Fail to zero out voteNoTotals after vote close."
-        );
+
       });
     });
 });

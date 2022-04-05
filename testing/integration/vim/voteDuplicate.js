@@ -1,11 +1,10 @@
 const assert = require('assert');
-const { postSetVote,
-        postGetPRvoteStatus,
-        postGetPRvoteYesTotals,
-        postGetPRvoteNoTotals,
+const {
         postCreateRepo,
+        postSetVote,
+        postGetPRvoteStatus,
         postNewPullRequest
-      } = require('./../../graphQLrequests')
+      } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
@@ -14,10 +13,11 @@ var snooze_ms = 1000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote to close', function () {
+describe('Vote duplicate with minority stake voter', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
-    before(async () => {
+    describe('Check status after vote duplicate', function () {
+      it("Should do something", async () => {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
@@ -38,23 +38,11 @@ describe('Vote to close', function () {
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
-            /*contributor_id:*/ "mary",
-            /*side:*/ "yes",
-        );
-
-    });
-    describe.only('Duplicate pull request.', function () {
-      it("Should not allow reopen a closed pull request.", async () => {
-        await snooze(1500);
-        const status = await postGetPRvoteStatus(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        await postNewPullRequest(
+        const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
@@ -70,7 +58,7 @@ describe('Vote to close', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const statusDuplicatePR = await postGetPRvoteStatus(
+        const duplicateStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
@@ -78,18 +66,42 @@ describe('Vote to close', function () {
             /*side:*/ "yes",
         );
 
+        // Close vote otherwise other tests on same server instance won't work.
+        // Only one vote round at a time.
+        await snooze(1500);
+        await postSetVote(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+        await snooze(1500);
+        const closeStatus = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
+
+        //console.log(status)
         assert.equal(
-            status,
-            "closed",
-            "Fail to stay close even the votes exceed the quorum"
+            openStatus,
+            "open",
+            "Fail open on initial vote below quorum"
         );
 
         assert.equal(
-            statusDuplicatePR,
-            "closed",
-            "Duplicate pull request."
+            duplicateStatus,
+            "open",
+            "Fail keep open even though initial vote below quorum"
         );
-
+        assert.equal(
+            closeStatus,
+            "closed",
+            "Fail to close even the votes exceed the quorum"
+        );
       });
     });
 });

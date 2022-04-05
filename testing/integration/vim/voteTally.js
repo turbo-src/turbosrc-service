@@ -1,10 +1,10 @@
 const assert = require('assert');
-const {
-        postCreateRepo,
-        postSetVote,
+const { postSetVote,
         postGetPRvoteStatus,
+        postGetPRvoteTotals,
+        postCreateRepo,
         postNewPullRequest
-      } = require('./../../graphQLrequests')
+      } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
@@ -13,7 +13,7 @@ var snooze_ms = 1000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote duplicate with minority stake voter', function () {
+describe('Vote and get tally', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Check status after vote duplicate', function () {
@@ -21,7 +21,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -29,7 +29,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -37,15 +37,15 @@ describe('Vote duplicate with minority stake voter', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const openStatus = await postGetPRvoteStatus(
+        const afterVoteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -53,26 +53,23 @@ describe('Vote duplicate with minority stake voter', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const duplicateStatus = await postGetPRvoteStatus(
+        const duplicateVoteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-
-        // Close vote otherwise other tests on same server instance won't work.
-        // Only one vote round at a time.
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -80,22 +77,19 @@ describe('Vote duplicate with minority stake voter', function () {
         const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
-
-        //console.log(status)
         assert.equal(
-            openStatus,
-            "open",
-            "Fail open on initial vote below quorum"
+            afterVoteTotals,
+            "0.033999",
+            "Fail to add votes."
         );
-
         assert.equal(
-            duplicateStatus,
-            "open",
-            "Fail keep open even though initial vote below quorum"
+            duplicateVoteTotals,
+            "0.033999",
+            "Fail to add votes."
         );
         assert.equal(
             closeStatus,

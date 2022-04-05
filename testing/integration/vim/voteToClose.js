@@ -3,10 +3,9 @@ const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
-        postGetPRvoteTotals,
         postCreateRepo,
         postNewPullRequest
-      } = require('./../../graphQLrequests')
+      } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
@@ -15,14 +14,14 @@ var snooze_ms = 1000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote to stay open, then close', function () {
+describe('Vote to close', function () {
     this.timeout(15000);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -30,7 +29,7 @@ describe('Vote to stay open, then close', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -38,19 +37,27 @@ describe('Vote to stay open, then close', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
-            /*contributor_id:*/ "7db9a",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
 
     });
-    describe('Check status after vote close', function () {
+    describe.only('Check status after vote open', function () {
       it("Should do something", async () => {
+        await snooze(1500);
+        const status = await postGetPRvoteStatus(
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
         await snooze(1500);
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*pr_id:*/ "issue_6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -58,68 +65,28 @@ describe('Vote to stay open, then close', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
-            /*contributor_id:*/ "mary",
-            /*side:*/ "yes",
-        );
-        const voteTotals = await postGetPRvoteTotals(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(1500);
-        const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(1500);
-        await postSetVote(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
-            /*contributor_id:*/ "mary",
-            /*side:*/ "yes",
-        );
-        await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
 
         //console.log(status)
+
+        assert.equal(
+            status,
+            "closed",
+            "Fail to stay close even the votes exceed the quorum"
+        );
+
         assert.equal(
             voteYesTotals,
-            '33999',
+            "0",
             "Fail to add votes yes."
         );
         assert.equal(
             voteNoTotals,
-            '0',
-            "Fail to add votes no."
-        );
-        assert.equal(
-            voteTotals,
-            '0.033999',
-            "Fail to add votes no."
-        );
-        assert.equal(
-            openStatus,
-            "open",
-            "Fail to close even the votes exceed the quorum"
-        );
-
-        assert.equal(
-            closeStatus,
-            "closed",
-            "Fail to close even the votes exceed the quorum"
+            "0",
+            "Fail to zero out voteNoTotals after vote close."
         );
       });
     });

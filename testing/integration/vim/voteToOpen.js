@@ -3,7 +3,7 @@ const { postSetVote,
         postGetPRvoteStatus,
         postCreateRepo,
         postNewPullRequest
-      } = require('./../../graphQLrequests')
+      } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
