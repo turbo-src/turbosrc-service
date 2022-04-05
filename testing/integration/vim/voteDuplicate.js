@@ -19,49 +19,49 @@ describe('Vote duplicate with minority stake voter', function () {
     describe('Check status after vote duplicate', function () {
       it("Should do something", async () => {
         await postCreateRepo(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
         await postNewPullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
         const duplicateStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -70,17 +70,17 @@ describe('Vote duplicate with minority stake voter', function () {
         // Only one vote round at a time.
         await snooze(1500);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
         const closeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*owner:*/ "vim",
+            /*repo:*/ "vim",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
