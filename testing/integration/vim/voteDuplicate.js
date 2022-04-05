@@ -73,7 +73,7 @@ describe('Vote duplicate with minority stake voter', function () {
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*pr_id:*/ "issue_8949",
-            /*contributor_id:*/ "7db9a",
+            /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(1500);
