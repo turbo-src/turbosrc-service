@@ -20,7 +20,7 @@ describe('Vote duplicate with minority stake voter', function () {
       it("Should do something", async () => {
         await postCreateRepo(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -28,7 +28,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await snooze(1500);
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -36,7 +36,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -44,7 +44,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await snooze(1500);
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -52,7 +52,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -71,7 +71,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await snooze(1500);
         await postSetVote(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -79,7 +79,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await snooze(1500);
         const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
