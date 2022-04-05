@@ -30,21 +30,21 @@ turbo-src-pfserver:0.0.1
 
 Test.
 ```
-npm test testing/integration/noRepo.js && \
+npm test testing/integration/vim/noRepo.js && \
 sleep 10 && \
-npm test testing/integration/createRepo.js && \
+npm test testing/integration/vim/createRepo.js && \
 sleep 10 && \
-npm test testing/integration/voteDuplicate.js && \
+npm test testing/integration/vim/voteDuplicate.js && \
 sleep 10 && \
-npm test testing/integration/voteTally.js && \
+npm test testing/integration/vim/voteTally.js && \
 sleep 10 && \
-npm test testing/integration/voteTallyMany.js && \
+npm test testing/integration/vim/voteTallyMany.js && \
 sleep 10 && \
-npm test testing/integration/voteToClose.js && \
+npm test testing/integration/vim/voteToClose.js && \
 sleep 10 && \
-npm test testing/integration/voteToOpenThenClose.js && \
+npm test testing/integration/vim/voteToOpenThenClose.js && \
 sleep 10 && \
-npm test testing/integration/voteDuplicatePR.js
+npm test testing/integration/vim/voteDuplicatePR.js
 ```
 
 To see server logs.
