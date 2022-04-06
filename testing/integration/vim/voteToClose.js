@@ -57,7 +57,7 @@ describe('Vote to close', function () {
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*pr_id:*/ "issue_8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
