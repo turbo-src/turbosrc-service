@@ -19,7 +19,7 @@ describe('Create repo', function () {
     before(async () => {
         await postCreateRepo(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -27,7 +27,7 @@ describe('Create repo', function () {
         await snooze(1500);
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -39,7 +39,7 @@ describe('Create repo', function () {
         await snooze(1500);
         const status = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
