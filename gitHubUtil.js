@@ -39,11 +39,31 @@ const gitHubUtil = {
 
     return { oid, contributor, forkBranch }
   },
-  closePullRequest: async function(owner, repo, pull) {
+  createPullRequest: async function(owner, repo, forkBranch, pull) {
     let tokenBuffer = await getGithubToken();
     let token = tokenBuffer.toString();
     const octokit = new Octokit({ auth: token });
     console.log('gh 46')
+    console.log(owner)
+    console.log(repo)
+    console.log(forkBranch)
+    console.log(pull)
+
+    await octokit.request(`POST /repos/${owner}/${repo}/pulls`, {
+      owner: owner,
+      repo: repo,
+      title: "servergh",
+      body: "auto pull request",
+      head: forkBranch,
+      base: "master"
+    })
+    console.log('gh 58`')
+  },
+  closePullRequest: async function(owner, repo, pull) {
+    let tokenBuffer = await getGithubToken();
+    let token = tokenBuffer.toString();
+    const octokit = new Octokit({ auth: token });
+    console.log('gh 64')
     console.log(owner)
     console.log(repo)
     console.log(pull)

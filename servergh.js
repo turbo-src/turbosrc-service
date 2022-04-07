@@ -7,12 +7,14 @@ const cors = require('cors');
 const superagent = require('superagent');
 const {
        getPullRequest,
+       createPullRequest,
        closePullRequest,
        mergePullRequest
       } = require('./gitHubUtil');
 
 var schema = buildSchema(`
   type Query {
+    createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, contributor_id: String, side: String): String,
     closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
   }
@@ -29,6 +31,9 @@ var fakeTurboSrcReposDB = {};
 // voting service calls this server to change github
 var root = {
   //
+  createPullRequest: async (args) => {
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.pr_id.split('_')[1])
+  },
   closePullRequest: async (args) => {
     await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
   },
