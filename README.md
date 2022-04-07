@@ -37,7 +37,10 @@ npm test testing/integration/privaterepo/voteDuplicate.js && \
 sleep 10 && \
 npm test testing/integration/privaterepo/voteTally.js && \
 sleep 10 && \
-npm test testing/integration/privaterepo/voteToClose.js
+npm test testing/integration/privaterepo/voteTallyMany.js && \
+npm test testing/integration/privaterepo/voteToClose.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/voteToOpenThenClose.js
 ```
 
 ```
