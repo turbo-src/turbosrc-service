@@ -7,14 +7,14 @@ const {
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
-var snooze_ms = 1000;
+var snooze_ms = 5000
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Create repo', function () {
-    this.timeout(15000);
+    this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         await postCreateRepo(
@@ -24,7 +24,7 @@ describe('Create repo', function () {
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-        await snooze(1500);
+        await snooze(snooze_ms);
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
@@ -32,11 +32,11 @@ describe('Create repo', function () {
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
-        await snooze(1500);
+        await snooze(snooze_ms);
     });
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
-        await snooze(1500);
+        await snooze(snooze_ms);
         const status = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
