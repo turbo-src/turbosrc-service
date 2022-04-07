@@ -20,25 +20,25 @@ describe('Vote to stay open, then close', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         await postCreateRepo(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postNewPullRequest(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -48,48 +48,48 @@ describe('Vote to stay open, then close', function () {
       it("Should do something", async () => {
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const voteNoTotals = await postGetPRvoteNoTotals(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const closeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
