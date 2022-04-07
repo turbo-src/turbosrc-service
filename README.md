@@ -28,7 +28,18 @@ docker run -p 4001:8080 -d \
 turbo-src-pfserver:0.0.1
 ```
 
-Test.
+Test private repo.
+
+```
+npm test testing/integration/privaterepo/createRepoAndPR.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/voteDuplicate.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/voteTally.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/voteToClose.js
+```
+
 ```
 npm test testing/integration/vim/noRepo.js && \
 sleep 10 && \
