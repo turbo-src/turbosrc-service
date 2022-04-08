@@ -28,7 +28,46 @@ docker run -p 4001:8080 -d \
 turbo-src-pfserver:0.0.1
 ```
 
+
+### Testing
+
 Test private repo.
+
+1. Delete github.com/turbo-src/testrepo
+
+2. Push master and feat branches
+
+```
+cd /path/to/turbo-src/testrepo
+```
+
+```
+git push origin master voteToOpenThenClose
+```
+
+3. Rebuild and start servers.
+
+```
+./dev.sh cycle && ./dev.sh start
+```
+
+4. Run tests
+
+Create the pull requests off of the feat branches and run tests.
+
+```
+cd /path/to/turbo-src/graphql_express_server
+```
+
+```
+npm test testing/integration/privaterepo/preTestCreatePRs.js
+```
+
+Should close and merge the vote, among other things.
+
+```
+npm test testing/integration/privaterepo/voteToOpenThenCloses.js
+```
 
 ```
 npm test testing/integration/privaterepo/createRepoAndPR.js && \
