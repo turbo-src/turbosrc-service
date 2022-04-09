@@ -1,5 +1,5 @@
 const { getPRhead } = require('./pullForkUtil');
-const { getPullRequest } = require('./gitHubUtil');
+const { getPullRequest, mergePullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { createRepo,
         createTokenSupply,
@@ -218,6 +218,7 @@ const root = {
 
           // Allow next pull request to be voted on.
           database[args.owner + "/" + args.repo].openPullRequest = ''
+          await mergePullRequest(args.owner, args.repo, prID)
         }
       }
     }

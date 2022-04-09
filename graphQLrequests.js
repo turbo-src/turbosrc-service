@@ -200,7 +200,7 @@ var root = {
   },
   postClosePullRequest: async (owner, repo, issue_id, contributor_id, side) => {
    superagent
-     .post('http://localhost:4002/graphql')
+     .post('http://localhost:4000/graphql')
      .send(
        //{ query: '{ name: 'Manny', species: 'cat' }' }
        //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -217,7 +217,7 @@ var root = {
   },
   postMergePullRequest: async (owner, repo, issue_id, contributor_id, side) => {
    superagent
-     .post('http://localhost:4002/graphql')
+     .post('http://localhost:4000/graphql')
      .send(
        //{ query: '{ name: 'Manny', species: 'cat' }' }
        //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -234,7 +234,7 @@ var root = {
   },
   postCreatePullRequest: async (owner, repo, fork_branch, issue_id, contributor_id, side) => {
    superagent
-     .post('http://localhost:4002/graphql')
+     .post('http://localhost:4000/graphql')
      .send(
        //{ query: '{ name: 'Manny', species: 'cat' }' }
        //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
