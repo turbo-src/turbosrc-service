@@ -6,7 +6,6 @@ const cors = require('cors');
 //const { createClient } = require('redis');
 const superagent = require('superagent');
 const { getPRhead } = require('./pullForkUtil');
-const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
 const {
@@ -17,6 +16,12 @@ const {
   setVote,
   createRepo
 } = require('./actions')
+const {
+       getPullRequest,
+       createPullRequest,
+       closePullRequest,
+       mergePullRequest
+      } = require('./gitHubUtil');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -46,6 +51,9 @@ var schema = buildSchema(`
     getRepoStatus(repo_id: String): Boolean,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(pr_id: String): String,
+    createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, contributor_id: String, side: String): String,
+    closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
   }
 `);
 
@@ -229,7 +237,18 @@ var root = {
     pullRequestsDB = resCreateRepo.pullRequestsDB
 
     return pullRequestsDB[args.pr_id]
-  }
+  },
+  //GH Server endpoints below
+  createPullRequest: async (args) => {
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.pr_id.split('_')[1])
+  },
+  closePullRequest: async (args) => {
+    await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+  },
+  mergePullRequest: async (args) => {
+    await mergePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+  },
+  //End of GH server endpoints.
 }
 
 var app = express();

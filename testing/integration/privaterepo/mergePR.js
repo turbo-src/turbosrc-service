@@ -33,8 +33,8 @@ describe('Pull requests', function () {
         await snooze(1500);
         await postMergePullRequest(
             /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_2",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_8",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
