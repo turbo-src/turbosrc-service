@@ -63,10 +63,10 @@ cd /path/to/turbo-src/graphql_express_server
 npm test testing/integration/privaterepo/preTestCreatePRs.js
 ```
 
-Should close and merge the vote, among other things.
+Should close after voting round and merge the pull request on Github.
 
 ```
-npm test testing/integration/privaterepo/voteToOpenThenCloses.js
+npm test testing/integration/privaterepo/voteTallyMany.js
 ```
 
 ```
