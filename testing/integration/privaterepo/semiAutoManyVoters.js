@@ -279,16 +279,6 @@ describe('Vote.', function () {
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
-
-        //Now close vote.
-        await snooze(snooze_ms);
-        await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "mary",
-            /*side:*/ "yes",
-        );
         assert.equal(
             riVoteCumm,
             "0.499999",
