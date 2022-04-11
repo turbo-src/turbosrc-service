@@ -51,7 +51,7 @@ var schema = buildSchema(`
     getRepoStatus(repo_id: String): Boolean,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(pr_id: String): String,
-    createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, contributor_id: String, side: String): String,
+    createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, title: String): String,
     closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
   }
@@ -240,7 +240,7 @@ var root = {
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
-    await createPullRequest(args.owner, args.repo, args.fork_branch, args.pr_id.split('_')[1])
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.pr_id.split('_')[1], args.title)
   },
   closePullRequest: async (args) => {
     await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])

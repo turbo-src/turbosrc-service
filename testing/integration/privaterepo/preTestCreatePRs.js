@@ -34,8 +34,7 @@ describe('Create repo and GH pull request', function () {
             /*repo:*/ "testrepo",
             /*fork_branch:*/ "twoVoters",
             /*pr_id:*/ "issue_1",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
+            /*title:*/ "Add Single Majority Voter to README.",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
@@ -43,8 +42,7 @@ describe('Create repo and GH pull request', function () {
             /*repo:*/ "testrepo",
             /*fork_branch:*/ "singleMajorityVoter",
             /*pr_id:*/ "issue_2",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
+            /*title:*/ "Add Single Majority Voter to README.",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
@@ -52,8 +50,7 @@ describe('Create repo and GH pull request', function () {
             /*repo:*/ "testrepo",
             /*fork_branch:*/ "duplicateVote",
             /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
+            /*title:*/ "Add Duplicate Vote to README.",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
@@ -61,8 +58,7 @@ describe('Create repo and GH pull request', function () {
             /*repo:*/ "testrepo",
             /*fork_branch:*/ "manyVoters",
             /*pr_id:*/ "issue_4",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
+            /*title:*/ "Add Many Voters to README.",
         );
 
         //console.log(status)

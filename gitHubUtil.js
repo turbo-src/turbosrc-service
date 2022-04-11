@@ -39,7 +39,7 @@ const gitHubUtil = {
 
     return { oid, contributor, forkBranch }
   },
-  createPullRequest: async function(owner, repo, forkBranch, pull) {
+  createPullRequest: async function(owner, repo, forkBranch, pull, title) {
     let tokenBuffer = await getGithubToken();
     let token = tokenBuffer.toString();
     const octokit = new Octokit({ auth: token });
@@ -52,7 +52,7 @@ const gitHubUtil = {
     await octokit.request(`POST /repos/${owner}/${repo}/pulls`, {
       owner: owner,
       repo: repo,
-      title: "servergh",
+      title: title,
       body: "auto pull request",
       head: forkBranch,
       base: "master"
