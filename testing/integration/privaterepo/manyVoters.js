@@ -13,15 +13,15 @@ var snooze_ms = 5000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote and get tally', function () {
+describe('Vote.', function () {
     this.timeout(snooze_ms*50);
     // Increase mocha(testing framework) time, otherwise tests fails
-    describe('Check status after vote duplicate', function () {
-      it("Should do something", async () => {
+    describe('Many voters vote.', function () {
+      it("Should increment vote and then close and merge on quorum.", async () => {
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -29,7 +29,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -37,7 +37,7 @@ describe('Vote and get tally', function () {
         const sevenDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -45,7 +45,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
@@ -53,7 +53,7 @@ describe('Vote and get tally', function () {
         const amDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
@@ -61,7 +61,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
@@ -69,7 +69,7 @@ describe('Vote and get tally', function () {
         const jcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
@@ -77,7 +77,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
@@ -85,7 +85,7 @@ describe('Vote and get tally', function () {
         const pcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
@@ -93,7 +93,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
@@ -101,7 +101,7 @@ describe('Vote and get tally', function () {
         const mbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
@@ -109,7 +109,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
@@ -117,7 +117,7 @@ describe('Vote and get tally', function () {
         const npVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
@@ -125,7 +125,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
@@ -133,7 +133,7 @@ describe('Vote and get tally', function () {
         const nnVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
@@ -141,7 +141,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
@@ -149,7 +149,7 @@ describe('Vote and get tally', function () {
         const jpVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
@@ -157,7 +157,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
@@ -165,7 +165,7 @@ describe('Vote and get tally', function () {
         const tsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
@@ -173,7 +173,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
             /*side:*/ "yes",
         );
@@ -181,7 +181,7 @@ describe('Vote and get tally', function () {
         const afVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
             /*side:*/ "yes",
         );
@@ -189,7 +189,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
             /*side:*/ "yes",
         );
@@ -197,7 +197,7 @@ describe('Vote and get tally', function () {
         const dsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
             /*side:*/ "yes",
         );
@@ -205,7 +205,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -213,7 +213,7 @@ describe('Vote and get tally', function () {
         const riVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -275,7 +275,7 @@ describe('Vote and get tally', function () {
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -285,7 +285,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -293,7 +293,7 @@ describe('Vote and get tally', function () {
         const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -301,7 +301,7 @@ describe('Vote and get tally', function () {
         const maryVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
+            /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
