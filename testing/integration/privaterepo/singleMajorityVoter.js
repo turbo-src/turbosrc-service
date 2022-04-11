@@ -1,27 +1,27 @@
 const assert = require('assert');
 const { postSetVote,
         postGetPRvoteStatus,
-        postGetPRvoteTotals,
+        postGetPRvoteYesTotals,
+        postGetPRvoteNoTotals,
         postCreateRepo,
         postNewPullRequest
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
-var snooze_ms = 1500
+var snooze_ms = 1500;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote and get tally', function () {
+describe('Vote to close', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
-    describe('Check status after vote duplicate', function () {
-      it("Should do something", async () => {
+    before(async () => {
         await postCreateRepo(
             /*owner:*/ "turbo-src",
             /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
+            /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -29,7 +29,7 @@ describe('Vote and get tally', function () {
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
             /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
+            /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -37,64 +37,56 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
+            /*pr_id:*/ "issue_2",
+            /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
+
+    });
+    describe.only('Check status after vote open', function () {
+      it("Should do something", async () => {
         await snooze(snooze_ms);
-        const afterVoteTotals = await postGetPRvoteTotals(
+        const status = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
-        await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
-        const duplicateVoteTotals = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
-        await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
+            /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const closeStatus = await postGetPRvoteStatus(
+        const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ "turbo-src",
             /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_3",
+            /*pr_id:*/ "issue_2",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
+        await snooze(snooze_ms);
+        const voteNoTotals = await postGetPRvoteNoTotals(
+            /*owner:*/ "turbo-src",
+            /*repo: */ "testrepo",
+            /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
+
+        //console.log(status)
+
         assert.equal(
-            afterVoteTotals,
-            "0.033999",
-            "Fail to add votes."
-        );
-        assert.equal(
-            duplicateVoteTotals,
-            "0.033999",
-            "Fail to add votes."
-        );
-        assert.equal(
-            closeStatus,
+            status,
             "closed",
-            "Fail to close even the votes exceed the quorum"
+            "Fail to stay close even the votes exceed the quorum"
+        );
+
+        assert.equal(
+            voteYesTotals,
+            "0",
+            "Fail to add votes yes."
+        );
+        assert.equal(
+            voteNoTotals,
+            "0",
+            "Fail to zero out voteNoTotals after vote close."
         );
       });
     });
