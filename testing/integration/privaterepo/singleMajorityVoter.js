@@ -14,18 +14,10 @@ var snooze_ms = 1500;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote to close', function () {
+describe('Vote.', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        await postCreateRepo(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
-            /*pr_id:*/ "issue_2",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
             /*repo: */ "testrepo",
@@ -43,8 +35,8 @@ describe('Vote to close', function () {
         );
 
     });
-    describe.only('Check status after vote open', function () {
-      it("Should do something", async () => {
+    describe.only('A single majority voter votes.', function () {
+      it("Should close vote and then merge.", async () => {
         await snooze(snooze_ms);
         const status = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
