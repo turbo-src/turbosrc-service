@@ -31,29 +31,33 @@ turbo-src-pfserver:0.0.1
 
 ### Testing
 
-Test private repo.
+To run any tests, you'll need to
 
-1. Delete github.com/turbo-src/testrepo
+```
+git clone https://github.com/turbo-src/testrepo
+```
 
-2. Push master and feat branches
+The following steps must be done everytime tests are ran.
+
+1. Recreate `github.com/turbo-src/testrepo` (delete and then create new).
+
+3. Push master and feat branches
 
 ```
 cd /path/to/turbo-src/testrepo
 ```
 
 ```
-git push origin master voteToOpenThenClose
+git push --all origin
 ```
 
-3. Rebuild and start servers.
+4. Rebuild and start servers.
 
 ```
 ./dev.sh cycle && ./dev.sh start
 ```
 
 4. Run tests
-
-Create the pull requests off of the feat branches and run tests.
 
 ```
 cd /path/to/turbo-src/graphql_express_server
@@ -66,21 +70,17 @@ npm test testing/integration/privaterepo/preTestCreatePRs.js
 Should close after voting round and merge the pull request on Github.
 
 ```
-npm test testing/integration/privaterepo/voteTallyMany.js
+npm test testing/integration/privaterepo/twoVoters.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/singleMajorityVoter.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/duplicateVote.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/manyVoters.js
 ```
 
-```
-npm test testing/integration/privaterepo/createRepoAndPR.js && \
-sleep 10 && \
-npm test testing/integration/privaterepo/voteDuplicate.js && \
-sleep 10 && \
-npm test testing/integration/privaterepo/voteTally.js && \
-sleep 10 && \
-npm test testing/integration/privaterepo/voteTallyMany.js && \
-npm test testing/integration/privaterepo/voteToClose.js && \
-sleep 10 && \
-npm test testing/integration/privaterepo/voteToOpenThenClose.js
-```
+
+Deprecated
 
 ```
 npm test testing/integration/vim/noRepo.js && \
