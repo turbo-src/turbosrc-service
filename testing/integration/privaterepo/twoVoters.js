@@ -15,42 +15,34 @@ var snooze_ms = 5000;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Vote to stay open, then close', function () {
+describe('Voting.', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        await postCreateRepo(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
         await postNewPullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
-        await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
 
     });
-    describe('Check status after vote close', function () {
-      it("Should do something", async () => {
+    describe('Two voters vote - exceed quorum.', function () {
+      it("Should close open and close vote, then merge.", async () => {
+        await snooze(snooze_ms);
+        await postSetVote(
+            /*owner:*/ "turbo-src",
+            /*repo:*/ "testrepo",
+            /*pr_id:*/ "issue_1",
+            /*contributor_id:*/ "7db9a",
+            /*side:*/ "yes",
+        );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -58,14 +50,14 @@ describe('Vote to stay open, then close', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -73,7 +65,7 @@ describe('Vote to stay open, then close', function () {
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -81,7 +73,7 @@ describe('Vote to stay open, then close', function () {
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -89,7 +81,7 @@ describe('Vote to stay open, then close', function () {
         const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
+            /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
