@@ -64,19 +64,19 @@ cd /path/to/turbo-src/graphql_express_server
 ```
 
 ```
-npm test testing/integration/privaterepo/preTestCreatePRs.js
-```
-
-Should close after voting round and merge the pull request on Github.
-
-```
+npm test testing/integration/privaterepo/preTestCreatePRs.js && \
+sleep 10 && \
 npm test testing/integration/privaterepo/twoVoters.js && \
 sleep 10 && \
 npm test testing/integration/privaterepo/singleMajorityVoter.js && \
 sleep 10 && \
 npm test testing/integration/privaterepo/duplicateVote.js && \
 sleep 10 && \
-npm test testing/integration/privaterepo/manyVoters.js
+npm test testing/integration/privaterepo/manyVoters.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js && \
+sleep 10 && \
+npm test testing/integration/privaterepo/semiAutoManyVoters.js
 ```
 
 
@@ -130,7 +130,7 @@ sha256sum FILENAME.tar
 https://reproducible-builds.org/docs/archives/
 
 
-injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkRepo
+injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkRepojj
 
 1. Try and return sha256 in getPRfork,then with postPullFork
 
@@ -143,3 +143,6 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 * contract (vote) server
 * github server (github actions and move all github api calls to here.)
 * business server (graphql_express) - calls contract and github server
+
+## Contributions
+
