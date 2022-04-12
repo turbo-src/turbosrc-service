@@ -59,6 +59,7 @@ var schema = buildSchema(`
 
 // Basically this will be a database service until we put this on ipfs or something.
 var pullRequestsVoteCloseHistory = []
+var pullRequestsVoteMergeHistory = []
 
 // From extension/src/utils/commonUtil.js
 //getUsernameWithReponameFromGithubURL()
@@ -132,9 +133,15 @@ var root = {
     var status = getPRvoteStatus(fakeTurboSrcReposDB, args)
     if (status === 'open' || status === 'none' ) {
       const prID = (args.pr_id).split('_')[1]
-      const res = pullRequestsVoteCloseHistory.includes(prID)
-      if (res) {
+      const closeRes = pullRequestsVoteCloseHistory.includes(prID)
+      if (closeRes) {
         status = 'closed'
+      }
+
+      const mergeRes = pullRequestsVoteMergeHistory.includes(prID)
+
+      if (mergeRes) {
+        status = 'merge'
       }
     }
 
@@ -211,12 +218,11 @@ var root = {
   },
   setVote: async (args) => {
     // Check user votes. If voted, don't set vote.
-    debugger
     const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
     if ( votedTokens > 0) {
       return "duplicate"
     } else if (typeof votedTokens === 'undefined') {
-      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, pullRequestsVoteCloseHistory, args)
+      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, pullRequestsVoteCloseHistory, pullRequestsVoteMergeHistory, args)
 
       fakeTurboSrcReposDB = resultSetVote.db
       return resultSetVote.prVoteStatus
