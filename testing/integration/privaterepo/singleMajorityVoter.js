@@ -66,8 +66,8 @@ describe('Vote.', function () {
 
         assert.equal(
             status,
-            "closed",
-            "Fail to stay close even the votes exceed the quorum"
+            "merge",
+            "Fail to stay close even though it was voted in."
         );
 
         assert.equal(

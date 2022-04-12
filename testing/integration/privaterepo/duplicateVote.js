@@ -69,7 +69,7 @@ describe('vote', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const closeStatus = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPRvoteStatus(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_3",
@@ -90,9 +90,9 @@ describe('vote', function () {
             "Fail keep open even though initial vote below quorum"
         );
         assert.equal(
-            closeStatus,
-            "closed",
-            "Fail to close even the votes exceed the quorum"
+            mergeStatus,
+            "merge",
+            "Fail to merge even though voted in."
         );
       });
     });
