@@ -144,9 +144,10 @@ const root = {
     console.log(alreadyHead)
 
     console.log("s 391")
-    console.log((prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead))
+    const closedMerge = (prVoteStatusNow === 'closed' || prVoteStatusNow === 'merge')
+    console.log((!closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead))
 
-    const pullAndVoteStatus = (prVoteStatusNow !== 'closed' && !votedAlready && openPullRequestStatus && !alreadyHead)
+    const pullAndVoteStatus = (!closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead)
 
     return {
       pullAndVoteStatus: pullAndVoteStatus,
@@ -165,7 +166,6 @@ const root = {
     var [_res, pullReqRepoHead] = await getPRhead(args)
     const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, pullReqRepoHead, args)
     database = resultPullAndVoteStatus.db
-
     //other function
 
     //const resultVoteStatus = await voteStatus(database, standardArgs)
@@ -190,7 +190,7 @@ const root = {
       }
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
       database = resUpdatePRvoteStatus.db
-      prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated
+      const prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated
 
       console.log('408')
       console.log(prVoteStatus)
@@ -215,15 +215,13 @@ const root = {
       if (resGetPR !== 404 && pullReqRepoHead !== 404) {
         const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
         // If vote close it out, open it up for other PRs.
-        if (prVoteStatus === 'closed' || prVoteStatus === 'merge') {
+
+        const closedMerge = (prVoteStatus === 'closed' || prVoteStatus === 'merge')
+        if (closedMerge) {
           [_res,pullReqRepoHead] = await getPRhead(args)
 
           // Update HEAD to repo.
           database[args.owner + "/" + args.repo].head = pullReqRepoHead
-
-          // Add to history
-          pullRequestsVoteCloseHistory.push(prID)
-          pullRequestVoteMergeHistory.push(prID)
 
           // Delete pull request from database
           delete database[args.owner + "/" + args.repo].pullRequests[prID]
@@ -231,8 +229,14 @@ const root = {
           // Allow next pull request to be voted on.
           database[args.owner + "/" + args.repo].openPullRequest = ''
           if (prVoteStatus === 'merge') {
+            // Add to history
+            pullRequestVoteMergeHistory.push(prID)
+
             await mergePullRequest(args.owner, args.repo, prID)
           } else if (prVoteStatus === 'closed') {
+            // Add to history
+            pullRequestsVoteCloseHistory.push(prID)
+
             await closePullRequest(args.owner, args.repo, prID)
           }
         }
