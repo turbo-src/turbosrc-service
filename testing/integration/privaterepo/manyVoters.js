@@ -7,7 +7,7 @@ const { postSetVote,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
-var snooze_ms = 5000;
+var snooze_ms = 1500;;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
@@ -39,7 +39,7 @@ describe('Vote.', function () {
             /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
+            /*side:*/ "no",
         );
         await snooze(snooze_ms);
         await postSetVote(
@@ -63,7 +63,7 @@ describe('Vote.', function () {
             /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
-            /*side:*/ "yes",
+            /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
@@ -175,7 +175,7 @@ describe('Vote.', function () {
             /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
-            /*side:*/ "yes",
+            /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
@@ -191,7 +191,7 @@ describe('Vote.', function () {
             /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
-            /*side:*/ "yes",
+            /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
@@ -207,7 +207,7 @@ describe('Vote.', function () {
             /*repo:*/ "testrepo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
-            /*side:*/ "yes",
+            /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(

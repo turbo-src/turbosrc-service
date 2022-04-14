@@ -9,7 +9,7 @@ const { postSetVote,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
-var snooze_ms = 5000;
+var snooze_ms = 1500;;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).

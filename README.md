@@ -65,17 +65,17 @@ cd /path/to/turbo-src/graphql_express_server
 
 ```
 npm test testing/integration/privaterepo/preTestCreatePRs.js && \
-sleep 10 && \
+sleep 3 && \
 npm test testing/integration/privaterepo/twoVoters.js && \
-sleep 10 && \
+sleep 3 && \
 npm test testing/integration/privaterepo/singleMajorityVoter.js && \
-sleep 10 && \
+sleep 3 && \
 npm test testing/integration/privaterepo/duplicateVote.js && \
-sleep 10 && \
+sleep 3 && \
 npm test testing/integration/privaterepo/manyVoters.js && \
-sleep 10 && \
+sleep 3 && \
 npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js && \
-sleep 10 && \
+sleep 3 && \
 npm test testing/integration/privaterepo/semiAutoManyVoters.js
 ```
 

@@ -8,7 +8,7 @@ const {
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
-var snooze_ms = 5000
+var snooze_ms = 1500;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
@@ -34,7 +34,7 @@ describe('Create repo and GH pull request', function () {
             /*repo:*/ "testrepo",
             /*fork_branch:*/ "twoVoters",
             /*pr_id:*/ "issue_1",
-            /*title:*/ "Add Single Majority Voter to README.",
+            /*title:*/ "Add Two Voters to README.",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
