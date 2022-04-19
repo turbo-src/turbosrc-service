@@ -218,6 +218,14 @@ var root = {
   },
   setVote: async (args) => {
     // Check user votes. If voted, don't set vote.
+    const voteStatus = await getPRvoteStatus(fakeTurboSrcReposDB, args);
+    if (voteStatus === 'none') {
+      const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+
+      fakeTurboSrcReposDB = resNewPullRequest.db
+      pullRequestsDB = resNewPullRequest.pullRequestsDB
+
+    }
     const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
     if ( votedTokens > 0) {
       return "duplicate"
