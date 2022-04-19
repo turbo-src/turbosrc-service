@@ -218,18 +218,30 @@ var root = {
   },
   setVote: async (args) => {
     // Check user votes. If voted, don't set vote.
-    const voteStatus = await getPRvoteStatus(fakeTurboSrcReposDB, args);
-    if (voteStatus === 'none') {
-      const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
-
-      fakeTurboSrcReposDB = resNewPullRequest.db
-      pullRequestsDB = resNewPullRequest.pullRequestsDB
-
-    }
     const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
     if ( votedTokens > 0) {
       return "duplicate"
     } else if (typeof votedTokens === 'undefined') {
+
+      // If vote not open, open it.
+      const voteStatus = await getPRvoteStatus(fakeTurboSrcReposDB, args);
+      if (voteStatus === 'none') {
+
+       const activePullRequests = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests
+       const numberActivePullRequests = Object.keys(activePullRequests).length
+
+       //Fix: shouldn't make state changes in status check.
+
+       // Only allow to open the pull request for vote
+       // if there is no other active vote.
+       if (numberActivePullRequests === 0) {
+         const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+
+         fakeTurboSrcReposDB = resNewPullRequest.db
+       pullRequestsDB = resNewPullRequest.pullRequestsDB
+       }
+      }
+
       const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, pullRequestsVoteCloseHistory, pullRequestsVoteMergeHistory, args)
 
       fakeTurboSrcReposDB = resultSetVote.db
