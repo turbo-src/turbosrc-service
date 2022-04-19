@@ -50,7 +50,11 @@ async function getSha256Fork(baseDir, fork) {
 }
 
 async function tarRepo(baseDir, fork) {
-  await execute(`tar --mtime='1999-12-25 00:00:00' -Jcf ${baseDir}/${fork}.tgz ${baseDir}/${fork}`)
+  await execute(`tar --sort=name \
+      --mtime='1999-12-25 00:00:00' \
+      --owner=0 --group=0 --numeric-owner \
+      --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
+      -cf ${baseDir}/${fork}.tgz ${baseDir}/${fork}`)
 }
 
 //Right now it just makes the dir with oid as a name.
@@ -64,46 +68,46 @@ const pullForkUtil = {
         fs.mkdirSync(dir, { recursive: true });
     }
 
-    //const options = {
-    //   baseDir: process.cwd() + '/' + dir,
-    //   binary: 'git',
-    //   maxConcurrentProcesses: 6,
-    //};
+    const options = {
+       baseDir: process.cwd() + '/' + dir,
+       binary: 'git',
+       maxConcurrentProcesses: 6,
+    };
 
-    //const git = simpleGit(options);
+    const git = simpleGit(options);
 
-    //await git.init();
-    //console.log(url)
-    //console.log(branch)
-    //try {
-    //   await git.addRemote('origin', url)
-    //} catch {
-    //  console.log('remote may already exist')
-    //}
-    //try {
-    //  await git.fetch(['origin', branch]);
-    //} catch {
-    //  console.log('fetch failed')
-    //}
-    //await git.checkout(branch);
+    await git.init();
+    console.log(url)
+    console.log(branch)
+    try {
+       await git.addRemote('origin', url)
+    } catch {
+      console.log('remote may already exist')
+    }
+    try {
+      await git.fetch(['origin', branch]);
+    } catch {
+      console.log('fetch failed')
+    }
+    await git.checkout(branch);
 
-    //const gitDir = dir + '/.git'
-    //// delete directory recursively
-    //await fs.promises.rm(gitDir, { recursive: true }, (err) => {
-    //  if (err) {
-    //      throw err;
-    //  }
+    const gitDir = dir + '/.git'
+    // delete directory recursively
+    await fs.promises.rm(gitDir, { recursive: true }, (err) => {
+      if (err) {
+          throw err;
+      }
 
-    //  console.log(`${gitDir} is deleted!`);
-    //});
+      console.log(`${gitDir} is deleted!`);
+    });
 
-    ////await new Promise(resolve => setTimeout(resolve, 3000));
-    //await tarRepo(baseDir, forkOid)
-    ////await new Promise(resolve => setTimeout(resolve, 5000));
-    //const forkSha256 = await getSha256Fork(baseDir, forkOid)
+    //await new Promise(resolve => setTimeout(resolve, 3000));
+    await tarRepo(baseDir, forkOid)
+    //await new Promise(resolve => setTimeout(resolve, 5000));
+    const forkSha256 = await getSha256Fork(baseDir, forkOid)
 
 
-    //return forkSha256
+    return forkSha256
   },
   getPullRequestSha256: async function(repo, fork, branch) {
      // sha256
