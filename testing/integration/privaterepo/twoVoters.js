@@ -19,14 +19,6 @@ describe('Voting.', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        await postNewPullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_1",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-
     });
     describe('Two voters vote - exceed quorum.', function () {
       it("Should close open and close vote, then merge.", async () => {

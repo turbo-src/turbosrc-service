@@ -18,14 +18,6 @@ describe('Vote.', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Many voters vote.', function () {
       it("Should increment vote and then close and merge on quorum.", async () => {
-        await postNewPullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
         await postSetVote(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo",
