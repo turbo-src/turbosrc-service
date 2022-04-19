@@ -32,14 +32,15 @@ var root = {
     console.log('pullReqRepoHead ' + pullReqRepoHead);
 
     console.log(resGetPR.forkBranch)
-    pullForkUtil(
+    const repoHash = pullForkUtil(
       baseRepoName,
       pullReqRepoHead,
       `https://github.com/${resGetPR.contributor}/${baseRepoName}`,
       resGetPR.forkBranch
     )
 
-    return "blah"
+    console.log("repoHash " + repoHash)
+    return repoHash
   },
 }
 
