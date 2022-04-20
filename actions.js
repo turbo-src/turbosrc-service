@@ -83,10 +83,10 @@ const root = {
       if (tsPullRequest) {
         // Check if pull is halted
         // If no
-        const supply = database[args.owner + "/" + args.repo].tokenSupply
-        const quorum = database[args.owner + "/" + args.repo].quorum
+        const supply = getTokenSupply(database, args)
+        const quorum = getQuorum(database, args)
 
-        const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+        const totalVotedTokens = getTotalVotedTokens(database, args)
         const percentVoted = totalVotedTokens/supply
         var status;
         if (percentVoted >= quorum) {
