@@ -10,7 +10,8 @@ const { createRepo,
         setQuorum,
         newPullRequest,
         setContributorVotedTokens,
-        getContributorTokens
+        getContributorTokens,
+        getTSpullRequest
  } = require('./state');
 
 const root = {
@@ -18,9 +19,9 @@ const root = {
   getPRvote: function (database, args) {
     const prID = args.pr_id.split('_')[1]
 
-    const pullRequest = database[args.owner + "/" + args.repo].pullRequests[prID]
+    const tsPullRequest = getTSpullRequest(database, args)
 
-    if (typeof pullRequest === 'undefined') {
+    if (typeof tsPullRequest === 'undefined') {
       return undefined
     } else {
       const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id]
@@ -36,11 +37,11 @@ const root = {
       var totalVotedYesTokens = 0;
       var totalVotedNoTokens = 0;
 
-      const prFields = database[args.owner + "/" + args.repo].pullRequests[prID]
+      const tsPullRequest = getTSpullRequest(database, args)
 
       var percentVotedQuorum
 
-      if (prFields) {
+      if (tsPullRequest) {
         // Check if pull is halted
         // If no
 
@@ -69,9 +70,9 @@ const root = {
   getPRvoteStatus: function(database, args) {
       const prID = args.pr_id.split('_')[1]
 
-      const prFields = database[args.owner + "/" + args.repo].pullRequests[prID]
+      const tsPullRequest = getTSpullRequest(database, args)
 
-      if (prFields) {
+      if (tsPullRequest) {
         // Check if pull is halted
         // If no
         const supply = database[args.owner + "/" + args.repo].tokenSupply

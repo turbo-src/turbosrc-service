@@ -82,7 +82,13 @@ const root = {
    }
 
    return database
-  }
+  },
+  getTSpullRequest: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
+    const pullRequest = database[args.owner + "/" + args.repo].pullRequests[prID]
+
+    return pullRequest
+  },
 }
 
 module.exports = root
