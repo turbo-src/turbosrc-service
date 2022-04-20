@@ -89,6 +89,13 @@ const root = {
 
     return pullRequest
   },
+  deleteTSpullRequest: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    delete database[args.owner + "/" + args.repo].pullRequests[prID]
+
+    return database
+  },
 }
 
 module.exports = root

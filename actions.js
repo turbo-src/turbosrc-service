@@ -11,7 +11,8 @@ const { createRepo,
         newPullRequest,
         setContributorVotedTokens,
         getContributorTokens,
-        getTSpullRequest
+        getTSpullRequest,
+        deleteTSpullRequest
  } = require('./state');
 
 const root = {
@@ -225,8 +226,7 @@ const root = {
           database[args.owner + "/" + args.repo].head = pullReqRepoHead
 
           // Delete pull request from database
-          delete database[args.owner + "/" + args.repo].pullRequests[prID]
-
+          database = deleteTSpullRequest(database, args)
           // Allow next pull request to be voted on.
           database[args.owner + "/" + args.repo].openPullRequest = ''
           if (prVoteStatus === 'merge') {
