@@ -96,6 +96,20 @@ const root = {
 
     return database
   },
+  getContributorVotedTokens: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id]
+
+    return votedTokens
+  },
+  getAllVotedTokens: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+
+    return allVotedTokens
+  },
 }
 
 module.exports = root

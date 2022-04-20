@@ -12,7 +12,9 @@ const { createRepo,
         setContributorVotedTokens,
         getContributorTokens,
         getTSpullRequest,
-        deleteTSpullRequest
+        deleteTSpullRequest,
+        getContributorVotedTokens,
+        getAllVotedTokens
  } = require('./state');
 
 const root = {
@@ -25,7 +27,7 @@ const root = {
     if (typeof tsPullRequest === 'undefined') {
       return undefined
     } else {
-      const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id]
+      const votedTokens = getContributorVotedTokens(database, args)
       return votedTokens
     }
   },
@@ -131,8 +133,8 @@ const root = {
     if (prVoteStatusNow === 'none') {
        votedAlready = false
     } else {
-      const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
-      votedAlready = Object.keys(votedTokens).includes(args.contributor_id)
+      const allVotedTokens = getAllVotedTokens(database, args)
+      votedAlready = Object.keys(allVotedTokens).includes(args.contributor_id)
       console.log(args.contributor_id + ' voted already: ' + votedAlready)
     }
 
