@@ -110,6 +110,37 @@ const root = {
 
     return allVotedTokens
   },
+  getTokenSupply: function(database, args) {
+    const supply = database[args.owner + "/" + args.repo].tokenSupply
+
+    return supply
+  },
+  getQuorum: function(database, args) {
+    const quorum = database[args.owner + "/" + args.repo].quorum
+
+    return quorum
+  },
+  //getTotalVotedTokens: function(database, args) {
+  //  const prID = (args.pr_id).split('_')[1]
+
+  //  const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+
+  //  return allVotedTokens
+  //},
+  //getTotalVotedYesTokens: function(database, args) {
+  //  const prID = (args.pr_id).split('_')[1]
+
+  //  const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+
+  //  return allVotedTokens
+  //},
+  //getTotalVotedNoTokens: function(database, args) {
+  //  const prID = (args.pr_id).split('_')[1]
+
+  //  const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+
+  //  return allVotedTokens
+  //},
 }
 
 module.exports = root

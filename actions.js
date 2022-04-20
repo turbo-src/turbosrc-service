@@ -14,7 +14,9 @@ const { createRepo,
         getTSpullRequest,
         deleteTSpullRequest,
         getContributorVotedTokens,
-        getAllVotedTokens
+        getAllVotedTokens,
+        getQuorum,
+        getTokenSupply
  } = require('./state');
 
 const root = {
@@ -48,8 +50,8 @@ const root = {
         // Check if pull is halted
         // If no
 
-        const supply = database[args.owner + "/" + args.repo].tokenSupply
-        const quorum = database[args.owner + "/" + args.repo].quorum
+        const supply = getTokenSupply(database, args)
+        const quorum = getQuorum(database, args)
 
         totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
 
