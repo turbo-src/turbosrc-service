@@ -16,7 +16,8 @@ const { createRepo,
         getContributorVotedTokens,
         getAllVotedTokens,
         getQuorum,
-        getTokenSupply
+        getTokenSupply,
+        getTotalVotedTokens
  } = require('./state');
 
 const root = {
@@ -53,7 +54,7 @@ const root = {
         const supply = getTokenSupply(database, args)
         const quorum = getQuorum(database, args)
 
-        totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+        totalVotedTokens = getTotalVotedTokens(database, args)
 
         totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
         totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
@@ -62,8 +63,6 @@ const root = {
       } else {
         "none"
       }
-
-      debugger
 
       return {
         percentVotedQuorum: percentVotedQuorum,

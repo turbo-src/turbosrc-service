@@ -120,13 +120,13 @@ const root = {
 
     return quorum
   },
-  //getTotalVotedTokens: function(database, args) {
-  //  const prID = (args.pr_id).split('_')[1]
+  getTotalVotedTokens: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
 
-  //  const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+    const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
 
-  //  return allVotedTokens
-  //},
+    return totalVotedTokens
+  },
   //getTotalVotedYesTokens: function(database, args) {
   //  const prID = (args.pr_id).split('_')[1]
 
