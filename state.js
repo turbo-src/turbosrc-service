@@ -127,20 +127,20 @@ const root = {
 
     return totalVotedTokens
   },
-  //getTotalVotedYesTokens: function(database, args) {
-  //  const prID = (args.pr_id).split('_')[1]
+  getTotalVotedYesTokens: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
 
-  //  const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+    const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
 
-  //  return allVotedTokens
-  //},
-  //getTotalVotedNoTokens: function(database, args) {
-  //  const prID = (args.pr_id).split('_')[1]
+    return totalVotedYesTokens
+  },
+  getTotalVotedNoTokens: function(database, args) {
+    const prID = (args.pr_id).split('_')[1]
 
-  //  const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+    const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
 
-  //  return allVotedTokens
-  //},
+    return totalVotedNoTokens
+  },
 }
 
 module.exports = root
