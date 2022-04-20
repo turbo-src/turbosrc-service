@@ -9,7 +9,8 @@ const { createRepo,
         createTokenSupply,
         setQuorum,
         newPullRequest,
-        setContributorVotedTokens
+        setContributorVotedTokens,
+        getContributorTokens
  } = require('./state');
 
 const root = {
@@ -115,7 +116,7 @@ const root = {
 
     const openPullRequest = database[args.owner + "/" + args.repo].openPullRequest
 
-    const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
+    const tokens = getContributorTokens(database, args)
 
     // We can only use the function if there asking for about a
     // specific pull request.
@@ -177,7 +178,7 @@ const root = {
 
     if (resultPullAndVoteStatus.pullAndVoteStatus) {
       console.log('128')
-      const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
+      const tokens = getContributorTokens(database, args)
       var pullRequest = pullRequestsDB[args.pr_id]
       console.log('130')
       if (typeof pullRequest === 'undefined') {
@@ -255,13 +256,9 @@ const root = {
     console.log(database)
     prVoteStatusUpdated = prVoteStatusNow
 
-    debugger
     if (prVoteStatusNow === 'open') {
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
-      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
-        tokens: tokens,
-        side: args.side
-      }
+      database = setContributorVotedTokens(database, args, tokens, args.side)
 
       console.log('upr 212')
       const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens

@@ -69,7 +69,9 @@ const root = {
     }
   },
   getContributorTokens: function(database, args) {
-    return database[args.owner + "/" + args.repo].contributors[args.contributor_id]
+    tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
+
+    return tokens
   },
   setContributorVotedTokens: function (database, args, tokens, side) {
    const prID = (args.pr_id).split('_')[1]
