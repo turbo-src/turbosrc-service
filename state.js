@@ -89,6 +89,11 @@ const root = {
 
     return pullRequest
   },
+  getAllTSpullRequests: function(database, args) {
+    const allTSpullRequests = database[args.owner + "/" + args.repo].pullRequests
+
+    return allTSpullRequests
+  },
   deleteTSpullRequest: function(database, args) {
     const prID = (args.pr_id).split('_')[1]
 

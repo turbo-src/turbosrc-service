@@ -12,6 +12,7 @@ const { createRepo,
         setContributorVotedTokens,
         getContributorTokens,
         getTSpullRequest,
+        getAllTSpullRequests,
         deleteTSpullRequest,
         getContributorVotedTokens,
         getAllVotedTokens,
@@ -115,7 +116,7 @@ const root = {
     const prID = (args.pr_id).split('_')[1]
     var votedAlready;
 
-    const activePullRequests = database[args.owner + "/" + args.repo].pullRequests
+    const activePullRequests = getAllTSpullRequests(database, args)
     const numberActivePullRequests = Object.keys(activePullRequests).length
 
     //Fix: shouldn't make state changes in status check.
@@ -269,10 +270,9 @@ const root = {
       database = setContributorVotedTokens(database, args, tokens, args.side)
 
       console.log('upr 212')
-      const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
-
-      const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
-      const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
+      const totalVotedTokens = getTotalVotedTokens(database, args)
+      const totalVotedYesTokens = getTotalVotedYesTokens(database, args)
+      const totalVotedNoTokens = getTotalVotedNoTokens(database, args)
 
       //Add to vote tally. Creates pull request fields if needed.
       database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
