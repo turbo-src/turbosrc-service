@@ -8,7 +8,8 @@ const { gitHeadUtil } = require('./gitHeadUtil');
 const { createRepo,
         createTokenSupply,
         setQuorum,
-        newPullRequest
+        newPullRequest,
+        setContributorVotedTokens
  } = require('./state');
 
 const root = {
@@ -184,10 +185,8 @@ const root = {
       }
 
       //database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
-      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
-        tokens: 0,
-        side: 'none'
-      }
+      database = setContributorVotedTokens(database, args, 0, "none")
+
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
       database = resUpdatePRvoteStatus.db
       const prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated

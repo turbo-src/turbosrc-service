@@ -68,7 +68,19 @@ const root = {
              db: database,
     }
   },
+  getContributorTokens: function(database, args) {
+    return database[args.owner + "/" + args.repo].contributors[args.contributor_id]
+  },
+  setContributorVotedTokens: function (database, args, tokens, side) {
+   const prID = (args.pr_id).split('_')[1]
 
+   database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+     tokens: tokens,
+     side: side
+   }
+
+   return database
+  }
 }
 
 module.exports = root
