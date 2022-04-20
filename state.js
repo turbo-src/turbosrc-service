@@ -146,6 +146,33 @@ const root = {
 
     return totalVotedNoTokens
   },
+  addToTotalVotedTokens: function(database, args, tokens) {
+    const prID = (args.pr_id).split('_')[1]
+
+    const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
+
+    return database
+  },
+  addToTotalVotedYesTokens: function(database, args, tokens) {
+    const prID = (args.pr_id).split('_')[1]
+
+    const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
+
+    return database
+  },
+  addToTotalVotedNoTokens: function(database, args, tokens) {
+    const prID = (args.pr_id).split('_')[1]
+
+    const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = totalVotedNoTokens + tokens
+
+    return database
+  },
 }
 
 module.exports = root

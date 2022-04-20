@@ -20,7 +20,10 @@ const { createRepo,
         getTokenSupply,
         getTotalVotedTokens,
         getTotalVotedYesTokens,
-        getTotalVotedNoTokens
+        getTotalVotedNoTokens,
+        addToTotalVotedTokens,
+        addToTotalVotedYesTokens,
+        addToTotalVotedNoTokens
  } = require('./state');
 
 const root = {
@@ -270,21 +273,15 @@ const root = {
       database = setContributorVotedTokens(database, args, tokens, args.side)
 
       console.log('upr 212')
-      const totalVotedTokens = getTotalVotedTokens(database, args)
-      const totalVotedYesTokens = getTotalVotedYesTokens(database, args)
-      const totalVotedNoTokens = getTotalVotedNoTokens(database, args)
-
-      //Add to vote tally. Creates pull request fields if needed.
-      database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
 
       database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
 
       //Add yes and not votes to tally.
-      database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
+      database = addToTotalVotedTokens(database, args, tokens)
       if (args.side === "yes") {
-        database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
+        database = addToTotalVotedYesTokens(database, args, tokens)
       } else {
-        database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = totalVotedNoTokens + tokens
+        database = addToTotalVotedNoTokens(database, args, tokens)
       }
 
       prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args)
