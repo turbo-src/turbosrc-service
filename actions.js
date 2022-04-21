@@ -23,7 +23,8 @@ const { createRepo,
         getTotalVotedNoTokens,
         addToTotalVotedTokens,
         addToTotalVotedYesTokens,
-        addToTotalVotedNoTokens
+        addToTotalVotedNoTokens,
+        setVoteSide
  } = require('./state');
 
 const root = {
@@ -273,7 +274,7 @@ const root = {
 
       console.log('upr 212')
 
-      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
+      database = setVoteSide(database, args)
 
       //Add yes and not votes to tally.
       database = addToTotalVotedTokens(database, args, tokens)

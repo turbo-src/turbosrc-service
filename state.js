@@ -83,6 +83,13 @@ const root = {
 
    return database
   },
+  seVoteSide: function (database, args) {
+   const prID = (args.pr_id).split('_')[1]
+
+   database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
+
+   return database
+  },
   getTSpullRequest: function(database, args) {
     const prID = (args.pr_id).split('_')[1]
     const pullRequest = database[args.owner + "/" + args.repo].pullRequests[prID]
