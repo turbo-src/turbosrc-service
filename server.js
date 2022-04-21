@@ -14,7 +14,8 @@ const {
   getPRvoteStatus,
   newPullRequest,
   setVote,
-  createRepo
+  createRepo,
+  getActivePullRequestsCount
 } = require('./actions')
 const {
        getPullRequest,
@@ -227,8 +228,7 @@ var root = {
       const voteStatus = await getPRvoteStatus(fakeTurboSrcReposDB, args);
       if (voteStatus === 'none') {
 
-       const activePullRequests = fakeTurboSrcReposDB[args.owner + "/" + args.repo].pullRequests
-       const numberActivePullRequests = Object.keys(activePullRequests).length
+       const numberActivePullRequests = getActivePullRequestsCount(fakeTurboSrcReposDB, args)
 
        //Fix: shouldn't make state changes in status check.
 

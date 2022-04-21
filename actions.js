@@ -332,6 +332,13 @@ const root = {
              pullRequestsDB: pullRequestsDB,
              db: database
     }
+  },
+  getActivePullRequestsCount: function(database, args) {
+    const activePullRequests = getAllTSpullRequests(database, args)
+    const numberActivePullRequests = Object.keys(activePullRequests).length
+
+    return numberActivePullRequests
+
   }
 };
 
