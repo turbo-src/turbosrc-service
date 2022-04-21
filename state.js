@@ -97,6 +97,13 @@ const root = {
 
    return database
   },
+  setPullRequestStatus: function(database, args, status) {
+    const prID = (args.pr_id).split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests[prID]['pullRequestStatus'] = status
+
+    return database
+  },
   getTSrepoHead: function (database, args) {
    const head = database[args.owner + "/" + args.repo].head
 

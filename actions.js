@@ -28,7 +28,8 @@ const { createRepo,
         getOpenPullRequest,
         setOpenPullRequest,
         setTSrepoHead,
-        getTSrepoHead
+        getTSrepoHead,
+        setPullRequestStatus
  } = require('./state');
 
 const root = {
@@ -289,7 +290,7 @@ const root = {
 
       prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args)
 
-      database[args.owner + "/" + args.repo].pullRequests[prID]['pullRequestStatus'] = prVoteStatusUpdated
+      database = setPullRequestStatus(database, args, prVoteStatusUpdated)
 
       console.log('upr 228')
     }
