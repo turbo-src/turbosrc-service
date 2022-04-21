@@ -175,6 +175,11 @@ const root = {
 
     return totalVotedYesTokens
   },
+  getPullRequestFromHistory: function(pullRequestsDB, args) {
+    var pullRequest = pullRequestsDB[args.pr_id]
+
+    return pullRequest
+  },
   getTotalVotedNoTokens: function(database, args) {
     const prID = (args.pr_id).split('_')[1]
 

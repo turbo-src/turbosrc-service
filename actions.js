@@ -31,7 +31,8 @@ const { createRepo,
         getTSrepoHead,
         setPullRequestStatus,
         addToMergePullRequestHistory,
-        addToRejectPullRequestHistory
+        addToRejectPullRequestHistory,
+        getPullRequestFromHistory
  } = require('./state');
 
 const root = {
@@ -199,7 +200,7 @@ const root = {
     if (resultPullAndVoteStatus.pullAndVoteStatus) {
       console.log('128')
       const tokens = getContributorTokens(database, args)
-      var pullRequest = pullRequestsDB[args.pr_id]
+      var pullRequest = getPullRequestFromHistory(pullRequestsDB, args)
       console.log('130')
       if (typeof pullRequest === 'undefined') {
          //return some error
