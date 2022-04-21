@@ -90,15 +90,25 @@ const root = {
 
    return database
   },
+  // Soon to be tprID. Right now it's the HEAD of the
+  // pull request fork on Github.
+  setTSrepoHead: function (database, args, tprID) {
+   database[args.owner + "/" + args.repo].head = tprID
+
+   return database
+  },
+  getTSrepoHead: function (database, args) {
+   const head = database[args.owner + "/" + args.repo].head
+
+   return head
+  },
   getOpenPullRequest: function (database, args) {
     const openPullRequest = database[args.owner + "/" + args.repo].openPullRequest
 
     return openPullRequest
   },
-  setOpenPullRequest: function (database, args) {
-    const prID = (args.pr_id).split('_')[1]
-
-    database[args.owner + "/" + args.repo].openPullRequest = prID
+  setOpenPullRequest: function (database, args, openPullRequest) {
+    database[args.owner + "/" + args.repo].openPullRequest = openPullRequest
 
     return database
   },

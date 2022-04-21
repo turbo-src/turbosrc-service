@@ -26,7 +26,9 @@ const { createRepo,
         addToTotalVotedNoTokens,
         setVoteSide,
         getOpenPullRequest,
-        setOpenPullRequest
+        setOpenPullRequest,
+        setTSrepoHead,
+        getTSrepoHead
  } = require('./state');
 
 const root = {
@@ -127,7 +129,7 @@ const root = {
 
     //Fix: shouldn't make state changes in status check.
     if (numberActivePullRequests === 0) {
-       database = setOpenPullRequest(database, args)
+       database = setOpenPullRequest(database, args, prID)
     }
     const openPullRequest = getOpenPullRequest(database,args)
 
@@ -153,11 +155,11 @@ const root = {
 
     console.log('op pr status: ' + openPullRequestStatus)
 
-    const alreadyHead = (pullReqRepoHead === database[args.owner + "/" + args.repo].head)
+    const alreadyHead = (pullReqRepoHead === getTSrepoHead(database, args))
 
     console.log('pullReqHead')
     console.log(pullReqRepoHead)
-    console.log(database[args.owner + "/" + args.repo].head)
+    console.log(getTSrepoHead(database, args))
     console.log(alreadyHead)
 
     console.log("s 391")
@@ -236,12 +238,12 @@ const root = {
           [_res,pullReqRepoHead] = await getPRhead(args)
 
           // Update HEAD to repo.
-          database[args.owner + "/" + args.repo].head = pullReqRepoHead
+          database = setTSrepoHead(database, args, pullReqRepoHead)
 
           // Delete pull request from database
           database = deleteTSpullRequest(database, args)
           // Allow next pull request to be voted on.
-          database[args.owner + "/" + args.repo].openPullRequest = ''
+          setOpenPullRequest(database, args, '')
           if (prVoteStatus === 'merge') {
             // Add to history
             pullRequestVoteMergeHistory.push(prID)
@@ -303,7 +305,8 @@ const root = {
     database = resCreateRepo.db
     // Add tip of OID to repo db.
     const head = await gitHeadUtil(args.owner, args.repo, '', 0)
-    database[args.owner + "/" + args.repo].head = head
+
+    database = setTSrepoHead(database, args, head)
 
     pullRequestsDB = resCreateRepo.pullRequestsDB
     database = createTokenSupply(database, 1_000_000, args)
