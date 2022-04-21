@@ -269,7 +269,6 @@ const root = {
     prVoteStatusUpdated = prVoteStatusNow
 
     if (prVoteStatusNow === 'open') {
-      database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
       database = setContributorVotedTokens(database, args, tokens, args.side)
 
       console.log('upr 212')
