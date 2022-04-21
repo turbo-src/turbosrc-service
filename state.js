@@ -187,6 +187,9 @@ const root = {
 
     return totalVotedNoTokens
   },
+  getRepoStatus: function(database, args) {
+    return Object.keys(database).includes(args.repo_id)
+  },
   addToTotalVotedTokens: function(database, args, tokens) {
     const prID = (args.pr_id).split('_')[1]
 

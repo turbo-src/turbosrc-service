@@ -32,7 +32,8 @@ const { createRepo,
         setPullRequestStatus,
         addToMergePullRequestHistory,
         addToRejectPullRequestHistory,
-        getPullRequestFromHistory
+        getPullRequestFromHistory,
+        getRepoStatus
  } = require('./state');
 
 const root = {
@@ -339,6 +340,11 @@ const root = {
 
     return numberActivePullRequests
 
+  },
+  getRepoStatus: function(database, args) {
+    const status = getRepoStatus(database, args)
+
+    return status
   }
 };
 

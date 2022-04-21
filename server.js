@@ -15,7 +15,8 @@ const {
   newPullRequest,
   setVote,
   createRepo,
-  getActivePullRequestsCount
+  getActivePullRequestsCount,
+  getRepoStatus
 } = require('./actions')
 const {
        getPullRequest,
@@ -114,8 +115,10 @@ var root = {
     //return status
     //return fakeTurboSrcReposDB.includes(arg.repo_id)
   },
-  getRepoStatus: async (arg) => {
-    return Object.keys(fakeTurboSrcReposDB).includes(arg.repo_id)
+  getRepoStatus: async (args) => {
+    const status = getRepoStatus(fakeTurboSrcReposDB, args)
+
+    return status
   },
   getAuthorizedContributor: async (args) => {
     console.log(args.repo_id)
