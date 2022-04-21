@@ -16,7 +16,8 @@ const {
   setVote,
   createRepo,
   getActivePullRequestsCount,
-  getRepoStatus
+  getRepoStatus,
+  checkContributor
 } = require('./actions')
 const {
        getPullRequest,
@@ -123,8 +124,7 @@ var root = {
   getAuthorizedContributor: async (args) => {
     console.log(args.repo_id)
     console.log(args.contributor_id)
-    const contributors = fakeTurboSrcReposDB[args.repo_id].contributors;
-    const contributor_exists = Object.keys(contributors).includes(args.contributor_id)
+    const contributor_exists = checkContributor(fakeTurboSrcReposDB, args)
     return contributor_exists
   },
   getVoteAll: async (pr_id) => {

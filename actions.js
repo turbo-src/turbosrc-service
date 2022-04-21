@@ -33,7 +33,8 @@ const { createRepo,
         addToMergePullRequestHistory,
         addToRejectPullRequestHistory,
         getPullRequestFromHistory,
-        getRepoStatus
+        getRepoStatus,
+        checkContributor
  } = require('./state');
 
 const root = {
@@ -345,6 +346,16 @@ const root = {
     const status = getRepoStatus(database, args)
 
     return status
+  },
+  getContributors: function(database, args) {
+    const status = getRepoStatus(database, args)
+
+    return status
+  },
+  checkContributor: function(database, args) {
+    const contributor_exists = checkContributor(database, args)
+
+    return contributor_exists
   }
 };
 

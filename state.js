@@ -190,6 +190,12 @@ const root = {
   getRepoStatus: function(database, args) {
     return Object.keys(database).includes(args.repo_id)
   },
+  checkContributor: function(database, args) {
+    const contributors = database[args.repo_id].contributors;
+    const contributor_exists = Object.keys(contributors).includes(args.contributor_id)
+
+    return contributor_exists
+  },
   addToTotalVotedTokens: function(database, args, tokens) {
     const prID = (args.pr_id).split('_')[1]
 
