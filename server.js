@@ -17,7 +17,9 @@ const {
   createRepo,
   getActivePullRequestsCount,
   getRepoStatus,
-  checkContributor
+  checkContributor,
+  checkMergePullRequestHistory,
+  checkRejectPullRequestHistory
 } = require('./actions')
 const {
        getPullRequest,
@@ -137,12 +139,12 @@ var root = {
     var status = getPRvoteStatus(fakeTurboSrcReposDB, args)
     if (status === 'open' || status === 'none' ) {
       const prID = (args.pr_id).split('_')[1]
-      const closeRes = pullRequestsVoteCloseHistory.includes(prID)
+      const closeRes = checkRejectPullRequestHistory(pullRequestsVoteCloseHistory, args)
       if (closeRes) {
         status = 'closed'
       }
 
-      const mergeRes = pullRequestsVoteMergeHistory.includes(prID)
+      const mergeRes = checkMergePullRequestHistory(pullRequestsVoteMergeHistory, args)
 
       if (mergeRes) {
         status = 'merge'

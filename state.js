@@ -237,6 +237,16 @@ const root = {
 
     return pullRequestVoteCloseHistory
   },
+  checkMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    return pullRequestVoteMergeHistory.includes(prID)
+  },
+  checkRejectPullRequestHistory: function(pullRequestVoteCloseHistory, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    return pullRequestVoteCloseHistory.includes(prID)
+  },
 }
 
 module.exports = root

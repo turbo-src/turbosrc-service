@@ -34,7 +34,9 @@ const { createRepo,
         addToRejectPullRequestHistory,
         getPullRequestFromHistory,
         getRepoStatus,
-        checkContributor
+        checkContributor,
+        checkMergePullRequestHistory,
+        checkRejectPullRequestHistory
  } = require('./state');
 
 const root = {
@@ -356,7 +358,17 @@ const root = {
     const contributor_exists = checkContributor(database, args)
 
     return contributor_exists
-  }
+  },
+  checkMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
+    const status = checkMergePullRequestHistory(pullRequestVoteMergeHistory, args)
+
+    return status
+  },
+  checkRejectPullRequestHistory: function(pullRequestVoteCloseHistory, args) {
+    const status = checkRejectPullRequestHistory(pullRequestVoteCloseHistory, args)
+
+    return status
+  },
 };
 
 module.exports = root
