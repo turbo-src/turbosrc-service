@@ -29,7 +29,9 @@ const { createRepo,
         setOpenPullRequest,
         setTSrepoHead,
         getTSrepoHead,
-        setPullRequestStatus
+        setPullRequestStatus,
+        addToMergePullRequestHistory,
+        addToRejectPullRequestHistory
  } = require('./state');
 
 const root = {
@@ -181,7 +183,7 @@ const root = {
     //}
 
   },
-  setVote: async function(database, pullRequestsDB, pullRequestsVoteCloseHistory, pullRequestVoteMergeHistory, args) {
+  setVote: async function(database, pullRequestsDB, pullRequestVoteCloseHistory, pullRequestVoteMergeHistory, args) {
     const prID = (args.pr_id).split('_')[1]
     var [_res, pullReqRepoHead] = await getPRhead(args)
     const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, pullReqRepoHead, args)
@@ -247,12 +249,12 @@ const root = {
           setOpenPullRequest(database, args, '')
           if (prVoteStatus === 'merge') {
             // Add to history
-            pullRequestVoteMergeHistory.push(prID)
+            pullRequestVoteMergeHistory = addToMergePullRequestHistory(pullRequestVoteMergeHistory, args)
 
             await mergePullRequest(args.owner, args.repo, prID)
           } else if (prVoteStatus === 'closed') {
             // Add to history
-            pullRequestsVoteCloseHistory.push(prID)
+            pullRequestVoteCloseHistory = addToRejectPullRequestHistory(pullRequestVoteCloseHistory, args)
 
             await closePullRequest(args.owner, args.repo, prID)
           }

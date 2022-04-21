@@ -209,6 +209,20 @@ const root = {
 
     return database
   },
+  addToMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    pullRequestVoteMergeHistory.push(prID)
+
+    return pullRequestVoteMergeHistory
+  },
+  addToRejectPullRequestHistory: function(pullRequestVoteCloseHistory, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    pullRequestVoteCloseHistory.push(prID)
+
+    return pullRequestVoteCloseHistory
+  },
 }
 
 module.exports = root
