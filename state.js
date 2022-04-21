@@ -90,6 +90,18 @@ const root = {
 
    return database
   },
+  getOpenPullRequest: function (database, args) {
+    const openPullRequest = database[args.owner + "/" + args.repo].openPullRequest
+
+    return openPullRequest
+  },
+  setOpenPullRequest: function (database, args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    database[args.owner + "/" + args.repo].openPullRequest = prID
+
+    return database
+  },
   getTSpullRequest: function(database, args) {
     const prID = (args.pr_id).split('_')[1]
     const pullRequest = database[args.owner + "/" + args.repo].pullRequests[prID]

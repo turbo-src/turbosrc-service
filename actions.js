@@ -24,7 +24,9 @@ const { createRepo,
         addToTotalVotedTokens,
         addToTotalVotedYesTokens,
         addToTotalVotedNoTokens,
-        setVoteSide
+        setVoteSide,
+        getOpenPullRequest,
+        setOpenPullRequest
  } = require('./state');
 
 const root = {
@@ -125,10 +127,9 @@ const root = {
 
     //Fix: shouldn't make state changes in status check.
     if (numberActivePullRequests === 0) {
-       database[args.owner + "/" + args.repo].openPullRequest = prID
+       database = setOpenPullRequest(database, args)
     }
-
-    const openPullRequest = database[args.owner + "/" + args.repo].openPullRequest
+    const openPullRequest = getOpenPullRequest(database,args)
 
     const tokens = getContributorTokens(database, args)
 
