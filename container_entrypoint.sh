@@ -1,1 +1,2 @@
-node server.js
+node server.js &
+node testdbserver.js
