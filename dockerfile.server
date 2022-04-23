@@ -15,5 +15,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+RUN /bin/ash -c 'chmod +x container_entrypoint.sh'
+
 EXPOSE 8080
-CMD [ "node", "server.js" ]
+CMD [ "./container_entrypoint.sh" ]
