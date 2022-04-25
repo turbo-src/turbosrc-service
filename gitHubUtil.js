@@ -6,13 +6,13 @@ async function getGithubToken() {
     const data = await fsPromises.readFile('.github-token')
                        .catch((err) => console.error('Failed to read file', err));
 
-    return data;
+    return data.toString().replace(/\n*$/, "");
+
 }
 
 const gitHubUtil = {
   getPullRequest: async function(owner, repo, pull) {
-    let tokenBuffer = await getGithubToken();
-    let token = tokenBuffer.toString();
+    let token = await getGithubToken();
 
     const octokit = new Octokit({ auth: token });
 
@@ -40,8 +40,7 @@ const gitHubUtil = {
     return { oid, contributor, forkBranch }
   },
   createPullRequest: async function(owner, repo, forkBranch, pull, title) {
-    let tokenBuffer = await getGithubToken();
-    let token = tokenBuffer.toString();
+    let token = await getGithubToken();
     const octokit = new Octokit({ auth: token });
     console.log('gh 46')
     console.log(owner)
@@ -60,8 +59,7 @@ const gitHubUtil = {
     console.log('gh 58`')
   },
   closePullRequest: async function(owner, repo, pull) {
-    let tokenBuffer = await getGithubToken();
-    let token = tokenBuffer.toString();
+    let token = await getGithubToken();
     const octokit = new Octokit({ auth: token });
     console.log('gh 64')
     console.log(owner)
@@ -81,8 +79,7 @@ const gitHubUtil = {
     console.log('gh 51`')
   },
   mergePullRequest: async function(owner, repo, pull) {
-    let tokenBuffer = await getGithubToken();
-    let token = tokenBuffer.toString();
+    let token = await getGithubToken();
     const octokit = new Octokit({ auth: token });
     console.log('gh 67')
     console.log(owner)
