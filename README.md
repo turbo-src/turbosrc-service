@@ -12,6 +12,10 @@ Create docker volume.
 
 `docker volume create vol-turbo-src-server`
 
+Add github token. The -n flag is for prevent new line character at the end. Without the flag, it can't read the token.
+
+`echo -n "MY_TOKEN" > .github-token`
+
 Start the servers.
 
 ```
@@ -145,4 +149,3 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 * business server (graphql_express) - calls contract and github server
 
 ## Contributions
-
