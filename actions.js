@@ -5,6 +5,9 @@ const {
   closePullRequest
  } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
+const {
+        postCreateRepoTestDB,
+      } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
         setQuorum,
@@ -309,8 +312,12 @@ const root = {
     }
   },
   createRepo: async (database, pullRequestsDB, args) => {
+    await postCreateRepoTestDB(database, pullRequestsDB, args)
+
+    //To be deprecated for above.
     const resCreateRepo = await createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
+
     // Add tip of OID to repo db.
     const head = await gitHeadUtil(args.owner, args.repo, '', 0)
 
