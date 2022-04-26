@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const root = {
   createRepo: async (database, prDB, args) => {
       const pullRequestsDB = prDB
@@ -27,7 +29,9 @@ const root = {
 
     database[args.owner + "/" + args.repo].quorum = 0.50
 
-    fs.writeFileSync('/tmp/testing/database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //For testing.
+    fs.writeFileSync('./turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
+
     return {
              pullRequestsDB: pullRequestsDB,
              db: database,

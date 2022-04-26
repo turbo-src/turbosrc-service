@@ -2,6 +2,7 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
+const fs = require('fs')
 
 var database = {}
 // Basically this will be a database service until we put this on ipfs or something.
@@ -18,12 +19,13 @@ var schema = buildSchema(`
     vote_code: [String]
   }
   type Query {
-    getPullRequestFromHistory(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    getPullRequestFromHistory(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
   }
 `);
 
 var root = {
-  createRepo: async (database) => {
+  createRepo: async (database, args) => {
       database[args.owner + "/" + args.repo] = {
         //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
@@ -50,7 +52,7 @@ var root = {
     database[args.owner + "/" + args.repo].quorum = 0.50
 
     // For testing.
-    fs.writeFileSync('/tmp/testing/test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
+    fs.writeFileSync('./turbo-src-test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   createTokenSupply: function (database, tokens, args) {
     const prID = args.pr_id.split('_')[1]
