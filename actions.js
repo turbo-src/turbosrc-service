@@ -313,7 +313,13 @@ const root = {
   },
   createRepo: async (database, pullRequestsDB, args) => {
     debugger
-    await postCreateRepoTestDB(args)
+    await postCreateRepoTestDB(
+      args.owner,
+      args.repo,
+      args.issue_id,
+      args.contributor_id,
+      args.side
+    )
 
     //To be deprecated for above.
     const resCreateRepo = await createRepo(database, pullRequestsDB, args)
