@@ -58,6 +58,8 @@ var root = {
   createTokenSupply: function (args) {
     database[args.owner + "/" + args.repo].tokenSupply = Number(args.tokens)
 
+    // For testing.
+    fs.writeFileSync('testing/special/turbo-src-test-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   setQuorum: function (database, quorum, args) {
     debugger

@@ -42,6 +42,9 @@ const root = {
 
     database[args.owner + "/" + args.repo].tokenSupply = tokens
 
+    // For testing.
+    fs.writeFileSync('testing/special/turbo-src-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
+
     return  database
   },
   setQuorum: function (database, quorum, args) {
