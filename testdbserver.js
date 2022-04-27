@@ -25,7 +25,7 @@ var schema = buildSchema(`
 `);
 
 var root = {
-  createRepo: async (database, args) => {
+  createRepo: async (args) => {
       database[args.owner + "/" + args.repo] = {
         //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
@@ -52,7 +52,7 @@ var root = {
     database[args.owner + "/" + args.repo].quorum = 0.50
 
     // For testing.
-    fs.writeFileSync('./turbo-src-test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
+    fs.writeFileSync('testing/special/turbo-src-test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   createTokenSupply: function (database, tokens, args) {
     const prID = args.pr_id.split('_')[1]

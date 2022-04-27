@@ -30,7 +30,7 @@ const root = {
     database[args.owner + "/" + args.repo].quorum = 0.50
 
     //For testing.
-    fs.writeFileSync('./turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
+    fs.writeFileSync('testing/special/turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return {
              pullRequestsDB: pullRequestsDB,
