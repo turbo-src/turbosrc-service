@@ -34,7 +34,7 @@ describe('Create repo and GH pull request', function () {
 
         assert.equal(
             testDBdata.toString(),
-            "no"
+            deprecatedDBdata.toString()
         )
       });
     });
