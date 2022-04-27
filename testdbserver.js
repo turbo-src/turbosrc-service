@@ -58,7 +58,6 @@ var root = {
   createTokenSupply: function (args) {
     database[args.owner + "/" + args.repo].tokenSupply = Number(args.tokens)
 
-    return  database
   },
   setQuorum: function (database, quorum, args) {
     debugger
