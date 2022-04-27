@@ -21,6 +21,7 @@ var schema = buildSchema(`
   type Query {
     getPullRequestFromHistory(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createTokenSupply(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
   }
 `);
 
@@ -54,10 +55,8 @@ var root = {
     // For testing.
     fs.writeFileSync('testing/special/turbo-src-test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
-  createTokenSupply: function (database, tokens, args) {
-    const prID = args.pr_id.split('_')[1]
-
-    database[args.owner + "/" + args.repo].tokenSupply = tokens
+  createTokenSupply: function (args) {
+    database[args.owner + "/" + args.repo].tokenSupply = Number(args.tokens)
 
     return  database
   },

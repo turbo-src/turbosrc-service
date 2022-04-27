@@ -7,6 +7,7 @@ const {
 const { gitHeadUtil } = require('./gitHeadUtil');
 const {
         postCreateRepoTestDB,
+        postCreateTokenSupplyTestDB,
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
@@ -331,7 +332,19 @@ const root = {
     database = setTSrepoHead(database, args, head)
 
     pullRequestsDB = resCreateRepo.pullRequestsDB
+
+    await postCreateTokenSupplyTestDB(
+      args.owner,
+      args.repo,
+      args.issue_id,
+      args.contributor_id,
+      args.side,
+      1_000_000
+    )
+
+    //To be deprecated for above.
     database = createTokenSupply(database, 1_000_000, args)
+
     database = setQuorum(database, 0.50, args)
 
     return {
