@@ -27,10 +27,19 @@ describe('Create repo and GH pull request', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
     });
-    describe.only('Check status after creating a repo.', function () {
-      it("Should do something", async () => {
+    describe.only('Check that db server and deprecated server output is the same.', function () {
+      it("Should have the same database after creating repo", async () => {
         const testDBdata = await readDBfile('testing/special/turbo-src-database-create-repo.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-create-repo.json')
+
+        assert.equal(
+            testDBdata.toString(),
+            deprecatedDBdata.toString()
+        )
+      });
+      it("Should have the same database after creating token supply", async () => {
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-create-repo.json')
+        const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-create-token-supply.json')
 
         assert.equal(
             testDBdata.toString(),
