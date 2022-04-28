@@ -57,31 +57,19 @@ git push --all origin
 ./dev.sh cycle && ./dev.sh start
 ```
 
-4. Run tests
+5. Run tests
 
 ```
-cd /path/to/turbo-src/graphql_express_server
+./run-tests.sh
 ```
 
+You may need to give it execution permission.
+
 ```
-npm test testing/integration/privaterepo/preTestCreatePRs.js && \
-sleep 3 && \
-npm test testing/integration/privaterepo/twoVoters.js && \
-sleep 3 && \
-npm test testing/integration/privaterepo/singleMajorityVoter.js && \
-sleep 3 && \
-npm test testing/integration/privaterepo/duplicateVote.js && \
-sleep 3 && \
-npm test testing/integration/privaterepo/manyVoters.js && \
-sleep 3 && \
-npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js && \
-sleep 3 && \
-npm test testing/integration/privaterepo/semiAutoManyVoters.js
+chmod +x run-tests.sh
 ```
 
-
-Deprecated
-
+Deprecated.
 ```
 npm test testing/integration/vim/noRepo.js && \
 sleep 10 && \
