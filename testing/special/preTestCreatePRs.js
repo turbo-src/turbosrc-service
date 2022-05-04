@@ -60,7 +60,7 @@ describe('Create repo and GH pull request', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-quorum.json')
 
         assert.equal(
-            "no",
+            testDBdata.toString(),
             deprecatedDBdata.toString()
         )
       });
