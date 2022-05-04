@@ -38,8 +38,17 @@ describe('Create repo and GH pull request', function () {
         )
       });
       it("Should have the same database after creating token supply", async () => {
-        const testDBdata = await readDBfile('testing/special/turbo-src-database-create-repo.json')
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-create-token-supply.json')
+
+        assert.equal(
+            testDBdata.toString(),
+            deprecatedDBdata.toString()
+        )
+      });
+      it("Should have the same database after setting head commit", async () => {
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
+        const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
             testDBdata.toString(),

@@ -103,6 +103,9 @@ const root = {
   setTSrepoHead: function (database, args, tprID) {
    database[args.owner + "/" + args.repo].head = tprID
 
+    // For testing.
+    fs.writeFileSync('testing/special/turbo-src-database-set-ts-repo-head.json', JSON.stringify(database, null, 2) , 'utf-8');
+
    return database
   },
   setPullRequestStatus: function(database, args, status) {

@@ -40,7 +40,8 @@ const { createRepo,
         getRepoStatus,
         checkContributor,
         checkMergePullRequestHistory,
-        checkRejectPullRequestHistory
+        checkRejectPullRequestHistory,
+        postSetTSrepoHeadTestDB
  } = require('./state');
 
 const root = {
@@ -329,6 +330,16 @@ const root = {
     // Add tip of OID to repo db.
     const head = await gitHeadUtil(args.owner, args.repo, '', 0)
 
+    await postSetTSrepoHeadTestDB(
+      args.owner,
+      args.repo,
+      args.issue_id,
+      args.contributor_id,
+      args.side,
+      head
+    )
+
+    //To be deprecated for above.
     database = setTSrepoHead(database, args, head)
 
     pullRequestsDB = resCreateRepo.pullRequestsDB

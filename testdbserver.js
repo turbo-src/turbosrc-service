@@ -22,6 +22,7 @@ var schema = buildSchema(`
     getPullRequestFromHistory(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createTokenSupply(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
+    setTSrepoHead(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, head: String): String,
   }
 `);
 
@@ -115,8 +116,10 @@ var root = {
   },
   // Soon to be tprID. Right now it's the HEAD of the
   // pull request fork on Github.
-  setTSrepoHead: function (database, args, tprID) {
-   database[args.owner + "/" + args.repo].head = tprID
+  setTSrepoHead: function (args) {
+   database[args.owner + "/" + args.repo].head = args.head
+
+   fs.writeFileSync('testing/special/turbo-src-test-database-set-ts-repo-head.json', JSON.stringify(database, null, 2) , 'utf-8');
 
    return database
   },
