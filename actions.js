@@ -8,6 +8,7 @@ const { gitHeadUtil } = require('./gitHeadUtil');
 const {
         postCreateRepoTestDB,
         postCreateTokenSupplyTestDB,
+        postSetTSrepoHeadTestDB,
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
@@ -40,8 +41,7 @@ const { createRepo,
         getRepoStatus,
         checkContributor,
         checkMergePullRequestHistory,
-        checkRejectPullRequestHistory,
-        postSetTSrepoHeadTestDB
+        checkRejectPullRequestHistory
  } = require('./state');
 
 const root = {
