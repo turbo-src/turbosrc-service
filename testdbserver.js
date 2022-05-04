@@ -64,7 +64,7 @@ var root = {
     fs.writeFileSync('testing/special/turbo-src-test-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   setQuorum: function (args) {
-    database[args.owner + "/" + args.repo].quorum = args.quorum
+    database[args.owner + "/" + args.repo].quorum = Number(args.quorum)
 
     fs.writeFileSync('testing/special/turbo-src-test-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
