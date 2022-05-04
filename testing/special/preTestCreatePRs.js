@@ -55,5 +55,14 @@ describe('Create repo and GH pull request', function () {
             deprecatedDBdata.toString()
         )
       });
+      it("Should have the same database after setting quorum", async () => {
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-set-quorum.json')
+        const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-quorum.json')
+
+        assert.equal(
+            "no",
+            deprecatedDBdata.toString()
+        )
+      });
     });
 });
