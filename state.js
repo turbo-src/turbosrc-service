@@ -48,9 +48,9 @@ const root = {
     return  database
   },
   setQuorum: function (database, quorum, args) {
-    const prID = args.pr_id.split('_')[1]
-
     database[args.owner + "/" + args.repo].quorum = quorum
+
+    fs.writeFileSync('testing/special/turbo-src-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return  database
   },

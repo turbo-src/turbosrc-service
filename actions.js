@@ -9,6 +9,7 @@ const {
         postCreateRepoTestDB,
         postCreateTokenSupplyTestDB,
         postSetTSrepoHeadTestDB,
+        postSetQuorumTestDB,
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
@@ -356,6 +357,16 @@ const root = {
     //To be deprecated for above.
     database = createTokenSupply(database, 1_000_000, args)
 
+    await postSetQuorumTestDB(
+      args.owner,
+      args.repo,
+      args.issue_id,
+      args.contributor_id,
+      args.side,
+      0.50
+    )
+
+    //To be deprecated for above.
     database = setQuorum(database, 0.50, args)
 
     return {

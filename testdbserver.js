@@ -23,6 +23,7 @@ var schema = buildSchema(`
     createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createTokenSupply(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
     setTSrepoHead(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, head: String): String,
+    setQuorum(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, quorum: String): String,
   }
 `);
 
@@ -62,13 +63,10 @@ var root = {
     // For testing.
     fs.writeFileSync('testing/special/turbo-src-test-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
-  setQuorum: function (database, quorum, args) {
-    debugger
-    const prID = args.pr_id.split('_')[1]
+  setQuorum: function (args) {
+    database[args.owner + "/" + args.repo].quorum = args.quorum
 
-    database[args.owner + "/" + args.repo].quorum = quorum
-
-    return  database
+    fs.writeFileSync('testing/special/turbo-src-test-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   newPullRequest: function (database, pullRequestsDB, args, prVoteStatus) {
     const prID = args.pr_id.split('_')[1]
