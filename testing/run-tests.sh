@@ -9,6 +9,13 @@ sleep 3 && \
 
 npm test testing/integration/privaterepo/twoVoters.js && \
 sleep 3 && \
+
+# Run refactor db test in container
+docker exec -it \
+turbo-src-server \
+npm test testing/special/twoVoters.js && \
+sleep 3 && \
+
 npm test testing/integration/privaterepo/singleMajorityVoter.js && \
 sleep 3 && \
 npm test testing/integration/privaterepo/duplicateVote.js && \

@@ -29,12 +29,11 @@ describe('Create new pull request', function () {
     });
     describe.only('Check that db server and deprecated server output is the same.', function () {
       it("Should have the same database after creating a new ull request", async () => {
-        const testDBdata = await readDBfile('testing/special/turbo-src-database-create-repo.json')
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-new-pull-request.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-new-pull-request.json')
 
         assert.equal(
-            "no",
-            //testDBdata.toString(),
+            testDBdata.toString(),
             deprecatedDBdata.toString()
         )
       });
