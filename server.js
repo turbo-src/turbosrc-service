@@ -241,7 +241,7 @@ var root = {
        // Only allow to open the pull request for vote
        // if there is no other active vote.
        if (numberActivePullRequests === 0) {
-         const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+         const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
 
          fakeTurboSrcReposDB = resNewPullRequest.db
        pullRequestsDB = resNewPullRequest.pullRequestsDB
@@ -256,7 +256,7 @@ var root = {
 
   },
   newPullRequest: async (args) => {
-    const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+    const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
 
     fakeTurboSrcReposDB = resNewPullRequest.db
     pullRequestsDB = resNewPullRequest.pullRequestsDB

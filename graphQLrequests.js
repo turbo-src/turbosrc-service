@@ -70,6 +70,23 @@ var root = {
        // Calling the end function will send the request
      });
   },
+  postNewPullRequestTestDB: async (owner, repo, issue_id, contributor_id, side, vote_status) => {
+   superagent
+     .post('http://localhost:8081/graphql')
+     .send(
+       //{ query: '{ name: 'Manny', species: 'cat' }' }
+       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
+       //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
+       //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
+       //{ query: `{ getVoteEverything }` }
+       { query: `{ newPullRequest(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}", vote_status: "${vote_status}") }` }
+       //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
+     ) // sends a JSON post body
+     .set('accept', 'json')
+     .end((err, res) => {
+       // Calling the end function will send the request
+     });
+  },
   postCreateRepo: async (owner, repo, issue_id, contributor_id, side) => {
    superagent
      .post('http://localhost:4000/graphql')

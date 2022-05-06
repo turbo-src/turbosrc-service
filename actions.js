@@ -10,6 +10,7 @@ const {
         postCreateTokenSupplyTestDB,
         postSetTSrepoHeadTestDB,
         postSetQuorumTestDB,
+        postNewPullRequestTestDB,
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
@@ -374,10 +375,21 @@ const root = {
              db: database
     }
   },
-  newPullRequest: function(database, pullRequestsDB, args) {
+  newPullRequest: async (database, pullRequestsDB, args) => {
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
     const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)
+
+    await postNewPullRequestTestDB(
+      args.owner,
+      args.repo,
+      args.issue_id,
+      args.contributor_id,
+      args.side,
+      prVoteStatus
+    )
+
+    //To be deprecated for above.
     database = resNewPullRequest.db
     pullRequestsDB = resNewPullRequest.pullRequestsDB
 

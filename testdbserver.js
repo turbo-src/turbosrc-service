@@ -24,6 +24,7 @@ var schema = buildSchema(`
     createTokenSupply(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
     setTSrepoHead(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, head: String): String,
     setQuorum(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, quorum: String): String,
+    newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, vote_status: String): String,
   }
 `);
 
@@ -68,11 +69,11 @@ var root = {
 
     fs.writeFileSync('testing/special/turbo-src-test-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
-  newPullRequest: function (database, pullRequestsDB, args, prVoteStatus) {
+  newPullRequest: function (args) {
     const prID = args.pr_id.split('_')[1]
 
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
-    const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
+    const vote_code = args.vote_status + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
     pullRequestsDB[args.pr_id] = [vote_code]
 
@@ -85,10 +86,7 @@ var root = {
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
 
-    return {
-             pullRequestsDB: pullRequestsDB,
-             db: database,
-    }
+    fs.writeFileSync('testing/special/turbo-src-test-database-new-pull-request.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   getContributorTokens: function(database, args) {
     tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]

@@ -71,6 +71,8 @@ const root = {
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
 
+    fs.writeFileSync('testing/special/turbo-src-database-new-pull-request.json', JSON.stringify(database, null, 2) , 'utf-8');
+
     return {
              pullRequestsDB: pullRequestsDB,
              db: database,
