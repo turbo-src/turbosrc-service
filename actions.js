@@ -320,7 +320,7 @@ const root = {
     await postCreateRepoTestDB(
       args.owner,
       args.repo,
-      args.issue_id,
+      args.pr_id,
       args.contributor_id,
       args.side
     )
@@ -335,7 +335,7 @@ const root = {
     await postSetTSrepoHeadTestDB(
       args.owner,
       args.repo,
-      args.issue_id,
+      args.pr_id,
       args.contributor_id,
       args.side,
       head
@@ -349,7 +349,7 @@ const root = {
     await postCreateTokenSupplyTestDB(
       args.owner,
       args.repo,
-      args.issue_id,
+      args.pr_id,
       args.contributor_id,
       args.side,
       1_000_000
@@ -361,7 +361,7 @@ const root = {
     await postSetQuorumTestDB(
       args.owner,
       args.repo,
-      args.issue_id,
+      args.pr_id,
       args.contributor_id,
       args.side,
       0.50
@@ -383,7 +383,7 @@ const root = {
     await postNewPullRequestTestDB(
       args.owner,
       args.repo,
-      args.issue_id,
+      args.pr_id,
       args.contributor_id,
       args.side,
       prVoteStatus
