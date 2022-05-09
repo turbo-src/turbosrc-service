@@ -91,6 +91,8 @@ const root = {
      side: side
    }
 
+   fs.writeFileSync('testing/special/turbo-src-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
+
    return database
   },
   setVoteSide: function (database, args) {

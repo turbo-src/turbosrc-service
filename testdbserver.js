@@ -25,6 +25,7 @@ var schema = buildSchema(`
     setTSrepoHead(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, head: String): String,
     setQuorum(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, quorum: String): String,
     newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, vote_status: String): String,
+    setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
   }
 `);
 
@@ -93,15 +94,15 @@ var root = {
 
     return tokens
   },
-  setContributorVotedTokens: function (database, args, tokens, side) {
+  setContributorVotedTokens: async function (args) {
    const prID = (args.pr_id).split('_')[1]
 
    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
-     tokens: tokens,
-     side: side
+     tokens: args.tokens,
+     side: args.side
    }
 
-   return database
+   fs.writeFileSync('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   setVoteSide: function (database, args) {
    const prID = (args.pr_id).split('_')[1]

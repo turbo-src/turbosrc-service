@@ -11,6 +11,7 @@ const {
         postSetTSrepoHeadTestDB,
         postSetQuorumTestDB,
         postNewPullRequestTestDB,
+        postSetContributorVotedTokensTestDB,
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
@@ -218,6 +219,17 @@ const root = {
       }
 
       //database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
+
+      await postSetContributorVotedTokensTestDB(
+        args.owner,
+        args.repo,
+        args.pr_id,
+        args.contributor_id,
+        "none",
+        0
+      )
+
+      //To be deprecated for above.
       database = setContributorVotedTokens(database, args, 0, "none")
 
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
@@ -288,6 +300,16 @@ const root = {
     prVoteStatusUpdated = prVoteStatusNow
 
     if (prVoteStatusNow === 'open') {
+      await postSetContributorVotedTokensTestDB(
+        args.owner,
+        args.repo,
+        args.pr_id,
+        args.contributor_id,
+        args.side,
+        tokens
+      )
+
+      //To be deprecated for above.
       database = setContributorVotedTokens(database, args, tokens, args.side)
 
       console.log('upr 212')
