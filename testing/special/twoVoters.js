@@ -37,5 +37,15 @@ describe('Create new pull request', function () {
             deprecatedDBdata.toString()
         )
       });
+      it("Should have the same database after creating a setting contributor's voted tokens", async () => {
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-set-contributor-voted-tokens.json')
+        const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json')
+
+        assert.equal(
+            "No",
+            //testDBdata.toString(),
+            deprecatedDBdata.toString()
+        )
+      });
     });
 });
