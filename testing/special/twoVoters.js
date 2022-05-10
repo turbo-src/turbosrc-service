@@ -42,10 +42,14 @@ describe('Create new pull request', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json')
 
         assert.equal(
-            "No",
-            //testDBdata.toString(),
-            deprecatedDBdata.toString()
+            JSON.parse(testDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString(),
+            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString()
         )
+
+        //assert.equal(
+        //    testDBdata,
+        //    deprecatedDBdata
+        //)
       });
     });
 });
