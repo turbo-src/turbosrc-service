@@ -11,6 +11,8 @@ docker run -it \
 gihtub-maker-tools \
 -c -r testrepo
 
+sleep 3
+
 # Push code to testrepo on github.
 git -C $HOME/projects/work/testrepo push --all origin
 
