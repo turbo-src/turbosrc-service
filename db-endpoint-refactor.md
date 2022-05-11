@@ -1,17 +1,12 @@
 # Refactor database endpoint
 
-Up next
-
-`postSetOpenPullRequestTestDB`
-
-`setOpenPullRequest`
-
-
 Below is an example of how to refactor.
 
 ## testdbserver.js
 
 ### 1. Modify values for database inputs.
+
+Any extra inputs beyond database and args, must be changed to args.arg. 'database' and other extra argument must be removed from function signature.
 
 ```
 -  setContributorVotedTokens: function (database, args, tokens, side) {
@@ -32,6 +27,7 @@ Below is an example of how to refactor.
 ```
 
 ### 2. Add to schema.
+
 
 ```
 +    setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
@@ -75,6 +71,8 @@ Below is an example of how to refactor.
 ```
 
 ### 2. add request next to original
+
+Be sure to modify the inputs with respect to testdbserver.js
 
 ```
 +      await postSetContributorVotedTokensTestDB(
