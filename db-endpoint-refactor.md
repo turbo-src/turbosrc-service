@@ -9,6 +9,35 @@ Up next
 
 Below is an example of how to refactor.
 
+## testdbserver.js
+
+### 1. Modify values for database inputs.
+
+```
+-  setContributorVotedTokens: function (database, args, tokens, side) {
++  setContributorVotedTokens: async function (args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+-     tokens: tokens,
+-     side: side
++     tokens: args.tokens,
++     side: args.side
+    }
+
+-   return database
++   fs.writeFileSync('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
+   },
+
+```
+
+### 2. Add to schema.
+
+```
++    setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
+
+```
+
 ## graphQLrequests.js
 
 ### 1. Add graphql request.
@@ -75,32 +104,3 @@ Repeat wherever a to-be-deprecated function to be found.
 ```
 
 Make sure to only add the statement, don't delete anything.
-
-## testdbserver.js
-
-### 1. Add to schema.
-
-```
-+    setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
-
-```
-
-### 2. Modify values for database inputs.
-
-```
--  setContributorVotedTokens: function (database, args, tokens, side) {
-+  setContributorVotedTokens: async function (args) {
-    const prID = (args.pr_id).split('_')[1]
-
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
--     tokens: tokens,
--     side: side
-+     tokens: args.tokens,
-+     side: args.side
-    }
-
--   return database
-+   fs.writeFileSync('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
-   },
-
-```
