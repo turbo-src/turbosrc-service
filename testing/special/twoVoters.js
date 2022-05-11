@@ -22,7 +22,7 @@ async function readDBfile(file) {
     return data
 }
 
-describe('Create new pull request', function () {
+describe('Make sure new database matches old.', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
@@ -50,6 +50,15 @@ describe('Create new pull request', function () {
         //    testDBdata,
         //    deprecatedDBdata
         //)
+      });
+      it("Should have the same database after setting head commit", async () => {
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
+        const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
+
+        assert.equal(
+            testDBdata.toString(),
+            deprecatedDBdata.toString()
+        )
       });
     });
 });
