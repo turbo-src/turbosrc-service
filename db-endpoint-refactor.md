@@ -65,7 +65,7 @@ Repeat wherever a to-be-deprecated function to be found.
 
 ## state.js
 
-### 1. Add file write statement to setContributorVotedTokens
+### 1. Add file write statement to setContributorVotedTokens.
 
 ```
 +   fs.writeFileSync('testing/special/turbo-src-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
@@ -78,10 +78,29 @@ Make sure to only add the statement, don't delete anything.
 
 ## testdbserver.js
 
-### 1. add to schema.
+### 1. Add to schema.
 
 ```
 +    setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
 
 ```
-setOpenPullRequest
+
+### 2. Modify values for database inputs.
+
+```
+-  setContributorVotedTokens: function (database, args, tokens, side) {
++  setContributorVotedTokens: async function (args) {
+    const prID = (args.pr_id).split('_')[1]
+
+    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+-     tokens: tokens,
+-     side: side
++     tokens: args.tokens,
++     side: args.side
+    }
+
+-   return database
++   fs.writeFileSync('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
+   },
+
+```
