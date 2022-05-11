@@ -265,6 +265,16 @@ const root = {
           [_res,pullReqRepoHead] = await getPRhead(args)
 
           // Update HEAD to repo.
+          await postSetTSrepoHeadTestDB(
+            args.owner,
+            args.repo,
+            args.pr_id,
+            args.contributor_id,
+            args.side,
+            pullReqRepoHead
+          )
+
+          //To be deprecated for above.
           database = setTSrepoHead(database, args, pullReqRepoHead)
 
           // Delete pull request from database
