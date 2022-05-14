@@ -59,6 +59,15 @@ describe('Make sure new database matches old.', function () {
             JSON.parse(testDBdata)["turbo-src/testrepo"]["head"].toString(),
             JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["head"].toString()
         )
+      });
+      it("Should have the same database after adding total yes votes", async () => {
+        const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
+        const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
+
+        assert.equal(
+            JSON.parse(testDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString(),
+            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString()
+        )
 
         //assert.equal(
         //    testDBdata.toString(),

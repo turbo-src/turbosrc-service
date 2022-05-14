@@ -2,6 +2,13 @@
 
 Below is an example of how to refactor.
 
+addToTotalVotedYesTokens
+postAddToTotalVotedYesTokensDB
+
+fs.writeFileSync('testing/special/turbo-src-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
+
+fs.writeFileSync('testing/special/turbo-src-test-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
+
 ## testdbserver.js
 
 ### 1. Modify values for database inputs.
@@ -102,3 +109,11 @@ Repeat wherever a to-be-deprecated function to be found.
 ```
 
 Make sure to only add the statement, don't delete anything.
+
+## Notes
+
+state.js -> action.js
+
+addToTotalVotedYesTokens
+addToTotalVotedNoTokens
+addToTotalVotedTokens

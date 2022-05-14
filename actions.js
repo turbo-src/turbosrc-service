@@ -12,6 +12,7 @@ const {
         postSetQuorumTestDB,
         postNewPullRequestTestDB,
         postSetContributorVotedTokensTestDB,
+        postAddToTotalVotedYesTokensDB,
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
@@ -329,6 +330,17 @@ const root = {
       //Add yes and not votes to tally.
       database = addToTotalVotedTokens(database, args, tokens)
       if (args.side === "yes") {
+
+        await postAddToTotalVotedYesTokensDB(
+          args.owner,
+          args.repo,
+          args.pr_id,
+          args.contributor_id,
+          args.side,
+          tokens
+        )
+
+        //To be deprecated for above.
         database = addToTotalVotedYesTokens(database, args, tokens)
       } else {
         database = addToTotalVotedNoTokens(database, args, tokens)

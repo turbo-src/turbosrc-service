@@ -227,6 +227,8 @@ const root = {
 
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
 
+    fs.writeFileSync('testing/special/turbo-src-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
+
     return database
   },
   addToTotalVotedNoTokens: function(database, args, tokens) {

@@ -26,6 +26,7 @@ var schema = buildSchema(`
     setQuorum(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, quorum: String): String,
     newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, vote_status: String): String,
     setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
+    addToTotalVotedYesTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
   }
 `);
 
@@ -228,14 +229,14 @@ var root = {
 
     return database
   },
-  addToTotalVotedYesTokens: function(database, args, tokens) {
+  addToTotalVotedYesTokens: function(args) {
     const prID = (args.pr_id).split('_')[1]
 
     const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + Number(args.tokens)
 
-    return database
+    fs.writeFileSync('testing/special/turbo-src-test-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   addToTotalVotedNoTokens: function(database, args, tokens) {
     const prID = (args.pr_id).split('_')[1]
