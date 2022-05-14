@@ -51,9 +51,14 @@ describe('Create repo and GH pull request', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
-            testDBdata.toString(),
-            deprecatedDBdata.toString()
+            JSON.parse(testDBdata)["turbo-src/testrepo"]["head"].toString(),
+            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["head"].toString()
         )
+
+        //assert.equal(
+        //    testDBdata.toString(),
+        //    deprecatedDBdata.toString()
+        //)
       });
       it("Should have the same database after setting quorum", async () => {
         const testDBdata = await readDBfile('testing/special/turbo-src-database-set-quorum.json')
