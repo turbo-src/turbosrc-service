@@ -69,6 +69,11 @@ describe('Make sure new database matches old.', function () {
             JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString()
         )
 
+        assert.equal(
+            JSON.parse(testDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString(),
+            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString()
+        )
+
         //assert.equal(
         //    testDBdata.toString(),
         //    deprecatedDBdata.toString()
