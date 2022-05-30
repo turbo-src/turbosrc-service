@@ -5,6 +5,15 @@ const {
   closePullRequest
  } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
+const {
+        postCreateRepoTestDB,
+        postCreateTokenSupplyTestDB,
+        postSetTSrepoHeadTestDB,
+        postSetQuorumTestDB,
+        postNewPullRequestTestDB,
+        postSetContributorVotedTokensTestDB,
+        postAddToTotalVotedYesTokensDB,
+      } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
         setQuorum,
@@ -211,6 +220,17 @@ const root = {
       }
 
       //database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
+
+      await postSetContributorVotedTokensTestDB(
+        args.owner,
+        args.repo,
+        args.pr_id,
+        args.contributor_id,
+        "none",
+        0
+      )
+
+      //To be deprecated for above.
       database = setContributorVotedTokens(database, args, 0, "none")
 
       const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
@@ -246,6 +266,16 @@ const root = {
           [_res,pullReqRepoHead] = await getPRhead(args)
 
           // Update HEAD to repo.
+          await postSetTSrepoHeadTestDB(
+            args.owner,
+            args.repo,
+            args.pr_id,
+            args.contributor_id,
+            args.side,
+            pullReqRepoHead
+          )
+
+          //To be deprecated for above.
           database = setTSrepoHead(database, args, pullReqRepoHead)
 
           // Delete pull request from database
@@ -281,6 +311,16 @@ const root = {
     prVoteStatusUpdated = prVoteStatusNow
 
     if (prVoteStatusNow === 'open') {
+      await postSetContributorVotedTokensTestDB(
+        args.owner,
+        args.repo,
+        args.pr_id,
+        args.contributor_id,
+        args.side,
+        tokens
+      )
+
+      //To be deprecated for above.
       database = setContributorVotedTokens(database, args, tokens, args.side)
 
       console.log('upr 212')
@@ -290,6 +330,17 @@ const root = {
       //Add yes and not votes to tally.
       database = addToTotalVotedTokens(database, args, tokens)
       if (args.side === "yes") {
+
+        await postAddToTotalVotedYesTokensDB(
+          args.owner,
+          args.repo,
+          args.pr_id,
+          args.contributor_id,
+          args.side,
+          tokens
+        )
+
+        //To be deprecated for above.
         database = addToTotalVotedYesTokens(database, args, tokens)
       } else {
         database = addToTotalVotedNoTokens(database, args, tokens)
@@ -309,15 +360,58 @@ const root = {
     }
   },
   createRepo: async (database, pullRequestsDB, args) => {
+    debugger
+    await postCreateRepoTestDB(
+      args.owner,
+      args.repo,
+      args.pr_id,
+      args.contributor_id,
+      args.side
+    )
+
+    //To be deprecated for above.
     const resCreateRepo = await createRepo(database, pullRequestsDB, args)
     database = resCreateRepo.db
+
     // Add tip of OID to repo db.
     const head = await gitHeadUtil(args.owner, args.repo, '', 0)
 
+    await postSetTSrepoHeadTestDB(
+      args.owner,
+      args.repo,
+      args.pr_id,
+      args.contributor_id,
+      args.side,
+      head
+    )
+
+    //To be deprecated for above.
     database = setTSrepoHead(database, args, head)
 
     pullRequestsDB = resCreateRepo.pullRequestsDB
+
+    await postCreateTokenSupplyTestDB(
+      args.owner,
+      args.repo,
+      args.pr_id,
+      args.contributor_id,
+      args.side,
+      1_000_000
+    )
+
+    //To be deprecated for above.
     database = createTokenSupply(database, 1_000_000, args)
+
+    await postSetQuorumTestDB(
+      args.owner,
+      args.repo,
+      args.pr_id,
+      args.contributor_id,
+      args.side,
+      0.50
+    )
+
+    //To be deprecated for above.
     database = setQuorum(database, 0.50, args)
 
     return {
@@ -325,10 +419,21 @@ const root = {
              db: database
     }
   },
-  newPullRequest: function(database, pullRequestsDB, args) {
+  newPullRequest: async (database, pullRequestsDB, args) => {
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
 
     const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)
+
+    await postNewPullRequestTestDB(
+      args.owner,
+      args.repo,
+      args.pr_id,
+      args.contributor_id,
+      args.side,
+      prVoteStatus
+    )
+
+    //To be deprecated for above.
     database = resNewPullRequest.db
     pullRequestsDB = resNewPullRequest.pullRequestsDB
 

@@ -224,6 +224,7 @@ var root = {
   },
   setVote: async (args) => {
     // Check user votes. If voted, don't set vote.
+    debugger
     const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
     if ( votedTokens > 0) {
       return "duplicate"
@@ -240,7 +241,7 @@ var root = {
        // Only allow to open the pull request for vote
        // if there is no other active vote.
        if (numberActivePullRequests === 0) {
-         const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+         const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
 
          fakeTurboSrcReposDB = resNewPullRequest.db
        pullRequestsDB = resNewPullRequest.pullRequestsDB
@@ -255,7 +256,7 @@ var root = {
 
   },
   newPullRequest: async (args) => {
-    const resNewPullRequest = newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+    const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
 
     fakeTurboSrcReposDB = resNewPullRequest.db
     pullRequestsDB = resNewPullRequest.pullRequestsDB
@@ -263,6 +264,7 @@ var root = {
     return pullRequestsDB[args.pr_id]
   },
   createRepo: async (args) => {
+    debugger
     const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
     fakeTurboSrcReposDB = resCreateRepo.db
     pullRequestsDB = resCreateRepo.pullRequestsDB

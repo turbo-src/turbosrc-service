@@ -1,9 +1,37 @@
+const express = require('express');
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+const cors = require('cors');
 const fs = require('fs')
 
-const root = {
-  createRepo: async (database, prDB, args) => {
-      const pullRequestsDB = prDB
+var database = {}
+// Basically this will be a database service until we put this on ipfs or something.
+var pullRequestsVoteCloseHistory = []
+var pullRequestsVoteMergeHistory = []
 
+// The object representing authorized repos and contributors.
+var pullRequestsDB = {
+   'default/default': ['vote_code']
+};
+
+var schema = buildSchema(`
+  type PullRequest {
+    vote_code: [String]
+  }
+  type Query {
+    getPullRequestFromHistory(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createTokenSupply(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
+    setTSrepoHead(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, head: String): String,
+    setQuorum(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, quorum: String): String,
+    newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, vote_status: String): String,
+    setContributorVotedTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
+    addToTotalVotedYesTokens(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, tokens: String): String,
+  }
+`);
+
+var root = {
+  createRepo: async (args) => {
       database[args.owner + "/" + args.repo] = {
         //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
@@ -29,36 +57,25 @@ const root = {
 
     database[args.owner + "/" + args.repo].quorum = 0.50
 
-    //For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-    return {
-             pullRequestsDB: pullRequestsDB,
-             db: database,
-    }
+    // For testing.
+    fs.writeFileSync('testing/special/turbo-src-test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
-  createTokenSupply: function (database, tokens, args) {
-    const prID = args.pr_id.split('_')[1]
-
-    database[args.owner + "/" + args.repo].tokenSupply = tokens
+  createTokenSupply: function (args) {
+    database[args.owner + "/" + args.repo].tokenSupply = Number(args.tokens)
 
     // For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-    return  database
+    fs.writeFileSync('testing/special/turbo-src-test-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
-  setQuorum: function (database, quorum, args) {
-    database[args.owner + "/" + args.repo].quorum = quorum
+  setQuorum: function (args) {
+    database[args.owner + "/" + args.repo].quorum = Number(args.quorum)
 
-    fs.writeFileSync('testing/special/turbo-src-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-    return  database
+    fs.writeFileSync('testing/special/turbo-src-test-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
-  newPullRequest: function (database, pullRequestsDB, args, prVoteStatus) {
+  newPullRequest: function (args) {
     const prID = args.pr_id.split('_')[1]
 
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
-    const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
+    const vote_code = args.vote_status + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
     pullRequestsDB[args.pr_id] = [vote_code]
 
@@ -71,29 +88,22 @@ const root = {
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
 
-    fs.writeFileSync('testing/special/turbo-src-database-new-pull-request.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-    return {
-             pullRequestsDB: pullRequestsDB,
-             db: database,
-    }
+    fs.writeFileSync('testing/special/turbo-src-test-database-new-pull-request.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   getContributorTokens: function(database, args) {
     tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
 
     return tokens
   },
-  setContributorVotedTokens: function (database, args, tokens, side) {
+  setContributorVotedTokens: async function (args) {
    const prID = (args.pr_id).split('_')[1]
 
    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
-     tokens: tokens,
-     side: side
+     tokens: Number(args.tokens),
+     side: args.side
    }
 
-   fs.writeFileSync('testing/special/turbo-src-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-   return database
+   fs.writeFileSync('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   setVoteSide: function (database, args) {
    const prID = (args.pr_id).split('_')[1]
@@ -104,11 +114,10 @@ const root = {
   },
   // Soon to be tprID. Right now it's the HEAD of the
   // pull request fork on Github.
-  setTSrepoHead: function (database, args, tprID) {
-   database[args.owner + "/" + args.repo].head = tprID
+  setTSrepoHead: function (args) {
+   database[args.owner + "/" + args.repo].head = args.head
 
-    // For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-set-ts-repo-head.json', JSON.stringify(database, null, 2) , 'utf-8');
+   fs.writeFileSync('testing/special/turbo-src-test-database-set-ts-repo-head.json', JSON.stringify(database, null, 2) , 'utf-8');
 
    return database
   },
@@ -220,16 +229,14 @@ const root = {
 
     return database
   },
-  addToTotalVotedYesTokens: function(database, args, tokens) {
+  addToTotalVotedYesTokens: function(args) {
     const prID = (args.pr_id).split('_')[1]
 
     const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
+    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + Number(args.tokens)
 
-    fs.writeFileSync('testing/special/turbo-src-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-    return database
+    fs.writeFileSync('testing/special/turbo-src-test-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   addToTotalVotedNoTokens: function(database, args, tokens) {
     const prID = (args.pr_id).split('_')[1]
@@ -266,4 +273,29 @@ const root = {
   },
 }
 
-module.exports = root
+var app = express();
+//app.use(loggingMiddleware);
+app.use(cors());
+app.use(function (req, res, next) {
+    let originalSend = res.send;
+    res.send = function (data) {
+        console.log(data + "\n");
+        originalSend.apply(res, Array.from(arguments));
+    }
+    next();
+});
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
+var way = false;
+//if (way === true) {
+//     console.log("true");
+//     return true;
+//   } else {
+//     console.log("false");
+//     return false;
+//}
+app.listen(8081);
+console.log("Running a GraphQL API server at container's localhost:8081/graphql");
