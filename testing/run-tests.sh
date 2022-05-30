@@ -1,5 +1,5 @@
 # Recreate testrepo
-./testing/gihtub-maker.sh &>/dev/null &
+./testing/gihtub-maker.sh
 
 # Rebuild and start containers.
 ./dev.sh cycle && ./dev.sh start
