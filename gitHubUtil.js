@@ -96,6 +96,26 @@ const gitHubUtil = {
 
     console.log('gh 83`')
   },
+  fork: async function(owner, repo, org) {
+    let token = await getGithubToken();
+    const octokit = new Octokit({ auth: token });
+    console.log('gh 102')
+    console.log(owner)
+    console.log(repo)
+    console.log(org)
+
+    //await octokit.rest.repos.createFork({owner, repo, org})
+    await octokit.rest.repos.createFork({owner, repo})
+
+    //await octokit.request(`PUT /repos/${owner}/${repo}/fork`, {
+    //  organization: org,
+    //  //repo: 'hello-world',
+    //  //pull_number: 42,
+    //  //commit_title: 'commit_title'
+    //})
+
+    console.log('gh 116`')
+  },
 }
 
 module.exports = gitHubUtil

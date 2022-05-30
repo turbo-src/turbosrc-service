@@ -25,7 +25,8 @@ const {
        getPullRequest,
        createPullRequest,
        closePullRequest,
-       mergePullRequest
+       mergePullRequest,
+       fork
       } = require('./gitHubUtil');
 
 // pr_id is the issue_id, which are the same for now.
@@ -59,6 +60,7 @@ var schema = buildSchema(`
     createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, title: String): String,
     closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    fork(owner: String, repo: String, org: String): String,
   }
 `);
 
@@ -280,6 +282,9 @@ var root = {
   },
   mergePullRequest: async (args) => {
     await mergePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+  },
+  fork: async (args) => {
+    await fork(args.owner, args.repo, args.org)
   },
   //End of GH server endpoints.
 }
