@@ -1,96 +1,52 @@
+Clone
 
-*A javascript client that makes a graphql request to a localhost graphql-express server.*
+```
+git clone https://turbo-src/service turbo-src-service
+cd turbo-src-service
+```
 
-Build docker server image.
 
-`docker build -t turbo-src-server:0.0.1 -f dockerfile.server .`
 
-Build docker pull fork server image.
-`docker build -t turbo-src-server:0.0.1 -f dockerfile.pfserver .`
+Click on your Github profile > Settings > Developer Settings > Personal Access Tokens > Generate new token
 
-Create docker volume.
-
-`docker volume create vol-turbo-src-server`
+Make sure the repo options are checked off.
 
 Add github token. The -n flag is for prevent new line character at the end. Without the flag, it can't read the token.
 
-`echo -n "MY_TOKEN" > .github-token`
+```
+echo -n "MY_TOKEN" > .github-token
+```
 
+
+Build docker server image.
+
+```
+docker build -t turbo-src-server:0.0.1 -f dockerfile.server .
+```
+
+Build docker pull fork server image.
+
+```
+docker build -t turbo-src-server:0.0.1 -f dockerfile.pfserver .
+```
+
+Create docker volume.
+
+```
+docker volume create vol-turbo-src-server
+```
 Start the servers.
-
-```
-docker run -p 4000:8080 -d \
---name turbo-src-server \
---mount source=vol-turbo-src-server,target=/usr/src/app/repos \
-turbo-src-server:0.0.1
-```
-
-```
-docker run -p 4001:8080 -d \
---name turbo-src-pfserver \
---mount source=vol-turbo-src-server,target=/usr/src/app/repos \
-turbo-src-pfserver:0.0.1
-```
 
 
 ### Testing
 
-To run any tests, you'll need to
-
 ```
-git clone https://github.com/turbo-src/testrepo
-```
-
-The following steps must be done everytime tests are ran.
-
-1. Recreate `github.com/turbo-src/testrepo` (delete and then create new).
-
-3. Push master and feat branches
-
-```
-cd /path/to/turbo-src/testrepo
+./testing/run-tests.sh
 ```
 
 ```
-git push --all origin
-```
 
-4. Rebuild and start servers.
-
-```
-./dev.sh cycle && ./dev.sh start
-```
-
-5. Run tests
-
-```
-./run-tests.sh
-```
-
-You may need to give it execution permission.
-
-```
-chmod +x run-tests.sh
-```
-
-Deprecated.
-```
-npm test testing/integration/vim/noRepo.js && \
-sleep 10 && \
-npm test testing/integration/vim/createRepo.js && \
-sleep 10 && \
-npm test testing/integration/vim/voteDuplicate.js && \
-sleep 10 && \
-npm test testing/integration/vim/voteTally.js && \
-sleep 10 && \
-npm test testing/integration/vim/voteTallyMany.js && \
-sleep 10 && \
-npm test testing/integration/vim/voteToClose.js && \
-sleep 10 && \
-npm test testing/integration/vim/voteToOpenThenClose.js && \
-sleep 10 && \
-npm test testing/integration/vim/voteDuplicatePR.js
-```
+### Notes
 
 To see server logs.
 
