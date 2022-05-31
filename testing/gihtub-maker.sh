@@ -1,12 +1,12 @@
 # Delete testrepo
 docker run -it \
 gihtub-maker-tools \
--d -r testrepo
+-d -r demo
 
 # Create testrepo
-docker run -it \
-gihtub-maker-tools \
--c -r testrepo
+#docker run -it \
+#gihtub-maker-tools \
+#-c -r demo
 
 # Push code to testrepo on github.
-git -C $HOME/projects/work/testrepo push --all origin
+#git -C $HOME/projects/work/turbo-src-demo/repo push --all origin

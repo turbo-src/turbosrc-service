@@ -19,8 +19,8 @@ describe('Vote.', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
@@ -31,24 +31,24 @@ describe('Vote.', function () {
       it("Should close vote and then merge.", async () => {
         await snooze(snooze_ms);
         const status = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const voteNoTotals = await postGetPRvoteNoTotals(
-            /*owner:*/ "turbo-src",
-            /*repo: */ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",

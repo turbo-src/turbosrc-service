@@ -32,8 +32,8 @@ describe('Pull requests', function () {
       it("Should merge pull request.", async () => {
         await snooze(1500);
         await postMergePullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_8",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",

@@ -22,11 +22,11 @@ describe('Create repo and GH pull request', function () {
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
         await postCreatePullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*fork_branch:*/ "semiAutoManyVoters",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest5",
             /*pr_id:*/ "issue_5",
-            /*title:*/ "Add Many Voters semi-automatically to README.",
+            /*title:*/ "refactor: missing parenthesis may cause unexpected problems",
         );
 
         //console.log(status)

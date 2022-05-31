@@ -19,32 +19,32 @@ describe('vote', function () {
     describe('Vote duplicate with minority voter', function () {
       it("Prevent duplicate vote", async () => {
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -54,16 +54,16 @@ describe('vote', function () {
         // Only one vote round at a time.
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",

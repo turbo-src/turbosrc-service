@@ -19,192 +19,192 @@ describe('Vote.', function () {
     describe('Many voters vote.', function () {
       it("Should increment vote and then close and merge on quorum.", async () => {
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const sevenDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const amDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const mbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const npVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const nnVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const jpVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const tsVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
@@ -265,8 +265,8 @@ describe('Vote.', function () {
         //    "Fail to add votes."
         //);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
@@ -275,24 +275,24 @@ describe('Vote.', function () {
         //Now close vote.
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const maryVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",

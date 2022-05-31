@@ -24,55 +24,55 @@ describe('Voting.', function () {
       it("Should close open and close vote, then merge.", async () => {
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const voteNoTotals = await postGetPRvoteNoTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",

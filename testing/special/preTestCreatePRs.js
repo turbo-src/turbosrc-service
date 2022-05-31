@@ -51,8 +51,8 @@ describe('Create repo and GH pull request', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["turbo-src/testrepo"]["head"].toString(),
-            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["head"].toString()
+            JSON.parse(testDBdata)["7db9a/demo"]["head"].toString(),
+            JSON.parse(deprecatedDBdata)["7db9a/demo"]["head"].toString()
         )
 
         //assert.equal(

@@ -42,8 +42,8 @@ describe('Make sure new database matches old.', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString(),
-            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString()
+            JSON.parse(testDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString(),
+            JSON.parse(deprecatedDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString()
         )
 
         //assert.equal(
@@ -56,8 +56,8 @@ describe('Make sure new database matches old.', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["turbo-src/testrepo"]["head"].toString(),
-            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["head"].toString()
+            JSON.parse(testDBdata)["7db9a/demo"]["head"].toString(),
+            JSON.parse(deprecatedDBdata)["7db9a/demo"]["head"].toString()
         )
       });
       it("Should have the same database after adding total yes votes", async () => {
@@ -65,13 +65,13 @@ describe('Make sure new database matches old.', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString(),
-            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString()
+            JSON.parse(testDBdata)["7db9a/demo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString(),
+            JSON.parse(deprecatedDBdata)["7db9a/demo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString()
         )
 
         assert.equal(
-            JSON.parse(testDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString(),
-            JSON.parse(deprecatedDBdata)["turbo-src/testrepo"]["pullRequests"]["1"]["votedTokens"].toString()
+            JSON.parse(testDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString(),
+            JSON.parse(deprecatedDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString()
         )
 
         //assert.equal(

@@ -18,16 +18,16 @@ describe('Create repo', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         await postCreateRepo(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postNewPullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
@@ -38,8 +38,8 @@ describe('Create repo', function () {
       it("Should do something", async () => {
         await snooze(snooze_ms);
         const status = await postGetPRvoteStatus(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",

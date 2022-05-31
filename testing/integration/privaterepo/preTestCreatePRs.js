@@ -22,46 +22,44 @@ describe('Create repo and GH pull request', function () {
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
         await postCreateRepo(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*fork_branch:*/ "twoVoters",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest1",
             /*pr_id:*/ "issue_1",
-            /*title:*/ "Add Two Voters to README.",
+            /*title:*/ "refactor(lsp): remove redundant client cleanup",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*fork_branch:*/ "singleMajorityVoter",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest2",
             /*pr_id:*/ "issue_2",
-            /*title:*/ "Add Single Majority Voter to README.",
+            /*title:*/ "refactor(uncrustify): set maximum number of consecutive newlines"
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*fork_branch:*/ "duplicateVote",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest3",
             /*pr_id:*/ "issue_3",
-            /*title:*/ "Add Duplicate Vote to README.",
+            /*title:*/ "ci(mingw): only enable -municode for MinGW",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "testrepo",
-            /*fork_branch:*/ "manyVoters",
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest4",
             /*pr_id:*/ "issue_4",
-            /*title:*/ "Add Many Voters to README.",
+            /*title:*/ "docs: add missing termdebug docs from Vim runtime updates",
         );
-
-        //console.log(status)
 
         assert.equal(
             true,
