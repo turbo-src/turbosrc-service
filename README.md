@@ -1,7 +1,7 @@
 Clone
 
 ```
-git clone https://turbo-src/service turbo-src-service
+git clone https://github.com/turbo-src/service turbo-src-service
 cd turbo-src-service
 ```
 
