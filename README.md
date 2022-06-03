@@ -47,6 +47,46 @@ Start the servers.
 
 https://github.com/turbo-src/GihtubMakerTools
 
+#### Install npm version 12.22.0
+
+##### Mac
+
+Before running
+
+`brew install nvm`
+
+There is some additional setup found here:
+
+https://formulae.brew.sh/formula/nvm
+
+Install node.
+
+`nvm install 12.22.0`
+
+Make sure using the right one
+
+`nvm use 12.22.0`
+
+##### Arch Linux
+
+```
+pacman -S nvm
+```
+
+Then follow these steps:
+
+https://aur.archlinux.org/packages/nvm
+
+##### Other linux distros
+
+Please look into how to do this.
+
+### Build javascript modules on host
+
+```
+npm build
+```
+
 ### Testing
 
 ```
