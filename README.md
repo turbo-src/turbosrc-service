@@ -27,7 +27,7 @@ docker build -t turbo-src-server:0.0.1 -f dockerfile.server .
 Build docker pull fork server image.
 
 ```
-docker build -t turbo-src-server:0.0.1 -f dockerfile.pfserver .
+docker build -t turbo-src-pfserver:0.0.1 -f dockerfile.pfserver .
 ```
 
 Create docker volume.
@@ -46,10 +46,6 @@ https://github.com/turbo-src/GihtubMakerTools
 ```
 ./testing/run-tests.sh
 ```
-
-```
-
-### Notes
 
 To see server logs.
 
