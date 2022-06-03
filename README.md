@@ -5,8 +5,6 @@ git clone https://github.com/turbo-src/service turbo-src-service
 cd turbo-src-service
 ```
 
-
-
 Click on your Github profile > Settings > Developer Settings > Personal Access Tokens > Generate new token
 
 Make sure the repo options are checked off.
@@ -17,6 +15,14 @@ Add github token. The -n flag is for prevent new line character at the end. With
 echo -n "MY_TOKEN" > .github-token
 ```
 
+Make the development and testing scripts executable.
+
+```
+chmod +x \
+dev.sh \
+testing/gihtub-maker.sh \
+testing/run-tests.sh
+```
 
 Build docker server image.
 
