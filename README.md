@@ -81,10 +81,10 @@ https://aur.archlinux.org/packages/nvm
 
 Please look into how to do this.
 
-### Build javascript modules on host
+### Install javascript modules on host
 
 ```
-npm build
+npm install
 ```
 
 ### Testing
