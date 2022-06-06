@@ -1,6 +1,12 @@
 # Delete fork of demo.
 ./testing/gihtub-maker.sh
 
+
+# Copy overwrite .config to where it's needed.
+# Can't reach file outside of testing dir
+# for some reason.
+\cp .config.json testing/integration/privaterepo/
+
 # Rebuild and start containers.
 ./dev.sh cycle && ./dev.sh start
 
