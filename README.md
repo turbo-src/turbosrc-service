@@ -9,10 +9,16 @@ Click on your Github profile > Settings > Developer Settings > Personal Access T
 
 Make sure the repo options are checked off.
 
-Add github token. The -n flag is for prevent new line character at the end. Without the flag, it can't read the token.
+Create a `.config`. You'll need a Github organization.
 
 ```
-echo -n "MY_TOKEN" > .github-token
+{
+  "github": {
+    "organization": "myOrg",
+    "user": "myGithub",
+    "token": "ghp_475fh.."
+  }
+}
 ```
 
 Make the development and testing scripts executable.
