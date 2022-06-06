@@ -7,7 +7,7 @@ cd turbo-src-service
 
 Click on your Github profile > Settings > Developer Settings > Personal Access Tokens > Generate new token
 
-Make sure the repo options are checked off.
+Make sure the repo and delete repo options are checked off.
 
 Create the `.config` file and add your Github user, organization and token.
 
