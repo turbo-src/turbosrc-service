@@ -3,6 +3,7 @@ const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
 const fs = require('fs')
+const fsPromises = require('fs').promises;
 
 var database = {}
 // Basically this will be a database service until we put this on ipfs or something.
@@ -30,15 +31,32 @@ var schema = buildSchema(`
   }
 `);
 
+async function getGithubUser() {
+    const data = await fsPromises.readFile('/usr/src/app/.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
+
 var root = {
   createRepo: async (args) => {
+      const user = await getGithubUser();
       database[args.owner + "/" + args.repo] = {
         //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
         'openPullRequest': '',
         'contributors': {
           'mary': 500_001,
-          '7db9a': 33_999,
           'am': 15_000,
           'jc': 10_000,
           'pc': 75_000,
@@ -54,6 +72,8 @@ var root = {
         'pullRequests': {
         }
       }
+
+    database[args.owner + "/" + args.repo].contributors[user] = 33_999
 
     database[args.owner + "/" + args.repo].quorum = 0.50
 

@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postCreatePullRequest,
@@ -21,8 +22,26 @@ describe('Create repo and GH pull request', function () {
     });
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
+        async function getGithubUser() {
+            const data = await fsPromises.readFile('.config.json')
+                               .catch((err) => console.error('Failed to read file', err));
+
+            let json = JSON.parse(data);
+            let user = json.github.user
+            if (user === undefined) {
+              throw new Error("Failed to load Github user " + user);
+
+            } else {
+              console.log("Successfully read Github " + user);
+            }
+
+            return user
+
+        }
+        const user  = await getGithubUser();
+
         await postCreatePullRequest(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest5",
             /*pr_id:*/ "issue_5",

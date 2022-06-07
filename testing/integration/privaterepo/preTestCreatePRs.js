@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postCreatePullRequest,
@@ -21,16 +22,33 @@ describe('Create repo and GH pull request', function () {
     });
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
+        async function getGithubUser() {
+            const data = await fsPromises.readFile('.config.json')
+                               .catch((err) => console.error('Failed to read file', err));
+
+            let json = JSON.parse(data);
+            let user = json.github.user
+            if (user === undefined) {
+              throw new Error("Failed to load Github user " + user);
+
+            } else {
+              console.log("Successfully read Github " + user);
+            }
+
+            return user
+
+        }
+        const user  = await getGithubUser();
         await postCreateRepo(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest1",
             /*pr_id:*/ "issue_1",
@@ -38,7 +56,7 @@ describe('Create repo and GH pull request', function () {
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest2",
             /*pr_id:*/ "issue_2",
@@ -46,7 +64,7 @@ describe('Create repo and GH pull request', function () {
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest3",
             /*pr_id:*/ "issue_3",
@@ -54,7 +72,7 @@ describe('Create repo and GH pull request', function () {
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest4",
             /*pr_id:*/ "issue_4",

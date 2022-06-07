@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postCreatePullRequest,
@@ -7,7 +8,6 @@ const {
         postNewPullRequest
       } = require('../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
-const fsPromises = require('fs').promises;
 
 var snooze_ms = 1500;
 
@@ -20,6 +20,23 @@ async function readDBfile(file) {
                        .catch((err) => console.error('Failed to read file', err));
 
     return data
+}
+
+async function getGithubUser() {
+    const data = await fsPromises.readFile('.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
 }
 
 describe('Make sure new database matches old.', function () {
@@ -38,12 +55,14 @@ describe('Make sure new database matches old.', function () {
         )
       });
       it("Should have the same database after creating a setting contributor's voted tokens", async () => {
+        const user  = await getGithubUser();
+
         const testDBdata = await readDBfile('testing/special/turbo-src-database-set-contributor-voted-tokens.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-contributor-voted-tokens.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString(),
-            JSON.parse(deprecatedDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString()
+            JSON.parse(testDBdata)[user + "/demo"]["pullRequests"]["1"]["votedTokens"].toString(),
+            JSON.parse(deprecatedDBdata)[user + "/demo"]["pullRequests"]["1"]["votedTokens"].toString()
         )
 
         //assert.equal(
@@ -56,22 +75,24 @@ describe('Make sure new database matches old.', function () {
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["7db9a/demo"]["head"].toString(),
-            JSON.parse(deprecatedDBdata)["7db9a/demo"]["head"].toString()
+            JSON.parse(testDBdata)[user + "/demo"]["head"].toString(),
+            JSON.parse(deprecatedDBdata)[user + "/demo"]["head"].toString()
         )
       });
       it("Should have the same database after adding total yes votes", async () => {
+        const user  = await getGithubUser();
+
         const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
         assert.equal(
-            JSON.parse(testDBdata)["7db9a/demo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString(),
-            JSON.parse(deprecatedDBdata)["7db9a/demo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString()
+            JSON.parse(testDBdata)[user + "/demo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString(),
+            JSON.parse(deprecatedDBdata)[user + "/demo"]["pullRequests"]["1"]["totalVotedYesTokens"].toString()
         )
 
         assert.equal(
-            JSON.parse(testDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString(),
-            JSON.parse(deprecatedDBdata)["7db9a/demo"]["pullRequests"]["1"]["votedTokens"].toString()
+            JSON.parse(testDBdata)[user + "/demo"]["pullRequests"]["1"]["votedTokens"].toString(),
+            JSON.parse(deprecatedDBdata)[user + "/demo"]["pullRequests"]["1"]["votedTokens"].toString()
         )
 
         //assert.equal(
