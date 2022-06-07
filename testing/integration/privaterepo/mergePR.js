@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteYesTotals,
@@ -24,18 +25,36 @@ describe('Pull requests', function () {
     //        /*owner:*/ "vim",
     //        /*repo:*/ "vim",
     //        /*pr_id:*/ "issue_4955",
-    //        /*contributor_id:*/ "7db9a",
+    //        /*contributor:*/ user,
     //        /*side:*/ "yes",
     //    );
     //});
     describe.only('Merge pull request.', function () {
       it("Should merge pull request.", async () => {
+        async function getGithubUser() {
+            const data = await fsPromises.readFile('.config.json')
+                               .catch((err) => console.error('Failed to read file', err));
+
+            let json = JSON.parse(data);
+            let user = json.github.user
+            if (user === undefined) {
+              throw new Error("Failed to load Github user " + user);
+
+            } else {
+              console.log("Successfully read Github " + user);
+            }
+
+            return user
+
+        }
+        const user  = await getGithubUser();
+
         await snooze(1500);
         await postMergePullRequest(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_8",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         assert.equal(

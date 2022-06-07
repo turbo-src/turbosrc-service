@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postCreatePullRequest,
@@ -7,7 +8,6 @@ const {
         postNewPullRequest
       } = require('../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
-const fsPromises = require('fs').promises;
 
 var snooze_ms = 1500;
 
@@ -20,6 +20,23 @@ async function readDBfile(file) {
                        .catch((err) => console.error('Failed to read file', err));
 
     return data
+}
+
+async function getGithubUser() {
+    const data = await fsPromises.readFile('.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
 }
 
 describe('Create repo and GH pull request', function () {
@@ -50,9 +67,10 @@ describe('Create repo and GH pull request', function () {
         const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
+        const user  = await getGithubUser();
         assert.equal(
-            JSON.parse(testDBdata)["7db9a/demo"]["head"].toString(),
-            JSON.parse(deprecatedDBdata)["7db9a/demo"]["head"].toString()
+            JSON.parse(testDBdata)[user + "/demo"]["head"].toString(),
+            JSON.parse(deprecatedDBdata)[user + "/demo"]["head"].toString()
         )
 
         //assert.equal(

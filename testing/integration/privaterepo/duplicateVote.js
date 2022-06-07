@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postSetVote,
@@ -18,35 +19,53 @@ describe('vote', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Vote duplicate with minority voter', function () {
       it("Prevent duplicate vote", async () => {
+        async function getGithubUser() {
+            const data = await fsPromises.readFile('.config.json')
+                               .catch((err) => console.error('Failed to read file', err));
+
+            let json = JSON.parse(data);
+            let user = json.github.user
+            if (user === undefined) {
+              throw new Error("Failed to load Github user " + user);
+
+            } else {
+              console.log("Successfully read Github " + user);
+            }
+
+            return user
+
+        }
+        const user  = await getGithubUser();
+
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPRvoteStatus(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
 
@@ -54,7 +73,7 @@ describe('vote', function () {
         // Only one vote round at a time.
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "mary",
@@ -62,10 +81,10 @@ describe('vote', function () {
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
 

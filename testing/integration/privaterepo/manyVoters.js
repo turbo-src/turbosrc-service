@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteTotals,
@@ -18,24 +19,43 @@ describe('Vote.', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Many voters vote.', function () {
       it("Should increment vote and then close and merge on quorum.", async () => {
+
+        async function getGithubUser() {
+            const data = await fsPromises.readFile('.config.json')
+                               .catch((err) => console.error('Failed to read file', err));
+
+            let json = JSON.parse(data);
+            let user = json.github.user
+            if (user === undefined) {
+              throw new Error("Failed to load Github user " + user);
+
+            } else {
+              console.log("Successfully read Github " + user);
+            }
+
+            return user
+
+        }
+        const user  = await getGithubUser();
+
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const sevenDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor_id:*/ "7db9a",
+            /*contributor:*/ user,
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "am",
@@ -43,7 +63,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const amDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "am",
@@ -51,7 +71,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
@@ -59,7 +79,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jc",
@@ -67,7 +87,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "pc",
@@ -75,7 +95,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "pc",
@@ -83,7 +103,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mb",
@@ -91,7 +111,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const mbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mb",
@@ -99,7 +119,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "np",
@@ -107,7 +127,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const npVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "np",
@@ -115,7 +135,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "nn",
@@ -123,7 +143,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const nnVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "nn",
@@ -131,7 +151,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jp",
@@ -139,7 +159,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const jpVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "jp",
@@ -147,7 +167,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ts",
@@ -155,7 +175,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const tsVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ts",
@@ -163,7 +183,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
@@ -171,7 +191,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "af",
@@ -179,7 +199,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
@@ -187,7 +207,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ds",
@@ -195,7 +215,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
@@ -203,7 +223,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
@@ -265,7 +285,7 @@ describe('Vote.', function () {
         //    "Fail to add votes."
         //);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "ri",
@@ -275,7 +295,7 @@ describe('Vote.', function () {
         //Now close vote.
         await snooze(snooze_ms);
         await postSetVote(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
@@ -283,7 +303,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPRvoteStatus(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
@@ -291,7 +311,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const maryVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ "7db9a",
+            /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor_id:*/ "mary",
