@@ -71,6 +71,8 @@ describe('Make sure new database matches old.', function () {
         //)
       });
       it("Should have the same database after setting head commit", async () => {
+        const user  = await getGithubUser();
+
         const testDBdata = await readDBfile('testing/special/turbo-src-database-set-ts-repo-head.json')
         const deprecatedDBdata = await readDBfile('testing/special/turbo-src-test-database-set-ts-repo-head.json')
 
