@@ -17,7 +17,7 @@ Create the `.config` file and add your Github user, organization and token.
   "github": {
     "organization": "myOrg",
     "user": "myGithub",
-    "token": "ghp_475fh.."
+    "apiToken": "ghp_475fh.."
   }
 }
 ```
