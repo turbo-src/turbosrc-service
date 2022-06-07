@@ -8,8 +8,10 @@
 \cp .config.json testing/integration/privaterepo/
 
 # Rebuild and start containers.
-./dev.sh cycle && ./dev.sh start
+sleep 3
 
+./dev.sh cycle && ./dev.sh start
+sleep 3
 
 # Create fork of demo. Must have running containers.
 # It calls the main server.
@@ -26,12 +28,12 @@ npm test testing/special/preTestCreatePRs.js && \
 sleep 3
 
 npm test testing/integration/privaterepo/twoVoters.js
-#sleep 3
+sleep 3
 
 # Run refactor db test in container
 docker exec -it \
 turbo-src-server \
-npm test testing/special/twoVoters.js && \
+npm test testing/special/twoVoters.js
 sleep 3
 
 npm test testing/integration/privaterepo/singleMajorityVoter.js && \
