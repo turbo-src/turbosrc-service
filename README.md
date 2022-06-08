@@ -9,7 +9,7 @@ Click on your Github profile > Settings > Developer Settings > Personal Access T
 
 Make sure the repo and delete repo options are checked off.
 
-Create the `.config` file and add your Github user, organization and token.
+Create the `.config.json` file and add your Github user, organization and token.
 
 ```
 {
