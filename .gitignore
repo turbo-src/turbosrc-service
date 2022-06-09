@@ -2,3 +2,4 @@ node_modules/
 repos/
 .github-token
 .config.json
+.dev/
