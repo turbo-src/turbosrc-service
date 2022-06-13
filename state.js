@@ -1,27 +1,8 @@
 const fs = require('fs')
-const fsPromises = require('fs').promises;
-
-async function getGithubUser() {
-    const data = await fsPromises.readFile('/usr/src/app/.config.json')
-                       .catch((err) => console.error('Failed to read file', err));
-
-    let json = JSON.parse(data);
-    let user = json.github.user
-    if (user === undefined) {
-      throw new Error("Failed to load Github user " + user);
-
-    } else {
-      console.log("Successfully read Github " + user);
-    }
-
-    return user
-
-}
 
 const root = {
   createRepo: async (database, prDB, args) => {
       const pullRequestsDB = prDB
-      const user = await getGithubUser();
 
       database[args.owner + "/" + args.repo] = {
         //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
@@ -45,7 +26,7 @@ const root = {
         }
       }
 
-    database[args.owner + "/" + args.repo].contributors[user] = 33_999
+    database[args.owner + "/" + args.repo].contributors[args.contributor_id] = 33_999
 
     database[args.owner + "/" + args.repo].quorum = 0.50
 
