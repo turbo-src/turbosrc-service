@@ -1,6 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
+        postCreateUser,
         postCreateRepo,
         postSetVote,
         postGetPRvoteStatus,
@@ -37,6 +38,16 @@ describe('Create repo', function () {
         }
         const user  = await getGithubUser();
 
+        //Gets it from .config.json
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*pr_id:*/ "",
+            /*contributor:*/ "",
+            /*side:*/ "",
+        );
+
+        await snooze(snooze_ms);
         await postCreateRepo(
             /*owner:*/ user,
             /*repo:*/ "demo",

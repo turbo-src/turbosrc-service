@@ -1,4 +1,5 @@
 const fs = require('fs')
+const fsPromises = require('fs').promises;
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
@@ -37,11 +38,29 @@ const {
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
 
+async function getGithubUser() {
+    const data = await fsPromises.readFile('/usr/src/app/.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
+
 var schema = buildSchema(`
   type PullRequest {
     vote_code: [String]
   }
   type Query {
+    createUser(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getVote(pr_id: String, contributor_id: String): String,
@@ -75,7 +94,9 @@ var pullRequestsVoteMergeHistory = []
 
 // The object representing pullRequests for a specific repository.
 
-var nameSpaceDB = {};
+var nameSpaceDB = {
+  'users': {}
+};
 
 var fakeTurboSrcReposDB = {};
 //const head = await gitHeadUtil('turbo-src', 'extension', 0)
@@ -113,6 +134,10 @@ var root = {
   //getVote: (args) => {
   //  return pullRequestsDB[args.contributor_id]
   //},
+  createUser: async (args) => {
+    const user = await getGithubUser();
+    nameSpaceDB['users'][user] = user;
+  },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
     // If not, fetch it.
@@ -269,11 +294,16 @@ var root = {
   },
   createRepo: async (args) => {
     debugger
-    const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
-    fakeTurboSrcReposDB = resCreateRepo.db
-    pullRequestsDB = resCreateRepo.pullRequestsDB
+    const user = nameSpaceDB['users'][user]
+    if (user === args.contributor) {
+      const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
+      fakeTurboSrcReposDB = resCreateRepo.db
+      pullRequestsDB = resCreateRepo.pullRequestsDB
+      return pullRequestsDB[args.pr_id]
+    } {
+       return "none"
+    }
 
-    return pullRequestsDB[args.pr_id]
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
