@@ -75,6 +75,8 @@ var pullRequestsVoteMergeHistory = []
 
 // The object representing pullRequests for a specific repository.
 
+var nameSpaceDB = {};
+
 var fakeTurboSrcReposDB = {};
 //const head = await gitHeadUtil('turbo-src', 'extension', 0)
 const repoAccounts = [
