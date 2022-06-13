@@ -294,7 +294,7 @@ var root = {
   },
   createRepo: async (args) => {
     debugger
-    const user = nameSpaceDB['users'][user]
+    const user = nameSpaceDB['users'][args.contributor]
     if (user === args.contributor) {
       const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = resCreateRepo.db
