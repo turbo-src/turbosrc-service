@@ -155,7 +155,7 @@ var root = {
     nameSpaceDB['users'][user] = user;
   },
   getContributorTokenAmount: async (args) => {
-    const contributorTokenAmount = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributors]
+    const contributorTokenAmount = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor]
 
     return contributorTokenAmount
   },
