@@ -52,7 +52,7 @@ describe('vote', function () {
         console.log(contributorTokenAmountRes)
         assert.equal(
             contributorTokenAmount,
-            "",
+            500001,
             "Fail to get token amount."
         );
       });
