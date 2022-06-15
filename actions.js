@@ -16,6 +16,7 @@ const {
       } = require('./graphQLrequests')
 const { createRepo,
         createTokenSupply,
+        transferTokens,
         setQuorum,
         newPullRequest,
         setContributorVotedTokens,
@@ -357,6 +358,21 @@ const root = {
     return {
              db: database,
              prVoteStatusUpdated: prVoteStatusUpdated
+    }
+  },
+  transferTokens: async (database, pullRequestsDB, args) => {
+    const restTransferTokens = await transferTokens(
+      args.owner,
+      args.repo,
+      args.from,
+      args.to,
+      args.amount
+    )
+    database = restTransferTokens.db
+
+    return {
+             pullRequestsDB: pullRequestsDB,
+             db: database
     }
   },
   createRepo: async (database, pullRequestsDB, args) => {

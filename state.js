@@ -48,6 +48,29 @@ const root = {
 
     return  database
   },
+  transferTokens: async (database, prDB, args) => {
+    //const pullRequestsDB = prDB
+
+    //var fromAmount = database[args.owner + "/" + args.repo].contributors[args.from] - args.amount
+    //var toAmount = database[args.owner + "/" + args.repo].contributors[args.to] + args.amount
+
+    //if (fromAmount < 0) {
+    //  throw new Error("Transfered more tokens then you own.");
+    //}
+    //database[args.owner + "/" + args.repo].contributors[args.from] = Number(fromAmount)
+    //database[args.owner + "/" + args.repo].contributors[args.to] = Number(toAmount)
+    //database[args.owner + "/" + args.repo].contributors[args.from] = 10
+    //database[args.owner + "/" + args.repo].contributors[args.to] = 10
+
+
+    //For testing.
+    fs.writeFileSync('testing/special/turbo-src-database-transfer-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
+
+    return {
+             pullRequestsDB: pullRequestsDB,
+             db: database,
+    }
+  },
   setQuorum: function (database, quorum, args) {
     database[args.owner + "/" + args.repo].quorum = quorum
 

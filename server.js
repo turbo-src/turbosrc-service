@@ -10,6 +10,7 @@ const { getPRhead } = require('./pullForkUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 const { update } = require('tar');
 const {
+  transferTokens,
   getPRvoteTotals,
   getPRvote,
   getPRvoteStatus,
@@ -60,7 +61,9 @@ var schema = buildSchema(`
     vote_code: [String]
   }
   type Query {
+    getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createUser(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
     pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getVote(pr_id: String, contributor_id: String): String,
@@ -95,7 +98,20 @@ var pullRequestsVoteMergeHistory = []
 // The object representing pullRequests for a specific repository.
 
 var nameSpaceDB = {
-  'users': {}
+  'users': {
+    'mary': 'mary',
+    'am': 'am',
+    'jc': 'jc',
+    'pc': 'pc',
+    'mb': 'mb',
+    'np': 'np',
+    'nn': 'nn',
+    'jp': 'jp',
+    'ts': 'ts',
+    'af': 'af',
+    'ds': 'ds',
+    'ri': 'ri'
+  }
 };
 
 var fakeTurboSrcReposDB = {};
@@ -137,6 +153,19 @@ var root = {
   createUser: async (args) => {
     const user = await getGithubUser();
     nameSpaceDB['users'][user] = user;
+  },
+  getContributorTokenAmount: async (args) => {
+    const contributorTokenAmount = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributors]
+
+    return contributorTokenAmount
+  },
+  transferTokens: async (args) => {
+    const from = nameSpaceDB['users'][args.from]
+    const to = nameSpaceDB['users'][args.to]
+    if (from === args.from && to === args.to) {
+      const restTransferTokens = transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
+      fakeTurboSrcReposDB = restTransferTokens.db
+    }
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
