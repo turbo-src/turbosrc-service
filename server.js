@@ -21,7 +21,8 @@ const {
   getRepoStatus,
   checkContributor,
   checkMergePullRequestHistory,
-  checkRejectPullRequestHistory
+  checkRejectPullRequestHistory,
+  getContributorTokenAmount
 } = require('./actions')
 const {
        getPullRequest,
@@ -155,7 +156,7 @@ var root = {
     nameSpaceDB['users'][user] = user;
   },
   getContributorTokenAmount: async (args) => {
-    const contributorTokenAmount = fakeTurboSrcReposDB[args.owner + "/" + args.repo].contributors[args.contributor]
+    const contributorTokenAmount = getContributorTokenAmount(fakeTurboSrcReposDB, args)
 
     return contributorTokenAmount
   },

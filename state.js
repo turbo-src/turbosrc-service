@@ -190,6 +190,11 @@ const root = {
 
     return allVotedTokens
   },
+  getContributorTokenAmount: function(database, args) {
+    const contributorTokenAmount = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
+
+    return contributorTokenAmount
+  },
   getTokenSupply: function(database, args) {
     const supply = database[args.owner + "/" + args.repo].tokenSupply
 

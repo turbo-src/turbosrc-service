@@ -46,7 +46,8 @@ const { createRepo,
         getRepoStatus,
         checkContributor,
         checkMergePullRequestHistory,
-        checkRejectPullRequestHistory
+        checkRejectPullRequestHistory,
+        getContributorTokenAmount
  } = require('./state');
 
 const root = {
@@ -101,6 +102,11 @@ const root = {
         totalVotedYesTokens: totalVotedYesTokens,
         totalVotedNoTokens: totalVotedNoTokens
       }
+  },
+  getContributorTokenAmount: function(database, args) {
+    const contributorTokenAmount = getContributorTokenAmount(database, args)
+
+    return contributorTokenAmount
   },
   getPRvoteStatus: function(database, args) {
       const prID = args.pr_id.split('_')[1]
