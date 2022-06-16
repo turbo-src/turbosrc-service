@@ -1,9 +1,26 @@
 const fs = require('fs')
+const fsPromises = require('fs').promises;
+
+async function getGithubUser() {
+    const data = await fsPromises.readFile('/usr/src/app/.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
 
 const root = {
-  createRepo: async (database, prDB, args) => {
-      const pullRequestsDB = prDB
-
+  createRepo: async (args) => {
+      const user = await getGithubUser();
       database[args.owner + "/" + args.repo] = {
         //'head': head,//'c20e46a4e3efcd408ef132872238144ea34f7ae5',
         'tokenSupply': 1_000_000,
@@ -26,17 +43,12 @@ const root = {
         }
       }
 
-    database[args.owner + "/" + args.repo].contributors[args.contributor_id] = 33_999
+    database[args.owner + "/" + args.repo].contributors[user] = 33_999
 
     database[args.owner + "/" + args.repo].quorum = 0.50
 
-    //For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
-
-    return {
-             pullRequestsDB: pullRequestsDB,
-             db: database,
-    }
+    // For testing.
+    fs.writeFileSync('testing/special/turbo-src-test-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
   },
   createTokenSupply: function (database, tokens, args) {
     const prID = args.pr_id.split('_')[1]
@@ -49,16 +61,16 @@ const root = {
     return  database
   },
   transferTokens: async (database, prDB, args) => {
-    //const pullRequestsDB = prDB
+    const pullRequestsDB = prDB
 
-    //var fromAmount = database[args.owner + "/" + args.repo].contributors[args.from] - args.amount
-    //var toAmount = database[args.owner + "/" + args.repo].contributors[args.to] + args.amount
+    var fromAmount = database[args.owner + "/" + args.repo].contributors[args.from] - args.amount
+    var toAmount = database[args.owner + "/" + args.repo].contributors[args.to] + args.amount
 
-    //if (fromAmount < 0) {
-    //  throw new Error("Transfered more tokens then you own.");
-    //}
-    //database[args.owner + "/" + args.repo].contributors[args.from] = Number(fromAmount)
-    //database[args.owner + "/" + args.repo].contributors[args.to] = Number(toAmount)
+    if (fromAmount < 0) {
+      throw new Error("Transfered more tokens then you own.");
+    }
+    database[args.owner + "/" + args.repo].contributors[args.from] = Number(fromAmount)
+    database[args.owner + "/" + args.repo].contributors[args.to] = Number(toAmount)
     //database[args.owner + "/" + args.repo].contributors[args.from] = 10
     //database[args.owner + "/" + args.repo].contributors[args.to] = 10
 
