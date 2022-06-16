@@ -164,7 +164,7 @@ var root = {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
-      const restTransferTokens = transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
+      const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
     //}
   },
