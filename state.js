@@ -51,17 +51,14 @@ const root = {
   transferTokens: async (database, prDB, args) => {
     const pullRequestsDB = prDB
 
-    var fromAmount = database[args.owner + "/" + args.repo].contributors[args.from] - args.amount
-    var toAmount = database[args.owner + "/" + args.repo].contributors[args.to] + args.amount
+    const fromAmount = database[args.owner + "/" + args.repo].contributors[args.from]
+    const toAmount = database[args.owner + "/" + args.repo].contributors[args.to]
 
     if (fromAmount < 0) {
       throw new Error("Transfered more tokens then you own.");
     }
-    database[args.owner + "/" + args.repo].contributors[args.from] = fromAmount
-    database[args.owner + "/" + args.repo].contributors[args.to] = toAmount
-    //database[args.owner + "/" + args.repo].contributors[args.from] = 10
-    //database[args.owner + "/" + args.repo].contributors[args.to] = 10
-
+    database[args.owner + "/" + args.repo].contributors[args.from] = (fromAmount - args.amount)
+    database[args.owner + "/" + args.repo].contributors[args.to] = (Number(toAmount) + Number(args.amount))
 
     //For testing.
     fs.writeFileSync('testing/special/turbo-src-database-transfer-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
