@@ -48,7 +48,7 @@ before(async () => {
         /*repo:*/ "demo",
         /*from:*/ "mary",
         /*to:*/ user,
-        /*amount:*/ 100_000,
+        /*amount:*/ 100000,
     );
 
     this.timeout(snooze_ms*50);
@@ -75,12 +75,12 @@ before(async () => {
 
     assert.equal(
         fromContributorTokenAmount,
-        500001,
+        400001,
         "Fail to get token amount from sender."
     );
     assert.equal(
         toContributorTokenAmount,
-        0,
+        133999,
         "Fail to get token amount from receiver."
     );
   });
