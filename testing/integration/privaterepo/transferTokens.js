@@ -72,6 +72,7 @@ before(async () => {
     const fromContributorTokenAmount = Number(fromContributorTokenAmountRes)
     const toContributorTokenAmount = Number(toContributorTokenAmountRes)
 
+
     assert.equal(
         fromContributorTokenAmount,
         500001,

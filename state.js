@@ -49,16 +49,16 @@ const root = {
     return  database
   },
   transferTokens: async (database, prDB, args) => {
-    //const pullRequestsDB = prDB
+    const pullRequestsDB = prDB
 
-    //var fromAmount = database[args.owner + "/" + args.repo].contributors[args.from] - args.amount
-    //var toAmount = database[args.owner + "/" + args.repo].contributors[args.to] + args.amount
+    var fromAmount = database[args.owner + "/" + args.repo].contributors[args.from] - args.amount
+    var toAmount = database[args.owner + "/" + args.repo].contributors[args.to] + args.amount
 
-    //if (fromAmount < 0) {
-    //  throw new Error("Transfered more tokens then you own.");
-    //}
-    //database[args.owner + "/" + args.repo].contributors[args.from] = Number(fromAmount)
-    //database[args.owner + "/" + args.repo].contributors[args.to] = Number(toAmount)
+    if (fromAmount < 0) {
+      throw new Error("Transfered more tokens then you own.");
+    }
+    database[args.owner + "/" + args.repo].contributors[args.from] = fromAmount
+    database[args.owner + "/" + args.repo].contributors[args.to] = toAmount
     //database[args.owner + "/" + args.repo].contributors[args.from] = 10
     //database[args.owner + "/" + args.repo].contributors[args.to] = 10
 

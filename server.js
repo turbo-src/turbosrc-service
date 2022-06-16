@@ -161,12 +161,12 @@ var root = {
     return contributorTokenAmount
   },
   transferTokens: async (args) => {
-    const from = nameSpaceDB['users'][args.from]
-    const to = nameSpaceDB['users'][args.to]
-    if (from === args.from && to === args.to) {
+    //const from = nameSpaceDB['users'][args.from]
+    //const to = nameSpaceDB['users'][args.to]
+    //if (from === args.from && to === args.to) {
       const restTransferTokens = transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
-    }
+    //}
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
