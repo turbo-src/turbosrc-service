@@ -43,7 +43,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
-            /*contributor:*/ "",
+            /*contributor:*/ user,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
