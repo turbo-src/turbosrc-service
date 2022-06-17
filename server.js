@@ -152,8 +152,14 @@ var root = {
   //  return pullRequestsDB[args.contributor_id]
   //},
   createUser: async (args) => {
-    const user = await getGithubUser();
-    nameSpaceDB['users'][user] = user;
+    //const user = await getGithubUser();
+
+    // Get from api request to service.
+
+    const userExists = Object.keys(nameSpaceDB.users).includes(args.contributor_id)
+    if (!userExists) {
+      nameSpaceDB['users'][user] = args.contributor_id;
+    }
   },
   getContributorTokenAmount: async (args) => {
     const contributorTokenAmount = getContributorTokenAmount(fakeTurboSrcReposDB, args)
