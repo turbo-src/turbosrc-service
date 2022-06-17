@@ -63,7 +63,9 @@ var schema = buildSchema(`
   }
   type Query {
     getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    createUser(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createUser(owner: String, repo: String, pr_id: String, contributor_id: String, contributor_signature: String): String,
+    getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
     pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
@@ -98,22 +100,35 @@ var pullRequestsVoteMergeHistory = []
 
 // The object representing pullRequests for a specific repository.
 
+//userSignature's keys are not the namespaced names but the account addresses.
 var nameSpaceDB = {
-  'users': {
-    'mary': 'mary',
-    'am': 'am',
-    'jc': 'jc',
-    'pc': 'pc',
-    'mb': 'mb',
-    'np': 'np',
-    'nn': 'nn',
-    'jp': 'jp',
-    'ts': 'ts',
-    'af': 'af',
-    'ds': 'ds',
-    'ri': 'ri'
-  }
+  // contributor_id: name
+  'contributors': [
+    {'id': 'mary', 'signature': '123', 'name': 'mary'},
+    {'id': 'am', 'signature': '123', 'name': 'am'},
+    {'id': 'jc', 'signature': '123', 'name': 'jc'},
+    {'id': 'pc', 'signature': '123', 'name': 'pc'},
+    {'id': 'mb', 'signature': '123', 'name': 'mb'},
+    {'id': 'np', 'signature': '123', 'name': 'np'},
+    {'id': 'nn', 'signature': '123', 'name': 'nn'},
+    {'id': 'jp', 'signature': '123', 'name': 'jp'},
+    {'id': 'af', 'signature': '123', 'name': 'af'},
+    {'id': 'ds', 'signature': '123', 'name': 'ds'},
+    {'id': 'ri', 'signature': '123', 'name': 'ri'},
+  ],
 };
+
+function getContributorsByContributorID(contributors, id) {
+  return contributors.filter(
+      function(contributors){ return contributors.id == id }
+  );
+}
+
+function getContributorsByName(contributors, name) {
+  return contributors.filter(
+      function(contributors){ return contributors.name == name }
+  );
+}
 
 var fakeTurboSrcReposDB = {};
 //const head = await gitHeadUtil('turbo-src', 'extension', 0)
@@ -152,13 +167,43 @@ var root = {
   //  return pullRequestsDB[args.contributor_id]
   //},
   createUser: async (args) => {
+    // Only people with database readwrite can use this (e.g. blockchain accounts), so need
+    // to look up the account address. Assumes they exist.
+
     //const user = await getGithubUser();
 
     // Get from api request to service.
 
-    const userExists = Object.keys(nameSpaceDB.users).includes(args.contributor_id)
-    if (!userExists) {
-      nameSpaceDB['users'][user] = args.contributor_id;
+    // Check if name exists
+    var contributors = getContributorsByName(nameSpaceDB, args.contributor_name)
+    if (contributors.length == 0) {
+      const contributor = {'id': contributor_id, 'signature': contributor_signature, 'name': contributor_name}
+      nameSpaceDB['users'].push(contributor)
+    }
+  },
+  getContributorName: async (args) => {
+    //const user = await getGithubUser();
+
+    // Get from api request to service.
+
+    var contributors = getContributorsByContributorID(nameSpaceDB, args.contributor_id)
+    if (contributors.length == 1) {
+      const contributor = contributors[0]
+      return contributor.name
+    } else {
+      return "none"
+    }
+  },
+  getContributorSignature: async (args) => {
+    //const user = await getGithubUser();
+
+    // Get from api request to service.
+    var contributors = getContributorsByContributorID(nameSpaceDB, args.contributor_id)
+    if (contributors.length == 1) {
+      const contributor = contributors[0]
+      return contributor.signature
+    } else {
+      return "none"
     }
   },
   getContributorTokenAmount: async (args) => {
