@@ -49,7 +49,11 @@ npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js
 sleep 3
 
 npm test testing/integration/privaterepo/semiAutoManyVoters.js
+sleep 3
+
+npm test testing/integration/privaterepo/transferTokens.js
+
 
 # Stop servers after some minutes (allow time for manual vote verification)
 
-#sleep 360 && ./dev.sh stop
+sleep 360 && ./dev.sh stop
