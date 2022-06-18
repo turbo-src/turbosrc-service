@@ -1,9 +1,14 @@
 const assert = require('assert');
-const fsPromises = require('fs').promises;
 const {
         postCreateUser,
         postGetContributorName,
       } = require('../../../graphQLrequests')
+
+const {
+        getContributorAddress,
+        getGithubUser,
+      } = require('../../../utils')
+
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 5000
@@ -12,28 +17,12 @@ var snooze_ms = 5000
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function getGithubUser() {
-    const data = await fsPromises.readFile('.config.json')
-                       .catch((err) => console.error('Failed to read file', err));
-
-    let json = JSON.parse(data);
-    let user = json.github.user
-    if (user === undefined) {
-      throw new Error("Failed to load Github user " + user);
-
-    } else {
-      console.log("Successfully read Github " + user);
-    }
-
-    return user
-
-}
-
 describe('Create repo', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        const user  = await getGithubUser();
+        const user = await getGithubUser()
+        //const userAddr = await getContributorAddress()
 
         //Gets it from .config.json
         await postCreateUser(
