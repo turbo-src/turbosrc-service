@@ -179,8 +179,6 @@ var root = {
      //.end((err, res) => {
        // Calling the end function will send the request
      //});
-   console.log("gqlr 140")
-   console.log(text)
    const json = JSON.parse(res.text)
    console.log(json)
    return json.data.getContributorTokenAmount
