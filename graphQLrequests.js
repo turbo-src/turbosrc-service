@@ -87,7 +87,7 @@ var root = {
        // Calling the end function will send the request
      });
   },
-  postCreateUser: async (owner, repo, issue_id, contributor_id, side) => {
+  postCreateUser: async (owner, repo, contributor_id, contributor_name, contributor_signature) => {
    superagent
      .post('http://localhost:4000/graphql')
      .send(
@@ -96,7 +96,7 @@ var root = {
        //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
        //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
        //{ query: `{ getVoteEverything }` }
-       { query: `{ createUser(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}") }` }
+       { query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}") }` }
        //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
      ) // sends a JSON post body
      .set('accept', 'json')

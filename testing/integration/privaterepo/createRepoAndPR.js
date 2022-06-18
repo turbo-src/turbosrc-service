@@ -42,48 +42,48 @@ describe('Create repo', function () {
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
-            /*pr_id:*/ "",
-            /*contributor:*/ "",
-            /*side:*/ "",
+            /*contributor_id:*/ user,
+            /*contributor_name:*/ user,
+            /*contributor_signature:*/ "456",
         );
 
         await snooze(snooze_ms);
-        await postCreateRepo(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
-            /*contributor:*/ user,
-            /*side:*/ "yes",
-        );
+        //await postCreateRepo(
+        //    /*owner:*/ user,
+        //    /*repo:*/ "demo",
+        //    /*pr_id:*/ "issue_1",
+        //    /*contributor:*/ user,
+        //    /*side:*/ "yes",
+        //);
 
-        await snooze(snooze_ms);
-        await postNewPullRequest(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
-            /*contributor:*/ user,
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
+        //await snooze(snooze_ms);
+        //await postNewPullRequest(
+        //    /*owner:*/ user,
+        //    /*repo:*/ "demo",
+        //    /*pr_id:*/ "issue_1",
+        //    /*contributor:*/ user,
+        //    /*side:*/ "yes",
+        //);
+        //await snooze(snooze_ms);
     });
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
-        await snooze(snooze_ms);
-        const status = await postGetPRvoteStatus(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
-            /*contributor:*/ user,
-            /*side:*/ "yes",
-        );
+        //await snooze(snooze_ms);
+        //const status = await postGetPRvoteStatus(
+        //    /*owner:*/ user,
+        //    /*repo:*/ "demo",
+        //    /*pr_id:*/ "issue_1",
+        //    /*contributor:*/ user,
+        //    /*side:*/ "yes",
+        //);
 
-        //console.log(status)
+        ////console.log(status)
 
-        assert.equal(
-            status,
-            "open",
-            "Fail to stay open even the votes are below the quorum"
-        );
+        //assert.equal(
+        //    status,
+        //    "open",
+        //    "Fail to stay open even the votes are below the quorum"
+        //);
       });
     });
 });

@@ -63,7 +63,7 @@ var schema = buildSchema(`
   }
   type Query {
     getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    createUser(owner: String, repo: String, pr_id: String, contributor_id: String, contributor_signature: String): String,
+    createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String): String,
     getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
@@ -177,8 +177,8 @@ var root = {
     // Check if name exists
     var contributors = getContributorsByName(nameSpaceDB.contributors, args.contributor_name)
     if (contributors.length == 0) {
-      const contributor = {'id': contributor_id, 'signature': contributor_signature, 'name': contributor_name}
-      nameSpaceDB['users'].push(contributor)
+      const contributor = {'id': args.contributor_id, 'signature': args.scontributor_signature, 'name': args.contributor_name}
+      nameSpaceDB.contributors.push(contributor)
     }
   },
   getContributorName: async (args) => {
