@@ -25,6 +25,7 @@ describe('Create repo', function () {
         //const userAddr = await getContributorAddress()
 
         //Gets it from .config.json
+        await snooze(snooze_ms);
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
@@ -34,23 +35,105 @@ describe('Create repo', function () {
         );
 
         await snooze(snooze_ms);
-        //await postCreateRepo(
-        //    /*owner:*/ user,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor:*/ user,
-        //    /*side:*/ "yes",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "mary",
+            /*contributor_name:*/ "mary",
+            /*contributor_signature:*/ "1",
+        );
 
-        //await snooze(snooze_ms);
-        //await postNewPullRequest(
-        //    /*owner:*/ user,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor:*/ user,
-        //    /*side:*/ "yes",
-        //);
-        //await snooze(snooze_ms);
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "am",
+            /*contributor_name:*/ "am",
+            /*contributor_signature:*/ "2",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "jc",
+            /*contributor_name:*/ "jc",
+            /*contributor_signature:*/ "3",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "pc",
+            /*contributor_name:*/ "pc",
+            /*contributor_signature:*/ "4",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "mb",
+            /*contributor_name:*/ "mb",
+            /*contributor_signature:*/ "5",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "np",
+            /*contributor_name:*/ "np",
+            /*contributor_signature:*/ "6",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "nn",
+            /*contributor_name:*/ "nn",
+            /*contributor_signature:*/ "7",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "jp",
+            /*contributor_name:*/ "jp",
+            /*contributor_signature:*/ "8",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "af",
+            /*contributor_name:*/ "af",
+            /*contributor_signature:*/ "9",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "ds",
+            /*contributor_name:*/ "ds",
+            /*contributor_signature:*/ "10",
+        );
+
+        await snooze(snooze_ms);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "ri",
+            /*contributor_name:*/ "ri",
+            /*contributor_signature:*/ "11",
+        );
+
+        await snooze(snooze_ms);
     });
     describe.only('Get contributor name.', function () {
       it("Should do something", async () => {

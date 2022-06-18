@@ -104,17 +104,6 @@ var pullRequestsVoteMergeHistory = []
 var nameSpaceDB = {
   // contributor_id: name
   'contributors': [
-    {'id': 'mary', 'signature': '123', 'name': 'mary'},
-    {'id': 'am', 'signature': '123', 'name': 'am'},
-    {'id': 'jc', 'signature': '123', 'name': 'jc'},
-    {'id': 'pc', 'signature': '123', 'name': 'pc'},
-    {'id': 'mb', 'signature': '123', 'name': 'mb'},
-    {'id': 'np', 'signature': '123', 'name': 'np'},
-    {'id': 'nn', 'signature': '123', 'name': 'nn'},
-    {'id': 'jp', 'signature': '123', 'name': 'jp'},
-    {'id': 'af', 'signature': '123', 'name': 'af'},
-    {'id': 'ds', 'signature': '123', 'name': 'ds'},
-    {'id': 'ri', 'signature': '123', 'name': 'ri'},
   ],
 };
 
