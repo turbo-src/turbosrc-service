@@ -38,20 +38,8 @@ describe('Create repo and GH pull request', function () {
             return user
 
         }
-        const user = await postGetUser(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
-            /*contributor:*/ user,
-            /*side:*/ "yes",
-        );
-        await postCreateRepo(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
-            /*contributor:*/ user,
-            /*side:*/ "yes",
-        );
+        const user = await getGithubUser()
+
         await snooze(snooze_ms);
         await postCreatePullRequest(
             /*owner:*/ user,

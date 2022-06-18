@@ -175,7 +175,7 @@ var root = {
     // Get from api request to service.
 
     // Check if name exists
-    var contributors = getContributorsByName(nameSpaceDB, args.contributor_name)
+    var contributors = getContributorsByName(nameSpaceDB.contributors, args.contributor_name)
     if (contributors.length == 0) {
       const contributor = {'id': contributor_id, 'signature': contributor_signature, 'name': contributor_name}
       nameSpaceDB['users'].push(contributor)
@@ -186,7 +186,7 @@ var root = {
 
     // Get from api request to service.
 
-    var contributors = getContributorsByContributorID(nameSpaceDB, args.contributor_id)
+    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
     if (contributors.length == 1) {
       const contributor = contributors[0]
       return contributor.name
@@ -198,7 +198,7 @@ var root = {
     //const user = await getGithubUser();
 
     // Get from api request to service.
-    var contributors = getContributorsByContributorID(nameSpaceDB, args.contributor_id)
+    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
     if (contributors.length == 1) {
       const contributor = contributors[0]
       return contributor.signature

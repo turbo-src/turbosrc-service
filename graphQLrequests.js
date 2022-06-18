@@ -104,7 +104,7 @@ var root = {
        // Calling the end function will send the request
      });
   },
-  postGetContributorName: async (owner, repo, issue_id, contributor_id, side) => {
+  postGetContributorName: async (owner, repo, issue_id, contributor_id) => {
    const res = await superagent
      .post('http://localhost:4000/graphql')
      .send(
@@ -113,7 +113,7 @@ var root = {
        //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
        //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
        //{ query: `{ getVoteEverything }` }
-       { query: `{ getContributorName(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}") }` }
+       { query: `{ getContributorName(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }` }
        //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
      ) // sends a JSON post body
      .set('accept', 'json')
@@ -121,12 +121,11 @@ var root = {
        // Calling the end function will send the request
      //});
    console.log("gqlr 123")
-   console.log(text)
    const json = JSON.parse(res.text)
    console.log(json)
    return json.data.getContributorName
   },
-  postGetContributorSignature: async (owner, repo, issue_id, contributor_id, side) => {
+  postGetContributorSignature: async (owner, repo, issue_id, contributor_id) => {
    const res = await superagent
      .post('http://localhost:4000/graphql')
      .send(
@@ -135,7 +134,7 @@ var root = {
        //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
        //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
        //{ query: `{ getVoteEverything }` }
-       { query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}") }` }
+       { query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }` }
        //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
      ) // sends a JSON post body
      .set('accept', 'json')
@@ -143,7 +142,6 @@ var root = {
        // Calling the end function will send the request
      //});
    console.log("gqlr 145")
-   console.log(text)
    const json = JSON.parse(res.text)
    console.log(json)
    return json.data.getContributorSignature
