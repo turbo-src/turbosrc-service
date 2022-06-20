@@ -214,10 +214,10 @@ var root = {
      {contributor_id: args.to}
     )
     console.log("contributor name: " + contributorName)
-    //if (contributorName !== "none") {
+    if (contributorName !== "none") {
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
-    //}
+    }
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
