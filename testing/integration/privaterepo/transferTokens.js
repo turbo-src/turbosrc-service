@@ -375,7 +375,7 @@ before(async () => {
 
     assert.equal(
         maryName,
-        "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+        "mary",
         "Fail to get contributors's name from namspace db by contributor id."
     );
     assert.equal(
