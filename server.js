@@ -45,6 +45,7 @@ async function getContributorName(args) {
     // Get from api request to service.
 
     var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
+    console.log(nameSpaceDB)
     if (contributors.length == 1) {
       const contributor = contributors[0]
       return contributor.name
@@ -208,16 +209,14 @@ var root = {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
-    //await getContributorName(
-    //  args.owner,
-    //  args.repo,
-    //  "",
-    //  args.to
-    //)
+   console.log("to: " + args.to)
+   const contributorName = await getContributorName(
+     {contributor_id: args.to}
+    )
+    console.log("contributor name: " + contributorName)
     //if (contributorName !== "none") {
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
-    //}
     //}
   },
   verifyPullRequest: async (arg) => {
