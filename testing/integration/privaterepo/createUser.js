@@ -19,14 +19,13 @@ var snooze_ms = 5000
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Create repo', function () {
-    this.timeout(snooze_ms*12);
+    this.timeout(snooze_ms*24);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         const user = await getGithubUser()
         //const userAddr = await getContributorAddress()
 
         //Gets it from .config.json
-        await snooze(snooze_ms);
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
@@ -35,7 +34,6 @@ describe('Create repo', function () {
             /*contributor_signature:*/ "456",
         );
 
-        await snooze(snooze_ms);
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
@@ -44,7 +42,6 @@ describe('Create repo', function () {
             /*contributor_signature:*/ "1",
         );
 
-        await snooze(snooze_ms);
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
@@ -53,104 +50,78 @@ describe('Create repo', function () {
             /*contributor_signature:*/ "2",
         );
 
-        const amContributorTokenAmountRes = await postGetContributorTokenAmount(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
-            /*contributor:*/ "am",
-            /*side:*/ "no",
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "jc",
+            /*contributor_name:*/ "jc",
+            /*contributor_signature:*/ "3",
         );
 
-        const amContributorTokenAmount = Number(amContributorTokenAmountRes)
-
-        assert.equal(
-            amContributorTokenAmount,
-            15000,
-            "Fail to get amount."
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "pc",
+            /*contributor_name:*/ "pc",
+            /*contributor_signature:*/ "4",
         );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "jc",
-        //    /*contributor_name:*/ "jc",
-        //    /*contributor_signature:*/ "3",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "mb",
+            /*contributor_name:*/ "mb",
+            /*contributor_signature:*/ "5",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "pc",
-        //    /*contributor_name:*/ "pc",
-        //    /*contributor_signature:*/ "4",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "np",
+            /*contributor_name:*/ "np",
+            /*contributor_signature:*/ "6",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "mb",
-        //    /*contributor_name:*/ "mb",
-        //    /*contributor_signature:*/ "5",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "nn",
+            /*contributor_name:*/ "nn",
+            /*contributor_signature:*/ "7",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "np",
-        //    /*contributor_name:*/ "np",
-        //    /*contributor_signature:*/ "6",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "jp",
+            /*contributor_name:*/ "jp",
+            /*contributor_signature:*/ "8",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "nn",
-        //    /*contributor_name:*/ "nn",
-        //    /*contributor_signature:*/ "7",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "af",
+            /*contributor_name:*/ "af",
+            /*contributor_signature:*/ "9",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "jp",
-        //    /*contributor_name:*/ "jp",
-        //    /*contributor_signature:*/ "8",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "ds",
+            /*contributor_name:*/ "ds",
+            /*contributor_signature:*/ "10",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "af",
-        //    /*contributor_name:*/ "af",
-        //    /*contributor_signature:*/ "9",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "ri",
+            /*contributor_name:*/ "ri",
+            /*contributor_signature:*/ "11",
+        );
 
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "ds",
-        //    /*contributor_name:*/ "ds",
-        //    /*contributor_signature:*/ "10",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "ri",
-        //    /*contributor_name:*/ "ri",
-        //    /*contributor_signature:*/ "11",
-        //);
-
-        //await snooze(snooze_ms);
     });
     describe.only('Get contributor name.', function () {
       it("Should do something", async () => {
@@ -161,7 +132,6 @@ describe('Create repo', function () {
             /*pr_id:*/ "issue_4",
             /*contributor:*/ "mary",
         );
-        this.timeout(snooze_ms*50);
         const userName = await postGetContributorName(
             /*owner:*/ user,
             /*repo:*/ "demo",
