@@ -2,7 +2,8 @@ const assert = require('assert');
 const {
         postCreateUser,
         postGetContributorName,
-        postGetContributorTokenAmount
+        postGetContributorTokenAmount,
+        postCreateRepo,
       } = require('../../../graphQLrequests')
 
 const {
@@ -53,19 +54,28 @@ describe('Create repo', function () {
             /*contributor_signature:*/ "2",
         );
 
-        const amContributorTokenAmountRes = await postGetContributorTokenAmount(
+        await snooze(snooze_ms);
+        await postCreateRepo(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "",
+            /*contributor:*/ "mary",
+            /*side:*/ "",
+        );
+
+        const contributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor:*/ "am",
+            /*contributor:*/ "mary",
             /*side:*/ "no",
         );
 
-        const amContributorTokenAmount = Number(amContributorTokenAmountRes)
+        const contributorTokenAmount = Number(contributorTokenAmountRes)
 
         assert.equal(
-            amContributorTokenAmount,
-            15000,
+            contributorTokenAmount,
+            1_000_000,
             "Fail to get amount."
         );
 
