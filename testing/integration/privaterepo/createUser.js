@@ -117,7 +117,7 @@ describe('Create repo', function () {
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
-            /*contributor_id:*/ "0x1d0798e2090xCD3A886878c4A8e5C23523e3217e374d4AB90f61A07715765F1486CA64f3D2399aF719",
+            /*contributor_id:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
             /*contributor_name:*/ "ds",
             /*contributor_signature:*/ "5039ae9ae169599d0b7d4c78bb80af3db4f1082bab2ee03c1fe33816d9f1a33a",
         );

@@ -120,7 +120,7 @@ before(async () => {
         /*repo:*/ "demo",
         /*from:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
         /*to:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
-        /*amount:*/ 50_000,
+        /*amount:*/ 10_000,
     );
 
     this.timeout(snooze_ms);
@@ -129,7 +129,7 @@ before(async () => {
         /*repo:*/ "demo",
         /*from:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
         /*to:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
-        /*amount:*/ 10_000,
+        /*amount:*/ 50_000,
     );
 
 
@@ -245,7 +245,7 @@ before(async () => {
         /*owner:*/ user,
         /*repo:*/ "demo",
         /*pr_id:*/ "issue_4",
-        /*contributor:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
+        /*contributor:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
         /*side:*/ "no",
     );
 
@@ -255,7 +255,7 @@ before(async () => {
         /*owner:*/ user,
         /*repo:*/ "demo",
         /*pr_id:*/ "issue_4",
-        /*contributor:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
+        /*contributor:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
         /*side:*/ "no",
     );
 
