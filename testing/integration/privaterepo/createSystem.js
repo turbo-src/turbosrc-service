@@ -4,6 +4,7 @@ const {
         postGetContributorName,
         postGetContributorTokenAmount,
         postCreateRepo,
+        postTransferTokens,
       } = require('../../../graphQLrequests')
 
 const {
@@ -64,6 +65,15 @@ describe('Create repo', function () {
         );
 
         await snooze(snooze_ms);
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "am",
+            /*amount:*/ 15_000,
+        );
+
+        await snooze(snooze_ms);
         const contributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -87,7 +97,7 @@ describe('Create repo', function () {
 
         assert.equal(
             contributorTokenAmount,
-            1_000_000,
+            985000,
             "Fail to get amount."
         );
 

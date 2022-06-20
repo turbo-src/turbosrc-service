@@ -53,11 +53,16 @@ const root = {
     const pullRequestsDB = prDB
 
     const fromAmount = database[args.owner + "/" + args.repo].contributors[args.from]
-    const toAmount = database[args.owner + "/" + args.repo].contributors[args.to]
+    var toAmount = database[args.owner + "/" + args.repo].contributors[args.to]
 
     if (fromAmount < 0) {
       throw new Error("Transfered more tokens then you own.");
     }
+
+    if (toAmount === undefined) {
+      toAmount = 0
+    }
+
     database[args.owner + "/" + args.repo].contributors[args.from] = (fromAmount - args.amount)
     database[args.owner + "/" + args.repo].contributors[args.to] = (Number(toAmount) + Number(args.amount))
 
