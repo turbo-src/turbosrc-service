@@ -369,7 +369,7 @@ before(async () => {
         /*owner:*/ user,
         /*repo:*/ "demo",
         /*pr_id:*/ "issue_4",
-        /*contributor:*/ user,
+        /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
     );
 
     assert.equal(

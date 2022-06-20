@@ -148,7 +148,7 @@ describe('Create repo', function () {
         );
         assert.equal(
             userName,
-            "",
+            user,
             "Fail to get contributors's signature from namspace db by contibutor id."
         );
       });
