@@ -122,13 +122,13 @@ describe('Create repo', function () {
             /*contributor_signature:*/ "5039ae9ae169599d0b7d4c78bb80af3db4f1082bab2ee03c1fe33816d9f1a33a",
         );
 
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
-        //    /*contributor_name:*/ "ri",
-        //    /*contributor_signature:*/ "52b687c3401542006d57fbb2de83815441b7bc6b032cd91cfbe1cff119ff30bc",
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
+            /*contributor_name:*/ "ri",
+            /*contributor_signature:*/ "52b687c3401542006d57fbb2de83815441b7bc6b032cd91cfbe1cff119ff30bc",
+        );
 
     });
     describe.only('Get contributor name.', function () {
