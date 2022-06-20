@@ -39,6 +39,19 @@ const {
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
+async function getContributorName(args) {
+    //const user = await getGithubUser();
+
+    // Get from api request to service.
+
+    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
+    if (contributors.length == 1) {
+      const contributor = contributors[0]
+      return contributor.name
+    } else {
+      return "none"
+    }
+  }
 
 async function getGithubUser() {
     const data = await fsPromises.readFile('/usr/src/app/.config.json')
@@ -169,19 +182,10 @@ var root = {
       const contributor = {'id': args.contributor_id, 'signature': args.scontributor_signature, 'name': args.contributor_name}
       nameSpaceDB.contributors.push(contributor)
     }
+    console.log(nameSpaceDB)
   },
   getContributorName: async (args) => {
-    //const user = await getGithubUser();
-
-    // Get from api request to service.
-
-    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
-    if (contributors.length == 1) {
-      const contributor = contributors[0]
-      return contributor.name
-    } else {
-      return "none"
-    }
+    return await getContributorName(args)
   },
   getContributorSignature: async (args) => {
     //const user = await getGithubUser();
@@ -204,8 +208,16 @@ var root = {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
+    //await getContributorName(
+    //  args.owner,
+    //  args.repo,
+    //  "",
+    //  args.to
+    //)
+    //if (contributorName !== "none") {
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
+    //}
     //}
   },
   verifyPullRequest: async (arg) => {
