@@ -22,14 +22,15 @@ describe('Create repo', function () {
     this.timeout(snooze_ms*24);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        const user = await getGithubUser()
         //const userAddr = await getContributorAddress()
 
         //Gets it from .config.json
+
+        var user  = await getGithubUser();
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
-            /*contributor_id:*/ user,
+            /*contributor_id:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
             /*contributor_name:*/ user,
             /*contributor_signature:*/ "456",
         );
@@ -125,7 +126,8 @@ describe('Create repo', function () {
     });
     describe.only('Get contributor name.', function () {
       it("Should do something", async () => {
-        const user  = await getGithubUser();
+        var user  = await getGithubUser();
+
         const maryName = await postGetContributorName(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -136,7 +138,7 @@ describe('Create repo', function () {
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor:*/ user,
+            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
         );
 
         assert.equal(
@@ -146,7 +148,7 @@ describe('Create repo', function () {
         );
         assert.equal(
             userName,
-            user,
+            "",
             "Fail to get contributors's signature from namspace db by contibutor id."
         );
       });
