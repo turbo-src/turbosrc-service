@@ -24,6 +24,10 @@ npm test testing/integration/privaterepo/createRepo.js
 
 sleep 5
 
+npm test testing/integration/privaterepo/transferTokens.js
+
+sleep 5
+
 # Create fork of demo. Must have running containers.
 # It calls the main server.
 npm test testing/integration/privaterepo/preTestForkRepo.js
@@ -69,10 +73,6 @@ npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js
 sleep 5
 
 npm test testing/integration/privaterepo/semiAutoManyVoters.js
-
-sleep 5
-
-npm test testing/integration/privaterepo/transferTokens.js
 
 # Stop servers after some minutes (allow time for manual vote verification)
 
