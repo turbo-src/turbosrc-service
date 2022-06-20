@@ -27,35 +27,6 @@ describe('Create repo', function () {
         const user = await getGithubUser()
         //const userAddr = await getContributorAddress()
 
-        //Gets it from .config.json
-        await snooze(snooze_ms);
-        await postCreateUser(
-            /*owner:*/ "",
-            /*repo:*/ "",
-            /*contributor_id:*/ user,
-            /*contributor_name:*/ user,
-            /*contributor_signature:*/ "456",
-        );
-
-        await snooze(snooze_ms);
-        await postCreateUser(
-            /*owner:*/ "",
-            /*repo:*/ "",
-            /*contributor_id:*/ "mary",
-            /*contributor_name:*/ "mary",
-            /*contributor_signature:*/ "1",
-        );
-
-        await snooze(snooze_ms);
-        await postCreateUser(
-            /*owner:*/ "",
-            /*repo:*/ "",
-            /*contributor_id:*/ "am",
-            /*contributor_name:*/ "am",
-            /*contributor_signature:*/ "2",
-        );
-
-        await snooze(snooze_ms);
         await postCreateRepo(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -64,7 +35,14 @@ describe('Create repo', function () {
             /*side:*/ "",
         );
 
-        await snooze(snooze_ms);
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "user",
+            /*amount:*/ 39_000,
+        );
+
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -73,7 +51,85 @@ describe('Create repo', function () {
             /*amount:*/ 15_000,
         );
 
-        await snooze(snooze_ms);
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "jc",
+            /*amount:*/ 10_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "pc",
+            /*amount:*/ 75_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "mb",
+            /*amount:*/ 75_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "np",
+            /*amount:*/ 5_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "nn",
+            /*amount:*/ 100_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "jp",
+            /*amount:*/ 50_000,
+        );
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "ts",
+            /*amount:*/ 50_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "af",
+            /*amount:*/ 10_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "ds",
+            /*amount:*/ 75_000,
+        );
+
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ "mary",
+            /*to:*/ "ri",
+            /*amount:*/ 1_000,
+        );
+
         const contributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -84,7 +140,6 @@ describe('Create repo', function () {
 
         const contributorTokenAmount = Number(contributorTokenAmountRes)
 
-        await snooze(snooze_ms);
         const amContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -95,17 +150,33 @@ describe('Create repo', function () {
 
         const amContributorTokenAmount = Number(amContributorTokenAmountRes)
 
-        assert.equal(
-            contributorTokenAmount,
-            985000,
-            "Fail to get amount."
+        const riContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "ri",
+            /*side:*/ "no",
         );
+
+        const riContributorTokenAmount = Number(riContributorTokenAmountRes)
 
         assert.equal(
             amContributorTokenAmount,
             15_000,
             "Fail to get amount."
         );
+
+        assert.equal(
+            riContributorTokenAmount,
+            1_000,
+            "Fail to get amount."
+        );
+
+        //assert.equal(
+        //    contributorTokenAmount,
+        //    985000,
+        //    "Fail to get amount."
+        //);
 
         //await snooze(snooze_ms);
         //await postCreateUser(
