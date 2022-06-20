@@ -24,9 +24,13 @@ describe('Create repo', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
+    });
+    describe.only('Get have new contributors', function () {
+      it("Should get token amoutns of each user", async () => {
         const user = await getGithubUser()
         //const userAddr = await getContributorAddress()
 
+        this.timeout(snooze_ms);
         await postCreateRepo(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -35,14 +39,16 @@ describe('Create repo', function () {
             /*side:*/ "",
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*from:*/ "mary",
-            /*to:*/ "user",
-            /*amount:*/ 39_000,
+            /*to:*/ user,
+            /*amount:*/ 33_999,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -51,6 +57,7 @@ describe('Create repo', function () {
             /*amount:*/ 15_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -59,6 +66,7 @@ describe('Create repo', function () {
             /*amount:*/ 10_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -67,6 +75,7 @@ describe('Create repo', function () {
             /*amount:*/ 75_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -75,6 +84,7 @@ describe('Create repo', function () {
             /*amount:*/ 75_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -83,6 +93,7 @@ describe('Create repo', function () {
             /*amount:*/ 5_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -91,6 +102,7 @@ describe('Create repo', function () {
             /*amount:*/ 100_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -98,6 +110,8 @@ describe('Create repo', function () {
             /*to:*/ "jp",
             /*amount:*/ 50_000,
         );
+
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -106,6 +120,7 @@ describe('Create repo', function () {
             /*amount:*/ 50_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -114,6 +129,7 @@ describe('Create repo', function () {
             /*amount:*/ 10_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -122,6 +138,7 @@ describe('Create repo', function () {
             /*amount:*/ 75_000,
         );
 
+        this.timeout(snooze_ms);
         await postTransferTokens(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -130,11 +147,21 @@ describe('Create repo', function () {
             /*amount:*/ 1_000,
         );
 
-        const contributorTokenAmountRes = await postGetContributorTokenAmount(
+        const maryContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor:*/ "mary",
+            /*side:*/ "no",
+        );
+
+        const maryContributorTokenAmount = Number(maryContributorTokenAmountRes)
+
+        const contributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ user,
             /*side:*/ "no",
         );
 
@@ -150,6 +177,96 @@ describe('Create repo', function () {
 
         const amContributorTokenAmount = Number(amContributorTokenAmountRes)
 
+        const jcContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "jc",
+            /*side:*/ "no",
+        );
+
+        const jcContributorTokenAmount = Number(jcContributorTokenAmountRes)
+
+        const pcContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "pc",
+            /*side:*/ "no",
+        );
+
+        const pcContributorTokenAmount = Number(pcContributorTokenAmountRes)
+
+        const mbContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "mb",
+            /*side:*/ "no",
+        );
+
+        const mbContributorTokenAmount = Number(mbContributorTokenAmountRes)
+
+        const npContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "np",
+            /*side:*/ "no",
+        );
+
+        const npContributorTokenAmount = Number(npContributorTokenAmountRes)
+
+        const nnContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "nn",
+            /*side:*/ "no",
+        );
+
+        const nnContributorTokenAmount = Number(nnContributorTokenAmountRes)
+
+        const jpContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "jp",
+            /*side:*/ "no",
+        );
+
+        const jpContributorTokenAmount = Number(jpContributorTokenAmountRes)
+
+        const tsContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "ts",
+            /*side:*/ "no",
+        );
+
+        const tsContributorTokenAmount = Number(tsContributorTokenAmountRes)
+
+        const afContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "af",
+            /*side:*/ "no",
+        );
+
+        const afContributorTokenAmount = Number(afContributorTokenAmountRes)
+
+        const dsContributorTokenAmountRes = await postGetContributorTokenAmount(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "ds",
+            /*side:*/ "no",
+        );
+
+        const dsContributorTokenAmount = Number(dsContributorTokenAmountRes)
+
         const riContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
@@ -161,8 +278,68 @@ describe('Create repo', function () {
         const riContributorTokenAmount = Number(riContributorTokenAmountRes)
 
         assert.equal(
+            contributorTokenAmount,
+            33_999,
+            "Fail to get amount."
+        );
+
+        assert.equal(
             amContributorTokenAmount,
             15_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            jcContributorTokenAmount,
+            10_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            pcContributorTokenAmount,
+            75_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            mbContributorTokenAmount,
+            75_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            npContributorTokenAmount,
+            5_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            nnContributorTokenAmount,
+            100_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            jpContributorTokenAmount,
+            50_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            tsContributorTokenAmount,
+            50_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            afContributorTokenAmount,
+            10_000,
+            "Fail to get amount."
+        );
+
+        assert.equal(
+            dsContributorTokenAmount,
+            75_000,
             "Fail to get amount."
         );
 
@@ -172,98 +349,11 @@ describe('Create repo', function () {
             "Fail to get amount."
         );
 
-        //assert.equal(
-        //    contributorTokenAmount,
-        //    985000,
-        //    "Fail to get amount."
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "jc",
-        //    /*contributor_name:*/ "jc",
-        //    /*contributor_signature:*/ "3",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "pc",
-        //    /*contributor_name:*/ "pc",
-        //    /*contributor_signature:*/ "4",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "mb",
-        //    /*contributor_name:*/ "mb",
-        //    /*contributor_signature:*/ "5",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "np",
-        //    /*contributor_name:*/ "np",
-        //    /*contributor_signature:*/ "6",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "nn",
-        //    /*contributor_name:*/ "nn",
-        //    /*contributor_signature:*/ "7",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "jp",
-        //    /*contributor_name:*/ "jp",
-        //    /*contributor_signature:*/ "8",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "af",
-        //    /*contributor_name:*/ "af",
-        //    /*contributor_signature:*/ "9",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "ds",
-        //    /*contributor_name:*/ "ds",
-        //    /*contributor_signature:*/ "10",
-        //);
-
-        //await snooze(snooze_ms);
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "ri",
-        //    /*contributor_name:*/ "ri",
-        //    /*contributor_signature:*/ "11",
-        //);
-
-        //await snooze(snooze_ms);
-    });
-    describe.only('Get contributor name.', function () {
-      it("Should do something", async () => {
-        const user  = await getGithubUser();
+        assert.equal(
+            maryContributorTokenAmount,
+            500_001,
+            "Fail to get amount."
+        );
         const maryName = await postGetContributorName(
             /*owner:*/ user,
             /*repo:*/ "demo",
