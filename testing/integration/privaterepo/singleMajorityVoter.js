@@ -41,7 +41,7 @@ describe('Vote.', function () {
             /*owner:*/ user,
             /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "yes",
         );
 
