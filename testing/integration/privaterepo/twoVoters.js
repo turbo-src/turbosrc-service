@@ -6,7 +6,8 @@ const { postSetVote,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
         postCreateRepo,
-        postNewPullRequest
+        postNewPullRequest,
+        postGetContributorID
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -82,12 +83,20 @@ describe('Voting.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+
+        const maryID = await postGetContributorID(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "mary",
+        );
+
         //mary
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
-            /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+            /*contributor_id:*/ maryID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
