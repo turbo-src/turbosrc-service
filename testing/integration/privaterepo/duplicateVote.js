@@ -41,8 +41,8 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E3",
-            /*contributor:*/ "",
+            /*pr_id:*/ "issue_3",
+            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);

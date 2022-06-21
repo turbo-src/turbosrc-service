@@ -37,11 +37,12 @@ describe('Vote.', function () {
         }
         const user  = await getGithubUser();
 
+        // user
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor:*/ user,
+            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -53,11 +54,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // am
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "am",
+            /*contributor_id:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
@@ -69,11 +71,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // jc
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "jc",
+            /*contributor_id:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -85,11 +88,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        //pc
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "pc",
+            /*contributor_id:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
@@ -101,11 +105,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // mb
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "mb",
+            /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -117,11 +122,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // np
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "np",
+            /*contributor_id:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -133,11 +139,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // nn
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "nn",
+            /*contributor_id:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -149,11 +156,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // jp
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "jp",
+            /*contributor_id:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
@@ -165,11 +173,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // ts
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "ts",
+            /*contributor_id:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -181,11 +190,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // af
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "af",
+            /*contributor_id:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -197,11 +207,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // ds
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "ds",
+            /*contributor_id:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
@@ -213,11 +224,12 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        // ri
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
-            /*contributor_id:*/ "ri",
+            /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
