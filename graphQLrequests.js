@@ -125,6 +125,27 @@ var root = {
    console.log(json)
    return json.data.getContributorName
   },
+  postGetContributorID: async (owner, repo, issue_id, contributor_name) => {
+   const res = await superagent
+     .post('http://localhost:4000/graphql')
+     .send(
+       //{ query: '{ name: 'Manny', species: 'cat' }' }
+       //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
+       //{ query: '{ getVote(pr_id: "default", contributorId: 1) {side} }' }
+       //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
+       //{ query: `{ getVoteEverything }` }
+       { query: `{ getContributorID(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_name: "${contributor_name}") }` }
+       //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
+     ) // sends a JSON post body
+     .set('accept', 'json')
+     //.end((err, res) => {
+       // Calling the end function will send the request
+     //});
+   console.log("gqlr 123")
+   const json = JSON.parse(res.text)
+   console.log(json)
+   return json.data.getContributorID
+  },
   postGetContributorSignature: async (owner, repo, issue_id, contributor_id) => {
    const res = await superagent
      .post('http://localhost:4000/graphql')

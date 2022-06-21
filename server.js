@@ -54,6 +54,18 @@ async function getContributorName(args) {
     }
   }
 
+async function getContributorID(args) {
+
+    var contributors = getContributorsByName(nameSpaceDB.contributors, args.contributor_name)
+    console.log(nameSpaceDB)
+    if (contributors.length == 1) {
+      const contributor = contributors[0]
+      return contributor.id
+    } else {
+      return "none"
+    }
+}
+
 async function getGithubUser() {
     const data = await fsPromises.readFile('/usr/src/app/.config.json')
                        .catch((err) => console.error('Failed to read file', err));
@@ -79,6 +91,7 @@ var schema = buildSchema(`
     getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String): String,
     getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    getContributorID(owner: String, repo: String, pr_id: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
     pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
@@ -187,6 +200,9 @@ var root = {
   },
   getContributorName: async (args) => {
     return await getContributorName(args)
+  },
+  getContributorID: async (args) => {
+    return await getContributorID(args)
   },
   getContributorSignature: async (args) => {
     //const user = await getGithubUser();
