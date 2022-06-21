@@ -42,11 +42,12 @@ describe('Voting.', function () {
         const user  = await getGithubUser();
 
         await snooze(snooze_ms);
+        //user
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
-            /*contributor:*/ user,
+            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -81,11 +82,12 @@ describe('Voting.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
+        //mary
         await postSetVote(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
