@@ -193,7 +193,7 @@ var root = {
     // Check if name exists
     var contributors = getContributorsByName(nameSpaceDB.contributors, args.contributor_name)
     if (contributors.length == 0) {
-      const contributor = {'id': args.contributor_id, 'signature': args.scontributor_signature, 'name': args.contributor_name}
+      const contributor = {'id': args.contributor_id, 'signature': args.contributor_signature, 'name': args.contributor_name}
       nameSpaceDB.contributors.push(contributor)
     }
     console.log(nameSpaceDB)
