@@ -241,7 +241,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*from:*/ maryID,
             /*to:*/ contributor_id,
-            /*amount:*/ 3,
+            /*amount:*/ 499_999,
         );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
