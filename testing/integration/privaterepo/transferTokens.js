@@ -163,7 +163,7 @@ before(async () => {
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
         /*to:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
-        /*amount:*/ 1_000,
+        /*amount:*/ 999,
     );
 
     const maryContributorTokenAmountRes = await postGetContributorTokenAmount(
@@ -298,7 +298,7 @@ before(async () => {
 
     assert.equal(
         contributorTokenAmount,
-        33_999,
+        34_000,
         "Fail to get amount."
     );
 
