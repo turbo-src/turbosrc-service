@@ -243,7 +243,7 @@ describe('Vote.', function () {
         );
         assert.equal(
             sevenDbVoteCumm,
-            "0.033999",
+            "0.034",
             "Fail to add votes."
         );
         //assert.equal(

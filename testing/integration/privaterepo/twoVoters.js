@@ -111,7 +111,7 @@ describe('Voting.', function () {
         //console.log(status)
         assert.equal(
             voteYesTotals,
-            '33999',
+            '34000',
             "Fail to add votes yes."
         );
         assert.equal(
@@ -121,7 +121,7 @@ describe('Voting.', function () {
         );
         assert.equal(
             voteTotals,
-            '0.033999',
+            '0.034',
             "Fail to add votes no."
         );
         assert.equal(
