@@ -3,12 +3,12 @@ const {
         postCreateUser,
         postGetContributorName,
         postGetContributorTokenAmount
-      } = require('../../../graphQLrequests')
+      } = require('./../graphQLrequests')
 
 const {
         getContributorAddress,
         getGithubUser,
-      } = require('../../../utils')
+      } = require('./../utils')
 
 const { Parser } = require('graphql/language/parser');
 
@@ -27,13 +27,13 @@ describe('Create repo', function () {
         //Gets it from .config.json
 
         var user  = await getGithubUser();
-        await postCreateUser(
-            /*owner:*/ "",
-            /*repo:*/ "",
-            /*contributor_id:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
-            /*contributor_name:*/ user,
-            /*contributor_signature:*/ "456",
-        );
+       // await postCreateUser(
+       //     /*owner:*/ "",
+       //     /*repo:*/ "",
+       //     /*contributor_id:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
+       //     /*contributor_name:*/ user,
+       //     /*contributor_signature:*/ "456",
+       // );
 
         await postCreateUser(
             /*owner:*/ "",
