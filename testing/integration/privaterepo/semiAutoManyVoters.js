@@ -4,7 +4,9 @@ const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteTotals,
         postCreateRepo,
-        postNewPullRequest
+        postNewPullRequest,
+	postTransferTokens,
+        postGetContributorID
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -217,6 +219,30 @@ describe('Vote.', function () {
             /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
             /*side:*/ "yes",
         );
+
+        // transfer 2 tokens to allow current contributor in extension to vote a majority
+        this.timeout(snooze_ms);
+        const maryID = await postGetContributorID(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "mary",
+        );
+        this.timeout(snooze_ms);
+        const contributor_id = await postGetContributorID(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ user,
+        );
+        this.timeout(snooze_ms);
+        await postTransferTokens(
+            /*owner:*/ user,
+            /*repo:*/ "demo",
+            /*from:*/ maryID,
+            /*to:*/ contributor_id,
+            /*amount:*/ 3,
+        );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ user,
@@ -225,6 +251,7 @@ describe('Vote.', function () {
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
+
         assert.equal(
             amDbVoteCumm,
             "0.015",
@@ -289,7 +316,7 @@ describe('Vote.', function () {
         );
         assert.equal(
             riVoteCumm,
-            "0.499999",
+            "0.465999",
             "Fail to add votes."
         );
         assert.equal(
