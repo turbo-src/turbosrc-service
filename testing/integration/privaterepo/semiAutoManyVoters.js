@@ -37,22 +37,7 @@ describe('Vote.', function () {
         }
         const user  = await getGithubUser();
 
-        // user
-        await postSetVote(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_5",
-            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
-            /*side:*/ "yes",
-        );
         await snooze(snooze_ms);
-        const sevenDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_5",
-            /*contributor:*/ user,
-            /*side:*/ "yes",
-        );
         await snooze(snooze_ms);
         // am
         await postSetVote(
@@ -241,8 +226,8 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         assert.equal(
-            sevenDbVoteCumm,
-            "0.034",
+            amDbVoteCumm,
+            "0.015",
             "Fail to add votes."
         );
         //assert.equal(
