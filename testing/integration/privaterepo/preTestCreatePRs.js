@@ -5,7 +5,9 @@ const {
         postCreatePullRequest,
         postSetVote,
         postGetPRvoteStatus,
-        postNewPullRequest
+        postNewPullRequest,
+        postGetContributorID,
+        postGetContributorName,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -22,7 +24,9 @@ describe('Create repo and GH pull request', function () {
     });
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
-        async function getGithubUser() {
+
+
+        async function getGithubContributor() {
             const data = await fsPromises.readFile('.config.json')
                                .catch((err) => console.error('Failed to read file', err));
 
@@ -38,11 +42,10 @@ describe('Create repo and GH pull request', function () {
             return user
 
         }
-        const user = await getGithubUser()
-
+        const contributor_name = await getGithubContributor()
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest1",
             /*pr_id:*/ "issue_1",
@@ -50,7 +53,7 @@ describe('Create repo and GH pull request', function () {
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest2",
             /*pr_id:*/ "issue_2",
@@ -58,7 +61,7 @@ describe('Create repo and GH pull request', function () {
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest3",
             /*pr_id:*/ "issue_3",
@@ -66,7 +69,7 @@ describe('Create repo and GH pull request', function () {
         );
         await snooze(snooze_ms);
         await postCreatePullRequest(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest4",
             /*pr_id:*/ "issue_4",

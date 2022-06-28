@@ -3,6 +3,8 @@ const fsPromises = require('fs').promises;
 const {
         postGetContributorTokenAmount,
         postCreateRepo,
+        postGetContributorID,
+        postGetContributorName,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -12,7 +14,7 @@ var snooze_ms = 5000
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function getGithubUser() {
+async function getGithubContributor() {
     const data = await fsPromises.readFile('.config.json')
                        .catch((err) => console.error('Failed to read file', err));
 
@@ -36,10 +38,10 @@ describe('Create repo', function () {
     });
     describe.only('Create repo', function () {
       it("Should do create repo", async () => {
-        const user  = await getGithubUser();
+        const contributor_name = await getGithubContributor()
         await snooze(snooze_ms);
         await postCreateRepo(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "",
             /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
@@ -47,7 +49,7 @@ describe('Create repo', function () {
         );
 
         const maryContributorTokenAmountRes = await postGetContributorTokenAmount(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",

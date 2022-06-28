@@ -1,13 +1,15 @@
 const assert = require('assert');
+const fsPromises = require('fs').promises;
 const {
         postCreateUser,
-        postGetContributorName,
-        postGetContributorTokenAmount
+        postGetContributorTokenAmount,
+        postGetContributorID,
+        postGetContributorName
       } = require('./../graphQLrequests')
 
 const {
         getContributorAddress,
-        getGithubUser,
+        getGithubUser
       } = require('./../utils')
 
 const { Parser } = require('graphql/language/parser');
@@ -18,20 +20,35 @@ var snooze_ms = 5000
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+async function getGithubContributor() {
+    const data = await fsPromises.readFile('.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
+
 describe('Create repo', function () {
     this.timeout(snooze_ms*24);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        //const userAddr = await getContributorAddress()
+        //const userAddr = await getContributorAddress
+        await snooze(snooze_ms);
 
-        //Gets it from .config.json
-
-        var user  = await getGithubUser();
        // await postCreateUser(
        //     /*owner:*/ "",
        //     /*repo:*/ "",
-       //     /*contributor_id:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
-       //     /*contributor_name:*/ user,
+       //     /*contributor_id:*/ contributor_id,
+       //     /*contributor_name:*/ contributor_name,
        //     /*contributor_signature:*/ "456",
        // );
 
@@ -133,19 +150,25 @@ describe('Create repo', function () {
     });
     describe.only('Get contributor name.', function () {
       it("Should do something", async () => {
-        var user  = await getGithubUser();
-
+        const contributor_name = await getGithubContributor()
+        await snooze(snooze_ms);
+        const contributor_id = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor_name:*/ contributor_name,
+        );
         const maryName = await postGetContributorName(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
         );
         const userName = await postGetContributorName(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
+            /*contributor:*/ contributor_id,
         );
 
         assert.equal(
@@ -155,7 +178,7 @@ describe('Create repo', function () {
         );
         assert.equal(
             userName,
-            user,
+            contributor_name,
             "Fail to get contributors's signature from namspace db by contibutor id."
         );
       });

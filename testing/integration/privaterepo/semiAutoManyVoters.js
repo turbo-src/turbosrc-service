@@ -5,8 +5,9 @@ const { postSetVote,
         postGetPRvoteTotals,
         postCreateRepo,
         postNewPullRequest,
-	postTransferTokens,
-        postGetContributorID
+        postGetContributorID,
+        postGetContributorName,
+	    postTransferTokens,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -16,34 +17,34 @@ var snooze_ms = 1500;;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+async function getGithubContributor() {
+    const data = await fsPromises.readFile('.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
+
 describe('Vote.', function () {
     this.timeout(snooze_ms*50);
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Many voters vote.', function () {
       it("Should increment vote and then close and merge on quorum.", async () => {
-        async function getGithubUser() {
-            const data = await fsPromises.readFile('.config.json')
-                               .catch((err) => console.error('Failed to read file', err));
-
-            let json = JSON.parse(data);
-            let user = json.github.user
-            if (user === undefined) {
-              throw new Error("Failed to load Github user " + user);
-
-            } else {
-              console.log("Successfully read Github " + user);
-            }
-
-            return user
-
-        }
-        const user  = await getGithubUser();
-
+        const contributor_name = await getGithubContributor()
         await snooze(snooze_ms);
-        await snooze(snooze_ms);
+
         // am
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
@@ -51,7 +52,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const amDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "am",
@@ -60,7 +61,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // jc
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
@@ -68,7 +69,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "jc",
@@ -77,7 +78,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         //pc
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
@@ -85,7 +86,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "pc",
@@ -94,7 +95,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // mb
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
@@ -102,7 +103,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const mbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "mb",
@@ -111,7 +112,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // np
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
@@ -119,7 +120,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const npVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "np",
@@ -128,7 +129,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // nn
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
@@ -136,7 +137,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const nnVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "nn",
@@ -145,7 +146,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // jp
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
@@ -153,7 +154,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const jpVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "jp",
@@ -162,7 +163,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // ts
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
@@ -170,7 +171,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const tsVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "ts",
@@ -179,7 +180,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // af
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
@@ -187,7 +188,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "af",
@@ -196,7 +197,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // ds
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
@@ -204,7 +205,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "ds",
@@ -213,7 +214,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         // ri
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
@@ -223,21 +224,21 @@ describe('Vote.', function () {
         // transfer 2 tokens to allow current contributor in extension to vote a majority
         this.timeout(snooze_ms);
         const maryID = await postGetContributorID(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor:*/ "mary",
         );
         this.timeout(snooze_ms);
         const contributor_id = await postGetContributorID(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor:*/ user,
+            /*contributor:*/ contributor_name,
         );
         this.timeout(snooze_ms);
         await postTransferTokens(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*from:*/ maryID,
             /*to:*/ contributor_id,
@@ -245,7 +246,7 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "ri",
@@ -308,7 +309,7 @@ describe('Vote.', function () {
         //    "Fail to add votes."
         //);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_5",
             /*contributor_id:*/ "ri",

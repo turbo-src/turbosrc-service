@@ -5,7 +5,9 @@ const { postSetVote,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
-        postNewPullRequest
+        postNewPullRequest,
+        postGetContributorID,
+        postGetContributorName,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -15,30 +17,32 @@ var snooze_ms = 1500;
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+async function getGithubContributor() {
+    const data = await fsPromises.readFile('.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
+
 describe('Vote.', function () {
     this.timeout(snooze_ms*12);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
-        async function getGithubUser() {
-            const data = await fsPromises.readFile('.config.json')
-                               .catch((err) => console.error('Failed to read file', err));
-
-            let json = JSON.parse(data);
-            let user = json.github.user
-            if (user === undefined) {
-              throw new Error("Failed to load Github user " + user);
-
-            } else {
-              console.log("Successfully read Github " + user);
-            }
-
-            return user
-
-        }
-        const user  = await getGithubUser();
+        const contributor_name = await getGithubContributor()
+        await snooze(snooze_ms);
 
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
@@ -48,27 +52,11 @@ describe('Vote.', function () {
     });
     describe.only('A single majority voter votes.', function () {
       it("Should close vote and then merge.", async () => {
+        const contributor_name = await getGithubContributor()
         await snooze(snooze_ms);
-        async function getGithubUser() {
-            const data = await fsPromises.readFile('.config.json')
-                               .catch((err) => console.error('Failed to read file', err));
-
-            let json = JSON.parse(data);
-            let user = json.github.user
-            if (user === undefined) {
-              throw new Error("Failed to load Github user " + user);
-
-            } else {
-              console.log("Successfully read Github " + user);
-            }
-
-            return user
-
-        }
-        const user  = await getGithubUser();
 
         const status = await postGetPRvoteStatus(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",
@@ -76,15 +64,15 @@ describe('Vote.', function () {
         );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
-            /*contributor:*/ user,
+            /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const voteNoTotals = await postGetPRvoteNoTotals(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
             /*contributor_id:*/ "mary",

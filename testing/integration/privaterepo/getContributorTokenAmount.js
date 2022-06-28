@@ -6,6 +6,8 @@ const {
         postGetPRvoteStatus,
         postNewPullRequest,
         postGetContributorTokenAmount,
+        postGetContributorID,
+        postGetContributorName,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 

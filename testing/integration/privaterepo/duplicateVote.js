@@ -4,7 +4,9 @@ const {
         postCreateRepo,
         postSetVote,
         postGetPRvoteStatus,
-        postNewPullRequest
+        postNewPullRequest,
+        postGetContributorID,
+        postGetContributorName
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
 
@@ -13,6 +15,23 @@ var snooze_ms = 1500;;
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function getGithubContributor() {
+    const data = await fsPromises.readFile('.config.json')
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let user = json.github.user
+    if (user === undefined) {
+      throw new Error("Failed to load Github user " + user);
+
+    } else {
+      console.log("Successfully read Github " + user);
+    }
+
+    return user
+
+}
 
 describe('vote', function () {
     this.timeout(snooze_ms*12);
@@ -35,39 +54,46 @@ describe('vote', function () {
             return user
 
         }
-        const user  = await getGithubUser();
+        const contributor_name = await getGithubContributor()
+        await snooze(snooze_ms);
+        const contributor_id = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor_name:*/ contributor_name,
+        );
 
         //user
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
+            /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const openStatus = await postGetPRvoteStatus(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor:*/ user,
+            /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         //user
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
+            /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPRvoteStatus(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor:*/ user,
+            /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
 
@@ -76,7 +102,7 @@ describe('vote', function () {
         await snooze(snooze_ms);
         //mary
         await postSetVote(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
@@ -84,10 +110,10 @@ describe('vote', function () {
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPRvoteStatus(
-            /*owner:*/ user,
+            /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_3",
-            /*contributor:*/ user,
+            /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
 
