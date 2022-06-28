@@ -13,11 +13,22 @@ Create the `.config.json` file and add your Github user, organization and token.
 
 ```
 {
-
   "github": {
     "organization": "myOrg",
     "user": "myGithub",
-    "apiToken": "ghp_475fh.."
+    "apiToken": "ghp_475fh..."
+  },
+  "turbosrc": {
+    "store": {
+      "repo": {
+        "addr": "0x682...,
+        "key": "2706a..."
+      },
+      "contributor": {
+        "addr": "0x18F...",
+        "key": "ae41e..."
+      }
+    }
   }
 }
 ```
