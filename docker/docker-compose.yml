@@ -1,0 +1,16 @@
+version: "3"
+services:
+  turbo-src-server:
+    image: turbo-src-server:0.0.1
+    expose:
+      - "8080"
+    env_file:
+      - service.env
+    volumes:
+      - ../:/usr/src/app
+      - turbo-src-server-node-modules-data-volume:/usr/local/node_modules
+    tty: true
+
+volumes:
+  turbo-src-server-node-modules-data-volume:
+    external: true
