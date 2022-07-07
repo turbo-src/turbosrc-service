@@ -10,7 +10,7 @@
 sleep 5
 
 # Rebuild and start containers.
-./dev.sh cycle && ./dev.sh start
+#./dev.sh cycle && ./dev.sh start
 
 sleep 5
 
