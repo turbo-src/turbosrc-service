@@ -2,6 +2,8 @@ version: "3"
 services:
   turbo-src-server:
     image: turbo-src-server:0.0.1
+    ports:
+      - 4000:8080
     expose:
       - "8080"
     env_file:
