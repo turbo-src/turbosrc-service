@@ -11,7 +11,20 @@ services:
     volumes:
       - ../:/usr/src/app
       - turbo-src-server-node-modules-data-volume:/usr/local/node_modules
-    tty: true
+    command: node server.js
+
+  turbo-src-pfserver:
+    image: turbo-src-server:0.0.1
+    ports:
+      - 4001:8080
+    expose:
+      - "8080"
+    env_file:
+      - service.env
+    volumes:
+      - ../:/usr/src/app
+      - turbo-src-server-node-modules-data-volume:/usr/local/node_modules
+    command: node pullForkServer.js
 
 volumes:
   turbo-src-server-node-modules-data-volume:
