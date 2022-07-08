@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://nixos.org#gh-light-mode-only">
-    <img src="images/turbosrc-light-big.png" width="500px" alt="NixOS logo"/>
+    <img src="images/turbosrc-light-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
   <a href="https://nixos.org#gh-dark-mode-only">
-    <img src="images/turbosrc-dark-big.png" width="500px" alt="NixOS logo"/>
+    <img src="images/turbosrc-dark-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
 </p>
 Clone
