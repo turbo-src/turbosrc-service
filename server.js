@@ -7,7 +7,7 @@ const cors = require('cors');
 //const { createClient } = require('redis');
 const superagent = require('superagent');
 const { getPRhead } = require('./pullForkUtil');
-const { gitHeadUtil } = require('./gitHeadUtil');
+const { gitHeadUtil } = require('./utils/gitHeadUtil');
 const { update } = require('tar');
 const {
   transferTokens,

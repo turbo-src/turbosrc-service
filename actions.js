@@ -4,7 +4,7 @@ const {
   mergePullRequest,
   closePullRequest
  } = require('./gitHubUtil');
-const { gitHeadUtil } = require('./gitHeadUtil');
+const { gitHeadUtil } = require('./utils/gitHeadUtil');
 const {
         postCreateRepoTestDB,
         postCreateTokenSupplyTestDB,

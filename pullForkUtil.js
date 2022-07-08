@@ -5,7 +5,8 @@ const tar = require('tar');
 const { exec } = require('child_process');
 const childProcess = require("child_process");
 const { getPullRequest } = require('./gitHubUtil');
-const { gitHeadUtil } = require('./gitHeadUtil');
+const { gitHeadUtil } = require('./utils/gitHeadUtil');
+
 
 /**
  * @param {string} command A shell command to execute
