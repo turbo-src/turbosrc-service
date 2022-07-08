@@ -1,9 +1,10 @@
+docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
+docker-compose -f docker/docker-compose.yml up -d
+
 # Copy overwrite .config to where it's needed.
 # Can't reach file outside of testing dir
 # for some reason.
 \cp .config.json testing/integration/privaterepo/
-
-sleep 5
 
 # Create user for namespace db from config.json file
 npm test testing/integration/privaterepo/createUser.js
@@ -32,3 +33,5 @@ npm test testing/integration/privaterepo/duplicateVote.js
 sleep 5
 
 npm test testing/integration/privaterepo/manyVoters.js
+
+docker-compose -f docker/docker-compose.yml down
