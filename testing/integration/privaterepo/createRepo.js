@@ -39,27 +39,34 @@ describe('Create repo', function () {
     describe.only('Create repo', function () {
       it("Should do create repo", async () => {
         const contributor_name = await getGithubContributor()
+        const contributor_id = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor_name:*/ contributor_name,
+        );
         await snooze(snooze_ms);
         await postCreateRepo(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "",
-            /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+            /*contributor:*/ contributor_id,
             /*side:*/ "",
         );
 
-        const maryContributorTokenAmountRes = await postGetContributorTokenAmount(
+        await snooze(snooze_ms);
+        const contributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+            /*contributor:*/ contributor_id,
             /*side:*/ "no",
         );
 
-        const maryContributorTokenAmount = Number(maryContributorTokenAmountRes)
+        const contributorTokenAmount = Number(contributorTokenAmountRes)
 
         assert.equal(
-            maryContributorTokenAmount,
+            contributorTokenAmount,
             1_000_000,
             "Fail to get amount."
         );
