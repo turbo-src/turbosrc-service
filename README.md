@@ -1,3 +1,12 @@
+<p align="center">
+  <a href="https://nixos.org#gh-light-mode-only">
+    <img src="images/turbsrc-light-big.png" width="500px" alt="TurboSrc logo"/>
+  </a>
+  <a href="https://nixos.org#gh-dark-mode-only">
+    <img src="images/turbsrc-dark-big.png" width="500px" alt="TurboSrc logo"/>
+  </a>
+</p>
+
 Clone
 
 ```
