@@ -30,7 +30,7 @@ const {
        closePullRequest,
        mergePullRequest,
        fork
-      } = require('./gitHubUtil');
+      } = require('./utils/gitHubUtil');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.

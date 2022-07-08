@@ -3,7 +3,7 @@ const {
   getPullRequest,
   mergePullRequest,
   closePullRequest
- } = require('./gitHubUtil');
+ } = require('./utils/gitHubUtil');
 const { gitHeadUtil } = require('./utils/gitHeadUtil');
 const {
         postCreateRepoTestDB,
