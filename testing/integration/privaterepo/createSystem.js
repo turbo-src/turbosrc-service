@@ -5,12 +5,12 @@ const {
         postGetContributorTokenAmount,
         postCreateRepo,
         postTransferTokens,
-      } = require('../../../utils/requests')
+      } = require('../../../src/utils/requests')
 
 const {
         getContributorAddress,
         getGithubUser,
-      } = require('../../../utils/config')
+      } = require('../../../src/utils/config')
 
 const { Parser } = require('graphql/language/parser');
 

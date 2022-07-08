@@ -5,12 +5,7 @@ const {
         postGetContributorTokenAmount,
         postGetContributorID,
         postGetContributorName
-      } = require('./../utils/requests')
-
-const {
-        getContributorAddress,
-        getGithubUser
-      } = require('./../utils/config')
+      } = require('./../src/utils/requests')
 
 const { Parser } = require('graphql/language/parser');
 

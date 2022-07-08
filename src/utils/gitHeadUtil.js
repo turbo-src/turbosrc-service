@@ -1,9 +1,10 @@
 const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
+var path = require("path");
 
 async function getGithubToken() {
-    const data = await fsPromises.readFile('/usr/src/app/.config.json')
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);

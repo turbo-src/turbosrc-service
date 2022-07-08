@@ -48,7 +48,7 @@ const { createRepo,
         checkMergePullRequestHistory,
         checkRejectPullRequestHistory,
         getContributorTokenAmount
- } = require('./../state');
+ } = require('./state');
 
 const root = {
   // Also a root 'methods' in graphql query, by the same name

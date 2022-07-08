@@ -6,8 +6,8 @@ const { buildSchema } = require('graphql');
 const cors = require('cors');
 //const { createClient } = require('redis');
 const superagent = require('superagent');
-const { getPRhead } = require('./utils/pullForkUtil');
-const { gitHeadUtil } = require('./utils/gitHeadUtil');
+const { getPRhead } = require('./src/utils/pullForkUtil');
+const { gitHeadUtil } = require('./src/utils/gitHeadUtil');
 const { update } = require('tar');
 const {
   transferTokens,
@@ -23,14 +23,14 @@ const {
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount
-} = require('./lib/actions')
+} = require('./src/lib/actions')
 const {
        getPullRequest,
        createPullRequest,
        closePullRequest,
        mergePullRequest,
        fork
-      } = require('./utils/gitHubUtil');
+      } = require('./src/utils/gitHubUtil');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.

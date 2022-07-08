@@ -8,12 +8,12 @@ const { postSetVote,
         postGetContributorID,
         postGetContributorName,
 	    postTransferTokens,
-      } = require('../../../utils/requests')
+      } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
-      } = require('../../../utils/config')
+      } = require('../../../src/utils/config')
 
 var snooze_ms = 1500;;
 

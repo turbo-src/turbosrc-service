@@ -1,8 +1,9 @@
 const fsPromises = require('fs').promises;
+var path = require("path");
 
 var root = {
   getGithubContributor: async () => {
-    const data = await fsPromises.readFile('.config.json')
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
@@ -17,7 +18,7 @@ var root = {
     return user
   },
   getContributorAddress: async () => {
-    const data = await fsPromises.readFile('.config.json')
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
@@ -32,7 +33,7 @@ var root = {
     return addr
   },
   getRepoAddress: async () => {
-    const data = await fsPromises.readFile('.config.json')
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
