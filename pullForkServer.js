@@ -2,7 +2,7 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
-const { pullForkUtil } = require('./pullForkUtil');
+const { pullForkUtil } = require('./utils/pullForkUtil');
 const { getPullRequest } = require('./utils/gitHubUtil');
 const { gitHeadUtil } = require('./utils/gitHeadUtil');
 

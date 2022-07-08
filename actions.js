@@ -1,4 +1,4 @@
-const { getPRhead } = require('./pullForkUtil');
+const { getPRhead } = require('./utils/pullForkUtil');
 const {
   getPullRequest,
   mergePullRequest,

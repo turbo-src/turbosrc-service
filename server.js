@@ -6,7 +6,7 @@ const { buildSchema } = require('graphql');
 const cors = require('cors');
 //const { createClient } = require('redis');
 const superagent = require('superagent');
-const { getPRhead } = require('./pullForkUtil');
+const { getPRhead } = require('./utils/pullForkUtil');
 const { gitHeadUtil } = require('./utils/gitHeadUtil');
 const { update } = require('tar');
 const {

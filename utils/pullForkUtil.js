@@ -4,8 +4,8 @@ const fs = require('fs')
 const tar = require('tar');
 const { exec } = require('child_process');
 const childProcess = require("child_process");
-const { getPullRequest } = require('./utils/gitHubUtil');
-const { gitHeadUtil } = require('./utils/gitHeadUtil');
+const { getPullRequest } = require('./gitHubUtil');
+const { gitHeadUtil } = require('./gitHeadUtil');
 
 
 /**
