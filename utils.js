@@ -1,7 +1,7 @@
 const fsPromises = require('fs').promises;
 
 var root = {
-  getGithubUser: async () => {
+  getGithubContributor: async () => {
     const data = await fsPromises.readFile('.config.json')
                        .catch((err) => console.error('Failed to read file', err));
 
@@ -32,7 +32,7 @@ var root = {
     return addr
   },
   getRepoAddress: async () => {
-    const data = await fsPromises.readFile('/usr/src/app/.config.json')
+    const data = await fsPromises.readFile('.config.json')
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
