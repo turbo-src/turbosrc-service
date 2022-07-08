@@ -5,11 +5,6 @@
 
 sleep 5
 
-# Rebuild and start containers.
-#./dev.sh cycle && ./dev.sh start
-
-sleep 5
-
 # Create user for namespace db from config.json file
 npm test testing/integration/privaterepo/createUser.js
 
