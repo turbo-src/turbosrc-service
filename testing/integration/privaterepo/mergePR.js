@@ -10,7 +10,7 @@ const { postSetVote,
         postMergePullRequest,
         postGetContributorID,
         postGetContributorName,
-      } = require('../../../graphQLrequests')
+      } = require('../../../utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,

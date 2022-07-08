@@ -8,7 +8,7 @@ const {
         postNewPullRequest,
         postGetContributorID,
         postGetContributorName,
-      } = require('../../../graphQLrequests')
+      } = require('../../../utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,

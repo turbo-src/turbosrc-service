@@ -13,7 +13,7 @@ const {
         postNewPullRequestTestDB,
         postSetContributorVotedTokensTestDB,
         postAddToTotalVotedYesTokensDB,
-      } = require('./graphQLrequests')
+      } = require('./utils/requests')
 const { createRepo,
         createTokenSupply,
         transferTokens,

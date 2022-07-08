@@ -5,7 +5,7 @@ const {
         postGetContributorTokenAmount,
         postCreateRepo,
         postTransferTokens,
-      } = require('../../../graphQLrequests')
+      } = require('../../../utils/requests')
 
 const {
         getContributorAddress,

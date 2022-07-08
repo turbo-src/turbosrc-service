@@ -5,7 +5,7 @@ const {
         postGetContributorTokenAmount,
         postGetContributorID,
         postGetContributorName
-      } = require('./../graphQLrequests')
+      } = require('./../utils/requests')
 
 const {
         getContributorAddress,
