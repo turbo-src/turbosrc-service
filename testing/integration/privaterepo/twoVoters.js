@@ -14,7 +14,7 @@ const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
-      } = require('../../../utils')
+      } = require('../../../utils/config')
 
 var snooze_ms = 1500;;
 

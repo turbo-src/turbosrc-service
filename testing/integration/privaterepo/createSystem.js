@@ -10,7 +10,7 @@ const {
 const {
         getContributorAddress,
         getGithubUser,
-      } = require('../../../utils')
+      } = require('../../../utils/config')
 
 const { Parser } = require('graphql/language/parser');
 

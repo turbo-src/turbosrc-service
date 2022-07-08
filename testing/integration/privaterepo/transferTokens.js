@@ -10,7 +10,7 @@ const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
-      } = require('../../../utils')
+      } = require('../../../utils/config')
 
 async function readDBfile(file) {
     const data = await fsPromises.readFile(file)
