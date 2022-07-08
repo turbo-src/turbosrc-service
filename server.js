@@ -23,7 +23,7 @@ const {
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount
-} = require('./actions')
+} = require('./lib/actions')
 const {
        getPullRequest,
        createPullRequest,
