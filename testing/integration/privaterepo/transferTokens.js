@@ -7,6 +7,10 @@ const {
         postGetContributorName,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
+const {
+        getContributorAddress,
+        getGithubContributor,
+      } = require('../../../utils')
 
 async function readDBfile(file) {
     const data = await fsPromises.readFile(file)
@@ -20,23 +24,6 @@ var snooze_ms = 200;
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-async function getGithubContributor() {
-    const data = await fsPromises.readFile('.config.json')
-                       .catch((err) => console.error('Failed to read file', err));
-
-    let json = JSON.parse(data);
-    let contributor = json.github.user
-    if (contributor === undefined) {
-      throw new Error("Failed to load Github contributor " + contributor);
-
-    } else {
-      console.log("Successfully read Github " + contributor);
-    }
-
-    return contributor
-
-}
 
 describe.only('Check that transfer tokens reflected in database', function () {
     this.timeout(snooze_ms*50);

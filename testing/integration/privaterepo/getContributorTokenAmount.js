@@ -10,6 +10,10 @@ const {
         postGetContributorName,
       } = require('../../../graphQLrequests')
 const { Parser } = require('graphql/language/parser');
+const {
+        getContributorAddress,
+        getGithubContributor,
+      } = require('../../../utils')
 
 var snooze_ms = 1500;;
 
@@ -22,23 +26,7 @@ describe('vote', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Vote duplicate with minority voter', function () {
       it("Prevent duplicate vote", async () => {
-        async function getGithubUser() {
-            const data = await fsPromises.readFile('.config.json')
-                               .catch((err) => console.error('Failed to read file', err));
-
-            let json = JSON.parse(data);
-            let user = json.github.user
-            if (user === undefined) {
-              throw new Error("Failed to load Github user " + user);
-
-            } else {
-              console.log("Successfully read Github " + user);
-            }
-
-            return user
-
-        }
-        const user  = await getGithubUser();
+        const user  = await getGithubContributor();
 
         await snooze(snooze_ms);
         const contributorTokenAmountRes = await postGetContributorTokenAmount(
