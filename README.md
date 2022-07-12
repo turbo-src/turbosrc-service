@@ -45,9 +45,9 @@ Make the development and testing scripts executable.
 
 ```
 chmod +x \
-dev.sh \
-testing/gihtub-maker.sh \
-testing/run-tests.sh
+scripts/demo.sh \
+scripts/run-tests.sh \
+testing/gihtub-maker.sh
 ```
 
 Build docker server image.
