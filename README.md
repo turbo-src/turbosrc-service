@@ -54,19 +54,19 @@ testing/gihtub-maker.sh
 Build docker server image.
 
 ```
-docker build -t turbo-src-server:0.0.1 -f dockerfile.server .
+docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
 ```
 
 Build docker pull fork server image.
 
 ```
-docker build -t turbo-src-pfserver:0.0.1 -f dockerfile.pfserver .
+docker build -t turbo-src-pfserver:0.0.1 -f docker/dockerfile.pfserver .
 ```
 
 Create docker volume.
 
 ```
-docker volume create vol-turbo-src-server
+turbo-src-server-node-modules-data-volume
 ```
 Start the servers.
 
