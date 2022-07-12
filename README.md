@@ -44,6 +44,7 @@ Create the `.config.json` file and add your Github user, organization and token.
 Make the development and testing scripts executable.
 
 ```
+cp ../package*.json .
 chmod +x \
 scripts/demo.sh \
 scripts/run-tests.sh \
