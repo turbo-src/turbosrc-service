@@ -66,9 +66,8 @@ docker build -t turbo-src-pfserver:0.0.1 -f docker/dockerfile.pfserver .
 Create docker volume.
 
 ```
-turbo-src-server-node-modules-data-volume
+docker volume create turbo-src-server-node-modules-data-volume
 ```
-Start the servers.
 
 #### Install GihtubMakerTool
 
