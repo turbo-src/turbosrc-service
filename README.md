@@ -1,3 +1,9 @@
+The Turbosrc service is in rapid development. It's only good for local testing and demos right now. The service is sorta like a blockchain node, except it doesn't need to sync or anything. The smart contract will take care of blockchain stuff.
+
+Right now, it'll allow you to run Turbosrc locally in nochain mode. You'll have to install the extension seperately (see [here](https://github.com/turbo-src) for instructions). Any blockchain can be dropped in. A default contract and service to run that is forthcoming.
+
+We're trying to advanced the minimum level of development. The codebase will begin to be refactored to make it easier for outside contribution shortly.
+
 ## Install
 
 ```
