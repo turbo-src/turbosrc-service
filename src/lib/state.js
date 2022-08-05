@@ -32,7 +32,7 @@ const root = {
     database[args.owner + "/" + args.repo].quorum = 0.50
 
     //For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-create-repo.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return {
              pullRequestsDB: pullRequestsDB,
@@ -45,7 +45,7 @@ const root = {
     database[args.owner + "/" + args.repo].tokenSupply = tokens
 
     // For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-create-token-supply.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return  database
   },
@@ -67,7 +67,7 @@ const root = {
     database[args.owner + "/" + args.repo].contributors[args.to] = (Number(toAmount) + Number(args.amount))
 
     //For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-transfer-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-transfer-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return {
              pullRequestsDB: pullRequestsDB,
@@ -77,7 +77,7 @@ const root = {
   setQuorum: function (database, quorum, args) {
     database[args.owner + "/" + args.repo].quorum = quorum
 
-    fs.writeFileSync('testing/special/turbo-src-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-set-quorum.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return  database
   },
@@ -98,7 +98,7 @@ const root = {
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
     database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
 
-    fs.writeFileSync('testing/special/turbo-src-database-new-pull-request.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-new-pull-request.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return {
              pullRequestsDB: pullRequestsDB,
@@ -118,7 +118,7 @@ const root = {
      side: side
    }
 
-   fs.writeFileSync('testing/special/turbo-src-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
+   //fs.writeFileSync('testing/special/turbo-src-database-set-contributor-voted-tokens.json', JSON.stringify(database, null, 2) , 'utf-8');
 
    return database
   },
@@ -135,7 +135,7 @@ const root = {
    database[args.owner + "/" + args.repo].head = tprID
 
     // For testing.
-    fs.writeFileSync('testing/special/turbo-src-database-set-ts-repo-head.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-set-ts-repo-head.json', JSON.stringify(database, null, 2) , 'utf-8');
 
    return database
   },
@@ -259,7 +259,7 @@ const root = {
 
     database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
 
-    fs.writeFileSync('testing/special/turbo-src-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
+    //fs.writeFileSync('testing/special/turbo-src-database-add-voted-yes.json', JSON.stringify(database, null, 2) , 'utf-8');
 
     return database
   },
