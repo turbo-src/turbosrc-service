@@ -1,5 +1,5 @@
 {
-  "name": "express-graphql-example",
+  "name": "turbosrc-service",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -8,8 +8,8 @@
     "test": "./node_modules/.bin/mocha",
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "7db9a",
+  "license": "MIT",
   "dependencies": {
     "child_process": "^1.0.2",
     "cors": "^2.8.5",
