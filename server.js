@@ -441,5 +441,5 @@ var way = false;
 //     console.log("false");
 //     return false;
 //}
-app.listen(8080);
+app.listen(4000);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
