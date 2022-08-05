@@ -445,13 +445,13 @@ let
         sha512 = "ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==";
       };
     };
-    "@types/node-18.6.3" = {
+    "@types/node-18.6.4" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "18.6.3";
+      version = "18.6.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-18.6.3.tgz";
-        sha512 = "6qKpDtoaYLM+5+AFChLhHermMQxc3TOEFIDzrZLPRGHPrLEwqFkkT5Kx3ju05g6X7uDPazz3jHbKPX0KzCjntg==";
+        url = "https://registry.npmjs.org/@types/node/-/node-18.6.4.tgz";
+        sha512 = "I4BD3L+6AWiUobfxZ49DlU43gtI+FTHSv9pE2Zekg6KjMpre4ByusaljW3vYSLJrvQ1ck1hUaeVu8HVlY3vzHg==";
       };
     };
     "@types/responselike-1.0.0" = {
@@ -580,13 +580,13 @@ let
         sha512 = "9GNFMRrEMG5y3Jvv+V4azWvc+qNWdWLTjDdhf/zgMlz8haaaLWv0xeAIWxz9PuWUBawsVxy0zZotjCdR3Xq+2w==";
       };
     };
-    "aws-sdk-2.1187.0" = {
+    "aws-sdk-2.1189.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.1187.0";
+      version = "2.1189.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1187.0.tgz";
-        sha512 = "QcxQ3asIhH9QQnN/5JO3MaHRjwcy3/AsBzcAjPU+lHZGV0drnuDmg3ZkZuAa/mOgQ3MEi68G3gYD+481QJgnMg==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1189.0.tgz";
+        sha512 = "EqluXSo8XAR086nF9UAtPYwUm82ZIRqg8OmHBRQyftcrD1Z0pqMmiuvacXoEAJ/4UU8KKafbpYarxx8rH/pZjQ==";
       };
     };
     "balanced-match-1.0.2" = {
@@ -3003,8 +3003,8 @@ let
     };
   };
   args = {
-    name = "express-graphql-example";
-    packageName = "express-graphql-example";
+    name = "turbosrc-service";
+    packageName = "turbosrc-service";
     version = "1.0.0";
     src = ./.;
     dependencies = [
@@ -3089,7 +3089,7 @@ let
       sources."@types/jsonwebtoken-8.5.8"
       sources."@types/keyv-3.1.4"
       sources."@types/lru-cache-5.1.1"
-      sources."@types/node-18.6.3"
+      sources."@types/node-18.6.4"
       sources."@types/responselike-1.0.0"
       sources."@ungap/promise-all-settled-1.1.2"
       sources."accepts-1.3.8"
@@ -3108,7 +3108,7 @@ let
           sources."js-yaml-3.14.1"
         ];
       })
-      sources."aws-sdk-2.1187.0"
+      sources."aws-sdk-2.1189.0"
       sources."balanced-match-1.0.2"
       sources."base64-js-1.5.1"
       sources."before-after-hook-2.2.2"
@@ -3415,7 +3415,7 @@ let
     buildInputs = globalBuildInputs;
     meta = {
       description = "";
-      license = "ISC";
+      license = "MIT";
     };
     production = true;
     bypassCache = true;
