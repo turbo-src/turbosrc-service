@@ -393,9 +393,7 @@ var root = {
     var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
     if (contributors.length == 1) {
       const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
-      fakeTurboSrcReposDB = resCreateRepo.db
-      pullRequestsDB = resCreateRepo.pullRequestsDB
-      return pullRequestsDB[args.pr_id]
+      return resCreateRepo //pullRequestsDB[args.pr_id]
     } else {
        return "none"
     }

@@ -14,7 +14,10 @@ const {
         postSetContributorVotedTokensTestDB,
         postAddToTotalVotedYesTokensDB,
       } = require('./../utils/requests')
-const { createRepo,
+const {
+        postCreateRepo,
+      } = require('./../utils/privateStoreRequests')
+const { //createRepo,
         createTokenSupply,
         transferTokens,
         setQuorum,
@@ -376,64 +379,20 @@ const root = {
     }
   },
   createRepo: async (database, pullRequestsDB, args) => {
-    debugger
-    await postCreateRepoTestDB(
-      args.owner,
-      args.repo,
-      args.pr_id,
-      args.contributor_id,
-      args.side
-    )
+    const resCreateRepo =
+        await postCreateRepo(
+          args.owner,
+          args.repo,
+          args.pr_id,
+          args.contributor_id,
+          args.side,
+	  // args.head?
+        )
 
-    //To be deprecated for above.
-    const resCreateRepo = await createRepo(database, pullRequestsDB, args)
-    database = resCreateRepo.db
+    // May need to implement in privateStore
+    //database = setTSrepoHead(database, args, head)
 
-    // Add tip of OID to repo db.
-    const head = await gitHeadUtil(args.owner, args.repo, '', 0)
-
-    await postSetTSrepoHeadTestDB(
-      args.owner,
-      args.repo,
-      args.pr_id,
-      args.contributor_id,
-      args.side,
-      head
-    )
-
-    //To be deprecated for above.
-    database = setTSrepoHead(database, args, head)
-
-    pullRequestsDB = resCreateRepo.pullRequestsDB
-
-    await postCreateTokenSupplyTestDB(
-      args.owner,
-      args.repo,
-      args.pr_id,
-      args.contributor_id,
-      args.side,
-      1_000_000
-    )
-
-    //To be deprecated for above.
-    database = createTokenSupply(database, 1_000_000, args)
-
-    await postSetQuorumTestDB(
-      args.owner,
-      args.repo,
-      args.pr_id,
-      args.contributor_id,
-      args.side,
-      0.50
-    )
-
-    //To be deprecated for above.
-    database = setQuorum(database, 0.50, args)
-
-    return {
-             pullRequestsDB: pullRequestsDB,
-             db: database
-    }
+    return resCreateRepo
   },
   newPullRequest: async (database, pullRequestsDB, args) => {
     const prVoteStatus = module.exports.getPRvoteStatus(database, args)
