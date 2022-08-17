@@ -66,7 +66,7 @@ describe('Create repo', function () {
 
         assert.equal(
 	    resCreateRepo,
-            "403",
+            201,
             "Fail to create repo."
         );
       });
