@@ -16,6 +16,7 @@ const {
       } = require('./../utils/requests')
 const {
         postCreateRepo,
+	postGetContributorTokenAmount,
       } = require('./../utils/privateStoreRequests')
 const { //createRepo,
         createTokenSupply,
@@ -50,7 +51,7 @@ const { //createRepo,
         checkContributor,
         checkMergePullRequestHistory,
         checkRejectPullRequestHistory,
-        getContributorTokenAmount
+        //getContributorTokenAmount
  } = require('./state');
 
 const root = {
@@ -106,9 +107,16 @@ const root = {
         totalVotedNoTokens: totalVotedNoTokens
       }
   },
-  getContributorTokenAmount: function(database, args) {
-    const contributorTokenAmount = getContributorTokenAmount(database, args)
-
+  getContributorTokenAmount: async function(database, args) {
+    //const contributorTokenAmount = getContributorTokenAmount(database, args)
+    const contributorTokenAmount =
+        await postGetContributorTokenAmount(
+          args.owner,
+          args.repo,
+          args.pr_id,
+          args.contributor_id,
+          args.side,
+        )
     return contributorTokenAmount
   },
   getPRvoteStatus: function(database, args) {

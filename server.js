@@ -217,7 +217,7 @@ var root = {
     }
   },
   getContributorTokenAmount: async (args) => {
-    const contributorTokenAmount = getContributorTokenAmount(fakeTurboSrcReposDB, args)
+    const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
 
     return contributorTokenAmount
   },
@@ -390,6 +390,7 @@ var root = {
     return pullRequestsDB[args.pr_id]
   },
   createRepo: async (args) => {
+    // name space server
     var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
     if (contributors.length == 1) {
       const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)

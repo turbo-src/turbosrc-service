@@ -1,11 +1,15 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-        postGetContributorTokenAmount,
-        postCreateRepo,
+        //postGetContributorTokenAmount,
+        //postCreateRepo,
         postGetContributorID,
         postGetContributorName,
       } = require('../../../src/utils/requests')
+const {
+        postGetContributorTokenAmount,
+        postCreateRepo,
+      } = require('../../../src/utils/privateStoreRequests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
@@ -26,6 +30,8 @@ describe('Create repo', function () {
     describe.only('Create repo', function () {
       it("Should do create repo", async () => {
         const contributor_name = await getGithubContributor()
+
+	//name space service
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
