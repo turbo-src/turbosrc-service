@@ -39,7 +39,7 @@ describe('Create repo', function () {
             /*contributor_name:*/ contributor_name,
         );
         await snooze(snooze_ms);
-        await postCreateRepo(
+        const resCreateRepo = await postCreateRepo(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "",
@@ -47,21 +47,27 @@ describe('Create repo', function () {
             /*side:*/ "",
         );
 
-        await snooze(snooze_ms);
-        const contributorTokenAmountRes = await postGetContributorTokenAmount(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
-            /*contributor:*/ contributor_id,
-            /*side:*/ "no",
-        );
+        //await snooze(snooze_ms);
+        //const contributorTokenAmountRes = await postGetContributorTokenAmount(
+        //    /*owner:*/ contributor_name,
+        //    /*repo:*/ "demo",
+        //    /*pr_id:*/ "issue_4",
+        //    /*contributor:*/ contributor_id,
+        //    /*side:*/ "no",
+        //);
 
-        const contributorTokenAmount = Number(contributorTokenAmountRes)
+        //const contributorTokenAmount = Number(contributorTokenAmountRes)
+
+        //assert.equal(
+        //    contributorTokenAmount,
+        //    1_000_000,
+        //    "Fail to get amount."
+        //);
 
         assert.equal(
-            contributorTokenAmount,
-            1_000_000,
-            "Fail to get amount."
+	    resCreateRepo,
+            "403",
+            "Fail to create repo."
         );
       });
     });
