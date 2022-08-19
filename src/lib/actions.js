@@ -17,10 +17,11 @@ const {
 const {
         postCreateRepo,
 	postGetContributorTokenAmount,
+        postTransferTokens,
       } = require('./../utils/privateStoreRequests')
 const { //createRepo,
         createTokenSupply,
-        transferTokens,
+        //transferTokens,
         setQuorum,
         newPullRequest,
         setContributorVotedTokens,
@@ -378,13 +379,16 @@ const root = {
     }
   },
   transferTokens: async (database, pullRequestsDB, args) => {
-    const restTransferTokens = await transferTokens(database, pullRequestsDB, args)
-    database = restTransferTokens.db
+    const restTransferTokens =
+        await postTransferTokens(
+          args.owner,
+          args.repo,
+          args.from,
+          args.to,
+          args.amount,
+        )
 
-    return {
-             pullRequestsDB: pullRequestsDB,
-             db: database
-    }
+    return resTransferTokens
   },
   createRepo: async (database, pullRequestsDB, args) => {
     const resCreateRepo =
