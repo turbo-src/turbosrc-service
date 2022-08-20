@@ -51,6 +51,10 @@ scripts/run-tests.sh \
 testing/gihtub-maker.sh
 ```
 
+## Install GihtubMakerTool
+
+https://github.com/turbo-src/GihtubMakerTools
+
 ## nixpkgs
 
 You only need to run this once or whenever you update your package.json.
@@ -64,6 +68,41 @@ Create a development environment.
 ```
 export NIXPKGS_ALLOW_INSECURE=1
 nix-shell -A shell
+```
+
+### Testing
+
+Launch the ain service in a nix shell
+
+```
+node server.js
+```
+
+In a seperate nix shell, launch the fork verification service.
+
+```
+node pullForkServer.js
+```
+
+***Make sure the privateStore is up an running.***
+
+If you're looking to progammatically create users
+
+```
+npm test testing/integration/privaterepo/createUser.js
+npm test testing/integration/privaterepo/createRepo.js
+```
+
+Otherwise, in order to login and tokenize
+
+```
+npm test testing/createUser.js
+```
+
+Transfer tokens test.
+
+```
+npm test testing/integration/privaterepo/transferTokens.js
 ```
 
 ## Docker
@@ -85,10 +124,6 @@ Create docker volume.
 ```
 docker volume create turbo-src-server-node-modules-data-volume
 ```
-
-#### Install GihtubMakerTool
-
-https://github.com/turbo-src/GihtubMakerTools
 
 ### Testing
 
