@@ -381,8 +381,8 @@ const root = {
   transferTokens: async (database, pullRequestsDB, args) => {
     const restTransferTokens =
         await postTransferTokens(
-          args.owner,
-          args.repo,
+          "",
+          `${args.owner}/${args.repo}`,
           args.from,
           args.to,
           args.amount,
