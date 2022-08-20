@@ -168,7 +168,7 @@ var root = {
    return json.data.getContributorSignature
   },
   postCreateRepo: async (owner, repo, issue_id, contributor_id, side) => {
-   superagent
+   const res = await superagent
      .post('http://localhost:4000/graphql')
      .send(
        //{ query: '{ name: 'Manny', species: 'cat' }' }
@@ -180,9 +180,12 @@ var root = {
        //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
      ) // sends a JSON post body
      .set('accept', 'json')
-     .end((err, res) => {
+     //.end((err, res) => {
        // Calling the end function will send the request
-     });
+     //});
+   const json = JSON.parse(res.text)
+   console.log(json)
+   return json.data.createRepo
   },
   postGetContributorTokenAmount: async (owner, repo, issue_id, contributor_id, side) => {
    const res = await superagent

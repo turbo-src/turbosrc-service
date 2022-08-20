@@ -20,7 +20,7 @@ var snooze_ms = 5000
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-describe('Create repo', function () {
+describe('Create users', function () {
     this.timeout(snooze_ms*24);
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
@@ -29,13 +29,7 @@ describe('Create repo', function () {
         //Gets it from .config.json
 
         const contributor_name = await getGithubContributor()
-        await snooze(snooze_ms);
-        const contributor_id = await postGetContributorID(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
-            /*contributor_name:*/ contributor_name,
-        );
+        const contributor_id = await getContributorAddress()
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",

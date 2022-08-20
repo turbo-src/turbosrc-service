@@ -1,15 +1,11 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-        //postGetContributorTokenAmount,
-        //postCreateRepo,
+        postGetContributorTokenAmount,
+        postCreateRepo,
         postGetContributorID,
         postGetContributorName,
       } = require('../../../src/utils/requests')
-const {
-        postGetContributorTokenAmount,
-        postCreateRepo,
-      } = require('../../../src/utils/privateStoreRequests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
@@ -40,8 +36,8 @@ describe('Create repo', function () {
         );
         await snooze(snooze_ms);
         const resCreateRepo = await postCreateRepo(
-            /*owner:*/ "",
-            /*repo:*/ `${contributor_name}/demo`,
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
             /*pr_id:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "",
@@ -49,23 +45,23 @@ describe('Create repo', function () {
 
         await snooze(snooze_ms);
         const contributorTokenAmount = await postGetContributorTokenAmount(
-            /*owner:*/ "",
-            /*repo:*/ `${contributor_name}/demo`,
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
             /*contributor:*/ contributor_id,
             /*side:*/ "no",
         );
 
         assert.equal(
-	    resCreateRepo,
-            201,
-            "Fail to create repo."
-        );
-
-        assert.equal(
             Number(contributorTokenAmount),
             1_000_000,
             "Fail to get amount."
+        );
+
+        assert.equal(
+	    Number(resCreateRepo),
+            201,
+            "Fail to create repo."
         );
       });
     });

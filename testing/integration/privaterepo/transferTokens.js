@@ -1,16 +1,11 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-        //postGetContributorTokenAmount,
-        //postTransferTokens,
+        postGetContributorTokenAmount,
+        postTransferTokens,
         postGetContributorID,
         postGetContributorName,
       } = require('../../../src/utils/requests')
-const {
-        postGetContributorTokenAmount,
-        postCreateRepo,
-        postTransferTokens,
-      } = require('../../../src/utils/privateStoreRequests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,

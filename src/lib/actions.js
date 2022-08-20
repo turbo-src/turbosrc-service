@@ -112,8 +112,8 @@ const root = {
     //const contributorTokenAmount = getContributorTokenAmount(database, args)
     const contributorTokenAmount =
         await postGetContributorTokenAmount(
-          args.owner,
-          args.repo_id,
+          "",
+          `${args.owner}/${args.repo}`,
           args.pr_id,
           args.contributor_id,
           args.side,
@@ -393,8 +393,8 @@ const root = {
   createRepo: async (database, pullRequestsDB, args) => {
     const resCreateRepo =
         await postCreateRepo(
-          args.owner,
-          args.repo,
+          "",
+          `${args.owner}/${args.repo}`,
           args.pr_id,
           args.contributor_id,
           args.side,

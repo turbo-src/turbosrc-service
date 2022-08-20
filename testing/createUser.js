@@ -9,28 +9,17 @@ const {
 
 const { Parser } = require('graphql/language/parser');
 
+const {
+        getContributorAddress,
+        getGithubContributor,
+      } = require('./../src/utils/config')
+
 var snooze_ms = 5000
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function getGithubContributor() {
-    const data = await fsPromises.readFile('.config.json')
-                       .catch((err) => console.error('Failed to read file', err));
-
-    let json = JSON.parse(data);
-    let user = json.github.user
-    if (user === undefined) {
-      throw new Error("Failed to load Github user " + user);
-
-    } else {
-      console.log("Successfully read Github " + user);
-    }
-
-    return user
-
-}
 
 describe('Create repo', function () {
     this.timeout(snooze_ms*24);
