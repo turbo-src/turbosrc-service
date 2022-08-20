@@ -51,6 +51,23 @@ scripts/run-tests.sh \
 testing/gihtub-maker.sh
 ```
 
+## nixpkgs
+
+You only need to run this once or whenever you update your package.json.
+
+```
+nod2nix
+```
+
+Create a development environment.
+
+```
+export NIXPKGS_ALLOW_INSECURE=1
+nix-shell -A shell
+```
+
+## Docker
+
 Build docker server image.
 
 ```
