@@ -40,21 +40,21 @@ describe('Voting.', function () {
 
         await snooze(snooze_ms);
         //user
-        await postSetVote(
+        const voteRes = await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
-        await snooze(snooze_ms);
-        const voteYesTotals = await postGetPRvoteYesTotals(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
-            /*contributor:*/ contributor_name,
-            /*side:*/ "yes",
-        );
+        //await snooze(snooze_ms);
+        //const voteYesTotals = await postGetPRvoteYesTotals(
+        //    /*owner:*/ contributor_name,
+        //    /*repo:*/ "demo",
+        //    /*pr_id:*/ "issue_1",
+        //    /*contributor:*/ contributor_name,
+        //    /*side:*/ "yes",
+        //);
         //await snooze(snooze_ms);
         //const voteNoTotals = await postGetPRvoteNoTotals(
         //    /*owner:*/ contributor_name,
@@ -106,10 +106,15 @@ describe('Voting.', function () {
 
         //console.log(status)
         assert.equal(
-            voteYesTotals,
-            '34',
-            "Fail to add votes yes."
+            voteRes,
+            "open",
+            "Fail to vote."
         );
+        //assert.equal(
+        //    voteYesTotals,
+        //    '34',
+        //    "Fail to add votes yes."
+        //);
         //assert.equal(
         //    voteNoTotals,
         //    '0',
