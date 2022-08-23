@@ -67,7 +67,7 @@ describe('Voting.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_1",
-            /*contributor:*/ contributor_name,
+            /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         //await snooze(snooze_ms);

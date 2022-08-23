@@ -97,17 +97,17 @@ const root = {
 
    return voteNo
   },
-  getPRvoteTotals: async function (database, args) {
-   const vote = await postGetPRvoteTotals(
-       args.owner,
-       `${args.owner}/${args.repo}`,
-       args.pr_id,
-       args.contributor_id,
-       "",
-   )
+  //getPRvoteTotals: async function (args) {
+  // const vote = await postGetPRvoteTotals(
+  //     args.owner,
+  //     `${args.owner}/${args.repo}`,
+  //     args.pr_id,
+  //     args.contributor_id,
+  //     "",
+  // )
 
-   return vote
-  },
+  // return vote
+  //},
   getContributorTokenAmount: async function(database, args) {
     //const contributorTokenAmount = getContributorTokenAmount(database, args)
     const contributorTokenAmount =

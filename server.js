@@ -273,19 +273,23 @@ var root = {
     return voteTotals.percentVotedQuorum
   },
   getPRvoteYesTotals: async (args) => {
-    const voteYesTotals = getPRvoteYesTotals(args)
+    const voteYesTotals = await getPRvoteYesTotals(args)
 
     return voteYesTotals
   },
   getPRvoteNoTotals: async (args) => {
-    const voteNoTotals = getPRvoteNoTotals(args)
+    const voteNoTotals = await getPRvoteNoTotals(args)
 
     return voteNoTotals
   },
   getPRvoteTotals: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    //return voteTotals.totalVotedTokens
-    return voteTotals.percentVotedQuorum
+    const voteYesTotals = await getPRvoteYesTotals(args)
+    const voteNoTotals = await getPRvoteNoTotals(args)
+  
+    var voteTotals = Number(voteYesTotals) + Number(voteNoTotals)
+    voteTotals = voteTotals/1_000_000
+
+    return `${voteTotals}`
   },
   getPRforkStatus: async (args) => {
     var res;
