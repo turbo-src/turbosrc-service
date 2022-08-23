@@ -86,6 +86,17 @@ const root = {
 
    return voteYes
   },
+  getPRvoteNoTotals: async function (args) {
+   const voteNo = postGetPRvoteNoTotals(
+       args.owner,
+       `${args.owner}/${args.repo}`,
+       args.pr_id,
+       args.contributor_id,
+       "",
+   )
+
+   return voteNo
+  },
   getPRvoteTotals: function (database, args) {
       const prID = args.pr_id.split('_')[1]
       //This is a little weird because it should

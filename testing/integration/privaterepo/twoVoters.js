@@ -55,14 +55,14 @@ describe('Voting.', function () {
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
-        //await snooze(snooze_ms);
-        //const voteNoTotals = await postGetPRvoteNoTotals(
-        //    /*owner:*/ contributor_name,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor_id:*/ "mary",
-        //    /*side:*/ "yes",
-        //);
+        await snooze(snooze_ms);
+        const voteNoTotals = await postGetPRvoteNoTotals(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_1",
+            /*contributor_id:*/ "mary",
+            /*side:*/ "yes",
+        );
         //const voteTotals = await postGetPRvoteTotals(
         //    /*owner:*/ contributor_name,
         //    /*repo:*/ "demo",
@@ -115,11 +115,11 @@ describe('Voting.', function () {
             '34000',
             "Fail to add votes yes."
         );
-        //assert.equal(
-        //    voteNoTotals,
-        //    '0',
-        //    "Fail to add votes no."
-        //);
+        assert.equal(
+            voteNoTotals,
+            '0',
+            "Fail to add votes no."
+        );
         //assert.equal(
         //    voteTotals,
         //    '0.034',

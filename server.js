@@ -13,6 +13,7 @@ const {
   transferTokens,
   getPRvoteTotals,
   getPRvoteYesTotals,
+  getPRvoteNoTotals,
   getPRvote,
   getPRvoteStatus,
   newPullRequest,
@@ -277,9 +278,9 @@ var root = {
     return voteYesTotals
   },
   getPRvoteNoTotals: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    return voteTotals.totalVotedNoTokens
-    //return voteTotals.percentVotedQuorum
+    const voteNoTotals = getPRvoteNoTotals(args)
+
+    return voteNoTotals
   },
   getPRvoteTotals: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
