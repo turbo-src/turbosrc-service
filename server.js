@@ -262,20 +262,7 @@ var root = {
     return JSON.stringify(pullRequestsDB)
   },
   getPRvoteStatus: async (args) => {
-    var status = getPRvoteStatus(fakeTurboSrcReposDB, args)
-    if (status === 'open' || status === 'none' ) {
-      const prID = (args.pr_id).split('_')[1]
-      const closeRes = checkRejectPullRequestHistory(pullRequestsVoteCloseHistory, args)
-      if (closeRes) {
-        status = 'closed'
-      }
-
-      const mergeRes = checkMergePullRequestHistory(pullRequestsVoteMergeHistory, args)
-
-      if (mergeRes) {
-        status = 'merge'
-      }
-    }
+    const status = await getPRvoteStatus(args)
 
     return status
   },
@@ -349,37 +336,9 @@ var root = {
     return "something"
   },
   setVote: async (args) => {
-    // Check user votes. If voted, don't set vote.
-    debugger
-    const votedTokens = getPRvote(fakeTurboSrcReposDB, args);
-    if ( votedTokens > 0) {
-      return "duplicate"
-    } else if (typeof votedTokens === 'undefined') {
+      const resultSetVote = await setVote(args)
 
-      // If vote not open, open it.
-      const voteStatus = await getPRvoteStatus(fakeTurboSrcReposDB, args);
-      if (voteStatus === 'none') {
-
-       const numberActivePullRequests = getActivePullRequestsCount(fakeTurboSrcReposDB, args)
-
-       //Fix: shouldn't make state changes in status check.
-
-       // Only allow to open the pull request for vote
-       // if there is no other active vote.
-       if (numberActivePullRequests === 0) {
-         const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
-
-         fakeTurboSrcReposDB = resNewPullRequest.db
-       pullRequestsDB = resNewPullRequest.pullRequestsDB
-       }
-      }
-
-      const resultSetVote = await setVote(fakeTurboSrcReposDB, pullRequestsDB, pullRequestsVoteCloseHistory, pullRequestsVoteMergeHistory, args)
-
-      fakeTurboSrcReposDB = resultSetVote.db
-      return resultSetVote.prVoteStatus
-    }
-
+      return resultSetVote
   },
   newPullRequest: async (args) => {
     const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)

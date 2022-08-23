@@ -13,11 +13,17 @@ const {
         postNewPullRequestTestDB,
         postSetContributorVotedTokensTestDB,
         postAddToTotalVotedYesTokensDB,
+	//postSetVote,
       } = require('./../utils/requests')
 const {
         postCreateRepo,
 	postGetContributorTokenAmount,
         postTransferTokens,
+        postSetVote,
+        postGetPRvoteStatus,
+        postGetPRvoteYesTotals,
+        postGetPRvoteNoTotals,
+        postGetPRvoteTotals,
       } = require('./../utils/privateStoreRequests')
 const { //createRepo,
         createTokenSupply,
@@ -39,7 +45,7 @@ const { //createRepo,
         addToTotalVotedTokens,
         addToTotalVotedYesTokens,
         addToTotalVotedNoTokens,
-        setVoteSide,
+        //setVoteSide,
         getOpenPullRequest,
         setOpenPullRequest,
         setTSrepoHead,
@@ -120,39 +126,15 @@ const root = {
         )
     return contributorTokenAmount
   },
-  getPRvoteStatus: function(database, args) {
-      const prID = args.pr_id.split('_')[1]
-
-      const tsPullRequest = getTSpullRequest(database, args)
-
-      if (tsPullRequest) {
-        // Check if pull is halted
-        // If no
-        const supply = getTokenSupply(database, args)
-        const quorum = getQuorum(database, args)
-
-        const totalVotedTokens = getTotalVotedTokens(database, args)
-        const percentVoted = totalVotedTokens/supply
-        var status;
-        if (percentVoted >= quorum) {
-          const voteTotals = module.exports.getPRvoteTotals(database, args)
-          const yesRatio = voteTotals.totalVotedYesTokens / voteTotals.totalVotedNoTokens
-          if (yesRatio > 1) {
-            status = 'merge'
-          } else {
-            status = 'closed'
-          }
-        } else {
-          status = 'open'
-        }
-      } else {
-        status = 'none'
-      }
-
-      //client.set(`vs-${prID}`, status)
-      console.log('198')
-      console.log(status)
-      console.log(database)
+  getPRvoteStatus: async function(args) {
+      const status =
+          await postGetPRvoteStatus(
+            args.owner,
+            `${args.owner}/${args.repo}`,
+            args.pr_id,
+            "",
+            "",
+         )
 
       return status
   },
@@ -216,112 +198,33 @@ const root = {
     //}
 
   },
-  setVote: async function(database, pullRequestsDB, pullRequestVoteCloseHistory, pullRequestVoteMergeHistory, args) {
-    const prID = (args.pr_id).split('_')[1]
-    var [_res, pullReqRepoHead] = await getPRhead(args)
-    const resultPullAndVoteStatus = await module.exports.pullAndVoteStatus(database, pullReqRepoHead, args)
-    database = resultPullAndVoteStatus.db
-    //other function
-
-    //const resultVoteStatus = await voteStatus(database, standardArgs)
-    //const prVoteStatusNow = resultVoteStatus.prVoteStatusNow
-    //const votedAlready = resultVoteStatus.votedAlready
-    //const openPullRequestStatus = resultVoteStatus.openPullRequestStatus
-    //const alreadyHead = resultVoteStatus.alreadyHead
-
-    if (resultPullAndVoteStatus.pullAndVoteStatus) {
-      console.log('128')
-      const tokens = getContributorTokens(database, args)
-      var pullRequest = getPullRequestFromHistory(pullRequestsDB, args)
-      console.log('130')
-      if (typeof pullRequest === 'undefined') {
-         //return some error
-      }
-
-      //database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens.contributorID = {}
-
-      await postSetContributorVotedTokensTestDB(
-        args.owner,
-        args.repo,
-        args.pr_id,
-        args.contributor_id,
-        "none",
-        0
-      )
-
-      //To be deprecated for above.
-      database = setContributorVotedTokens(database, args, 0, "none")
-
-      const resUpdatePRvoteStatus = await module.exports.updatePRvoteStatus(database,args, tokens)
-      database = resUpdatePRvoteStatus.db
-      const prVoteStatus = resUpdatePRvoteStatus.prVoteStatusUpdated
-
-      console.log('408')
-      console.log(prVoteStatus)
-      console.log(database)
-      // Add tokens to vote tally so we can get the new
-      // pull request vote status.
-      // Vote data to sent over the wire.
-      //const prVoteStatus = getPRvoteStatus(args);
-
-      var baseRepoName = args.repo
-      var baseRepoOwner = args.owner
-      const resGetPR = await getPullRequest(baseRepoOwner,baseRepoName, prID);
-      var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName,resGetPR.forkBranch, 0);
-      const baseDir = 'repos/' + args.repo;
-      //const pullForkDir = baseDir + '/' + pullReqRepoHead;
-
-      console.log('pullReqRepoHead ' + pullReqRepoHead);
-
+  setVote: async function(args) {
       //console.log('\nvote code:\n' + vote_code)
+      const resSetVote =
+	await postSetVote(
+          args.owner,
+          `${args.owner}/${args.repo}`,
+         args.pr_id,
+         args.contributor_id,
+         args.side,
+       )
+      
+    const prVoteStatus = module.exports.getPRvoteStatus(args)
 
-      ////If pull request doesn't exist, we have to make one to set a vote.
-      if (resGetPR !== 404 && pullReqRepoHead !== 404) {
-        const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
-        // If vote close it out, open it up for other PRs.
+      //
+      //if (Number(resSetVote) === 201) {
+      //        if (prVoteStatus === 'merged') {
+      //          await mergePullRequest(args.owner, args.repo, prID)
+      //        } else if (prVoteStatus === 'closed') {
+      //          // Add to history
+      //          pullRequestVoteCloseHistory = addToRejectPullRequestHistory(pullRequestVoteCloseHistory, args)
 
-        const closedMerge = (prVoteStatus === 'closed' || prVoteStatus === 'merge')
-        if (closedMerge) {
-          [_res,pullReqRepoHead] = await getPRhead(args)
-
-          // Update HEAD to repo.
-          await postSetTSrepoHeadTestDB(
-            args.owner,
-            args.repo,
-            args.pr_id,
-            args.contributor_id,
-            args.side,
-            pullReqRepoHead
-          )
-
-          //To be deprecated for above.
-          database = setTSrepoHead(database, args, pullReqRepoHead)
-
-          // Delete pull request from database
-          database = deleteTSpullRequest(database, args)
-          // Allow next pull request to be voted on.
-          setOpenPullRequest(database, args, '')
-          if (prVoteStatus === 'merge') {
-            // Add to history
-            pullRequestVoteMergeHistory = addToMergePullRequestHistory(pullRequestVoteMergeHistory, args)
-
-            await mergePullRequest(args.owner, args.repo, prID)
-          } else if (prVoteStatus === 'closed') {
-            // Add to history
-            pullRequestVoteCloseHistory = addToRejectPullRequestHistory(pullRequestVoteCloseHistory, args)
-
-            await closePullRequest(args.owner, args.repo, prID)
-          }
-        }
-      }
-    }
-
-    console.log('475')
-
-    return {
-             db: database,
-             prVoteStatus: module.exports.getPRvoteStatus(database, args)
-    }
+      //          await closePullRequest(args.owner, args.repo, prID)
+      //        }
+      //}
+	
+      
+    return prVoteStatus
   },
   updatePRvoteStatus: async function(database, args, tokens) {
     const prID = args.pr_id.split('_')[1]
