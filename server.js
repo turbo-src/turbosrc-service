@@ -12,6 +12,7 @@ const { update } = require('tar');
 const {
   transferTokens,
   getPRvoteTotals,
+  getPRvoteYesTotals,
   getPRvote,
   getPRvoteStatus,
   newPullRequest,
@@ -271,9 +272,9 @@ var root = {
     return voteTotals.percentVotedQuorum
   },
   getPRvoteYesTotals: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    return voteTotals.totalVotedYesTokens
-    //return voteTotals.percentVotedQuorum
+    const voteYesTotals = getPRvoteYesTotals(args)
+
+    return voteYesTotals
   },
   getPRvoteNoTotals: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
