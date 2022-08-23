@@ -63,13 +63,13 @@ describe('Voting.', function () {
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
-        //const voteTotals = await postGetPRvoteTotals(
-        //    /*owner:*/ contributor_name,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor:*/ contributor_name,
-        //    /*side:*/ "yes",
-        //);
+        const voteTotals = await postGetPRvoteTotals(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_1",
+            /*contributor:*/ contributor_name,
+            /*side:*/ "yes",
+        );
         //await snooze(snooze_ms);
         //const openStatus = await postGetPRvoteStatus(
         //    /*owner:*/ contributor_name,
@@ -120,11 +120,11 @@ describe('Voting.', function () {
             '0',
             "Fail to add votes no."
         );
-        //assert.equal(
-        //    voteTotals,
-        //    '0.034',
-        //    "Fail to add votes no."
-        //);
+        assert.equal(
+            voteTotals,
+            '0.03',
+            "Fail to add votes no."
+        );
         //assert.equal(
         //    openStatus,
         //    "open",

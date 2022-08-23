@@ -87,7 +87,7 @@ const root = {
    return voteYes
   },
   getPRvoteNoTotals: async function (args) {
-   const voteNo = postGetPRvoteNoTotals(
+   const voteNo = await postGetPRvoteNoTotals(
        args.owner,
        `${args.owner}/${args.repo}`,
        args.pr_id,
@@ -97,44 +97,16 @@ const root = {
 
    return voteNo
   },
-  getPRvoteTotals: function (database, args) {
-      const prID = args.pr_id.split('_')[1]
-      //This is a little weird because it should
-      //Already have a value but leaving here just
-      // in case. It will get resolved below.
-      var totalVotedTokens = 0;
-      var totalVotedYesTokens = 0;
-      var totalVotedNoTokens = 0;
+  getPRvoteTotals: async function (database, args) {
+   const vote = await postGetPRvoteTotals(
+       args.owner,
+       `${args.owner}/${args.repo}`,
+       args.pr_id,
+       args.contributor_id,
+       "",
+   )
 
-      const tsPullRequest = getTSpullRequest(database, args)
-
-      var percentVotedQuorum
-
-      if (tsPullRequest) {
-        // Check if pull is halted
-        // If no
-
-        const supply = getTokenSupply(database, args)
-        const quorum = getQuorum(database, args)
-
-        totalVotedTokens = getTotalVotedTokens(database, args)
-
-        totalVotedYesTokens = getTotalVotedYesTokens(database, args)
-
-        totalVotedNoTokens = getTotalVotedNoTokens(database, args)
-
-        percentVotedQuorum = totalVotedTokens/supply
-        c= totalVotedTokens/(supply*quorum)
-      } else {
-        "none"
-      }
-
-      return {
-        percentVotedQuorum: percentVotedQuorum,
-        totalVotedTokens: totalVotedTokens,
-        totalVotedYesTokens: totalVotedYesTokens,
-        totalVotedNoTokens: totalVotedNoTokens
-      }
+   return vote
   },
   getContributorTokenAmount: async function(database, args) {
     //const contributorTokenAmount = getContributorTokenAmount(database, args)
