@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const { postSetVote,
-        //postGetPRvoteStatus,
+        postGetPRvoteStatus,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
@@ -70,15 +70,15 @@ describe('Voting.', function () {
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
-        //await snooze(snooze_ms);
-        //const openStatus = await postGetPRvoteStatus(
-        //    /*owner:*/ contributor_name,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor:*/ contributor_name,
-        //    /*side:*/ "yes",
-        //);
-        //await snooze(snooze_ms);
+        await snooze(snooze_ms);
+        const openStatus = await postGetPRvoteStatus(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_1",
+            /*contributor:*/ contributor_name,
+            /*side:*/ "yes",
+        );
+        await snooze(snooze_ms);
 
         //const maryID = await postGetContributorID(
         //    /*owner:*/ contributor_name,
@@ -125,11 +125,11 @@ describe('Voting.', function () {
             '0.034',
             "Fail to add votes no."
         );
-        //assert.equal(
-        //    openStatus,
-        //    "open",
-        //    "Fail to stay open."
-        //);
+        assert.equal(
+            openStatus,
+            "open",
+            "Fail to stay open."
+        );
 
         //assert.equal(
         //    mergeStatus,
