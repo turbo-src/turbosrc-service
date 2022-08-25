@@ -80,29 +80,37 @@ describe('Voting.', function () {
         );
         await snooze(snooze_ms);
 
-        //const maryID = await postGetContributorID(
-        //    /*owner:*/ contributor_name,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_4",
-        //    /*contributor:*/ "mary",
-        //);
+        const maryID = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor:*/ "mary",
+        );
 
-        ////mary
-        //await postSetVote(
-        //    /*owner:*/ contributor_name,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor_id:*/ maryID,
-        //    /*side:*/ "yes",
-        //);
-        //await snooze(snooze_ms);
-        //const mergeStatus = await postGetPRvoteStatus(
-        //    /*owner:*/ contributor_name,
-        //    /*repo:*/ "demo",
-        //    /*pr_id:*/ "issue_1",
-        //    /*contributor_id:*/ "mary",
-        //    /*side:*/ "yes",
-        //);
+        //mary
+        await postSetVote(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_1",
+            /*contributor_id:*/ maryID,
+            /*side:*/ "yes",
+        );
+        await snooze(snooze_ms);
+        const mergeStatus = await postGetPRvoteStatus(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_1",
+            /*contributor_id:*/ maryID,
+            /*side:*/ "yes",
+        );
+
+        const voteTotalsFinal = await postGetPRvoteTotals(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_1",
+            /*contributor:*/ contributor_id,
+            /*side:*/ "yes",
+        );
 
         //console.log(status)
         assert.equal(
@@ -121,21 +129,24 @@ describe('Voting.', function () {
             "Fail to add votes no."
         );
         assert.equal(
-            voteTotals,
-            '0.034',
-            "Fail to add votes no."
+            voteTotals, '0.034', "Fail to add votes no."
         );
         assert.equal(
             openStatus,
             "open",
             "Fail to stay open."
         );
+        assert.equal(
+            voteTotalsFinal,
+            '0.534001',
+            "Fail to tally all votes."
+        );
 
-        //assert.equal(
-        //    mergeStatus,
-        //    "merge",
-        //    "Fail to merge even though it was voted in."
-        //);
+        assert.equal(
+            mergeStatus,
+            "merge",
+            "Fail to merge even though it was voted in."
+        );
       });
     });
 });
