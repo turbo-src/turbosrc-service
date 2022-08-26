@@ -18,6 +18,10 @@ const {
   getPRvoteStatus,
   newPullRequest,
   setVote,
+  createUser,
+  getContributorID,
+  getContributorName,
+  getContributorSignature,
   createRepo,
   getActivePullRequestsCount,
   getRepoStatus,
@@ -41,32 +45,6 @@ const {
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
-async function getContributorName(args) {
-    //const user = await getGithubUser();
-
-    // Get from api request to service.
-
-    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
-    console.log(nameSpaceDB)
-    if (contributors.length == 1) {
-      const contributor = contributors[0]
-      return contributor.name
-    } else {
-      return "none"
-    }
-  }
-
-async function getContributorID(args) {
-
-    var contributors = getContributorsByName(nameSpaceDB.contributors, args.contributor_name)
-    console.log(nameSpaceDB)
-    if (contributors.length == 1) {
-      const contributor = contributors[0]
-      return contributor.id
-    } else {
-      return "none"
-    }
-}
 
 async function getGithubUser() {
     const data = await fsPromises.readFile('/usr/src/app/.config.json')
@@ -185,38 +163,20 @@ var root = {
   //  return pullRequestsDB[args.contributor_id]
   //},
   createUser: async (args) => {
-    // Only people with database readwrite can use this (e.g. blockchain accounts), so need
-    // to look up the account address. Assumes they exist.
-
-    //const user = await getGithubUser();
-
-    // Get from api request to service.
-
-    // Check if name exists
-    var contributors = getContributorsByName(nameSpaceDB.contributors, args.contributor_name)
-    if (contributors.length == 0) {
-      const contributor = {'id': args.contributor_id, 'signature': args.contributor_signature, 'name': args.contributor_name}
-      nameSpaceDB.contributors.push(contributor)
-    }
-    console.log(nameSpaceDB)
+    const res = await createUser(args)
+    return res
   },
   getContributorName: async (args) => {
-    return await getContributorName(args)
+    const res = getContributorName(args)
+    return res
   },
   getContributorID: async (args) => {
-    return await getContributorID(args)
+    const res =  await getContributorID(args)
+    return res
   },
   getContributorSignature: async (args) => {
-    //const user = await getGithubUser();
-
-    // Get from api request to service.
-    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
-    if (contributors.length == 1) {
-      const contributor = contributors[0]
-      return contributor.signature
-    } else {
-      return "none"
-    }
+    const res = await getContributorSignature(args)
+    return res
   },
   getContributorTokenAmount: async (args) => {
     const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)

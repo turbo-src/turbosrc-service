@@ -25,6 +25,11 @@ const {
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
       } = require('./../utils/privateStoreRequests')
+const {
+        postCreateUser,
+        postGetContributorID,
+        postGetContributorName,
+      } = require('./../utils/nameSpaceRequests')
 const { //createRepo,
         createTokenSupply,
         //transferTokens,
@@ -286,6 +291,64 @@ const root = {
         )
 
     return resTransferTokens
+  },
+  createUser: async (args) => {
+    debugger
+    const resCreateUser =
+        await postCreateUser(
+          "",
+	  "",
+	  args.contributor_id,
+	  args.contributor_name,
+	  args.contributor_signature,
+        )
+
+    // May need to implement in privateStore
+    //database = setTSrepoHead(database, args, head)
+
+    return resCreateUser
+  },
+  getContributorName: async (args) => {
+    const resGetContributorName =
+        await postGetContributorName(
+          "",
+	  "",
+	  "",
+	  args.contributor_id,
+        )
+
+    // May need to implement in privateStore
+    //database = setTSrepoHead(database, args, head)
+
+    return resGetContributorName
+  },
+  getContributorID: async (args) => {
+    const resGetContributorID =
+        await postGetContributorID(
+          "",
+	  "",
+	  "",
+	  args.contributor_name,
+        )
+
+    // May need to implement in privateStore
+    //database = setTSrepoHead(database, args, head)
+
+    return resGetContributorID
+  },
+  getContributorSignature: async (args) => {
+    const resGetContributorSignature =
+        await postGetContributorSignature(
+          "",
+	  "",
+	  "",
+	  args.contributor_id,
+        )
+
+    // May need to implement in privateStore
+    //database = setTSrepoHead(database, args, head)
+
+    return resGetContributorSignature
   },
   createRepo: async (database, pullRequestsDB, args) => {
     const resCreateRepo =
