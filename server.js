@@ -316,14 +316,9 @@ var root = {
   },
   createRepo: async (args) => {
     // name space server
-    var contributors = getContributorsByContributorID(nameSpaceDB.contributors, args.contributor_id)
-    if (contributors.length == 1) {
       const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
-      return resCreateRepo //pullRequestsDB[args.pr_id]
-    } else {
-       return "none"
-    }
 
+      return resCreateRepo
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
