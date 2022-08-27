@@ -24,6 +24,8 @@ const {
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
+        postGetAuthorizedContributor,
+	postGetRepoStatus,
       } = require('./../utils/privateStoreRequests')
 const {
         postCreateUser,
@@ -59,7 +61,7 @@ const { //createRepo,
         addToMergePullRequestHistory,
         addToRejectPullRequestHistory,
         getPullRequestFromHistory,
-        getRepoStatus,
+        //getRepoStatus,
         checkContributor,
         checkMergePullRequestHistory,
         checkRejectPullRequestHistory,
@@ -396,20 +398,26 @@ const root = {
     return numberActivePullRequests
 
   },
-  getRepoStatus: function(database, args) {
-    const status = getRepoStatus(database, args)
+  getRepoStatus: async function(args) {
+    const res =
+	await postGetRepoStatus(
+           `${args.owner}/${args.repo}`,
+        )
 
-    return status
+    return true
   },
   getContributors: function(database, args) {
     const status = getRepoStatus(database, args)
 
     return status
   },
-  checkContributor: function(database, args) {
-    const contributor_exists = checkContributor(database, args)
-
-    return contributor_exists
+  getAuthorizedContributor: async function(args) {
+    const res =
+        await postGetAuthorizedContributor(
+          args.contributor_id,
+          `${args.owner}/${args.repo}`,
+        )
+    return res
   },
   checkMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
     const status = checkMergePullRequestHistory(pullRequestVoteMergeHistory, args)

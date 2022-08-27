@@ -1,5 +1,5 @@
-docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
-docker-compose -f docker/docker-compose.yml up -d
+#docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
+#docker-compose -f docker/docker-compose.yml up -d
 # Copy overwrite .config to where it's needed.
 # Can't reach file outside of testing dir
 # for some reason.

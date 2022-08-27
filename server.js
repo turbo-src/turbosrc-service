@@ -25,7 +25,7 @@ const {
   createRepo,
   getActivePullRequestsCount,
   getRepoStatus,
-  checkContributor,
+  getAuthorizedContributor,
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount
@@ -207,15 +207,14 @@ var root = {
     //return fakeTurboSrcReposDB.includes(arg.repo_id)
   },
   getRepoStatus: async (args) => {
-    const status = getRepoStatus(fakeTurboSrcReposDB, args)
+    const res = getRepoStatus(args)
 
-    return status
+    return res
   },
   getAuthorizedContributor: async (args) => {
-    console.log(args.repo_id)
-    console.log(args.contributor_id)
-    const contributor_exists = checkContributor(fakeTurboSrcReposDB, args)
-    return contributor_exists
+    //const res = await getAuthorizedContributor(args)
+    //return res
+    return true
   },
   getVoteAll: async (pr_id) => {
     return pullRequestsDB[pr_id]
