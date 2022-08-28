@@ -212,9 +212,9 @@ var root = {
     return res
   },
   getAuthorizedContributor: async (args) => {
-    //const res = await getAuthorizedContributor(args)
-    //return res
-    return true
+    const res = await getAuthorizedContributor(args)
+
+    return res
   },
   getVoteAll: async (pr_id) => {
     return pullRequestsDB[pr_id]

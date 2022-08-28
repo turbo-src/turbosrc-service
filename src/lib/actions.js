@@ -404,7 +404,11 @@ const root = {
            `${args.owner}/${args.repo}`,
         )
 
-    return true
+    if (res === 200) {
+      return true
+    } else {
+      return false
+    }
   },
   getContributors: function(database, args) {
     const status = getRepoStatus(database, args)
