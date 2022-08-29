@@ -1,6 +1,6 @@
 const superagent = require("superagent");
 
-const port = "http://localhost:4002";
+const privateStore = "https://private-store.fly.dev/graphql";
 
 var root = {
   postCreateUser: async (
@@ -11,7 +11,7 @@ var root = {
     contributor_signature
   ) => {
     superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}") }`,
       })
@@ -24,7 +24,7 @@ var root = {
   },
   postCreateRepo: async (owner, repo, pr_id, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ createRepo(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
@@ -41,7 +41,7 @@ var root = {
     /*title:*/ title
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", fork_branch: "${fork_branch}", pr_id: "${pr_id}", title: "${title}") }`,
       })
@@ -52,7 +52,7 @@ var root = {
   },
   postGetContributorName: async (owner, repo, pr_id, contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getContributorName(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}") }`,
       })
@@ -66,7 +66,7 @@ var root = {
   },
   postGetContributorID: async (owner, repo, pr_id, contributor_name) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getContributorID(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
       })
@@ -79,7 +79,7 @@ var root = {
   },
   postGetContributorSignature: async (owner, repo, pr_id, contributor_name) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
       })
@@ -92,7 +92,7 @@ var root = {
   },
   postGetRepoStatus: async (repo_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getRepoStatus(repo_id: "${repo_id}") }`,
       })
@@ -105,7 +105,7 @@ var root = {
   },
   postGetAuthorizedContributor: async (contributor_id, repo_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
       })
@@ -124,7 +124,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       }) // sends a JSON post body
@@ -137,7 +137,7 @@ var root = {
   },
   postTransferTokens: async (owner, repo, from, to, amount) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: "${amount}") }`,
       }) // sends a JSON post body
@@ -150,7 +150,7 @@ var root = {
   },
   postSetVote: async (owner, repo, pr_id, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ setVote(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
@@ -163,7 +163,7 @@ var root = {
   },
   postGetPRvoteStatus: async (owner, repo, pr_id, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getPRvoteStatus(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
@@ -176,7 +176,7 @@ var root = {
   },
   postSetQuorum: async (repo, contributor_id, quorum) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ setQuorum(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`,
       })
@@ -189,7 +189,7 @@ var root = {
   },
   postGetQuorum: async (repo) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getQuorum(repo: "${repo}") }`,
       })
@@ -202,7 +202,7 @@ var root = {
   },
   postGetPRvoteTotals: async (owner, repo, pr_id, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
@@ -215,7 +215,7 @@ var root = {
   },
   postGetPRvoteYesTotals: async (owner, repo, pr_id, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
@@ -228,7 +228,7 @@ var root = {
   },
   postGetPRvoteNoTotals: async (owner, repo, pr_id, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
