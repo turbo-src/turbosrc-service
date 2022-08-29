@@ -3,9 +3,9 @@ services:
   turbo-src-server:
     image: turbo-src-server:0.0.1
     ports:
-      - 4000:8080
+      - 4000:4000
     expose:
-      - "8080"
+      - "4000"
     env_file:
       - service.env
     volumes:
@@ -16,9 +16,9 @@ services:
   turbo-src-pfserver:
     image: turbo-src-server:0.0.1
     ports:
-      - 4001:8080
+      - 4001:4001
     expose:
-      - "8080"
+      - "4001"
     env_file:
       - service.env
     volumes:
