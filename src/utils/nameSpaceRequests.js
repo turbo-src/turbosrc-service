@@ -1,6 +1,6 @@
 const superagent = require("superagent");
 
-const namespaceUrl = "https://private-store.fly.dev/graphql";
+const namespaceUrl = "https://namespace-db.fly.dev/graphql";
 
 var root = {
   postCreateUser: async (
