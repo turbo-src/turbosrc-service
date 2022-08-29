@@ -401,14 +401,10 @@ const root = {
   getRepoStatus: async function(args) {
     const res =
 	await postGetRepoStatus(
-           `${args.owner}/${args.repo}`,
+           `${args.repo_id}`,
         )
 
-    if (res === 200) {
-      return true
-    } else {
-      return false
-    }
+    return res
   },
   getContributors: function(database, args) {
     const status = getRepoStatus(database, args)
