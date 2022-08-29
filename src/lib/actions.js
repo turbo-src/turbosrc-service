@@ -415,7 +415,7 @@ const root = {
     const res =
         await postGetAuthorizedContributor(
           args.contributor_id,
-          `${args.owner}/${args.repo}`,
+          args.repo_id,
         )
     return res
   },
