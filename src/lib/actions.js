@@ -1,108 +1,110 @@
-const { getPRhead } = require('./../utils/pullForkUtil');
+const { getPRhead } = require("./../utils/pullForkUtil");
 const {
   getPullRequest,
   mergePullRequest,
-  closePullRequest
- } = require('./../utils/gitHubUtil');
-const { gitHeadUtil } = require('./../utils/gitHeadUtil');
+  closePullRequest,
+} = require("./../utils/gitHubUtil");
+const { gitHeadUtil } = require("./../utils/gitHeadUtil");
 const {
-        postCreateRepoTestDB,
-        postCreateTokenSupplyTestDB,
-        postSetTSrepoHeadTestDB,
-        postSetQuorumTestDB,
-        postNewPullRequestTestDB,
-        postSetContributorVotedTokensTestDB,
-        postAddToTotalVotedYesTokensDB,
-	//postSetVote,
-      } = require('./../utils/requests')
+  postCreateRepoTestDB,
+  postCreateTokenSupplyTestDB,
+  postSetTSrepoHeadTestDB,
+  postSetQuorumTestDB,
+  postNewPullRequestTestDB,
+  postSetContributorVotedTokensTestDB,
+  postAddToTotalVotedYesTokensDB,
+  //postSetVote,
+} = require("./../utils/requests");
 const {
-        postCreateRepo,
-	postGetContributorTokenAmount,
-        postTransferTokens,
-        postSetVote,
-        postGetPRvoteStatus,
-        postGetPRvoteYesTotals,
-        postGetPRvoteNoTotals,
-        postGetPRvoteTotals,
-        postGetAuthorizedContributor,
-	postGetRepoStatus,
-      } = require('./../utils/privateStoreRequests')
+  postCreateRepo,
+  postGetContributorTokenAmount,
+  postTransferTokens,
+  postSetVote,
+  postGetPRvoteStatus,
+  postGetPRvoteYesTotals,
+  postGetPRvoteNoTotals,
+  postGetPRvoteTotals,
+  postGetAuthorizedContributor,
+  postGetRepoStatus,
+} = require("./../utils/privateStoreRequests");
 const {
-        postCreateUser,
-        postGetContributorID,
-        postGetContributorName,
-      } = require('./../utils/nameSpaceRequests')
-const { //createRepo,
-        createTokenSupply,
-        //transferTokens,
-        setQuorum,
-        newPullRequest,
-        setContributorVotedTokens,
-        getContributorTokens,
-        getTSpullRequest,
-        getAllTSpullRequests,
-        deleteTSpullRequest,
-        getContributorVotedTokens,
-        getAllVotedTokens,
-        getQuorum,
-        getTokenSupply,
-        getTotalVotedTokens,
-        getTotalVotedYesTokens,
-        getTotalVotedNoTokens,
-        addToTotalVotedTokens,
-        addToTotalVotedYesTokens,
-        addToTotalVotedNoTokens,
-        //setVoteSide,
-        getOpenPullRequest,
-        setOpenPullRequest,
-        setTSrepoHead,
-        getTSrepoHead,
-        setPullRequestStatus,
-        addToMergePullRequestHistory,
-        addToRejectPullRequestHistory,
-        getPullRequestFromHistory,
-        //getRepoStatus,
-        checkContributor,
-        checkMergePullRequestHistory,
-        checkRejectPullRequestHistory,
-        //getContributorTokenAmount
- } = require('./state');
+  postCreateUser,
+  postGetContributorID,
+  postGetContributorName,
+  postGetContributorSignature,
+} = require("./../utils/nameSpaceRequests");
+const {
+  //createRepo,
+  createTokenSupply,
+  //transferTokens,
+  setQuorum,
+  newPullRequest,
+  setContributorVotedTokens,
+  getContributorTokens,
+  getTSpullRequest,
+  getAllTSpullRequests,
+  deleteTSpullRequest,
+  getContributorVotedTokens,
+  getAllVotedTokens,
+  getQuorum,
+  getTokenSupply,
+  getTotalVotedTokens,
+  getTotalVotedYesTokens,
+  getTotalVotedNoTokens,
+  addToTotalVotedTokens,
+  addToTotalVotedYesTokens,
+  addToTotalVotedNoTokens,
+  //setVoteSide,
+  getOpenPullRequest,
+  setOpenPullRequest,
+  setTSrepoHead,
+  getTSrepoHead,
+  setPullRequestStatus,
+  addToMergePullRequestHistory,
+  addToRejectPullRequestHistory,
+  getPullRequestFromHistory,
+  //getRepoStatus,
+  checkContributor,
+  checkMergePullRequestHistory,
+  checkRejectPullRequestHistory,
+  //getContributorTokenAmount
+} = require("./state");
 
 const root = {
   // Also a root 'methods' in graphql query, by the same name
   getPRvote: function (database, args) {
-    const prID = args.pr_id.split('_')[1]
+    const prID = args.pr_id.split("_")[1];
 
-    const tsPullRequest = getTSpullRequest(database, args)
+    const tsPullRequest = getTSpullRequest(database, args);
 
-    if (typeof tsPullRequest === 'undefined') {
-      return undefined
+    if (typeof tsPullRequest === "undefined") {
+      return undefined;
     } else {
-      const votedTokens = getContributorVotedTokens(database, args)
-      return votedTokens
+      const votedTokens = getContributorVotedTokens(database, args);
+      return votedTokens;
     }
   },
   getPRvoteYesTotals: async function (args) {
-   const voteYes = postGetPRvoteYesTotals(
-       args.owner,
-       `${args.owner}/${args.repo}`,
-       args.pr_id,
-       args.contributor_id,
-       "",
-   )
+    const voteYes = postGetPRvoteYesTotals(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      args.contributor_id,
+      ""
+    );
 
-   return voteYes
+    return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
-   const voteNo = await postGetPRvoteNoTotals(
-       args.owner,
-       `${args.owner}/${args.repo}`,
-       args.pr_id,
-       args.contributor_id,
-       "",
-   )
+    const voteNo = await postGetPRvoteNoTotals(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      args.contributor_id,
+      ""
+    );
 
-   return voteNo
+    return voteNo;
   },
   //getPRvoteTotals: async function (args) {
   // const vote = await postGetPRvoteTotals(
@@ -115,89 +117,91 @@ const root = {
 
   // return vote
   //},
-  getContributorTokenAmount: async function(database, args) {
+  getContributorTokenAmount: async function (database, args) {
     //const contributorTokenAmount = getContributorTokenAmount(database, args)
-    const contributorTokenAmount =
-        await postGetContributorTokenAmount(
-          "",
-          `${args.owner}/${args.repo}`,
-          args.pr_id,
-          args.contributor_id,
-          args.side,
-        )
-    return contributorTokenAmount
+    const contributorTokenAmount = await postGetContributorTokenAmount(
+      "",
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      args.contributor_id,
+      args.side
+    );
+    return contributorTokenAmount;
   },
-  getPRvoteStatus: async function(args) {
-      const status =
-          await postGetPRvoteStatus(
-            args.owner,
-            `${args.owner}/${args.repo}`,
-            args.pr_id,
-            "",
-            "",
-         )
+  getPRvoteStatus: async function (args) {
+    const status = await postGetPRvoteStatus(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      "",
+      ""
+    );
 
-      return status
+    return status;
   },
-  pullAndVoteStatus: async function(database, pullReqRepoHead, args) {
-    const prID = (args.pr_id).split('_')[1]
+  pullAndVoteStatus: async function (database, pullReqRepoHead, args) {
+    const prID = args.pr_id.split("_")[1];
     var votedAlready;
 
-    const activePullRequests = getAllTSpullRequests(database, args)
-    const numberActivePullRequests = Object.keys(activePullRequests).length
+    const activePullRequests = getAllTSpullRequests(database, args);
+    const numberActivePullRequests = Object.keys(activePullRequests).length;
 
     //Fix: shouldn't make state changes in status check.
     if (numberActivePullRequests === 0) {
-       database = setOpenPullRequest(database, args, prID)
+      database = setOpenPullRequest(database, args, prID);
     }
-    const openPullRequest = getOpenPullRequest(database,args)
+    const openPullRequest = getOpenPullRequest(database, args);
 
-    const tokens = getContributorTokens(database, args)
+    const tokens = getContributorTokens(database, args);
 
     // We can only use the function if there asking for about a
     // specific pull request.
-    console.log('owner ' + args.owner)
-    console.log('repo ' + args.repo)
-    console.log('pr_id ' + prID)
-    console.log('tokens ' + tokens)
+    console.log("owner " + args.owner);
+    console.log("repo " + args.repo);
+    console.log("pr_id " + prID);
+    console.log("tokens " + tokens);
 
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args)
-    if (prVoteStatusNow === 'none') {
-       votedAlready = false
+    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
+    if (prVoteStatusNow === "none") {
+      votedAlready = false;
     } else {
-      const allVotedTokens = getAllVotedTokens(database, args)
-      votedAlready = Object.keys(allVotedTokens).includes(args.contributor_id)
-      console.log(args.contributor_id + ' voted already: ' + votedAlready)
+      const allVotedTokens = getAllVotedTokens(database, args);
+      votedAlready = Object.keys(allVotedTokens).includes(args.contributor_id);
+      console.log(args.contributor_id + " voted already: " + votedAlready);
     }
 
-    const openPullRequestStatus = (openPullRequest === prID || openPullRequest === '');
+    const openPullRequestStatus =
+      openPullRequest === prID || openPullRequest === "";
 
-    console.log('op pr status: ' + openPullRequestStatus)
+    console.log("op pr status: " + openPullRequestStatus);
 
-    const alreadyHead = (pullReqRepoHead === getTSrepoHead(database, args))
+    const alreadyHead = pullReqRepoHead === getTSrepoHead(database, args);
 
-    console.log('pullReqHead')
-    console.log(pullReqRepoHead)
-    console.log(getTSrepoHead(database, args))
-    console.log(alreadyHead)
+    console.log("pullReqHead");
+    console.log(pullReqRepoHead);
+    console.log(getTSrepoHead(database, args));
+    console.log(alreadyHead);
 
-    console.log("s 391")
-    const closedMerge = (prVoteStatusNow === 'closed' || prVoteStatusNow === 'merge')
-    console.log((!closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead))
+    console.log("s 391");
+    const closedMerge =
+      prVoteStatusNow === "closed" || prVoteStatusNow === "merge";
+    console.log(
+      !closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead
+    );
 
-    const pullAndVoteStatus = (!closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead)
+    const pullAndVoteStatus =
+      !closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead;
 
     return {
       pullAndVoteStatus: pullAndVoteStatus,
-      db: database
-    }
+      db: database,
+    };
     //return {
     //         prVoteStatusNow: prVoteStatusNow,
     //         votedAlready: votedAlready,
     //         openPullRequestStatus: openPullRequestStatus,
     //         alreadyHead: alreadyHead
     //}
-
   },
   setVote: async function (args) {
     //console.log('\nvote code:\n' + vote_code)
@@ -225,13 +229,13 @@ const root = {
 
     return resSetVote;
   },
-  updatePRvoteStatus: async function(database, args, tokens) {
-    const prID = args.pr_id.split('_')[1]
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args)
-    console.log(database)
-    prVoteStatusUpdated = prVoteStatusNow
+  updatePRvoteStatus: async function (database, args, tokens) {
+    const prID = args.pr_id.split("_")[1];
+    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
+    console.log(database);
+    prVoteStatusUpdated = prVoteStatusNow;
 
-    if (prVoteStatusNow === 'open') {
+    if (prVoteStatusNow === "open") {
       await postSetContributorVotedTokensTestDB(
         args.owner,
         args.repo,
@@ -239,19 +243,18 @@ const root = {
         args.contributor_id,
         args.side,
         tokens
-      )
+      );
 
       //To be deprecated for above.
-      database = setContributorVotedTokens(database, args, tokens, args.side)
+      database = setContributorVotedTokens(database, args, tokens, args.side);
 
-      console.log('upr 212')
+      console.log("upr 212");
 
-      database = setVoteSide(database, args)
+      database = setVoteSide(database, args);
 
       //Add yes and not votes to tally.
-      database = addToTotalVotedTokens(database, args, tokens)
+      database = addToTotalVotedTokens(database, args, tokens);
       if (args.side === "yes") {
-
         await postAddToTotalVotedYesTokensDB(
           args.owner,
           args.repo,
@@ -259,26 +262,26 @@ const root = {
           args.contributor_id,
           args.side,
           tokens
-        )
+        );
 
         //To be deprecated for above.
-        database = addToTotalVotedYesTokens(database, args, tokens)
+        database = addToTotalVotedYesTokens(database, args, tokens);
       } else {
-        database = addToTotalVotedNoTokens(database, args, tokens)
+        database = addToTotalVotedNoTokens(database, args, tokens);
       }
 
-      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args)
+      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args);
 
-      database = setPullRequestStatus(database, args, prVoteStatusUpdated)
+      database = setPullRequestStatus(database, args, prVoteStatusUpdated);
 
-      console.log('upr 228')
+      console.log("upr 228");
     }
 
     // Maybe should have index increment to know if updated or not
     return {
-             db: database,
-             prVoteStatusUpdated: prVoteStatusUpdated
-    }
+      db: database,
+      prVoteStatusUpdated: prVoteStatusUpdated,
+    };
   },
   transferTokens: async (database, pullRequestsDB, args) => {
     const resTransferTokens =
@@ -305,7 +308,7 @@ const root = {
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
-    return resCreateUser
+    return resCreateUser;
   },
   getContributorName: async (args) => {
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
@@ -316,61 +319,62 @@ const root = {
 	  "",
 	  args.contributor_id,
         )
-
   
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
-    return resGetContributorName
+    return resGetContributorName;
   },
   getContributorID: async (args) => {
-    const resGetContributorID =
-        await postGetContributorID(
-          "",
-	  "",
-	  "",
-	  args.contributor_name,
-        )
+    const resGetContributorID = await postGetContributorID(
+      "",
+      "",
+      "",
+      args.contributor_name
+    );
 
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
-    return resGetContributorID
+    return resGetContributorID;
   },
   getContributorSignature: async (args) => {
-    const resGetContributorSignature =
-        await postGetContributorSignature(
-          "",
-	  "",
-	  "",
-	  args.contributor_id,
-        )
+    const resGetContributorSignature = await postGetContributorSignature(
+      "",
+      "",
+      "",
+      args.contributor_id
+    );
 
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
-    return resGetContributorSignature
+    return resGetContributorSignature;
   },
   createRepo: async (database, pullRequestsDB, args) => {
-    const resCreateRepo =
-        await postCreateRepo(
-          "",
-          `${args.owner}/${args.repo}`,
-          args.pr_id,
-          args.contributor_id,
-          args.side,
-	  // args.head?
-        )
+    const resCreateRepo = await postCreateRepo(
+      "",
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      args.contributor_id,
+      args.side
+      // args.head?
+    );
 
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
-    return resCreateRepo
+    return resCreateRepo;
   },
   newPullRequest: async (database, pullRequestsDB, args) => {
-    const prVoteStatus = module.exports.getPRvoteStatus(database, args)
+    const prVoteStatus = module.exports.getPRvoteStatus(database, args);
 
-    const resNewPullRequest = newPullRequest(database, pullRequestsDB, args, prVoteStatus)
+    const resNewPullRequest = newPullRequest(
+      database,
+      pullRequestsDB,
+      args,
+      prVoteStatus
+    );
 
     await postNewPullRequestTestDB(
       args.owner,
@@ -379,55 +383,56 @@ const root = {
       args.contributor_id,
       args.side,
       prVoteStatus
-    )
+    );
 
     //To be deprecated for above.
-    database = resNewPullRequest.db
-    pullRequestsDB = resNewPullRequest.pullRequestsDB
+    database = resNewPullRequest.db;
+    pullRequestsDB = resNewPullRequest.pullRequestsDB;
 
     return {
-             pullRequestsDB: pullRequestsDB,
-             db: database
-    }
+      pullRequestsDB: pullRequestsDB,
+      db: database,
+    };
   },
-  getActivePullRequestsCount: function(database, args) {
-    const activePullRequests = getAllTSpullRequests(database, args)
-    const numberActivePullRequests = Object.keys(activePullRequests).length
+  getActivePullRequestsCount: function (database, args) {
+    const activePullRequests = getAllTSpullRequests(database, args);
+    const numberActivePullRequests = Object.keys(activePullRequests).length;
 
-    return numberActivePullRequests
-
+    return numberActivePullRequests;
   },
-  getRepoStatus: async function(args) {
-    const res =
-	await postGetRepoStatus(
-           `${args.repo_id}`,
-        )
+  getRepoStatus: async function (args) {
+    const res = await postGetRepoStatus(`${args.repo_id}`);
 
-    return res
+    return res;
   },
-  getContributors: function(database, args) {
-    const status = getRepoStatus(database, args)
+  getContributors: function (database, args) {
+    const status = getRepoStatus(database, args);
 
-    return status
+    return status;
   },
-  getAuthorizedContributor: async function(args) {
-    const res =
-        await postGetAuthorizedContributor(
-          args.contributor_id,
-          args.repo_id,
-        )
-    return res
+  getAuthorizedContributor: async function (args) {
+    const res = await postGetAuthorizedContributor(
+      args.contributor_id,
+      args.repo_id
+    );
+    return res;
   },
-  checkMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
-    const status = checkMergePullRequestHistory(pullRequestVoteMergeHistory, args)
+  checkMergePullRequestHistory: function (pullRequestVoteMergeHistory, args) {
+    const status = checkMergePullRequestHistory(
+      pullRequestVoteMergeHistory,
+      args
+    );
 
-    return status
+    return status;
   },
-  checkRejectPullRequestHistory: function(pullRequestVoteCloseHistory, args) {
-    const status = checkRejectPullRequestHistory(pullRequestVoteCloseHistory, args)
+  checkRejectPullRequestHistory: function (pullRequestVoteCloseHistory, args) {
+    const status = checkRejectPullRequestHistory(
+      pullRequestVoteCloseHistory,
+      args
+    );
 
-    return status
+    return status;
   },
 };
 
-module.exports = root
+module.exports = root;
