@@ -188,6 +188,7 @@ var root = {
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
    console.log("to: " + args.to)
+    // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
    const contributorName = await getContributorName(
      {contributor_id: args.to}
     )
