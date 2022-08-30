@@ -199,33 +199,31 @@ const root = {
     //}
 
   },
-  setVote: async function(args) {
-      //console.log('\nvote code:\n' + vote_code)
-      const resSetVote =
-	await postSetVote(
-          args.owner,
-          `${args.owner}/${args.repo}`,
-         args.pr_id,
-         args.contributor_id,
-         args.side,
-       )
-      
-    const prVoteStatus = module.exports.getPRvoteStatus(args)
+  setVote: async function (args) {
+    //console.log('\nvote code:\n' + vote_code)
+    const resSetVote = await postSetVote(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      args.contributor_id,
+      args.side
+    );
 
-      //
-      //if (Number(resSetVote) === 201) {
-      //        if (prVoteStatus === 'merged') {
-      //          await mergePullRequest(args.owner, args.repo, prID)
-      //        } else if (prVoteStatus === 'closed') {
-      //          // Add to history
-      //          pullRequestVoteCloseHistory = addToRejectPullRequestHistory(pullRequestVoteCloseHistory, args)
+   // Marginal vote that exceeded quorum, vote yes was majority.
+    const prVoteStatus = await postGetPRvoteStatus(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.pr_id,
+      args.contributor_id,
+      args.side
+    ); // merge
 
-      //          await closePullRequest(args.owner, args.repo, prID)
-      //        }
-      //}
-	
-      
-    return prVoteStatus
+    if (prVoteStatus === 'merge') {
+      // think 200 means success in object. See gitHubUtils
+      /*resSetVote =*/ await mergePullRequest(args.owner, args.repo, args.pr_id)
+    } 
+
+    return resSetVote;
   },
   updatePRvoteStatus: async function(database, args, tokens) {
     const prID = args.pr_id.split('_')[1]
@@ -295,7 +293,6 @@ const root = {
     return resTransferTokens
   },
   createUser: async (args) => {
-    debugger
     const resCreateUser =
         await postCreateUser(
           "",

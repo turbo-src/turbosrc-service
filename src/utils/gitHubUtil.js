@@ -89,20 +89,22 @@ const gitHubUtil = {
     //})
     console.log('gh 51`')
   },
-  mergePullRequest: async function(owner, repo, pull) {
+  mergePullRequest: async function(owner, repo, prID) {
     let token = await getGithubToken();
     const octokit = new Octokit({ auth: token });
     console.log('gh 67')
     console.log(owner)
     console.log(repo)
-    console.log(pull)
+    console.log(prID)
+    const pull = prID.split('_')[1]
 
-    await octokit.request(`PUT /repos/${owner}/${repo}/pulls/${pull}/merge`, //{
+    const res = await octokit.request(`PUT /repos/${owner}/${repo}/pulls/${pull}/merge`, //{
       //owner: 'octocat',
       //repo: 'hello-world',
       //pull_number: 42,
       //commit_title: 'commit_title'
     //}
+
     )
 
     console.log('gh 83`')
