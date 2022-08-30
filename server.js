@@ -191,8 +191,8 @@ var root = {
    const contributorName = await getContributorName(
      {contributor_id: args.to}
     )
-    console.log("contributor name: " + contributorName)
-    if (contributorName !== "none") {
+    if (contributorName !== null) {
+      console.log("contributor name: " + contributorName)
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
     }

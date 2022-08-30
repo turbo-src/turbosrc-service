@@ -281,7 +281,7 @@ const root = {
     }
   },
   transferTokens: async (database, pullRequestsDB, args) => {
-    const restTransferTokens =
+    const resTransferTokens =
         await postTransferTokens(
           "",
           `${args.owner}/${args.repo}`,
@@ -308,6 +308,7 @@ const root = {
     return resCreateUser
   },
   getContributorName: async (args) => {
+    // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
     const resGetContributorName =
         await postGetContributorName(
           "",
@@ -316,6 +317,7 @@ const root = {
 	  args.contributor_id,
         )
 
+  
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
