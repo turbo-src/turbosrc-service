@@ -1,0 +1,32 @@
+{
+  "name": "express-graphql-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.1.1",
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "fs": "0.0.1-security",
+    "got": "^11.8.3",
+    "graphql": "^16.0.1",
+    "mocha": "^9.2.0",
+    "octokit": "^1.7.1",
+    "redis": "^4.0.0",
+    "simple-git": "^2.48.0",
+    "superagent": "^6.1.0",
+    "tar": "^6.1.11"
+  },
+  "devDependencies": {
+    "uuid": "^8.3.2"
+  }
+}
