@@ -7,7 +7,9 @@ COPY package*.json /usr/local/
 
 ENV NODE_PATH=/usr/local/node_modules
 
-RUN npm install --prefix /usr/local/
+RUN npm install --prefix /usr/local
+
+RUN npm install --save-dev -y dotenv --prefix /usr/local/
 
 # If you are building your code for production
 # RUN npm ci --only=production
