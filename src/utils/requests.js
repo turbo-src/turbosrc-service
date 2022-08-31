@@ -1,5 +1,11 @@
 const { Parser } = require("graphql/language/parser");
 const superagent = require("superagent");
+require("dotenv").config();
+
+const port =
+  process.env.NODE_ENV === "fly"
+    ? "https://turbosrc-service.fly.dev"
+    : "http://localhost:4000";
 
 var root = {
   postCreateRepoTestDB: async (owner, repo, issue_id, contributor_id, side) => {
@@ -133,7 +139,7 @@ var root = {
     contributor_signature
   ) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -154,7 +160,7 @@ var root = {
   },
   postGetContributorName: async (owner, repo, issue_id, contributor_id) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -177,7 +183,7 @@ var root = {
   },
   postGetContributorID: async (owner, repo, issue_id, contributor_name) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -205,7 +211,7 @@ var root = {
     contributor_id
   ) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -228,7 +234,7 @@ var root = {
   },
   postCreateRepo: async (owner, repo, issue_id, contributor_id, side) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -256,7 +262,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -278,7 +284,7 @@ var root = {
   },
   postTransferTokens: async (owner, repo, from, to, amount) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -297,7 +303,7 @@ var root = {
   },
   postNewPullRequest: async (owner, repo, issue_id, contributor_id, side) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -316,7 +322,7 @@ var root = {
   },
   postSetVote: async (owner, repo, issue_id, contributor_id, side) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -337,7 +343,7 @@ var root = {
   },
   get_repo_status: async (repo_id) => {
     return await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }` })
       .set("accept", "json");
     //.end((err, res) => {
@@ -353,7 +359,7 @@ var root = {
   },
   get_authorized_contributor: async (contributor_id, repo_id) => {
     return await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send({
         query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
       })
@@ -369,7 +375,7 @@ var root = {
   },
   postGetPRforkStatus: async (owner, repo, issue_id, contributor_id) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send({
         query: `{ getPRforkStatus(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}") }`,
       }) // sends a JSON post body
@@ -382,7 +388,7 @@ var root = {
   },
   postGetPRvoteStatus: async (owner, repo, issue_id, contributor_id, side) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -410,7 +416,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -432,7 +438,7 @@ var root = {
   },
   postGetPRvoteTotals: async (owner, repo, issue_id, contributor_id, side) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -460,7 +466,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -488,7 +494,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -510,7 +516,7 @@ var root = {
   },
   postClosePullRequest: async (owner, repo, issue_id, contributor_id, side) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -529,7 +535,7 @@ var root = {
   },
   postMergePullRequest: async (owner, repo, issue_id, contributor_id, side) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -548,7 +554,7 @@ var root = {
   },
   postCreatePullRequest: async (owner, repo, fork_branch, issue_id, title) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -567,7 +573,7 @@ var root = {
   },
   postFork: async (owner, repo, org) => {
     superagent
-      .post("http://localhost:4000/graphql")
+      .post(`${port}/graphql`)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(pr_id: "first", contributorId: "1", side: 1) { vote_code } }' }
