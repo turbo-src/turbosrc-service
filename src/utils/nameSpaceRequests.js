@@ -36,11 +36,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorName;
   },
-  postGetContributorID: async (owner, repo_id, pr_id, contributor_name) => {
+  postGetContributorID: async (owner, repo, pr_id, contributor_name) => {
     const res = await superagent
       .post(namespaceUrl)
       .send({
-        query: `{ getContributorID(owner: "${owner}", repo_id: "${repo_id}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
