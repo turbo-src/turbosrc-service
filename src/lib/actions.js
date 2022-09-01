@@ -224,7 +224,7 @@ const root = {
 
     if (prVoteStatus === 'merge') {
       // think 200 means success in object. See gitHubUtils
-      /*resSetVote =*/ await mergePullRequest(args.owner, args.repo, args.pr_id)
+      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
     } 
 
     return resSetVote;
