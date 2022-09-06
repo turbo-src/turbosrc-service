@@ -341,21 +341,15 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.setVote;
   },
-  get_repo_status: async (repo_id) => {
-    return await superagent
-      .post(`${port}/graphql`)
-      .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }` })
+  postGetRepoStatus: async (repo_id) => {
+    const res = await superagent .post(`${port}/graphql`) .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }`,
+      })
       .set("accept", "json");
     //.end((err, res) => {
-    //  //console.log(repo_id)
-    //  //console.log('hey')
-    //  //console.log('res: ' + res['body']['data']['getRepoStatus'])
-    //  //const text= res['text'];
-    //  //console.log(text);
-    //  //isRepoTurboSrcToken = res;
-    //  // Calling the end function will send the request
-    //  return res
-    //})
+    // Calling the end function will send the request
+    //});
+    const json = JSON.parse(res.text);
+    return json.data.getRepoStatus;
   },
   get_authorized_contributor: async (contributor_id, repo_id) => {
     return await superagent

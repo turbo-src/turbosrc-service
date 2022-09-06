@@ -1,6 +1,9 @@
 const superagent = require("superagent");
 
-const namespaceUrl = "https://namespace-db.fly.dev/graphql";
+const namespaceUrl =
+  process.env.NODE_ENV === "fly"
+    ? "https://namespace-db.fly.dev/graphql"
+    : "http://localhost:4003/graphql"
 
 var root = {
   postCreateUser: async (

@@ -3,6 +3,7 @@ const fsPromises = require('fs').promises;
 const {
         postGetContributorTokenAmount,
         postCreateRepo,
+        postGetRepoStatus,
         postGetContributorID,
         postGetContributorName,
       } = require('../../../src/utils/requests')
@@ -43,6 +44,8 @@ describe('Create repo', function () {
             /*side:*/ "",
         );
 
+        const resRepoStatus = await postGetRepoStatus(`${contributor_name}/demo`);
+
         await snooze(snooze_ms);
         const contributorTokenAmount = await postGetContributorTokenAmount(
             /*owner:*/ contributor_name,
@@ -62,6 +65,12 @@ describe('Create repo', function () {
 	    Number(resCreateRepo),
             201,
             "Fail to create repo."
+        );
+
+        assert.equal(
+	    resRepoStatus,
+            true,
+            "Fail to get correct repo status."
         );
       });
     });
