@@ -342,7 +342,10 @@ var root = {
     return json.data.setVote;
   },
   postGetRepoStatus: async (repo_id) => {
-    const res = await superagent .post(`${port}/graphql`) .send({ query: `{ getRepoStatus(repo_id: "${repo_id}") }`,
+    const res = await superagent
+      .post(`${port}/graphql`)
+      .send({
+        query: `{ getRepoStatus(repo_id: "${repo_id}" ) {code, result} }`
       })
       .set("accept", "json");
     //.end((err, res) => {

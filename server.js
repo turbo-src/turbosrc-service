@@ -67,6 +67,12 @@ var schema = buildSchema(`
   type PullRequest {
     vote_code: [String]
   }
+
+  type RepoStatus {
+    code: Int!
+    result: Boolean!
+  }
+
   type Query {
     getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String): String,
@@ -86,7 +92,7 @@ var schema = buildSchema(`
     getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getRepoStatus(repo_id: String): Boolean,
+    getRepoStatus(repo_id: String): RepoStatus,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(pr_id: String): String,
     createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, title: String): String,
@@ -208,7 +214,7 @@ var root = {
     //return fakeTurboSrcReposDB.includes(arg.repo_id)
   },
   getRepoStatus: async (args) => {
-    const res = getRepoStatus(args)
+    const res = await getRepoStatus(args)
 
     return res
   },

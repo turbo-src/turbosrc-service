@@ -401,7 +401,7 @@ const root = {
     return numberActivePullRequests;
   },
   getRepoStatus: async function (args) {
-    const res = await postGetRepoStatus(`${args.repo_id}`);
+    const res = await postGetRepoStatus(args.repo_id);
 
     return res;
   },
