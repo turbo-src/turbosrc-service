@@ -76,7 +76,7 @@ docker volume create turbo-src-server-node-modules-data-volume
 
 https://github.com/turbo-src/GihtubMakerTools
 
-## Development worflow
+## Development workflow
 
 Build docker server image.
 
@@ -95,6 +95,8 @@ Launch the services.
 ```
 docker-compose -f docker/docker-compose.yml up
 ```
+
+
 
 ## Testing
 
