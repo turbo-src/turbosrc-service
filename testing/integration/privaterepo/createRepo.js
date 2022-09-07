@@ -54,9 +54,9 @@ describe('Create repo', function () {
             /*side:*/ "no",
         );
 
-        assert.equal(
-            Number(contributorTokenAmount),
-            1_000_000,
+        assert.deepEqual(
+            contributorTokenAmount,
+	    { status: 200, amount: 1_000_000 },
             "Fail to get amount."
         );
 

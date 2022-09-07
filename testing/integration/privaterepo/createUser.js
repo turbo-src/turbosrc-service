@@ -4,7 +4,6 @@ const {
         postCreateUser,
         postGetContributorID,
         postGetContributorName,
-        postGetContributorTokenAmount
       } = require('../../../src/utils/requests')
 
 const { Parser } = require('graphql/language/parser');
