@@ -73,8 +73,13 @@ var schema = buildSchema(`
     exists: Boolean!
   }
 
+  type ContributorTokenAmount {
+    status: Int!
+    amount: Int!
+  }
+
   type Query {
-    getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String): String,
     getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, pr_id: String, contributor_name: String): String,
