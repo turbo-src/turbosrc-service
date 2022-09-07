@@ -6,7 +6,10 @@
     <img src="images/turbosrc-dark-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
 </p>
-Clone
+
+## Install
+
+Clone.
 
 ```
 git clone https://github.com/turbo-src/service turbo-src-service
@@ -51,62 +54,6 @@ scripts/run-tests.sh \
 testing/gihtub-maker.sh
 ```
 
-## Install GihtubMakerTool
-
-https://github.com/turbo-src/GihtubMakerTools
-
-## nixpkgs
-
-You only need to run this once or whenever you update your package.json.
-
-```
-nod2nix
-```
-
-Create a development environment.
-
-```
-export NIXPKGS_ALLOW_INSECURE=1
-nix-shell -A shell
-```
-
-### Testing
-
-Launch the ain service in a nix shell
-
-```
-node server.js
-```
-
-In a seperate nix shell, launch the fork verification service.
-
-```
-node pullForkServer.js
-```
-
-***Make sure the privateStore is up an running.***
-
-If you're looking to progammatically create users
-
-```
-npm test testing/integration/privaterepo/createUser.js
-npm test testing/integration/privaterepo/createRepo.js
-```
-
-Otherwise, in order to login and tokenize
-
-```
-npm test testing/createUser.js
-```
-
-Transfer tokens test.
-
-```
-npm test testing/integration/privaterepo/transferTokens.js
-```
-
-## Docker
-
 Build docker server image.
 
 ```
@@ -125,11 +72,37 @@ Create docker volume.
 docker volume create turbo-src-server-node-modules-data-volume
 ```
 
-### Testing
+#### Install GihtubMakerTool
+
+https://github.com/turbo-src/GihtubMakerTools
+
+## Development worflow
+
+Build docker server image.
+
+```
+docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
+```
+
+Build docker pull fork server image.
+
+```
+docker build -t turbo-src-pfserver:0.0.1 -f docker/dockerfile.pfserver .
+```
+
+Launch the services.
+
+```
+docker-compose -f docker/docker-compose.yml up
+```
+
+## Testing
 
 ```
 ./testing/run-tests.sh
 ```
+
+## Other
 
 To see server logs.
 
