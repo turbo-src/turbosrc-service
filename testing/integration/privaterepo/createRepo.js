@@ -35,7 +35,6 @@ describe('Create repo', function () {
             /*pr_id:*/ "issue_4",
             /*contributor_name:*/ contributor_name,
         );
-        await snooze(snooze_ms);
         const resCreateRepo = await postCreateRepo(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -67,9 +66,9 @@ describe('Create repo', function () {
             "Fail to create repo."
         );
 
-        assert.equal(
+        assert.deepEqual(
 	    resRepoStatus,
-            true,
+	    { status: 200, exists: true },
             "Fail to get correct repo status."
         );
       });

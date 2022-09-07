@@ -30,7 +30,7 @@ describe('Create repo', function () {
 	console.log(resRepoStatus)
         assert.deepEqual(
 	    resRepoStatus,
-	    { code: 200, result: true },
+	    { status: 200, exists: true },
             "Fail to get correct repo status."
         );
       });
