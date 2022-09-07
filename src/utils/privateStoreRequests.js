@@ -93,7 +93,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorSignature;
   },
-  postGetRepoStatus: async (repo_id) => {
+  getRepoStatus: async (repo_id) => {
     const res = await superagent
       .post(privateStore)
       .send({

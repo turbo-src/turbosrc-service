@@ -25,7 +25,7 @@ const {
   postGetPRvoteNoTotals,
   postGetPRvoteTotals,
   postGetAuthorizedContributor,
-  postGetRepoStatus,
+  getRepoStatus,
 } = require("./../utils/privateStoreRequests");
 const {
   postCreateUser,
@@ -401,7 +401,7 @@ const root = {
     return numberActivePullRequests;
   },
   getRepoStatus: async function (args) {
-    const res = await postGetRepoStatus(args.repo_id);
+    const res = await getRepoStatus(args.repo_id);
 
     return res;
   },

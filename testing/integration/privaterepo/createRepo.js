@@ -3,7 +3,7 @@ const fsPromises = require('fs').promises;
 const {
         postGetContributorTokenAmount,
         postCreateRepo,
-        postGetRepoStatus,
+        getRepoStatus,
         postGetContributorID,
         postGetContributorName,
       } = require('../../../src/utils/requests')
@@ -43,7 +43,7 @@ describe('Create repo', function () {
             /*side:*/ "",
         );
 
-        const resRepoStatus = await postGetRepoStatus(`${contributor_name}/demo`);
+        const resRepoStatus = await getRepoStatus(`${contributor_name}/demo`);
 
         await snooze(snooze_ms);
         const contributorTokenAmount = await postGetContributorTokenAmount(

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-        postGetRepoStatus,
+        getRepoStatus,
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
@@ -24,7 +24,7 @@ describe('Create repo', function () {
       it("Should do create repo", async () => {
         const contributor_name = await getGithubContributor()
 
-        const resRepoStatus = await postGetRepoStatus(`${contributor_name}/demo`);
+        const resRepoStatus = await getRepoStatus(`${contributor_name}/demo`);
 
 
 	console.log(resRepoStatus)
