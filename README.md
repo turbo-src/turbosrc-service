@@ -101,7 +101,7 @@ docker-compose -f docker/docker-compose.yml up
 ## Testing
 
 ```
-./testing/run-tests.sh
+./scripts/run-tests.sh
 ```
 
 ## Other
