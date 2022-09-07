@@ -69,8 +69,8 @@ var schema = buildSchema(`
   }
 
   type RepoStatus {
-    code: Int!
-    result: Boolean!
+    status: Int!
+    exists: Boolean!
   }
 
   type Query {

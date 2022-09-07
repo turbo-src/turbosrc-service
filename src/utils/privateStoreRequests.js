@@ -97,7 +97,7 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getRepoStatus(repo_id: "${repo_id}" ) {code, result} }`
+        query: `{ getRepoStatus(repo_id: "${repo_id}" ) { status, exists } }`
       })
       .set("accept", "json");
     //.end((err, res) => {
