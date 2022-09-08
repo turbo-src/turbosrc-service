@@ -16,26 +16,28 @@ npm test testing/integration/privaterepo/preTestCreatePRs.js
 
 sleep 5
 
-echo "Launch extension pop-up and login with Github."
-echo "Then tokenize the repo."
-echo "Once completed, run the following commands:"
+npm test testing/integration/privaterepo/createUser.js
+sleep 5
+npm test testing/integration/privaterepo/transferTokens.js
+sleep 5
+npm test testing/integration/privaterepo/twoVoters.js
+sleep 5
+npm test testing/integration/privaterepo/singleMajorityVoter.js
+sleep 5
+npm test testing/integration/privaterepo/duplicateVote.js
+sleep 5
+npm test testing/integration/privaterepo/manyVoters.js
+sleep 5
+npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js
+sleep 5
+
+echo "Please run the final test that requires to actually vote on the extension to merge or close."
 echo ""
-echo ""
-echo "npm test testing/createUser.js"
-echo "sleep 5"
-echo "npm test testing/integration/privaterepo/transferTokens.js"
-echo "sleep 5"
-echo "npm test testing/integration/privaterepo/twoVoters.js"
-echo "sleep 5"
-echo "npm test testing/integration/privaterepo/singleMajorityVoter.js"
-echo "sleep 5"
-echo "npm test testing/integration/privaterepo/duplicateVote.js"
-echo "sleep 5"
-echo "npm test testing/integration/privaterepo/manyVoters.js"
-echo "sleep 5"
-echo "npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js"
-echo "sleep 5"
 echo "npm test testing/integration/privaterepo/semiAutoManyVoters.js"
+echo ""
+echo "You must wait untile the automated voting is complete before you can vote."
+
+
 echo ""
 echo "Please run"
 echo ""
