@@ -88,22 +88,21 @@ describe('vote', function () {
             /*side:*/ "yes",
         );
 
-        //console.log(status)
-        assert.equal(
-            openStatus,
-            "open",
-            "Fail open on initial vote below quorum"
+        assert.deepEqual(
+          openStatus,
+          { status: 200, type: 0 },
+          "Fail open on initial vote below quorum"
         );
 
-        assert.equal(
-            duplicateStatus,
-            "open",
-            "Fail keep open even though initial vote below quorum"
+        assert.deepEqual(
+          duplicateStatus,
+          { status: 200, type: 0 },
+          "Fail keep open even though initial vote below quorum"
         );
-        assert.equal(
-            mergeStatus,
-            "merge",
-            "Fail to merge even though voted in."
+        assert.deepEqual(
+          mergeStatus,
+         { status: 200, type: 2 },
+          "Fail to merge even though it was voted in."
         );
       });
     });

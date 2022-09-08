@@ -150,4 +150,31 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 * github server (github actions and move all github api calls to here.)
 * business server (graphql_express) - calls contract and github server
 
+## GraphQL API reference
+
+```
+{ getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String) { status, type } }
+```
+### Types
+
+#### PRvoteStatus
+
+Return type of getPRvoteStatus
+
+```
+  type PRvoteStatus {
+    status: Int!
+    type: Int!
+  }
+```
+`status` is the http code and `type` indicates `open`, `merge`, or `close`
+
+open is 1
+
+merge is 2
+
+close is 3
+
+A status 200 indicates success while a 500 indicates an error from the service.
+
 ## Contributions

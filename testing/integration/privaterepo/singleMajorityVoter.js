@@ -42,7 +42,7 @@ describe('Vote.', function () {
         const contributor_name = await getGithubContributor()
         await snooze(snooze_ms);
 
-        const status = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPRvoteStatus(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*pr_id:*/ "issue_2",
@@ -66,12 +66,10 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
 
-        //console.log(status)
-
-        assert.equal(
-            status,
-            "merge",
-            "Fail to stay close even though it was voted in."
+        assert.deepEqual(
+          mergeStatus,
+         { status: 200, type: 2 },
+          "Fail to merge even though it was voted in."
         );
 
         assert.equal(

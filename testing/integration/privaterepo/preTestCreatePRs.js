@@ -4,7 +4,6 @@ const {
         postCreateRepo,
         postCreatePullRequest,
         postSetVote,
-        postGetPRvoteStatus,
         postNewPullRequest,
         postGetContributorID,
         postGetContributorName,

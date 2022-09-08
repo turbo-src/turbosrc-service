@@ -142,10 +142,10 @@ describe('Voting.', function () {
             "Fail to tally all votes."
         );
 
-        assert.equal(
-            mergeStatus,
-            "merge",
-            "Fail to merge even though it was voted in."
+        assert.deepEqual(
+          mergeStatus,
+         { status: 200, type: 2 },
+          "Fail to merge even though it was voted in."
         );
       });
     });

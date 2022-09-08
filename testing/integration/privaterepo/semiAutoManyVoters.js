@@ -307,10 +307,10 @@ describe('Vote.', function () {
             "0.465999",
             "Fail to add votes."
         );
-        assert.equal(
-            openStatus,
-            "open",
-            "Fail to stay open even the votes are below the quorum"
+        assert.deepEqual(
+          openStatus,
+          { status: 200, type: 0 },
+          "Fail keep open even though initial vote below quorum"
         );
       });
     });

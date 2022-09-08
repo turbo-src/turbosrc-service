@@ -3,7 +3,6 @@ const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postSetVote,
-        postGetPRvoteStatus,
         postNewPullRequest,
         postGetContributorTokenAmount,
         postGetContributorID,
@@ -29,20 +28,17 @@ describe('vote', function () {
         const user  = await getGithubContributor();
 
         await snooze(snooze_ms);
-        const contributorTokenAmountRes = await postGetContributorTokenAmount(
+        const contributorTokenAmount = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*pr_id:*/ "issue_4",
-            /*contributor:*/ "mary",
+            /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "no",
         );
 
-        const contributorTokenAmount = Number(contributorTokenAmountRes)
-
-        console.log(contributorTokenAmountRes)
-        assert.equal(
+        assert.deepEqual(
             contributorTokenAmount,
-            500001,
+	    { status: 200, amount: 500001 },
             "Fail to get token amount."
         );
       });
