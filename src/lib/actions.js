@@ -210,10 +210,13 @@ const root = {
       `${args.owner}/${args.repo}`,
       args.pr_id,
       args.contributor_id,
-      args.side
+      args.side,
+      args.branch,
+      args.head,
+      args.defaultHash
     );
 
-   // Marginal vote that exceeded quorum, vote yes was majority.
+    // Marginal vote that exceeded quorum, vote yes was majority.
     const prVoteStatus = await postGetPRvoteStatus(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -222,10 +225,11 @@ const root = {
       args.side
     ); // merge
 
-    if (prVoteStatus === 'merge') {
+    if (prVoteStatus === "merge") {
       // think 200 means success in object. See gitHubUtils
-      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
-    } 
+      /*resSetVote =*/
+      //await mergePullRequest(args.owner, args.repo, args.pr_id)
+    }
 
     return resSetVote;
   },
@@ -284,26 +288,24 @@ const root = {
     };
   },
   transferTokens: async (database, pullRequestsDB, args) => {
-    const resTransferTokens =
-        await postTransferTokens(
-          "",
-          `${args.owner}/${args.repo}`,
-          args.from,
-          args.to,
-          args.amount,
-        )
+    const resTransferTokens = await postTransferTokens(
+      "",
+      `${args.owner}/${args.repo}`,
+      args.from,
+      args.to,
+      args.amount
+    );
 
-    return resTransferTokens
+    return resTransferTokens;
   },
   createUser: async (args) => {
-    const resCreateUser =
-        await postCreateUser(
-          "",
-	  "",
-	  args.contributor_id,
-	  args.contributor_name,
-	  args.contributor_signature,
-        )
+    const resCreateUser = await postCreateUser(
+      "",
+      "",
+      args.contributor_id,
+      args.contributor_name,
+      args.contributor_signature
+    );
 
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
@@ -312,14 +314,13 @@ const root = {
   },
   getContributorName: async (args) => {
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
-    const resGetContributorName =
-        await postGetContributorName(
-          "",
-	  "",
-	  "",
-	  args.contributor_id,
-        )
-  
+    const resGetContributorName = await postGetContributorName(
+      "",
+      "",
+      "",
+      args.contributor_id
+    );
+
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
