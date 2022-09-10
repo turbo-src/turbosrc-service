@@ -96,7 +96,7 @@ var schema = buildSchema(`
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
     setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, name: String, pr_id: String, contributor_id: String, side: String): String,
     newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): PRvoteStatus,
     getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,

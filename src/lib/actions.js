@@ -352,13 +352,22 @@ const root = {
     return resGetContributorSignature;
   },
   createRepo: async (database, pullRequestsDB, args) => {
+    
+    // const repoCreds = generate.EthereumAddressAndKey
+    // name space server
+    
+    // const repoID = repoCreds.addr
+    // const repoKey = repoCreds.key
+
+    // The namespace service will have to recored repoNames against repoIDs.
     const resCreateRepo = await postCreateRepo(
       "",
-      `${args.owner}/${args.repo}`,
+      `${args.owner}/${args.name}`,
+      //repoID,
+      //repoKey, // Don't really need but mine as well.
       args.pr_id,
       args.contributor_id,
       args.side
-      // args.head?
     );
 
     // May need to implement in privateStore
