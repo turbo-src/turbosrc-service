@@ -70,6 +70,7 @@ var schema = buildSchema(`
     mergeable: Boolean!
     mergeCommitSha: String!
     state: String!
+    baseBranch: String!
   }
 
   type RepoStatus {
@@ -255,6 +256,7 @@ var root = {
     var mergeable = gitHubPullRequest.mergeable
     const state = gitHubPullRequest.state
     const mergeCommitSha = gitHubPullRequest.merge_commit_sha
+    const baseBranch = gitHubPullRequest.base.ref
     if (mergeable === null) {
         mergeable = false
     }
@@ -263,7 +265,8 @@ var root = {
 	    status: 200,
 	    mergeable: mergeable,
 	    mergeCommitSha: mergeCommitSha,
-	    state: state
+	    state: state,
+	    baseBranch: baseBranch
     }
   },
   getPRpercentVotedQuorum: async (args) => {

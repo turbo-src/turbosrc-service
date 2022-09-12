@@ -57,7 +57,7 @@ describe('Pull request', function () {
             "Failed to merge commit sha."
         );
         assert.equal(
-            gitHubPullRequest.base.ref, // base branch
+            gitHubPullRequest.baseBranch, // base branch
 	    "feature",
             "Failed to get base branch."
         );
