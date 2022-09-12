@@ -6,15 +6,13 @@ const {
         getRepoStatus,
         postGetContributorID,
         postGetContributorName,
+        getGitHubPullRequest
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
-const {
-        getGitHubPullRequest
-      } = require('../../../src/utils/gitHubUtil')
 
 var snooze_ms = 5000
 
@@ -41,7 +39,7 @@ describe('Pull request', function () {
         console.log(gitHubPullRequest)
         assert.equal(
             gitHubPullRequest.mergeable,
-	    null , // true, false, or null
+		    false , // Github can return null, but module converts null to false
             "Failed to be mergeable."
         );
         assert.equal(
@@ -52,7 +50,7 @@ describe('Pull request', function () {
 
 	//gitHubPullRequest.merge_commit_sha == head
         assert.equal(
-            gitHubPullRequest.merge_commit_sha,
+            gitHubPullRequest.mergeCommitSha,
 	    // when PR is open it is "264e4bfe8ce188e2e7b0ad9d6250c75d9bcef468",
 	    // Does it stay the same if it was rebased and commited, via option on Github.
 	    "8bd57d78bc3de856eb0c882717c4db52894a7624", // Same as head after commit.

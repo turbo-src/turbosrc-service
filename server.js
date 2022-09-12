@@ -31,6 +31,7 @@ const {
   getContributorTokenAmount
 } = require('./src/lib/actions')
 const {
+       getGitHubPullRequest,
        getPullRequest,
        createPullRequest,
        closePullRequest,
@@ -65,7 +66,10 @@ async function getGithubUser() {
 
 var schema = buildSchema(`
   type PullRequest {
-    vote_code: [String]
+    status: Int!
+    mergeable: Boolean!
+    mergeCommitSha: String!
+    state: String!
   }
 
   type RepoStatus {
@@ -99,6 +103,7 @@ var schema = buildSchema(`
     createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): PRvoteStatus,
+    getGitHubPullRequest(owner: String, repo: String, pr_id: String): PullRequest,
     getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
@@ -243,6 +248,23 @@ var root = {
     const status = await getPRvoteStatus(args)
 
     return status
+  },
+  getGitHubPullRequest: async (args) => {
+    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, args.pr_id)
+
+    var mergeable = gitHubPullRequest.mergeable
+    const state = gitHubPullRequest.state
+    const mergeCommitSha = gitHubPullRequest.merge_commit_sha
+    if (mergeable === null) {
+        mergeable = false
+    }
+
+    return {
+	    status: 200,
+	    mergeable: mergeable,
+	    mergeCommitSha: mergeCommitSha,
+	    state: state
+    }
   },
   getPRpercentVotedQuorum: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
