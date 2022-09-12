@@ -251,7 +251,8 @@ var root = {
     return status
   },
   getGitHubPullRequest: async (args) => {
-    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, args.pr_id)
+    const prID = (args.pr_id).split('_')[1]
+    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(prID))
 
     var mergeable = gitHubPullRequest.mergeable
     const state = gitHubPullRequest.state
