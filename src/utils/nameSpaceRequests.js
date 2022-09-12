@@ -15,7 +15,7 @@ var root = {
     token
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(namespaceUrl)
       .send({
         query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") }`,
       })
@@ -26,7 +26,7 @@ var root = {
   },
   postGetContributorName: async (owner, repo, pr_id, contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(namespaceUrl)
       .send({
         query: `{ getContributorName(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}") }`,
       })
@@ -40,7 +40,7 @@ var root = {
   },
   postGetContributorID: async (owner, repo, pr_id, contributor_name) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(namespaceUrl)
       .send({
         query: `{ getContributorID(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
       })
@@ -52,7 +52,7 @@ var root = {
   },
   postGetContributorSignature: async (owner, repo, pr_id, contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(namespaceUrl)
       .send({
         query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}") }`,
       })
@@ -64,7 +64,7 @@ var root = {
   },
   getUser: async (contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(namespaceUrl)
       .send({
         query: `{ getUser(contributor_id: "${contributor_id}") {contributor_name, contributor_id, contributor_signature, token}}`,
       })
