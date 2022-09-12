@@ -23,7 +23,7 @@ async function getGithubToken() {
 
 const gitHubUtil = {
 
-  getPullRequestExperiment: async function(owner, repo, pull) {
+  getGitHubPullRequest: async function(owner, repo, pull) {
     let token = await getGithubToken();
 
     const octokit = new Octokit({ auth: token });

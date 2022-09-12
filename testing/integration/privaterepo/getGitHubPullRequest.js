@@ -13,7 +13,7 @@ const {
         getGithubContributor,
       } = require('../../../src/utils/config')
 const {
-        getPullRequestExperiment
+        getGitHubPullRequest
       } = require('../../../src/utils/gitHubUtil')
 
 var snooze_ms = 5000
@@ -32,34 +32,34 @@ describe('Pull request', function () {
         const contributor_name = await getGithubContributor()
 
 	//name space service
-        const pullRequest =
-	    await getPullRequestExperiment(
+        const gitHubPullRequest =
+	    await getGitHubPullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "git-service",
 	    2
 	    )
-        console.log(pullRequest)
+        console.log(gitHubPullRequest)
         assert.equal(
-            pullRequest.mergeable,
+            gitHubPullRequest.mergeable,
 	    null , // true, false, or null
             "Failed to be mergeable."
         );
         assert.equal(
-            pullRequest.state,
+            gitHubPullRequest.state,
 	    "closed",
             "Failed to be mergeable."
         );
 
-	//pullRequest.merge_commit_sha == head
+	//gitHubPullRequest.merge_commit_sha == head
         assert.equal(
-            pullRequest.merge_commit_sha,
+            gitHubPullRequest.merge_commit_sha,
 	    // when PR is open it is "264e4bfe8ce188e2e7b0ad9d6250c75d9bcef468",
 	    // Does it stay the same if it was rebased and commited, via option on Github.
 	    "8bd57d78bc3de856eb0c882717c4db52894a7624", // Same as head after commit.
             "Failed to merge commit sha."
         );
         assert.equal(
-            pullRequest.base.ref, // base branch
+            gitHubPullRequest.base.ref, // base branch
 	    "feature",
             "Failed to get base branch."
         );
