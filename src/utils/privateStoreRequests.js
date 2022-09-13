@@ -3,7 +3,7 @@ const superagent = require("superagent");
 const privateStore =
   process.env.NODE_ENV === "fly"
     ? "https://private-store.fly.dev/graphql"
-    : "http://localhost:4002/graphql"
+    : "http://localhost:4002/graphql";
 
 var root = {
   postCreateUser: async (
@@ -97,7 +97,7 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getRepoStatus(repo_id: "${repo_id}" ) { status, exists } }`
+        query: `{ getRepoStatus(repo_id: "${repo_id}" ) { status, exists } }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -241,6 +241,17 @@ var root = {
     //});
     const json = JSON.parse(res.text);
     return json.data.getPRvoteNoTotals;
+  },
+  getRepo: async (repo) => {
+    const res = await superagent
+      .post(privateStore)
+      .send({
+        query: `{ getRepo(repo: "${repo}") }`,
+      })
+      .set("accept", "json");
+
+    const json = JSON.parse(res.text);
+    return json.data.getRepo;
   },
 };
 
