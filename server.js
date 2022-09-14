@@ -1,14 +1,14 @@
-const fs = require("fs");
-const fsPromises = require("fs").promises;
-const express = require("express");
-const { graphqlHTTP } = require("express-graphql");
-const { buildSchema } = require("graphql");
-const cors = require("cors");
+const fs = require('fs');
+const fsPromises = require('fs').promises;
+const express = require('express');
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+const cors = require('cors');
 //const { createClient } = require('redis');
-const superagent = require("superagent");
-const { getPRhead } = require("./src/utils/pullForkUtil");
-const { gitHeadUtil } = require("./src/utils/gitHeadUtil");
-const { update } = require("tar");
+const superagent = require('superagent');
+const { getPRhead } = require('./src/utils/pullForkUtil');
+const { gitHeadUtil } = require('./src/utils/gitHeadUtil');
+const { update } = require('tar');
 const {
   transferTokens,
   getPRvoteTotals,
@@ -30,14 +30,14 @@ const {
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount,
-} = require("./src/lib/actions");
+} = require('./src/lib/actions');
 const {
   getPullRequest,
   createPullRequest,
   closePullRequest,
   mergePullRequest,
   fork,
-} = require("./src/utils/gitHubUtil");
+} = require('./src/utils/gitHubUtil');
 
 // pr_id is the issue_id, which are the same for now.
 // issue_id !== pr_uid in the future.
@@ -49,15 +49,15 @@ const {
 
 async function getGithubUser() {
   const data = await fsPromises
-    .readFile("/usr/src/app/.config.json")
-    .catch((err) => console.error("Failed to read file", err));
+    .readFile('/usr/src/app/.config.json')
+    .catch((err) => console.error('Failed to read file', err));
 
   let json = JSON.parse(data);
   let user = json.github.user;
   if (user === undefined) {
-    throw new Error("Failed to load Github user " + user);
+    throw new Error('Failed to load Github user ' + user);
   } else {
-    console.log("Successfully read Github " + user);
+    console.log('Successfully read Github ' + user);
   }
 
   return user;
@@ -151,45 +151,45 @@ function getContributorsByName(contributors, name) {
 
 var fakeTurboSrcReposDB = {};
 //const head = await gitHeadUtil('turbo-src', 'extension', 0)
-const repoAccounts = ["default/default"];
+const repoAccounts = ['default/default'];
 //const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
 
 const fakeAuthorizedContributors = {
-  default: ["default"],
-  "turbo-src/extension": ["emmanuel", "mary", "joseph", "john"],
-  "turbo-src/graphql_express_server": ["emmanuel", "mary", "joseph", "john"],
-  "7db9a/dir-contract": ["7db9a", "emmanuel", "mary", "joseph", "john"],
-  "vim/vim": [
-    "7db9a",
-    "Yoshgunn",
-    "emmanuel",
-    "mary",
-    "joseph",
-    "john",
-    "am",
-    "jc",
-    "pc",
-    "mb",
-    "np",
-    "nn",
-    "jp",
-    "ts",
-    "af",
-    "aj",
-    "ds",
-    "ri",
+  default: ['default'],
+  'turbo-src/extension': ['emmanuel', 'mary', 'joseph', 'john'],
+  'turbo-src/graphql_express_server': ['emmanuel', 'mary', 'joseph', 'john'],
+  '7db9a/dir-contract': ['7db9a', 'emmanuel', 'mary', 'joseph', 'john'],
+  'vim/vim': [
+    '7db9a',
+    'Yoshgunn',
+    'emmanuel',
+    'mary',
+    'joseph',
+    'john',
+    'am',
+    'jc',
+    'pc',
+    'mb',
+    'np',
+    'nn',
+    'jp',
+    'ts',
+    'af',
+    'aj',
+    'ds',
+    'ri',
   ],
-  "NixOS/nix": ["7db9a", "Yoshgunn", "emmanuel", "mary", "joseph", "john"],
-  "NixOS/nixpkgs": ["7db9a", "Yoshgunn", "emmanuel", "mary", "joseph", "john"],
+  'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel', 'mary', 'joseph', 'john'],
+  'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel', 'mary', 'joseph', 'john'],
 };
 
 // The object representing authorized repos and contributors.
 var pullRequestsDB = {
-  "default/default": ["vote_code"],
+  'default/default': ['vote_code'],
 };
 
 const loggingMiddleware = (req, res, next) => {
-  console.log("vote:", req.data);
+  console.log('vote:', req.data);
   next();
 };
 
@@ -234,13 +234,13 @@ var root = {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
-    console.log("to: " + args.to);
+    console.log('to: ' + args.to);
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
     const contributorName = await getContributorName({
       contributor_id: args.to,
     });
     if (contributorName !== null) {
-      console.log("contributor name: " + contributorName);
+      console.log('contributor name: ' + contributorName);
       const restTransferTokens = await transferTokens(
         fakeTurboSrcReposDB,
         pullRequestsDB,
@@ -302,11 +302,11 @@ var root = {
   },
   getPRforkStatus: async (args) => {
     var res;
-    const prID = args.pr_id.split("_")[1];
+    const prID = args.pr_id.split('_')[1];
     // User should do this instead and pass it in request so we don't overuse our github api.
-    console.log("owner " + args.owner);
-    console.log("repo " + args.repo);
-    console.log("pr_id " + prID);
+    console.log('owner ' + args.owner);
+    console.log('repo ' + args.repo);
+    console.log('pr_id ' + prID);
     var baseRepoName = args.repo;
     var baseRepoOwner = args.owner;
     console.log(args.owner);
@@ -320,40 +320,40 @@ var root = {
       resGetPR.forkBranch,
       0
     );
-    const baseDir = "repos/" + args.repo;
-    const pullForkDir = baseDir + "/" + pullReqRepoHead;
+    const baseDir = 'repos/' + args.repo;
+    const pullForkDir = baseDir + '/' + pullReqRepoHead;
 
-    console.log("pullReqRepoHead " + pullReqRepoHead);
+    console.log('pullReqRepoHead ' + pullReqRepoHead);
 
     // 404 means the repo doesn't exist on github, per api call.
     if (resGetPR !== 404 && pullReqRepoHead !== 404) {
       // Check if there is already a dir for the pull fork.
       if (!fs.existsSync(pullForkDir)) {
-        res = "pull";
-        console.log("pull");
+        res = 'pull';
+        console.log('pull');
       } else {
-        res = "valid";
-        console.log("valid");
+        res = 'valid';
+        console.log('valid');
       }
     } else {
-      res = "notOnGithub";
-      console.log("notOnGithub");
+      res = 'notOnGithub';
+      console.log('notOnGithub');
     }
-    console.log("final result");
+    console.log('final result');
     console.log(res);
     return res;
   },
   pullFork: async (args) => {
     superagent
-      .post("http://localhost:4001/graphql")
+      .post('http://localhost:4001/graphql')
       .send({
         query: `{ getPRfork(owner: "${args.owner}", repo: "${args.repo}", pr_id: "${args.pr_id}", contributor_id: "${args.contributor_id}") }`,
       }) // sends a JSON post body
-      .set("accept", "json")
+      .set('accept', 'json')
       .end((err, res) => {
         // Calling the end function will send the request
       });
-    return "something";
+    return 'something';
   },
   setVote: async (args) => {
     const resultSetVote = await setVote(args);
@@ -388,15 +388,15 @@ var root = {
       args.owner,
       args.repo,
       args.fork_branch,
-      args.pr_id.split("_")[1],
+      args.pr_id.split('_')[1],
       args.title
     );
   },
   closePullRequest: async (args) => {
-    await closePullRequest(args.owner, args.repo, args.pr_id.split("_")[1]);
+    await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1]);
   },
   mergePullRequest: async (args) => {
-    await mergePullRequest(args.owner, args.repo, args.pr_id.split("_")[1]);
+    await mergePullRequest(args.owner, args.repo, args.pr_id.split('_')[1]);
   },
   fork: async (args) => {
     await fork(args.owner, args.repo, args.org);
@@ -410,13 +410,13 @@ app.use(cors());
 app.use(function (req, res, next) {
   let originalSend = res.send;
   res.send = function (data) {
-    console.log(data + "\n");
+    console.log(data + '\n');
     originalSend.apply(res, Array.from(arguments));
   };
   next();
 });
 app.use(
-  "/graphql",
+  '/graphql',
   graphqlHTTP({
     schema: schema,
     rootValue: root,
@@ -432,4 +432,4 @@ var way = false;
 //     return false;
 //}
 app.listen(4000);
-console.log("Running a GraphQL API server at localhost:4000/graphql");
+console.log('Running a GraphQL API server at localhost:4000/graphql');
