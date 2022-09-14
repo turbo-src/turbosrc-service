@@ -224,7 +224,7 @@ const root = {
 
     // Merge if turborsc pull request status says there are enough votes to merge.
     if (prVoteStatus.status === 200 && prVoteStatus.type === 2) {
-       console.log(`Github merge (${args.pr_id}) disabled)`
+       console.log(`Github merge (${args.pr_id}) disabled)`)
       /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
     } 
 
