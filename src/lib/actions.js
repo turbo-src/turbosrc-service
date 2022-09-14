@@ -32,6 +32,7 @@ const {
   postGetContributorID,
   postGetContributorName,
   postGetContributorSignature,
+  getUser
 } = require("./../utils/nameSpaceRequests");
 const {
   //createRepo,
@@ -303,12 +304,17 @@ const root = {
 	  args.contributor_id,
 	  args.contributor_name,
 	  args.contributor_signature,
+    args.token
         )
 
     // May need to implement in privateStore
     //database = setTSrepoHead(database, args, head)
 
     return resCreateUser;
+  },
+  getUser: async (args) => {
+    const resgetUser = await getUser(args.contributor_id);
+    return resgetUser;
   },
   getContributorName: async (args) => {
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
