@@ -32,19 +32,23 @@ const gitHubUtil = {
     console.log(owner)
     console.log(repo)
     console.log(pull)
-    const res = await octokit.request(`GET /repos/${owner}/${repo}/pulls/${pull}`)//, {
-    console.log('gh 21')
-    //await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
-    //  owner: 'octocat',
-    //  repo: 'hello-world',
-    //  pull_number: 42
-    //})
-    //console.log(res)
+    try {
+      const res = await octokit.request(`GET /repos/${owner}/${repo}/pulls/${pull}`)//, {
+      console.log('gh 21')
+      //await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
+      //  owner: 'octocat',
+      //  repo: 'hello-world',
+      //  pull_number: 42
+      //})
+      //console.log(res)
 
-    const data = res.data
+      const data = res.data
 
-    return data
-  },
+      return data
+    } catch (error) {
+      return error
+    }
+  }, 
   getPullRequest: async function(owner, repo, pull) {
     let token = await getGithubToken();
 

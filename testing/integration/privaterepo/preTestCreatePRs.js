@@ -61,6 +61,21 @@ describe('Create repo and GH pull request', function () {
             /*title:*/ "docs: add missing termdebug docs from Vim runtime updates",
         );
 
+        await postCreatePullRequest(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest5",
+            /*pr_id:*/ "issue_5",
+            /*title:*/ "refactor: missing parenthesis may cause unexpected problems",
+        );
+
+        await postCreatePullRequest(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*fork_branch:*/ "pullRequest6",
+            /*pr_id:*/ "issue_6",
+            /*title:*/ "refactor(normal): convert function comments to doxygen format",
+        );
         assert.equal(
             true,
             true,

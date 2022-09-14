@@ -252,22 +252,37 @@ var root = {
   },
   getGitHubPullRequest: async (args) => {
     const prID = (args.pr_id).split('_')[1]
-    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(prID))
+    try {
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(prID))
 
-    var mergeable = gitHubPullRequest.mergeable
-    const state = gitHubPullRequest.state
-    const mergeCommitSha = gitHubPullRequest.merge_commit_sha
-    const baseBranch = gitHubPullRequest.base.ref
-    if (mergeable === null) {
-        mergeable = false
-    }
+      var mergeable = gitHubPullRequest.mergeable
+      var mergeCommitSha
+      const state = gitHubPullRequest.state
+      if (gitHubPullRequest.merge_commit_sha === null) {
+         mergeCommitSha = ""
+      } else {
+         mergeCommitSha = gitHubPullRequest.merge_commit_sha
+      }
+      const baseBranch = gitHubPullRequest.base.ref
+      if (mergeable === null) {
+          mergeable = false
+      }
 
-    return {
-	    status: 200,
-	    mergeable: mergeable,
-	    mergeCommitSha: mergeCommitSha,
-	    state: state,
-	    baseBranch: baseBranch
+      return {
+              status: 200,
+              mergeable: mergeable,
+              mergeCommitSha: mergeCommitSha,
+              state: state,
+              baseBranch: baseBranch
+      }
+    } catch (error) {
+      return {
+              status: 500,
+              mergeable: false,
+              mergeCommitSha: "",
+              state: "",
+              baseBranch: ""
+      }
     }
   },
   getPRpercentVotedQuorum: async (args) => {

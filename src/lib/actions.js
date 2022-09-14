@@ -220,11 +220,11 @@ const root = {
       args.pr_id,
       args.contributor_id,
       args.side
-    ); // merge
+    );
 
-    if (prVoteStatus === 'merge') {
-      // think 200 means success in object. See gitHubUtils
-      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
+    // Merge if turborsc pull request status says there are enough votes to merge.
+    if (prVoteStatus.status === 200 && prVoteStatus.type === 2) {
+      /*resSetVote =*/ await mergePullRequest(args.owner, args.repo, args.pr_id)
     } 
 
     return resSetVote;
