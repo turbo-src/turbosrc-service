@@ -43,6 +43,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*contributor_name:*/ "mary",
             /*contributor_signature:*/ "2aee41131c1f78f9f881a8be2ea9e1f6faae9ba1b6d78449dca708084b193886",
+            /*token:*/ "ghp_1",
         );
 
         await postCreateUser(
@@ -51,6 +52,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
             /*contributor_name:*/ "am",
             /*contributor_signature:*/ "b1dbf781fe8c40dbea3d6f773d435861134990f9f46729724962b6d0a9f55fcd",
+            /*token:*/ "ghp_2",
         );
 
         await postCreateUser(
@@ -59,6 +61,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
             /*contributor_name:*/ "jc",
             /*contributor_signature:*/ "e3cf0768d0d2920892da66f44055241300e5b6d3d570207f0e89bc4b301c0911",
+            /*token:*/ "ghp_3",
         );
 
         await postCreateUser(
@@ -67,6 +70,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
             /*contributor_name:*/ "pc",
             /*contributor_signature:*/ "d5a088816c5038814e1f344e3ff0b1585391e26dec3c595fa83c22da65bf5a2a",
+            /*token:*/ "ghp_4",
         );
 
         await postCreateUser(
@@ -75,6 +79,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
             /*contributor_name:*/ "mb",
             /*contributor_signature:*/ "0b0ad429c51453564c6ec1c9bdebe16e51d04794f88ad3b74927068cda4c894e",
+            /*token:*/ "ghp_5",
         );
 
         await postCreateUser(
@@ -83,6 +88,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
             /*contributor_name:*/ "np",
             /*contributor_signature:*/ "604f930b8e88787457a94abeb889eb2a363679637698b10d64929a3f34b815e4",
+            /*token:*/ "ghp_6",
         );
 
         await postCreateUser(
@@ -91,6 +97,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
             /*contributor_name:*/ "nn",
             /*contributor_signature:*/ "66acf24f1298e4eb0eb158b62fbd5d3cc1f467be79d427a0f336b15e4b7c99cf",
+            /*token:*/ "ghp_7",
         );
 
         await postCreateUser(
@@ -99,6 +106,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
             /*contributor_name:*/ "jp",
             /*contributor_signature:*/ "d5894454babd1a75f586b4db0a10b1160c0883c6c6a311d9595d560ff4a28e8d",
+            /*token:*/ "ghp_8",
         );
 
         await postCreateUser(
@@ -107,6 +115,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
             /*contributor_name:*/ "af",
             /*contributor_signature:*/ "abceec1c1e8379a75bd76233bb7bd1887bf2b3a2713b9022110849938407cc31",
+            /*token:*/ "ghp_9",
         );
         await postCreateUser(
             /*owner:*/ "",
@@ -114,6 +123,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
             /*contributor_name:*/ "ts",
             /*contributor_signature:*/ "10f7e287f50c2daac084a809b809b16bc88f68033fe91939978386d237054b55`",
+            /*token:*/ "ghp_10",
         );
 
         await postCreateUser(
@@ -122,6 +132,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
             /*contributor_name:*/ "ds",
             /*contributor_signature:*/ "5039ae9ae169599d0b7d4c78bb80af3db4f1082bab2ee03c1fe33816d9f1a33a",
+            /*token:*/ "ghp_11",
         );
 
         await postCreateUser(
@@ -130,6 +141,7 @@ describe('Create users', function () {
             /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
             /*contributor_name:*/ "ri",
             /*contributor_signature:*/ "52b687c3401542006d57fbb2de83815441b7bc6b032cd91cfbe1cff119ff30bc",
+            /*token:*/ "ghp_12",
         );
 
     });
