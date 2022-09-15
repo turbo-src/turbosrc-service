@@ -28,7 +28,8 @@ const {
   getAuthorizedContributor,
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
-  getContributorTokenAmount
+  getContributorTokenAmount,
+  getUser
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -88,9 +89,17 @@ var schema = buildSchema(`
     amount: Int!
   }
 
+  type User {
+    contributor_name: String!
+    contributor_id: String!
+    contributor_signature: String!
+    token: String!
+  }
+
   type Query {
     getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): ContributorTokenAmount,
-    createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String): String,
+    createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
+    getUser(contributor_id: String): User,
     getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, pr_id: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
@@ -187,6 +196,10 @@ var root = {
   createUser: async (args) => {
     const res = await createUser(args)
     return res
+  },
+  getUser: async (args) => {
+    const res = await getUser(args);
+    return res;
   },
   getContributorName: async (args) => {
     const res = getContributorName(args)

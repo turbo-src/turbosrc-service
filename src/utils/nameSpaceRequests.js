@@ -16,7 +16,7 @@ var root = {
     superagent
       .post(namespaceUrl)
       .send({
-        query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}") }`,
+        query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") }`,
       })
       .set("accept", "json")
       .end((err, res) => {
@@ -64,6 +64,16 @@ var root = {
     //});
     const json = JSON.parse(res.text);
     return json.data.getContributorSignature;
+  },
+  getUser: async (contributor_id) => {
+    const res = await superagent
+      .post(namespaceUrl)
+      .send({
+        query: `{ getUser(contributor_id: "${contributor_id}") {contributor_name, contributor_id, contributor_signature, token}}`,
+      })
+      .set('accept', 'json');
+    const json = JSON.parse(res.text);
+    return json.data.getUser;
   },
 };
 

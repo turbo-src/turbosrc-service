@@ -136,7 +136,8 @@ var root = {
     repo,
     contributor_id,
     contributor_name,
-    contributor_signature
+    contributor_signature,
+    token
   ) => {
     superagent
       .post(`${port}/graphql`)
@@ -147,7 +148,7 @@ var root = {
         //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
         //{ query: `{ getVoteEverything }` }
         {
-          query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}") }`,
+          query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}")) }`,
         }
         //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
       ) // sends a JSON post body
@@ -253,6 +254,16 @@ var root = {
     const json = JSON.parse(res.text);
     console.log(json);
     return json.data.createRepo;
+  },
+  getUser: async (contributor_id) => {
+    const res = await superagent
+      .post(`${port}/graphql`)
+      .send({
+        query: `{ getUser(contributor_id: "${contributor_id}") {contributor_name, contributor_id, contributor_signature, token}}`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.getUser;
   },
   postGetContributorTokenAmount: async (
     owner,
