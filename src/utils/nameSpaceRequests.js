@@ -11,19 +11,18 @@ var root = {
     repo,
     contributor_id,
     contributor_name,
-    contributor_signature
+    contributor_signature,
+    token
   ) => {
-    superagent
+    const res = await superagent
       .post(namespaceUrl)
       .send({
         query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") }`,
       })
-      .set("accept", "json")
-      .end((err, res) => {
-        //Calling the end function will send the request
-        const json = JSON.parse(res.text);
-        return json.data.createUser;
-      });
+      .set("accept", "json");
+
+    const json = JSON.parse(res.text);
+    return json.data.createUser;
   },
   postGetContributorName: async (owner, repo, pr_id, contributor_id) => {
     const res = await superagent
