@@ -3,6 +3,7 @@ const fsPromises = require('fs').promises;
 const { postSetVote,
         postGetPRvoteStatus,
         postGetPRvoteTotals,
+        postGetPRvoteYesTotals,
         postCreateRepo,
         postNewPullRequest,
         postGetContributorID,
@@ -327,6 +328,50 @@ describe('Vote.', function () {
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
+
+        var jcVoteYesTotal = await postGetPRvoteYesTotals(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*pr_id:*/ "issue_4",
+            /*contributor_id:*/ "jc",
+            /*side:*/ "yes",
+        );
+
+        jcVoteYesTotal = Number(jcVoteYesTotal);
+	const quorum = 0.5 //getRepo
+	const majority = 0.5 // implicit, must be greater than
+	const supply = 1_000_000 //implicit
+	const yesVotesMinimumToMerge = quorum*supply*majority + 1 // majority + 1 vote.
+
+	var jcYesVotePercentToMergeInteger = 100*((jcVoteYesTotal / yesVotesMinimumToMerge))
+	
+	// Show 1 decimal if less than 10%. Greater, round to nearest integer.
+	if (jcYesVotePercentToMergeInteger < 10) {
+	  jcYesVotePercentToMergeInteger = jcYesVotePercentToMergeInteger.toFixed(1)
+	} else if (jcYesVotePercentToMergeInteger > 100) {
+          jcYesVotePercentToMergeInteger = 100
+	} else {
+	  jcYesVotePercentToMergeInteger =  Math.round(jcYesVotePercentToMergeInteger)
+	}
+
+        //assert.equal(
+        //    jcVoteYesTotal,
+        //    904_001,
+	//    "Failed to get total yes vote percentage string."
+        //);
+
+        assert.equal(
+            `${jcYesVotePercentToMergeInteger}%`,
+            "100%",
+	    "Failed to get percentage string."
+        );
+
+        assert.equal(
+            voteYesPercent,
+            "0.499999",
+            "Fail to add votes."
+        );
+
         assert.equal(
             riVoteCumm,
             "0.499999",
