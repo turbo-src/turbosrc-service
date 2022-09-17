@@ -367,12 +367,6 @@ describe('Vote.', function () {
         );
 
         assert.equal(
-            voteYesPercent,
-            "0.499999",
-            "Fail to add votes."
-        );
-
-        assert.equal(
             riVoteCumm,
             "0.499999",
             "Fail to add votes."
