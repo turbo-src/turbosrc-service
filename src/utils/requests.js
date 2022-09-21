@@ -247,7 +247,7 @@ var root = {
   postGetContributorTokenAmount: async (
     owner,
     repo,
-    issue_id,
+    defaultHash,
     contributor_id,
     side
   ) => {
@@ -260,7 +260,7 @@ var root = {
         //{ query: '{ getVoteAll(pr_id: "default") { vote_code } }' }
         //{ query: `{ getVoteEverything }` }
         {
-          query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", pr_id: "${issue_id}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
+          query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
         }
         //{ query: '{ setVote(pr_id: "default" contributorId: "2", side: 1 ) { vote_code }' }
       ) // sends a JSON post body

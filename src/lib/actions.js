@@ -135,7 +135,7 @@ const root = {
     const contributorTokenAmount = await postGetContributorTokenAmount(
       "",
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side
     );
