@@ -32,7 +32,7 @@ describe('Create repo', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*pr_id:*/ "",
             /*contributor_name:*/ contributor_name,
         );
         const resCreateRepo = await postCreateRepo(
@@ -49,7 +49,7 @@ describe('Create repo', function () {
         const contributorTokenAmount = await postGetContributorTokenAmount(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "no",
         );
