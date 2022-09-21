@@ -10,6 +10,7 @@ const { getPRhead } = require('./src/utils/pullForkUtil');
 const { gitHeadUtil } = require('./src/utils/gitHeadUtil');
 const { update } = require('tar');
 const {
+  createTsrcPullRequest,
   transferTokens,
   getPRvoteTotals,
   getPRvoteYesTotals,
@@ -97,6 +98,7 @@ var schema = buildSchema(`
   }
 
   type Query {
+    createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, fork_branch: String, title: String): String,
     getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
@@ -110,7 +112,7 @@ var schema = buildSchema(`
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
     setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): PRvoteStatus,
     getGitHubPullRequest(owner: String, repo: String, pr_id: String): PullRequest,
@@ -193,6 +195,10 @@ var root = {
   //getVote: (args) => {
   //  return pullRequestsDB[args.contributor_id]
   //},
+  createTsrcPullRequest: async (args) => {
+    const res = await createTsrcPullRequest(args);
+    return res
+  },
   createUser: async (args) => {
     const res = await createUser(args)
     return res
@@ -386,9 +392,7 @@ var root = {
   },
   createRepo: async (args) => {
     // name space server
-      const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
-
-      return resCreateRepo
+      return await createRepo(args)
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {

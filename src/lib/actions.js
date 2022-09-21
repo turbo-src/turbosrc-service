@@ -16,6 +16,7 @@ const {
   //postSetVote,
 } = require("./../utils/requests");
 const {
+  postCreatePullRequest,
   postCreateRepo,
   postGetContributorTokenAmount,
   postTransferTokens,
@@ -72,6 +73,17 @@ const {
 } = require("./state");
 
 const root = {
+  createTsrcPullRequest: async (args) => {
+    const res = await postCreatePullRequest(
+      args.owner,
+      args.repo,
+      args.defaultHash,
+      args.childDefaultHash,
+      args.fork_branch,
+      args.title
+    );
+    return res
+  },
   // Also a root 'methods' in graphql query, by the same name
   getPRvote: function (database, args) {
     const prID = args.pr_id.split("_")[1];
@@ -358,11 +370,11 @@ const root = {
 
     return resGetContributorSignature;
   },
-  createRepo: async (database, pullRequestsDB, args) => {
+  createRepo: async (args) => {
     const resCreateRepo = await postCreateRepo(
       "",
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side
       // args.head?

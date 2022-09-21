@@ -25,11 +25,11 @@ var root = {
         return json.data.createUser;
       });
   },
-  postCreateRepo: async (owner, repo, pr_id, contributor_id, side) => {
+  postCreateRepo: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createRepo(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
 
@@ -37,16 +37,17 @@ var root = {
     return json.data.createRepo;
   },
   postCreatePullRequest: async (
-    /*owner:*/ owner,
-    /*repo:*/ repo,
-    /*fork_branch:*/ fork_branch,
-    /*pr_id:*/ pr_id,
-    /*title:*/ title
+    owner,
+    repo,
+    defaultHash,
+    childDefaultHash,
+    fork_branch,
+    title
   ) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", fork_branch: "${fork_branch}", pr_id: "${pr_id}", title: "${title}") }`,
+        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", fork_branch: "${fork_branch}", title: "${title}") }`,
       })
       .set("accept", "json");
 
