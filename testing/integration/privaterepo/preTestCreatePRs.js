@@ -33,7 +33,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest1",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*title:*/ "refactor(lsp): remove redundant client cleanup",
         );
         await snooze(snooze_ms);
@@ -41,7 +41,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest2",
-            /*pr_id:*/ "issue_2",
+            /*defaultHash:*/ "defaultHash2",
             /*title:*/ "refactor(uncrustify): set maximum number of consecutive newlines"
         );
         await snooze(snooze_ms);
@@ -49,7 +49,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest3",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*title:*/ "ci(mingw): only enable -municode for MinGW",
         );
         await snooze(snooze_ms);
@@ -57,7 +57,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest4",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*title:*/ "docs: add missing termdebug docs from Vim runtime updates",
         );
 
@@ -65,7 +65,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest5",
-            /*pr_id:*/ "issue_5",
+            /*defaultHash:*/ "defaultHash5",
             /*title:*/ "refactor: missing parenthesis may cause unexpected problems",
         );
 
@@ -73,7 +73,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest6",
-            /*pr_id:*/ "issue_6",
+            /*defaultHash:*/ "defaultHash6",
             /*title:*/ "refactor(normal): convert function comments to doxygen format",
         );
         assert.equal(

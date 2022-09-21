@@ -21,7 +21,7 @@ describe('Open pull requests', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_4955",
+            /*defaultHash:*/ "defaultHash4955",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -32,7 +32,7 @@ describe('Open pull requests', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_4955",
+            /*defaultHash:*/ "defaultHash4955",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -40,7 +40,7 @@ describe('Open pull requests', function () {
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_4955",
+            /*defaultHash:*/ "defaultHash4955",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -48,7 +48,7 @@ describe('Open pull requests', function () {
         //await postNewPullRequest(
         //    /*owner:*/ "vim",
         //    /*repo:*/ "vim",
-        //    /*pr_id:*/ "issue_4901",
+        //    /*defaultHash:*/ "defaultHash4901",
         //    /*contributor_id:*/ "7db9a",
         //    /*side:*/ "yes",
         //);
@@ -56,7 +56,7 @@ describe('Open pull requests', function () {
         //const statusDuplicatePR = await postGetPRvoteStatus(
         //    /*owner:*/ "vim",
         //    /*repo:*/ "vim",
-        //    /*pr_id:*/ "issue_4901",
+        //    /*defaultHash:*/ "defaultHash4901",
         //    /*contributor_id:*/ "7db9a",
         //    /*side:*/ "yes",
         //);

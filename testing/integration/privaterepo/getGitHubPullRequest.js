@@ -34,7 +34,7 @@ describe('Pull request', function () {
 	    await getGitHubPullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "git-service",
-	    "issue_2"
+	    "defaultHash2"
 	    )
         console.log(gitHubPullRequest)
         assert.equal(

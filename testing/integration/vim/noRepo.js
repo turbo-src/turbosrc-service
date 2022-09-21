@@ -20,7 +20,7 @@ describe('Create repo', function () {
         //await postNewPullRequest(
         //    /*owner:*/ "vim",
         //    /*repo:*/ "vim",
-        //    /*pr_id:*/ "issue_8457",
+        //    /*defaultHash:*/ "defaultHash8457",
         //    /*contributor_id:*/ "7db9a",
         //    /*side:*/ "yes",
         //);
@@ -32,7 +32,7 @@ describe('Create repo', function () {
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8457",
+            /*defaultHash:*/ "defaultHash8457",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );

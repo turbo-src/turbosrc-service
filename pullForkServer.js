@@ -10,23 +10,23 @@ const { gitHeadUtil } = require('./src/utils/gitHeadUtil');
 
 var schema = buildSchema(`
   type Query {
-    getPRfork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    getPRfork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
   }
 `);
 
 var root = {
   getPRfork: async (args) => {
-    const pr_id = args.pr_id
+    const defaultHash = args.defaultHash
     // User should do this instead and pass it in request so we don't overuse our github api.
     console.log('owner ' + args.owner)
     console.log('repo ' + args.repo)
-    console.log('pr_id ' + pr_id.split('_')[1])
+    console.log('defaultHash ' + defaultHash)
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
     //console.log('contributor ' + resGetPR.contributor)
     console.log('baseRepoName ' + baseRepoName)
     //console.log('forkBranch ' + resGetPR.forkBranch)
-    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, pr_id.split('_')[1])
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, defaultHash)
     var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
 
     console.log('pullReqRepoHead ' + pullReqRepoHead);

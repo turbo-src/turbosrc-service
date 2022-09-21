@@ -32,13 +32,13 @@ describe('Create repo', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "",
+            /*defaultHash:*/ "",
             /*contributor_name:*/ contributor_name,
         );
         const resCreateRepo = await postCreateRepo(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "",
+            /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "",
         );

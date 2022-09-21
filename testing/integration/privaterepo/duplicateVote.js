@@ -30,7 +30,7 @@ describe('vote', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -38,7 +38,7 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -46,7 +46,7 @@ describe('vote', function () {
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -55,7 +55,7 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -63,7 +63,7 @@ describe('vote', function () {
         const duplicateStatus = await postGetPRvoteStatus(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -75,7 +75,7 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "yes",
         );
@@ -83,7 +83,7 @@ describe('vote', function () {
         const mergeStatus = await postGetPRvoteStatus(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "defaultHash3",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );

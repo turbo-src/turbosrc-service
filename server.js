@@ -41,8 +41,8 @@ const {
        fork
       } = require('./src/utils/gitHubUtil');
 
-// pr_id is the issue_id, which are the same for now.
-// issue_id !== pr_uid in the future.
+// defaultHash is the defaultHash, which are the same for now.
+// defaultHash !== pr_uid in the future.
 // The pr_uid will be the OID of the HEAD from the pull requesters linked repository.
 // We may actually choose to calculate the sha256 of the repo at said HEAD to eliminate all doubt of collisions in OID (sha) and to be able to verify that the pull requester and the merger have the absolute identical versions.
 
@@ -102,29 +102,29 @@ var schema = buildSchema(`
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
-    getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getContributorID(owner: String, repo: String, pr_id: String, contributor_name: String): String,
-    getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
+    getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
+    getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
+    getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
-    pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getVote(pr_id: String, contributor_id: String): String,
-    getVoteAll(pr_id: String): PullRequest,
+    pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
+    getPRforkStatus(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
+    getVote(defaultHash: String, contributor_id: String): String,
+    getVoteAll(defaultHash: String): PullRequest,
     getVoteEverything: String,
-    setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    setVote(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
-    newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): PRvoteStatus,
-    getGitHubPullRequest(owner: String, repo: String, pr_id: String): PullRequest,
-    getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteNoTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    getPRvoteStatus(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PRvoteStatus,
+    getGitHubPullRequest(owner: String, repo: String, defaultHash: String): PullRequest,
+    getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getRepoStatus(repo_id: String): RepoStatus,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
-    verifyPullRequest(pr_id: String): String,
-    createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, title: String): String,
-    closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    verifyPullRequest(defaultHash: String): String,
+    createPullRequest(owner: String, repo: String, fork_branch: String, defaultHash: String, title: String): String,
+    closePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    mergePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     fork(owner: String, repo: String, org: String): String,
   }
 `);
@@ -258,8 +258,8 @@ var root = {
 
     return res
   },
-  getVoteAll: async (pr_id) => {
-    return pullRequestsDB[pr_id]
+  getVoteAll: async (defaultHash) => {
+    return pullRequestsDB[defaultHash]
   },
   getVoteEverything: async () => {
     return JSON.stringify(pullRequestsDB)
@@ -270,9 +270,9 @@ var root = {
     return status
   },
   getGitHubPullRequest: async (args) => {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
     try {
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(prID))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(defaultHash))
 
       var mergeable = gitHubPullRequest.mergeable
       var mergeCommitSha
@@ -329,17 +329,17 @@ var root = {
   },
   getPRforkStatus: async (args) => {
     var res;
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
     // User should do this instead and pass it in request so we don't overuse our github api.
     console.log('owner ' + args.owner)
     console.log('repo ' + args.repo)
-    console.log('pr_id ' + prID)
+    console.log('defaultHash ' + defaultHash)
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
     console.log(args.owner)
     console.log(baseRepoOwner)
-    console.log(prID)
-    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, prID)
+    console.log(defaultHash)
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, defaultHash)
     console.log(resGetPR)
     var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
     const baseDir = 'repos/' + args.repo;
@@ -369,7 +369,7 @@ var root = {
     superagent
       .post('http://localhost:4001/graphql')
       .send(
-        { query: `{ getPRfork(owner: "${args.owner}", repo: "${args.repo}", pr_id: "${args.pr_id}", contributor_id: "${args.contributor_id}") }` }
+        { query: `{ getPRfork(owner: "${args.owner}", repo: "${args.repo}", defaultHash: "${args.defaultHash}", contributor_id: "${args.contributor_id}") }` }
       ) // sends a JSON post body
       .set('accept', 'json')
       .end((err, res) => {
@@ -388,7 +388,7 @@ var root = {
     fakeTurboSrcReposDB = resNewPullRequest.db
     pullRequestsDB = resNewPullRequest.pullRequestsDB
 
-    return pullRequestsDB[args.pr_id]
+    return pullRequestsDB[args.defaultHash]
   },
   createRepo: async (args) => {
     // name space server
@@ -396,13 +396,13 @@ var root = {
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
-    await createPullRequest(args.owner, args.repo, args.fork_branch, args.pr_id.split('_')[1], args.title)
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title)
   },
   closePullRequest: async (args) => {
-    await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+    await closePullRequest(args.owner, args.repo, args.defaultHash)
   },
   mergePullRequest: async (args) => {
-    await mergePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+    await mergePullRequest(args.owner, args.repo, args.defaultHash)
   },
   fork: async (args) => {
     await fork(args.owner, args.repo, args.org)

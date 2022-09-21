@@ -142,7 +142,7 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 
 2. Fix tar command for reproducibility.
 
-3. On the server, map github HEAD and issue_id with sha256.
+3. On the server, map github HEAD and defaultHash with sha256.
 
 4. Use only sha256 in contract layer logic.
 
@@ -153,7 +153,7 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 ## GraphQL API reference
 
 ```
-{ getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String) { status, type } }
+{ getPRvoteStatus(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String) { status, type } }
 ```
 ### Types
 

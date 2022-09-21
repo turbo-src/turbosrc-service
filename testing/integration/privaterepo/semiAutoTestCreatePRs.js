@@ -34,7 +34,7 @@ describe('Create repo and GH pull request', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*fork_branch:*/ "pullRequest5",
-            /*pr_id:*/ "issue_5",
+            /*defaultHash:*/ "defaultHash5",
             /*title:*/ "refactor: missing parenthesis may cause unexpected problems",
         );
 

@@ -116,14 +116,14 @@ const gitHubUtil = {
     //})
     console.log('gh 51`')
   },
-  mergePullRequest: async function(owner, repo, prID) {
+  mergePullRequest: async function(owner, repo, defaultHash) {
     let token = await getGithubToken();
     const octokit = new Octokit({ auth: token });
     console.log('gh 67')
     console.log(owner)
     console.log(repo)
-    console.log(prID)
-    const pull = prID.split('_')[1]
+    console.log(defaultHash)
+    const pull = defaultHash
 
     const res = await octokit.request(`PUT /repos/${owner}/${repo}/pulls/${pull}/merge`, //{
       //owner: 'octocat',

@@ -34,7 +34,7 @@ describe('Create repo', function () {
         await postCreateRepo(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "",
+            /*defaultHash:*/ "",
             /*contributor:*/ "mary",
             /*side:*/ "",
         );
@@ -150,7 +150,7 @@ describe('Create repo', function () {
         const maryContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "mary",
             /*side:*/ "no",
         );
@@ -160,7 +160,7 @@ describe('Create repo', function () {
         const contributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ user,
             /*side:*/ "no",
         );
@@ -170,7 +170,7 @@ describe('Create repo', function () {
         const amContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "am",
             /*side:*/ "no",
         );
@@ -180,7 +180,7 @@ describe('Create repo', function () {
         const jcContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "jc",
             /*side:*/ "no",
         );
@@ -190,7 +190,7 @@ describe('Create repo', function () {
         const pcContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "pc",
             /*side:*/ "no",
         );
@@ -200,7 +200,7 @@ describe('Create repo', function () {
         const mbContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "mb",
             /*side:*/ "no",
         );
@@ -210,7 +210,7 @@ describe('Create repo', function () {
         const npContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "np",
             /*side:*/ "no",
         );
@@ -220,7 +220,7 @@ describe('Create repo', function () {
         const nnContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "nn",
             /*side:*/ "no",
         );
@@ -230,7 +230,7 @@ describe('Create repo', function () {
         const jpContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "jp",
             /*side:*/ "no",
         );
@@ -240,7 +240,7 @@ describe('Create repo', function () {
         const tsContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "ts",
             /*side:*/ "no",
         );
@@ -250,7 +250,7 @@ describe('Create repo', function () {
         const afContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "af",
             /*side:*/ "no",
         );
@@ -260,7 +260,7 @@ describe('Create repo', function () {
         const dsContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "ds",
             /*side:*/ "no",
         );
@@ -270,7 +270,7 @@ describe('Create repo', function () {
         const riContributorTokenAmountRes = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "ri",
             /*side:*/ "no",
         );
@@ -357,14 +357,14 @@ describe('Create repo', function () {
         const maryName = await postGetContributorName(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "mary",
         );
         this.timeout(snooze_ms*50);
         const userName = await postGetContributorName(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ user,
         );
 

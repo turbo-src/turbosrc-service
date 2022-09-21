@@ -54,11 +54,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.createPullRequest;
   },
-  postGetContributorName: async (owner, repo, pr_id, contributor_id) => {
+  postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorName(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}") }`,
+        query: `{ getContributorName(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`,
       })
       .set("accept", "json");
     // .end((err, res) => {
@@ -68,11 +68,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorName;
   },
-  postGetContributorID: async (owner, repo, pr_id, contributor_name) => {
+  postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -81,11 +81,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorID;
   },
-  postGetContributorSignature: async (owner, repo, pr_id, contributor_name) => {
+  postGetContributorSignature: async (owner, repo, defaultHash, contributor_name) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -152,11 +152,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.transferTokens;
   },
-  postSetVote: async (owner, repo, pr_id, contributor_id, side) => {
+  postSetVote: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ setVote(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ setVote(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //   .end((err, res) => {
@@ -165,11 +165,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.setVote;
   },
-  postGetPRvoteStatus: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteStatus: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteStatus(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") { status, type } }`,
+        query: `{ getPRvoteStatus(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, type } }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -182,7 +182,7 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ setQuorum(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`,
+        query: `{ setQuorum(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`,
       })
       .set("accept", "json")
       .end((err, res) => {
@@ -204,11 +204,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getQuorum;
   },
-  postGetPRvoteTotals: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -217,11 +217,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getVoteTotals;
   },
-  postGetPRvoteYesTotals: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteYesTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -230,11 +230,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPRvoteYesTotals;
   },
-  postGetPRvoteNoTotals: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteNoTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {

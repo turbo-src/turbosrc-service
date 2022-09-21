@@ -21,7 +21,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -29,7 +29,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -37,7 +37,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -45,7 +45,7 @@ describe('Vote duplicate with minority stake voter', function () {
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -53,7 +53,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -61,7 +61,7 @@ describe('Vote duplicate with minority stake voter', function () {
         const duplicateStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -72,7 +72,7 @@ describe('Vote duplicate with minority stake voter', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -80,7 +80,7 @@ describe('Vote duplicate with minority stake voter', function () {
         const closeStatus = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );

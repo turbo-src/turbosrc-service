@@ -152,20 +152,20 @@ describe('Create users', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor_name:*/ contributor_name,
         );
 
         const maryName = await postGetContributorName(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
         );
         const userName = await postGetContributorName(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ contributor_id,
         );
 

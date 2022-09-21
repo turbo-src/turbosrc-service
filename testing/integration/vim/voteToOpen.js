@@ -19,7 +19,7 @@ describe('Vote to stay open', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -27,7 +27,7 @@ describe('Vote to stay open', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -35,7 +35,7 @@ describe('Vote to stay open', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -47,7 +47,7 @@ describe('Vote to stay open', function () {
         const status = await postGetPRvoteStatus(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_8949",
+            /*defaultHash:*/ "defaultHash8949",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );

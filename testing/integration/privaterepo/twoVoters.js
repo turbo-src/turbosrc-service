@@ -34,7 +34,7 @@ describe('Voting.', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -43,7 +43,7 @@ describe('Voting.', function () {
         const voteRes = await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -51,7 +51,7 @@ describe('Voting.', function () {
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -59,14 +59,14 @@ describe('Voting.', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -74,7 +74,7 @@ describe('Voting.', function () {
         const openStatus = await postGetPRvoteStatus(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -83,7 +83,7 @@ describe('Voting.', function () {
         const maryID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "mary",
         );
 
@@ -91,7 +91,7 @@ describe('Voting.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
         );
@@ -99,7 +99,7 @@ describe('Voting.', function () {
         const mergeStatus = await postGetPRvoteStatus(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
         );
@@ -107,7 +107,7 @@ describe('Voting.', function () {
         const voteTotalsFinal = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );

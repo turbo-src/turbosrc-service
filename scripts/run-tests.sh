@@ -16,6 +16,10 @@ npm test testing/integration/privaterepo/createRepo.js
 
 sleep 5
 
+npm test testing/integration/privaterepo/createPullRequest.js
+
+sleep 5
+
 npm test testing/integration/privaterepo/transferTokens.js
 
 sleep 5

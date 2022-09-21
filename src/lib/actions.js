@@ -86,7 +86,7 @@ const root = {
   },
   // Also a root 'methods' in graphql query, by the same name
   getPRvote: function (database, args) {
-    const prID = args.pr_id.split("_")[1];
+    const defaultHash = args.defaultHash;
 
     const tsPullRequest = getTSpullRequest(database, args);
 
@@ -101,7 +101,7 @@ const root = {
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       ""
     );
@@ -112,7 +112,7 @@ const root = {
     const voteNo = await postGetPRvoteNoTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       ""
     );
@@ -123,7 +123,7 @@ const root = {
   // const vote = await postGetPRvoteTotals(
   //     args.owner,
   //     `${args.owner}/${args.repo}`,
-  //     args.pr_id,
+  //     args.defaultHash,
   //     args.contributor_id,
   //     "",
   // )
@@ -145,7 +145,7 @@ const root = {
     const status = await postGetPRvoteStatus(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       "",
       ""
     );
@@ -153,7 +153,7 @@ const root = {
     return status;
   },
   pullAndVoteStatus: async function (database, pullReqRepoHead, args) {
-    const prID = args.pr_id.split("_")[1];
+    const defaultHash = args.defaultHash;
     var votedAlready;
 
     const activePullRequests = getAllTSpullRequests(database, args);
@@ -161,7 +161,7 @@ const root = {
 
     //Fix: shouldn't make state changes in status check.
     if (numberActivePullRequests === 0) {
-      database = setOpenPullRequest(database, args, prID);
+      database = setOpenPullRequest(database, args, defaultHash);
     }
     const openPullRequest = getOpenPullRequest(database, args);
 
@@ -171,7 +171,7 @@ const root = {
     // specific pull request.
     console.log("owner " + args.owner);
     console.log("repo " + args.repo);
-    console.log("pr_id " + prID);
+    console.log("defaultHash " + defaultHash);
     console.log("tokens " + tokens);
 
     const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
@@ -184,7 +184,7 @@ const root = {
     }
 
     const openPullRequestStatus =
-      openPullRequest === prID || openPullRequest === "";
+      openPullRequest === defaultHash || openPullRequest === "";
 
     console.log("op pr status: " + openPullRequestStatus);
 
@@ -221,7 +221,7 @@ const root = {
     const resSetVote = await postSetVote(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side
     );
@@ -230,21 +230,21 @@ const root = {
     const prVoteStatus = await postGetPRvoteStatus(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side
     );
 
     // Merge if turborsc pull request status says there are enough votes to merge.
     if (prVoteStatus.status === 200 && prVoteStatus.type === 2) {
-       console.log(`Github merge (${args.pr_id}) disabled)`)
-      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
+       console.log(`Github merge (${args.defaultHash}) disabled)`)
+      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.defaultHash)
     } 
 
     return resSetVote;
   },
   updatePRvoteStatus: async function (database, args, tokens) {
-    const prID = args.pr_id.split("_")[1];
+    const defaultHash = args.defaultHash;
     const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
     console.log(database);
     prVoteStatusUpdated = prVoteStatusNow;
@@ -253,7 +253,7 @@ const root = {
       await postSetContributorVotedTokensTestDB(
         args.owner,
         args.repo,
-        args.pr_id,
+        args.defaultHash,
         args.contributor_id,
         args.side,
         tokens
@@ -272,7 +272,7 @@ const root = {
         await postAddToTotalVotedYesTokensDB(
           args.owner,
           args.repo,
-          args.pr_id,
+          args.defaultHash,
           args.contributor_id,
           args.side,
           tokens
@@ -398,7 +398,7 @@ const root = {
     await postNewPullRequestTestDB(
       args.owner,
       args.repo,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side,
       prVoteStatus
