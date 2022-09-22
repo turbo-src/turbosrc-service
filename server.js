@@ -34,7 +34,6 @@ const {
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
-       getPullRequest,
        createPullRequest,
        closePullRequest,
        mergePullRequest,
@@ -111,7 +110,6 @@ var schema = buildSchema(`
     getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
     pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
-    getPRforkStatus(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getVote(defaultHash: String, contributor_id: String): String,
     getVoteAll(defaultHash: String): ghPullRequest,
     getVoteEverything: String,
@@ -330,44 +328,6 @@ var root = {
     voteTotals = voteTotals/1_000_000
 
     return `${voteTotals}`
-  },
-  getPRforkStatus: async (args) => {
-    var res;
-    const defaultHash = (args.defaultHash)
-    // User should do this instead and pass it in request so we don't overuse our github api.
-    console.log('owner ' + args.owner)
-    console.log('repo ' + args.repo)
-    console.log('defaultHash ' + defaultHash)
-    var baseRepoName = args.repo
-    var baseRepoOwner = args.owner
-    console.log(args.owner)
-    console.log(baseRepoOwner)
-    console.log(defaultHash)
-    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, defaultHash)
-    console.log(resGetPR)
-    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
-    const baseDir = 'repos/' + args.repo;
-    const pullForkDir = baseDir + '/' + pullReqRepoHead;
-
-    console.log('pullReqRepoHead ' + pullReqRepoHead);
-
-    // 404 means the repo doesn't exist on github, per api call.
-    if (resGetPR !== 404 && pullReqRepoHead !== 404) {
-    // Check if there is already a dir for the pull fork.
-      if (!fs.existsSync(pullForkDir)) {
-        res = "pull"
-        console.log("pull")
-      } else {
-         res =  "valid"
-         console.log("valid")
-      }
-    } else {
-      res = "notOnGithub"
-      console.log("notOnGithub")
-    }
-    console.log("final result")
-    console.log(res)
-    return res
   },
   pullFork: async (args) => {
     superagent
