@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
@@ -70,7 +70,7 @@ describe('Vote to stay open, then close', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash6598",
@@ -86,7 +86,7 @@ describe('Vote to stay open, then close', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
+        const closeStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash6598",

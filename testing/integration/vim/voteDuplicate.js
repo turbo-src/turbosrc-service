@@ -2,7 +2,7 @@ const assert = require('assert');
 const {
         postCreateRepo,
         postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postNewPullRequest
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
@@ -42,7 +42,7 @@ describe('Vote duplicate with minority stake voter', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8949",
@@ -58,7 +58,7 @@ describe('Vote duplicate with minority stake voter', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const duplicateStatus = await postGetPRvoteStatus(
+        const duplicateStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8949",
@@ -77,7 +77,7 @@ describe('Vote duplicate with minority stake voter', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
+        const closeStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8949",

@@ -2,7 +2,7 @@ const assert = require('assert');
 const {
         postCreateRepo,
         postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postNewPullRequest
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
@@ -37,7 +37,7 @@ describe('Create repo', function () {
     describe.only('Check status after creating a repo.', function () {
       it("Should do something", async () => {
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const status = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8457",

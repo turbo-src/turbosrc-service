@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteTotals,
         postCreateRepo,
         postNewPullRequest
@@ -280,7 +280,7 @@ describe('Vote and get tally', function () {
         //    "0.499999",
         //    "Fail to add votes."
         //);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash6519",
@@ -298,7 +298,7 @@ describe('Vote and get tally', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
+        const closeStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash6519",

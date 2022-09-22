@@ -21,7 +21,7 @@ const {
   postGetContributorTokenAmount,
   postTransferTokens,
   postSetVote,
-  postGetPRvoteStatus,
+  postGetPullRequest,
   postGetPRvoteYesTotals,
   postGetPRvoteNoTotals,
   postGetPRvoteTotals,
@@ -141,8 +141,8 @@ const root = {
     );
     return contributorTokenAmount;
   },
-  getPRvoteStatus: async function (args) {
-    const status = await postGetPRvoteStatus(
+  getPullRequest: async function (args) {
+    const status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
       args.defaultHash,
@@ -174,7 +174,7 @@ const root = {
     console.log("defaultHash " + defaultHash);
     console.log("tokens " + tokens);
 
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
+    const prVoteStatusNow = module.exports.getPullRequest(database, args);
     if (prVoteStatusNow === "none") {
       votedAlready = false;
     } else {
@@ -227,7 +227,7 @@ const root = {
     );
 
    // Marginal vote that exceeded quorum, vote yes was majority.
-    const prVoteStatus = await postGetPRvoteStatus(
+    const prVoteStatus = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
       args.defaultHash,
@@ -243,9 +243,9 @@ const root = {
 
     return resSetVote;
   },
-  updatePRvoteStatus: async function (database, args, tokens) {
+  updatePullRequest: async function (database, args, tokens) {
     const defaultHash = args.defaultHash;
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
+    const prVoteStatusNow = module.exports.getPullRequest(database, args);
     console.log(database);
     prVoteStatusUpdated = prVoteStatusNow;
 
@@ -284,7 +284,7 @@ const root = {
         database = addToTotalVotedNoTokens(database, args, tokens);
       }
 
-      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args);
+      prVoteStatusUpdated = module.exports.getPullRequest(database, args);
 
       database = setPullRequestStatus(database, args, prVoteStatusUpdated);
 
@@ -386,7 +386,7 @@ const root = {
     return resCreateRepo;
   },
   newPullRequest: async (database, pullRequestsDB, args) => {
-    const prVoteStatus = module.exports.getPRvoteStatus(database, args);
+    const prVoteStatus = module.exports.getPullRequest(database, args);
 
     const resNewPullRequest = newPullRequest(
       database,

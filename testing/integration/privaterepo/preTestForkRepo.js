@@ -5,7 +5,7 @@ const {
         postCreatePullRequest,
         postFork,
         postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postNewPullRequest,
         postGetContributorID,
         postGetContributorName,

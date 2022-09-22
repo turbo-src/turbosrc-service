@@ -153,16 +153,16 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 ## GraphQL API reference
 
 ```
-{ getPRvoteStatus(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String) { status, type } }
+{ getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String) { status, type } }
 ```
 ### Types
 
-#### PRvoteStatus
+#### PullRequest
 
-Return type of getPRvoteStatus
+Return type of getPullRequest
 
 ```
-  type PRvoteStatus {
+  type PullRequest {
     status: Int!
     type: Int!
   }

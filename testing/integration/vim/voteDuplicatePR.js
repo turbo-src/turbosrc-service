@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
@@ -46,7 +46,7 @@ describe('Vote to close', function () {
     describe.only('Duplicate pull request.', function () {
       it("Should not allow reopen a closed pull request.", async () => {
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const status = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8949",
@@ -70,7 +70,7 @@ describe('Vote to close', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const statusDuplicatePR = await postGetPRvoteStatus(
+        const statusDuplicatePR = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8949",

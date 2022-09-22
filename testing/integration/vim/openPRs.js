@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
@@ -37,7 +37,7 @@ describe('Open pull requests', function () {
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const status = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash4955",
@@ -53,7 +53,7 @@ describe('Open pull requests', function () {
         //    /*side:*/ "yes",
         //);
         //await snooze(1500);
-        //const statusDuplicatePR = await postGetPRvoteStatus(
+        //const statusDuplicatePR = await postGetPullRequest(
         //    /*owner:*/ "vim",
         //    /*repo:*/ "vim",
         //    /*defaultHash:*/ "defaultHash4901",

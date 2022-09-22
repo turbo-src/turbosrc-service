@@ -3,7 +3,7 @@ const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postNewPullRequest,
         postGetContributorID,
         postGetContributorName
@@ -43,7 +43,7 @@ describe('vote', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash3",
@@ -60,7 +60,7 @@ describe('vote', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const duplicateStatus = await postGetPRvoteStatus(
+        const duplicateStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash3",
@@ -80,7 +80,7 @@ describe('vote', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const mergeStatus = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash3",

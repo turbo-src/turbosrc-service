@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postCreateRepo,
         postNewPullRequest
       } = require('../../../src/utils/requests')
@@ -44,7 +44,7 @@ describe('Vote to stay open', function () {
     describe.only('Check status after vote open', function () {
       it("Should do something", async () => {
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const status = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
             /*defaultHash:*/ "defaultHash8949",

@@ -16,7 +16,7 @@ const {
   getPRvoteYesTotals,
   getPRvoteNoTotals,
   getPRvote,
-  getPRvoteStatus,
+  getPullRequest,
   newPullRequest,
   setVote,
   createUser,
@@ -87,11 +87,6 @@ var schema = buildSchema(`
   type RepoStatus {
     status: Int!
     exists: Boolean!
-  }
-
-  type PRvoteStatus {
-    status: Int!
-    type: Int!
   }
 
   type ContributorTokenAmount {
@@ -273,8 +268,8 @@ var root = {
   getVoteEverything: async () => {
     return JSON.stringify(pullRequestsDB)
   },
-  getPRvoteStatus: async (args) => {
-    const status = await getPRvoteStatus(args)
+  getPullRequest: async (args) => {
+    const status = await getPullRequest(args)
 
     return status
   },

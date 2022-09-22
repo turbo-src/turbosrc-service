@@ -4,7 +4,7 @@ const {
         postCreateRepo,
         postCreatePullRequest,
         postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postNewPullRequest
       } = require('../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');

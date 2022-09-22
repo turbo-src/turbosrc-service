@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,

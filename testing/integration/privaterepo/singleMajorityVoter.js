@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
@@ -42,7 +42,7 @@ describe('Vote.', function () {
         const contributor_name = await getGithubContributor()
         await snooze(snooze_ms);
 
-        const mergeStatus = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "defaultHash2",

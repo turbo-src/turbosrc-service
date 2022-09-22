@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteTotals,
         postGetPRvoteYesTotals,
         postCreateRepo,
@@ -294,7 +294,7 @@ describe('Vote.', function () {
         //    "0.499999",
         //    "Fail to add votes."
         //);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
@@ -313,7 +313,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const mergeStatus = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
