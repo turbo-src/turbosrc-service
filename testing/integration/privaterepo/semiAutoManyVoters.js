@@ -309,7 +309,7 @@ describe('Vote.', function () {
         );
         assert.deepEqual(
           openStatus,
-          { status: 200, type: 0 },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest5", "childDefaultHash": "defaultHash5", "defaultHash": "defaultHash5" },
           "Fail keep open even though initial vote below quorum"
         );
       });

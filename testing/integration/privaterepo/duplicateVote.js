@@ -90,18 +90,18 @@ describe('vote', function () {
 
         assert.deepEqual(
           openStatus,
-          { status: 200, type: 0 },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "defaultHash3", "defaultHash": "defaultHash3" },
           "Fail open on initial vote below quorum"
         );
 
         assert.deepEqual(
           duplicateStatus,
-          { status: 200, type: 0 },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "defaultHash3", "defaultHash": "defaultHash3" },
           "Fail keep open even though initial vote below quorum"
         );
         assert.deepEqual(
           mergeStatus,
-         { status: 200, type: 2 },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "defaultHash3", "defaultHash": "defaultHash3" },
           "Fail to merge even though it was voted in."
         );
       });
