@@ -167,7 +167,7 @@ var root = {
   },
   postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(privateStore)
       .send({
         query: `{ getPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash} }`,
       })
