@@ -67,6 +67,15 @@ async function getGithubUser() {
 }
 
 var schema = buildSchema(`
+  type PullRequest {
+    status: Int!
+    state: String!
+    repo_id: String!
+    fork_branch: String!
+    defaultHash: String!
+    childDefaultHash: String!
+  }
+
   type ghPullRequest {
     status: Int!
     mergeable: Boolean!
@@ -114,7 +123,7 @@ var schema = buildSchema(`
     setVote(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
-    getPRvoteStatus(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PRvoteStatus,
+    getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
     getGitHubPullRequest(owner: String, repo: String, defaultHash: String): ghPullRequest,
     getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,

@@ -373,18 +373,18 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPRforkStatus;
   },
-  postGetPRvoteStatus: async (owner, repo, defaultHash, contributor_id, side) => {
+  postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
-        query: `{ getPRvoteStatus(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, type } }`,
+        query: `{ getPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash} }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getPRvoteStatus;
+    return json.data.getPullRequest;
   },
   getGitHubPullRequest: async (owner, repo, defaultHash) => {
     const res = await superagent

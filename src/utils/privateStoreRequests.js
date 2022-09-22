@@ -165,18 +165,18 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.setVote;
   },
-  postGetPRvoteStatus: async (owner, repo, defaultHash, contributor_id, side) => {
+  postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
-      .post(privateStore)
+      .post(`${port}/graphql`)
       .send({
-        query: `{ getPRvoteStatus(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, type } }`,
+        query: `{ getPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash} }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getPRvoteStatus;
+    return json.data.getPullRequest;
   },
   postSetQuorum: async (repo, contributor_id, quorum) => {
     const res = await superagent
