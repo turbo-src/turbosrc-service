@@ -115,7 +115,7 @@ describe('Voting.', function () {
         //console.log(status)
         assert.equal(
             voteRes,
-            "open",
+            201,
             "Fail to vote."
         );
         assert.equal(
@@ -133,7 +133,7 @@ describe('Voting.', function () {
         );
         assert.equal(
             openStatus,
-            "open",
+            201,
             "Fail to stay open."
         );
         assert.equal(
@@ -144,7 +144,7 @@ describe('Voting.', function () {
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, type: 2 },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "defaultHash1", "defaultHash": "defaultHash1" },
           "Fail to merge even though it was voted in."
         );
       });
