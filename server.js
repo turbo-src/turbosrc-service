@@ -67,7 +67,7 @@ async function getGithubUser() {
 }
 
 var schema = buildSchema(`
-  type PullRequest {
+  type ghPullRequest {
     status: Int!
     mergeable: Boolean!
     mergeCommitSha: String!
@@ -109,13 +109,13 @@ var schema = buildSchema(`
     pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getPRforkStatus(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getVote(defaultHash: String, contributor_id: String): String,
-    getVoteAll(defaultHash: String): PullRequest,
+    getVoteAll(defaultHash: String): ghPullRequest,
     getVoteEverything: String,
     setVote(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PRvoteStatus,
-    getGitHubPullRequest(owner: String, repo: String, defaultHash: String): PullRequest,
+    getGitHubPullRequest(owner: String, repo: String, defaultHash: String): ghPullRequest,
     getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
