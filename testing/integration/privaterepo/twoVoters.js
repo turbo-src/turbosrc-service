@@ -131,9 +131,9 @@ describe('Voting.', function () {
         assert.equal(
             voteTotals, '0.034', "Fail to add votes no."
         );
-        assert.equal(
-            openStatus,
-            201,
+        assert.deepEqual(
+	    openStatus,
+            { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "defaultHash1", "defaultHash": "defaultHash1" },
             "Fail to stay open."
         );
         assert.equal(
