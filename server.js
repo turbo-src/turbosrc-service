@@ -29,7 +29,8 @@ const {
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount,
-  getUser
+  getUser,
+  authenticate
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -124,6 +125,7 @@ var schema = buildSchema(`
     closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     fork(owner: String, repo: String, org: String): String,
+    authenticate(contributor_id: String, token: String): String,
   }
 `);
 
@@ -212,6 +214,10 @@ var root = {
   getContributorSignature: async (args) => {
     const res = await getContributorSignature(args)
     return res
+  },
+  authenticate: async (args) => {
+    const res = await authenticate(args);
+    return res;
   },
   getContributorTokenAmount: async (args) => {
     const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)

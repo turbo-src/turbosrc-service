@@ -74,6 +74,16 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getUser;
   },
+  authenticate: async (contributor_id, token) => {
+    const res = await superagent
+      .post(namespaceUrl)
+      .send({
+        query: `{ authenticate(contributor_id: "${contributor_id}", token: "${token}") }`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.authenticate;
+  },
 };
 
 module.exports = root;
