@@ -32,8 +32,7 @@ const {
   postGetContributorID,
   postGetContributorName,
   postGetContributorSignature,
-  getUser,
-  authenticate
+  getUser
 } = require("./../utils/nameSpaceRequests");
 const {
   //createRepo,
@@ -126,7 +125,8 @@ const root = {
       `${args.owner}/${args.repo}`,
       args.pr_id,
       args.contributor_id,
-      args.side
+      args.side,
+      args.token
     );
     return contributorTokenAmount;
   },
@@ -317,10 +317,6 @@ const root = {
   getUser: async (args) => {
     const resgetUser = await getUser(args.contributor_id);
     return resgetUser;
-  },
-  authenticate: async (args) => {
-    const res = await authenticate(args.contributor_id, args.token);
-    return res;
   },
   getContributorName: async (args) => {
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"

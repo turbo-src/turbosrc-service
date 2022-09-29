@@ -29,8 +29,7 @@ const {
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount,
-  getUser,
-  authenticate
+  getUser
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -38,7 +37,8 @@ const {
        createPullRequest,
        closePullRequest,
        mergePullRequest,
-       fork
+       fork,
+       verify
       } = require('./src/utils/gitHubUtil');
 
 // pr_id is the issue_id, which are the same for now.
@@ -98,7 +98,7 @@ var schema = buildSchema(`
   }
 
   type Query {
-    getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): ContributorTokenAmount,
+    getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
     getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
@@ -125,7 +125,6 @@ var schema = buildSchema(`
     closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     fork(owner: String, repo: String, org: String): String,
-    authenticate(contributor_id: String, token: String): String,
   }
 `);
 
@@ -215,14 +214,18 @@ var root = {
     const res = await getContributorSignature(args)
     return res
   },
-  authenticate: async (args) => {
-    const res = await authenticate(args);
-    return res;
-  },
   getContributorTokenAmount: async (args) => {
-    const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
+    // Layer of security: 'verify' authenticates user thru Github using the token in their Chrome storage from Github,
+    // if the response is valid and returns the username associated with the contributor_id in our namespace-service-db,
+    // verified will equal true, else false.
+    const verified = await verify(args.contributor_id, args.token)
 
-    return contributorTokenAmount
+    if(verified === true) {
+      const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
+
+      return contributorTokenAmount
+    }
+
   },
   transferTokens: async (args) => {
     //const from = nameSpaceDB['users'][args.from]
