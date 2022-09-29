@@ -73,7 +73,7 @@ var root = {
       .set('accept', 'json');
     const json = JSON.parse(res.text);
     return json.data.getUser;
-  }
+  },
 };
 
 module.exports = root;
