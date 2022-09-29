@@ -124,7 +124,7 @@ var root = {
     repo,
     pr_id,
     contributor_id,
-    side,
+    side
   ) => {
     const res = await superagent
       .post(privateStore)
