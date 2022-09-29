@@ -228,9 +228,9 @@ var root = {
 
   },
   transferTokens: async (args) => {
-    // const verified = await verify(args.from, args.token)
+   const verified = await verify(args.from, args.token)
 
-    // if(verified === true) { 
+    if(verified === true) {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
@@ -244,7 +244,7 @@ var root = {
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
     }
-  // }
+  }
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
