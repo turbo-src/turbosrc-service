@@ -215,17 +215,12 @@ var root = {
     return res
   },
   getContributorTokenAmount: async (args) => {
-    // Layer of security: 'verify' authenticates user thru Github using the token in their Chrome storage from Github,
-    // if the response is valid and returns the username associated with the contributor_id in our namespace-service-db,
-    // verified will equal true, else false.
     const verified = await verify(args.contributor_id, args.token)
-
     if(verified === true) {
       const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
 
       return contributorTokenAmount
     }
-
   },
   transferTokens: async (args) => {
    const verified = await verify(args.from, args.token)
