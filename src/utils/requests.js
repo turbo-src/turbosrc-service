@@ -260,7 +260,7 @@ var root = {
     repo,
     issue_id,
     contributor_id,
-    side,
+    side
   ) => {
     const res = await superagent
       .post(`${port}/graphql`)
