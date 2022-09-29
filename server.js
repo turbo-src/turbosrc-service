@@ -104,7 +104,7 @@ var schema = buildSchema(`
     getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, pr_id: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
+    transferTokens(owner: String, repo: String, from: String, to: String, amount: String, token: String): String,
     pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
     getVote(pr_id: String, contributor_id: String): String,
@@ -228,6 +228,9 @@ var root = {
 
   },
   transferTokens: async (args) => {
+    // const verified = await verify(args.from, args.token)
+
+    // if(verified === true) { 
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
@@ -241,6 +244,7 @@ var root = {
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
     }
+  // }
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database

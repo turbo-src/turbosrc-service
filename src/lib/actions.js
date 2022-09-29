@@ -294,6 +294,7 @@ const root = {
           args.from,
           args.to,
           args.amount,
+          args.token
         )
 
     return resTransferTokens
