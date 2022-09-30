@@ -112,7 +112,7 @@ var schema = buildSchema(`
     getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
-    transferTokens(owner: String, repo: String, from: String, to: String, amount: String): String,
+    transferTokens(owner: String, repo: String, from: String, to: String, amount: Int): String,
     pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getVote(defaultHash: String, contributor_id: String): String,
     getVoteAll(defaultHash: String): ghPullRequest,

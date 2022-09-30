@@ -143,7 +143,7 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: "${amount}") }`,
+        query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: ${amount}) }`,
       }) // sends a JSON post body
       .set("accept", "json");
     //   .end((err, res) => {
