@@ -1,6 +1,7 @@
 const { getPRhead } = require("./../utils/pullForkUtil");
 const {
   getPullRequest,
+  getGitHubPullRequest,
   mergePullRequest,
   closePullRequest,
 } = require("./../utils/gitHubUtil");
@@ -222,20 +223,65 @@ const root = {
   },
   setVote: async function (args) {
     //console.log('\nvote code:\n' + vote_code)
-    const resSetVote = await postSetVote(
+    let mergeable
+    let prVoteStatus = await postGetPullRequest(
       args.owner,
-      `${args.owner}/${args.repo}`,
+      args.repo,
       args.defaultHash,
-      args.childDefaultHash,
-      args.mergeable,
       args.contributor_id,
       args.side
     );
 
+    if (prVoteStatus.status === 404) {
+      // get github pull request to get below data
+      // to pass into below arguments.
+      
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number((args.defaultHash).split('_')[1]))
+      
+      if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
+	console.log("Can't vote because trouble finding Github Pull request.")
+      }
+      console.log('arrive')
+      mergeable = gitHubPullRequest.mergeable
+      const baseBranch = gitHubPullRequest.base.ref
+      const forkBranch = gitHubPullRequest.head.ref
+      const head =  gitHubPullRequest.head.sha
+      const remoteURL = gitHubPullRequest.head.repo.git_url
+      const title = gitHubPullRequest.title
+      console.log('baseBranch ', baseBranch)
+      console.log('title ', title)
+      if (mergeable === null) {
+          mergeable = false
+      }
+
+      const res = await postCreatePullRequest(
+        args.owner,
+        `${args.owner}/${args.repo}`,
+        args.defaultHash,
+        args.childDefaultHash,
+        head, // get head
+        args.branchDefaultHash,
+        remoteURL, // get remoteURl
+        baseBranch, // get baseBranch
+        forkBranch, // get forkBranch
+        title // get title
+      );
+      console.log('res', res)
+    }
+
+      const resSetVote = await postSetVote(
+        args.owner,
+        `${args.owner}/${args.repo}`,
+        args.defaultHash,
+        args.childDefaultHash,
+        mergeable,
+        args.contributor_id,
+        args.side
+      );
    // Marginal vote that exceeded quorum, vote yes was majority.
-    const prVoteStatus = await postGetPullRequest(
+    prVoteStatus = await postGetPullRequest(
       args.owner,
-      `${args.owner}/${args.repo}`,
+      args.repo,
       args.defaultHash,
       args.contributor_id,
       args.side

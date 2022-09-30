@@ -310,7 +310,7 @@ var root = {
         // Calling the end function will send the request
       });
   },
-  postSetVote: async (owner, repo, defaultHash, contributor_id, side) => {
+  postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
