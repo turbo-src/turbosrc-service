@@ -206,13 +206,15 @@ const root = {
     //}
   },
   setVote: async function (args) {
+
     //console.log('\nvote code:\n' + vote_code)
     const resSetVote = await postSetVote(
       args.owner,
       `${args.owner}/${args.repo}`,
       args.pr_id,
       args.contributor_id,
-      args.side
+      args.side,
+      args.token
     );
 
    // Marginal vote that exceeded quorum, vote yes was majority.
@@ -228,9 +230,10 @@ const root = {
     if (prVoteStatus.status === 200 && prVoteStatus.type === 2) {
        console.log(`Github merge (${args.pr_id}) disabled)`)
       /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
-    } 
+    
 
     return resSetVote;
+  }
   },
   updatePRvoteStatus: async function (database, args, tokens) {
     const prID = args.pr_id.split("_")[1];

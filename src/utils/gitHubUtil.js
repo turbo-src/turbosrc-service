@@ -32,7 +32,7 @@ const gitHubUtil = {
       // Trade contributor_id for our contributor_name in our PG database
       // If contributor_name in ags above, then it is a createUser
 
-      const githubUsername = contributor_name ? contributor_name : await postGetContributorName("","","",contributor_id)
+      let githubUsername = contributor_name || await postGetContributorName("","","",contributor_id)
 
       const octokit = new Octokit({ auth: token });
 
@@ -51,7 +51,7 @@ const gitHubUtil = {
        })
 
     } catch (error) {
-      console.log('github token invalid')
+      console.log('error verifying github token')
       return 500
     }
     
