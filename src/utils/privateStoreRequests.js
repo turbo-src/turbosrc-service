@@ -152,11 +152,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.transferTokens;
   },
-  postSetVote: async (owner, repo, defaultHash, contributor_id, side) => {
+  postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ setVote(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ setVote(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", mergeable: ${mergeable}, contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //   .end((err, res) => {

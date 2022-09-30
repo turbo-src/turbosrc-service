@@ -222,6 +222,8 @@ const root = {
       args.owner,
       `${args.owner}/${args.repo}`,
       args.defaultHash,
+      args.childDefaultHash,
+      args.mergeable,
       args.contributor_id,
       args.side
     );
