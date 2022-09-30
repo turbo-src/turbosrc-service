@@ -366,8 +366,9 @@ const root = {
       `${args.owner}/${args.repo}`,
       args.pr_id,
       args.contributor_id,
-      args.side
+      args.side,
       // args.head?
+      args.token
     );
 
     // May need to implement in privateStore

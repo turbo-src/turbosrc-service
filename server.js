@@ -111,7 +111,7 @@ var schema = buildSchema(`
     getVoteAll(pr_id: String): PullRequest,
     getVoteEverything: String,
     setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, token: String): String,
     newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
     getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): PRvoteStatus,
     getGitHubPullRequest(owner: String, repo: String, pr_id: String): PullRequest,
@@ -394,9 +394,13 @@ var root = {
   },
   createRepo: async (args) => {
     // name space server
+    const verified = await verify(args.contributor_id, args.token)
+
+    if(verified === true) {
       const resCreateRepo = await createRepo(fakeTurboSrcReposDB, pullRequestsDB, args)
 
       return resCreateRepo
+    }
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
