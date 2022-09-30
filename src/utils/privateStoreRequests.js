@@ -169,14 +169,14 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash} }`,
+        query: `{ getMostRecentLinkedPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash, head, branchDefaultHash, remoteURL, baseBranch } }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getPullRequest;
+    return json.data.getMostRecentLinkedPullRequest;
   },
   postSetQuorum: async (repo, contributor_id, quorum) => {
     const res = await superagent
