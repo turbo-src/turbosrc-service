@@ -34,7 +34,7 @@ describe('Voting.', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -43,7 +43,9 @@ describe('Voting.', function () {
         const voteRes = await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
+            /*childDefaultHash:*/ "issue_1",
+	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -51,7 +53,7 @@ describe('Voting.', function () {
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -59,14 +61,14 @@ describe('Voting.', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -74,7 +76,7 @@ describe('Voting.', function () {
         const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -83,7 +85,7 @@ describe('Voting.', function () {
         const maryID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor:*/ "mary",
         );
 
@@ -91,7 +93,9 @@ describe('Voting.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
+            /*childDefaultHash:*/ "issue_1",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
         );
@@ -99,7 +103,7 @@ describe('Voting.', function () {
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
         );
@@ -107,7 +111,7 @@ describe('Voting.', function () {
         const voteTotalsFinal = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -133,7 +137,7 @@ describe('Voting.', function () {
         );
         assert.deepEqual(
 	    openStatus,
-            { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "defaultHash1", "defaultHash": "defaultHash1" },
+            { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "issue_1", defaultHash: "issue_1" },
             "Fail to stay open."
         );
         assert.equal(
@@ -144,7 +148,7 @@ describe('Voting.', function () {
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "defaultHash1", "defaultHash": "defaultHash1" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "issue_1", defaultHash: "issue_1" },
           "Fail to merge even though it was voted in."
         );
       });
