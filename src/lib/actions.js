@@ -79,6 +79,10 @@ const root = {
       args.repo,
       args.defaultHash,
       args.childDefaultHash,
+      args.head,
+      args.branchDefaultHash,
+      args.remoteURL,
+      args.baseBranch,
       args.fork_branch,
       args.title
     );

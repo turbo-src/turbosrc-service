@@ -548,13 +548,17 @@ var root = {
     repo,
     defaultHash,
     childDefaultHash,
+    head,
+    branchDefaultHash,
+    remoteURL,
+    baseBranch,
     fork_branch,
     title
   ) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
-        query: `{ createTsrcPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", fork_branch: "${fork_branch}", title: "${title}") }`,
+        query: `{ createTsrcPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
       })
       .set("accept", "json");
 
