@@ -191,12 +191,17 @@ var pullRequestsDB = {
 // request automatically if non exists, including same
 // root 'method' for query.
 var root = {
+  
   //getVote: (args) => {
   //  return pullRequestsDB[args.contributor_id]
   //},
   createUser: async (args) => {
+    const verified = await verify(args.contributor_id, args.token, args.contributor_name)
+
+    if(verified === true) {
     const res = await createUser(args)
     return res
+    }
   },
   getUser: async (args) => {
     const res = await getUser(args);

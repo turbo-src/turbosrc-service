@@ -2,7 +2,7 @@ const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
-const { getUser } = require('./requests');
+const { postGetContributorName } = require('./requests');
 
 async function getGithubToken() {
     const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
@@ -24,25 +24,24 @@ async function getGithubToken() {
 
 const gitHubUtil = {
 
-  verify: async function(contributor_id, token){
+  verify: async function(contributor_id, token, contributor_name){
     try {
       if(!contributor_id || !token) {
         return false
       }
-      // Get user info
-      const user = await getUser(contributor_id)
-      // NB, the token associated with the user in our PG database may not be the same as token in the args above.
-      // It is not relevant right now, we are just checking the token in the args above which should be got from
-      // the chrome extension. It changes if the user logs out/in.
+      // Trade contributor_id for our contributor_name in our PG database
+      // If contributor_name in ags above, then it is a createUser
+
+      const githubUsername = contributor_name ? contributor_name : await postGetContributorName("","","",contributor_id)
 
       const octokit = new Octokit({ auth: token });
-      
+
       // Request Github user info with token got from Github, stored in Chrome storage while using extension
-      const res = await octokit.request(`GET /users/${user.contributor_name}`)
+      const res = await octokit.request(`GET /users/${githubUsername}`)
 
       // If res was successful and was querying the user associated with the contributor_id return true
       return Promise.resolve(res).then((object) => {
-        if(user.contributor_name === object.data.login) {
+        if(githubUsername === object.data.login) {
           console.log('verified token thru github')
           return true
         } else {
