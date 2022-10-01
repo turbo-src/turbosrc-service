@@ -271,6 +271,7 @@ const root = {
     if (originalDefaultHash === args.childDefaultHash) {
       args.childDefaultHash = args.defaultHash
     } else {
+      args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
       args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
     }
 
