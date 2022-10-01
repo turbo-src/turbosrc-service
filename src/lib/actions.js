@@ -1,3 +1,8 @@
+const onlineMode =
+  process.env.TSRC_ENV === "online"
+    ? true
+    : false
+
 const { getPRhead } = require("./../utils/pullForkUtil");
 const {
   getPullRequest,

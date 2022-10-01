@@ -96,6 +96,9 @@ Launch the services.
 docker-compose -f docker/docker-compose.yml up
 ```
 
+## Nix
+
+If running nix, please set envar `TSRC_ENV=localdev` or `TSRC_ENV=online`. `localdev` is for developing on localhost and `online` when deployed to a cloud service and such.
 
 
 ## Testing
