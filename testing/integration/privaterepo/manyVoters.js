@@ -32,7 +32,7 @@ describe('Vote.', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -40,7 +40,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -48,7 +50,7 @@ describe('Vote.', function () {
         const sevenDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor:*/ contributor_name,
             /*side:*/ "no",
         );
@@ -57,7 +59,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
             /*side:*/ "yes",
         );
@@ -65,7 +69,7 @@ describe('Vote.', function () {
         const amDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
@@ -74,7 +78,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
             /*side:*/ "no",
         );
@@ -82,7 +88,7 @@ describe('Vote.', function () {
         const jcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
@@ -91,7 +97,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
             /*side:*/ "yes",
         );
@@ -99,7 +107,7 @@ describe('Vote.', function () {
         const pcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
@@ -108,7 +116,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
             /*side:*/ "yes",
         );
@@ -116,7 +126,7 @@ describe('Vote.', function () {
         const mbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
@@ -125,7 +135,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
             /*side:*/ "yes",
         );
@@ -133,7 +145,7 @@ describe('Vote.', function () {
         const npVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
@@ -142,7 +154,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
             /*side:*/ "yes",
         );
@@ -150,7 +164,7 @@ describe('Vote.', function () {
         const nnVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
@@ -159,7 +173,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
             /*side:*/ "yes",
         );
@@ -167,7 +183,7 @@ describe('Vote.', function () {
         const jpVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
@@ -176,7 +192,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
             /*side:*/ "yes",
         );
@@ -184,7 +202,7 @@ describe('Vote.', function () {
         const tsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
@@ -193,7 +211,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
             /*side:*/ "no",
         );
@@ -201,7 +221,7 @@ describe('Vote.', function () {
         const afVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "af",
             /*side:*/ "yes",
         );
@@ -210,7 +230,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
             /*side:*/ "no",
         );
@@ -218,7 +240,7 @@ describe('Vote.', function () {
         const dsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "ds",
             /*side:*/ "yes",
         );
@@ -227,7 +249,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
             /*side:*/ "no",
         );
@@ -235,7 +259,7 @@ describe('Vote.', function () {
         const riVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -297,7 +321,7 @@ describe('Vote.', function () {
         const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -308,7 +332,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "yes",
         );
@@ -316,7 +342,7 @@ describe('Vote.', function () {
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -324,7 +350,7 @@ describe('Vote.', function () {
         const maryVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -332,7 +358,7 @@ describe('Vote.', function () {
         var jcVoteYesTotal = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "defaultHash4",
+            /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
@@ -373,12 +399,12 @@ describe('Vote.', function () {
         );
         assert.deepEqual(
           openStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "defaultHash4", "defaultHash": "defaultHash4" },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "issue_4", "defaultHash": "issue_4" },
           "Fail open on initial vote below quorum"
         );
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "defaultHash4", "defaultHash": "defaultHash4" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "issue_4", "defaultHash": "issue_4" },
           "Fail to merge even though it was voted in."
         );
       });
