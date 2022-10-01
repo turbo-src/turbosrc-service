@@ -31,7 +31,9 @@ describe('Vote.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
-            /*defaultHash:*/ "defaultHash2",
+            /*defaultHash:*/ "issue_2",
+            /*childDefaultHash:*/ "issue_2",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "yes",
         );
@@ -45,7 +47,7 @@ describe('Vote.', function () {
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
-            /*defaultHash:*/ "defaultHash2",
+            /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -53,7 +55,7 @@ describe('Vote.', function () {
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
-            /*defaultHash:*/ "defaultHash2",
+            /*defaultHash:*/ "issue_2",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -61,21 +63,21 @@ describe('Vote.', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
-            /*defaultHash:*/ "defaultHash2",
+            /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "defaultHash2", "defaultHash": "defaultHash2" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "issue_2", "defaultHash": "issue_2" },
          { status: 200, type: 2 },
           "Fail to merge even though it was voted in."
         );
 
         assert.equal(
             voteYesTotals,
-            "0",
+            "500001",
             "Fail to add votes yes."
         );
         assert.equal(
