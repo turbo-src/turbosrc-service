@@ -46,7 +46,7 @@ const {
   postCreateIssue,
   postGetIssueID,
   postGetTsrcID
-} = require("../src/ghServiceRequests");
+} = require("./../utils/ghServiceRequests");
 
 const {
   //createRepo,
@@ -85,8 +85,38 @@ const {
   //getContributorTokenAmount
 } = require("./state");
 
+async function getGitHubPRhead(owner, repo, issueID) {
+    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number((args.defaultHash).split('_')[1]))
+
+    return gitHubPullRequest.head.sha
+}
+
+async function convertDefaultHash(owner, repo, defaultHash) {
+    // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
+    // It'll also record the defaultHash against the tsrcID for later use.
+    if (onlineMode) {
+      const tsrcID = await getGitHubPRhead(args.owner, args.repo, args.defaultHash)
+      let resPostTsrcID = await postCreateTsrcID(`${args.owner}/${args.repo}`, tsrcID, defaultHash)
+      if (resPostTsrcID === 201) {
+        return tsrcID
+      } else {
+        return defaultHash
+      }
+    } else {
+      let resPostTsrcID = await postCreateTsrcID(`${args.owner}/${args.repo}`, defaultHash, defaultHash)
+      if (resPostTsrcID === 201) {
+        return defaultHash
+      } else {
+	return 500
+      }
+    }
+
+    return defaultHash
+}
+
 const root = {
   createTsrcPullRequest: async (args) => {
+
     const res = await postCreatePullRequest(
       args.owner,
       args.repo,
@@ -234,7 +264,16 @@ const root = {
     //}
   },
   setVote: async function (args) {
-    //console.log('\nvote code:\n' + vote_code)
+    const issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
+    // If ran online, it'll convert the defaultHashs into a tsrcIDs.
+    const originalDefaultHash = args.defaultHash
+    args.defaultHash = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
+    if (originalDefaultHash === args.childDefaultHash) {
+      args.childDefaultHash = args.defaultHash
+    } else {
+      args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
+    }
+
     let mergeable
     let prVoteStatus = await postGetPullRequest(
       args.owner,
@@ -248,7 +287,7 @@ const root = {
       // get github pull request to get below data
       // to pass into below arguments.
       
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number((args.defaultHash).split('_')[1]))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
       
       if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
 	console.log("Can't vote because trouble finding Github Pull request.")
