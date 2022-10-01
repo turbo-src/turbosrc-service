@@ -34,7 +34,7 @@ describe('Voting.', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
+            /*defaultHash:*/ "issue_1",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -85,7 +85,7 @@ describe('Voting.', function () {
         const maryID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ "mary",
         );
 
