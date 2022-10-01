@@ -1,8 +1,3 @@
-const onlineMode =
-  process.env.TSRC_ENV === "online"
-    ? true
-    : false
-
 const { getPRhead } = require("./../utils/pullForkUtil");
 const {
   getPullRequest,
@@ -49,6 +44,10 @@ const {
 } = require("./../utils/ghServiceRequests");
 
 const {
+        getTurbosrcMode
+      } = require('./../utils/config')
+
+const {
   //createRepo,
   createTokenSupply,
   //transferTokens,
@@ -86,7 +85,8 @@ const {
 } = require("./state");
 
 async function getGitHubPRhead(owner, repo, issueID) {
-    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number((args.defaultHash).split('_')[1]))
+    issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
+    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
 
     return gitHubPullRequest.head.sha
 }
@@ -94,16 +94,22 @@ async function getGitHubPRhead(owner, repo, issueID) {
 async function convertDefaultHash(owner, repo, defaultHash) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
-    if (onlineMode) {
-      const tsrcID = await getGitHubPRhead(args.owner, args.repo, args.defaultHash)
-      let resPostTsrcID = await postCreateTsrcID(`${args.owner}/${args.repo}`, tsrcID, defaultHash)
+    const onlineMode = await getTurbosrcMode()
+    if (onlineMode === 'online') {
+      console.log('args 100')
+      console.log(owner)
+      console.log(repo)
+      console.log(defaultHash)
+      const tsrcID = await getGitHubPRhead(owner, repo, defaultHash)
+
+      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, tsrcID, defaultHash)
       if (resPostTsrcID === 201) {
         return tsrcID
       } else {
         return defaultHash
       }
     } else {
-      let resPostTsrcID = await postCreateTsrcID(`${args.owner}/${args.repo}`, defaultHash, defaultHash)
+      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
       if (resPostTsrcID === 201) {
         return defaultHash
       } else {
@@ -264,7 +270,12 @@ const root = {
     //}
   },
   setVote: async function (args) {
-    const issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
+    console.log(args)
+    const onlineMode = await getTurbosrcMode()
+    console.log('')
+    console.log('onlineMode', onlineMode)
+    console.log('')
+    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
     // If ran online, it'll convert the defaultHashs into a tsrcIDs.
     const originalDefaultHash = args.defaultHash
     args.defaultHash = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
@@ -275,6 +286,8 @@ const root = {
       args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
     }
 
+    console.log('args after')
+    console.log(args)
     let mergeable
     let prVoteStatus = await postGetPullRequest(
       args.owner,
