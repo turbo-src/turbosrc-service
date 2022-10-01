@@ -36,6 +36,13 @@ const {
   postGetContributorSignature,
   getUser
 } = require("./../utils/nameSpaceRequests");
+
+const {
+  postCreateIssue,
+  postGetIssueID,
+  postGetTsrcID
+} = require("../src/ghServiceRequests");
+
 const {
   //createRepo,
   createTokenSupply,
