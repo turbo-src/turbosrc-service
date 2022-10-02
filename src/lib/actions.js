@@ -104,7 +104,7 @@ async function convertDefaultHash(owner, repo, defaultHash) {
       console.log(defaultHash)
       const tsrcID = await getGitHubPRhead(owner, repo, defaultHash)
 
-      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, tsrcID, defaultHash)
+      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, tsrcID)
       console.log('resPostTsrcID: ', resPostTsrcID)
       console.log(tsrcID)
       if (resPostTsrcID === "201") {
@@ -115,7 +115,7 @@ async function convertDefaultHash(owner, repo, defaultHash) {
         return defaultHash
       }
     } else {
-      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
+      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, tsrcID)
       if (resPostTsrcID === 201) {
         return defaultHash
       } else {
