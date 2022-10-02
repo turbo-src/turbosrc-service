@@ -88,7 +88,9 @@ async function getGitHubPRhead(owner, repo, issueID) {
     issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
     const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
 
-    return gitHubPullRequest.head.sha
+    const head = gitHubPullRequest.head.sha
+    console.log('gHprHead', head)
+    return head
 }
 
 async function convertDefaultHash(owner, repo, defaultHash) {
@@ -103,9 +105,13 @@ async function convertDefaultHash(owner, repo, defaultHash) {
       const tsrcID = await getGitHubPRhead(owner, repo, defaultHash)
 
       let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, tsrcID, defaultHash)
-      if (resPostTsrcID === 201) {
+      console.log('resPostTsrcID: ', resPostTsrcID)
+      console.log(tsrcID)
+      if (resPostTsrcID === "201") {
+	console.log('resPostTsrcID: ', resPostTsrcID)
         return tsrcID
       } else {
+	console.log('defaultHash instead resPostTsrcID: ', defaultHash)
         return defaultHash
       }
     } else {
@@ -278,6 +284,8 @@ const root = {
     const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
     // If ran online, it'll convert the defaultHashs into a tsrcIDs.
     const originalDefaultHash = args.defaultHash
+    console.log('defaultHash: ', args.defaultHash)
+    console.log('childDefaultHash: ', args.childDefaultHash)
     args.defaultHash = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
     if (originalDefaultHash === args.childDefaultHash) {
       args.childDefaultHash = args.defaultHash
@@ -285,6 +293,9 @@ const root = {
       args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
       args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
     }
+
+    console.log('after defaultHash: ', args.defaultHash)
+    console.log('after childDefaultHash: ', args.childDefaultHash)
 
     console.log('args after')
     console.log(args)
