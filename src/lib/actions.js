@@ -383,7 +383,11 @@ const root = {
         title // get title
       );
       console.log('res', res)
-  }
+    } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
+       console.log('PR updated and is mergeable')
+    } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
+       console.log('PR updated but is unmergeable')
+    }
 
    const resSetVote = await postSetVote(
      args.owner,
