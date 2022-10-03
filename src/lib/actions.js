@@ -99,6 +99,8 @@ async function convertDefaultHash(owner, repo, defaultHash) {
     let resPostTsrcID
 
     let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
+   let convertedChildDefaulHash
+   let convertedDefaulHash
     console.log('tsrcID ', tsrcID)
     const onlineMode = await getTurbosrcMode()
     if (onlineMode === 'online') {
@@ -107,38 +109,53 @@ async function convertDefaultHash(owner, repo, defaultHash) {
       console.log(repo)
       console.log(defaultHash)
       const head = await getGitHubPRhead(owner, repo, defaultHash)
+      console.log(head)
+      console.log(tsrcID)
 
-      if (tsrcID === head && tsrcID !== 500) {
-	return head
-      } else if (tsrcID === 500) {
-	return 500
+      if (tsrcID === head && tsrcID !== "500") {
+        convertedDefaulHash = head
+        convertedChildDefaulHash = head
+        return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
+      } else if (tsrcID !== head && tsrcID !== "500") {
+	childDefaultHash = tsrcID
+	
+      //} else if (tsrcID === "500") {
+      //  return { status: "500", defaultHash: defaulHash, childDefaultHash: defaulHash }
       } else { 
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
         console.log('resPostTsrcID: ', resPostTsrcID)
         console.log(head)
         if (resPostTsrcID === "201") {
           console.log('resPostTsrcID: ', resPostTsrcID)
-          return head
+          convertedDefaulHash = head
+          convertedChildDefaulHash = head
+          return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
         } else {
           console.log('defaultHash instead resPostTsrcID: ', defaultHash)
-          return defaultHash
+          convertedDefaulHash = defaultHash
+          convertedChildDefaulHash = defaultHash
+        return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
         }
       }
     } else {
-      if (tsrcID === head && tsrcID !== 500) {
+      if (tsrcID === head && tsrcID !== "500") {
         resPostTsrcID = tsrcID
       } else { 
 	// Offline so we don't get the HEAD of the PR from GH.
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
       }
       if (resPostTsrcID === 201) {
-        return defaultHash
+        convertedDefaulHash = defaultHash
+        convertedChildDefaulHash = defaultHash
+        return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash:convertedChildDefaulHash }
       } else {
-	return 500
+        return { status: "500", defaultHash: defaulHash, childDefaultHash: defaulHash }
       }
     }
 
-    return defaultHash
+    convertedDefaulHash = defaultHash
+    convertedChildDefaulHash = defaultHash
+    return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash:convertedChildDefaulHash }
 }
 
 const root = {
@@ -301,8 +318,9 @@ const root = {
     const originalDefaultHash = args.defaultHash
     console.log('defaultHash: ', args.defaultHash)
     console.log('childDefaultHash: ', args.childDefaultHash)
-    args.defaultHash = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    args.childDefaultHash = args.defaultHash
+    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
+    args.defaultHash = convertedHashes.defaultHash
+    args.childDefaultHash = convertedHashes.childDefaultHash
 
     //if (originalDefaultHash === args.childDefaultHash) {
     //  args.childDefaultHash = args.defaultHash
