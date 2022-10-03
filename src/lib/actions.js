@@ -118,9 +118,13 @@ async function convertDefaultHash(owner, repo, defaultHash) {
         return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
       } else if (tsrcID !== head && tsrcID !== "500") {
 	childDefaultHash = tsrcID
+        convertedDefaulHash = tsrcID
+        convertedChildDefaulHash = head
+	console.log("Updated?")
+	console.log("tsrcID/default ", convertedDefaulHash)
+	console.log("child", convertedChildDefaulHash)
 	
-      //} else if (tsrcID === "500") {
-      //  return { status: "500", defaultHash: defaulHash, childDefaultHash: defaulHash }
+          return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
       } else { 
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
         console.log('resPostTsrcID: ', resPostTsrcID)
