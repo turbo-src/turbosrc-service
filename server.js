@@ -277,10 +277,22 @@ var root = {
   },
   getGitHubPullRequest: async (args) => {
     const defaultHash = (args.defaultHash)
+    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
     try {
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(defaultHash))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
 
-      var mergeable = gitHubPullRequest.mergeable
+      mergeable = gitHubPullRequest.mergeable
+      const baseBranch = gitHubPullRequest.base.ref
+      const forkBranch = gitHubPullRequest.head.ref
+      const head =  gitHubPullRequest.head.sha
+      const remoteURL = gitHubPullRequest.head.repo.git_url
+      const title = gitHubPullRequest.title
+      console.log('baseBranch ', baseBranch)
+      console.log('title ', title)
+      if (mergeable === null) {
+          mergeable = false
+      }
+
       var mergeCommitSha
       const state = gitHubPullRequest.state
       if (gitHubPullRequest.merge_commit_sha === null) {
@@ -288,7 +300,6 @@ var root = {
       } else {
          mergeCommitSha = gitHubPullRequest.merge_commit_sha
       }
-      const baseBranch = gitHubPullRequest.base.ref
       if (mergeable === null) {
           mergeable = false
       }
