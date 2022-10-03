@@ -96,26 +96,41 @@ async function getGitHubPRhead(owner, repo, issueID) {
 async function convertDefaultHash(owner, repo, defaultHash) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
+    let resPostTsrcID
+
+    let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
+    console.log('tsrcID ', tsrcID)
     const onlineMode = await getTurbosrcMode()
     if (onlineMode === 'online') {
       console.log('args 100')
       console.log(owner)
       console.log(repo)
       console.log(defaultHash)
-      const tsrcID = await getGitHubPRhead(owner, repo, defaultHash)
+      const head = await getGitHubPRhead(owner, repo, defaultHash)
 
-      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, tsrcID)
-      console.log('resPostTsrcID: ', resPostTsrcID)
-      console.log(tsrcID)
-      if (resPostTsrcID === "201") {
-	console.log('resPostTsrcID: ', resPostTsrcID)
-        return tsrcID
-      } else {
-	console.log('defaultHash instead resPostTsrcID: ', defaultHash)
-        return defaultHash
+      if (tsrcID === head && tsrcID !== 500) {
+	return head
+      } else if (tsrcID === 500) {
+	return 500
+      } else { 
+        resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
+        console.log('resPostTsrcID: ', resPostTsrcID)
+        console.log(head)
+        if (resPostTsrcID === "201") {
+          console.log('resPostTsrcID: ', resPostTsrcID)
+          return head
+        } else {
+          console.log('defaultHash instead resPostTsrcID: ', defaultHash)
+          return defaultHash
+        }
       }
     } else {
-      let resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, tsrcID)
+      if (tsrcID === head && tsrcID !== 500) {
+        resPostTsrcID = tsrcID
+      } else { 
+	// Offline so we don't get the HEAD of the PR from GH.
+        resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
+      }
       if (resPostTsrcID === 201) {
         return defaultHash
       } else {
@@ -287,12 +302,14 @@ const root = {
     console.log('defaultHash: ', args.defaultHash)
     console.log('childDefaultHash: ', args.childDefaultHash)
     args.defaultHash = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    if (originalDefaultHash === args.childDefaultHash) {
-      args.childDefaultHash = args.defaultHash
-    } else {
-      args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
-      args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
-    }
+    args.childDefaultHash = args.defaultHash
+
+    //if (originalDefaultHash === args.childDefaultHash) {
+    //  args.childDefaultHash = args.defaultHash
+    //} else {
+    //  args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
+    //  args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
+    //}
 
     console.log('after defaultHash: ', args.defaultHash)
     console.log('after childDefaultHash: ', args.childDefaultHash)
@@ -302,34 +319,35 @@ const root = {
     let mergeable
     let prVoteStatus = await postGetPullRequest(
       args.owner,
-      args.repo,
+      `${args.owner}/${args.repo}`,
       args.defaultHash,
       args.contributor_id,
       args.side
     );
+    console.log('prVoteStatus: ', prVoteStatus)
+
+    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
+    
+    if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
+      console.log("Can't vote because trouble finding Github Pull request.")
+    }
+    console.log('arrive')
+    mergeable = gitHubPullRequest.mergeable
+    const baseBranch = gitHubPullRequest.base.ref
+    const forkBranch = gitHubPullRequest.head.ref
+    const head =  gitHubPullRequest.head.sha
+    const remoteURL = gitHubPullRequest.head.repo.git_url
+    const title = gitHubPullRequest.title
+    console.log('baseBranch ', baseBranch)
+    console.log('title ', title)
+    if (mergeable === null) {
+        mergeable = false
+    }
 
     if (prVoteStatus.status === 404) {
       // get github pull request to get below data
       // to pass into below arguments.
       
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
-      
-      if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
-	console.log("Can't vote because trouble finding Github Pull request.")
-      }
-      console.log('arrive')
-      mergeable = gitHubPullRequest.mergeable
-      const baseBranch = gitHubPullRequest.base.ref
-      const forkBranch = gitHubPullRequest.head.ref
-      const head =  gitHubPullRequest.head.sha
-      const remoteURL = gitHubPullRequest.head.repo.git_url
-      const title = gitHubPullRequest.title
-      console.log('baseBranch ', baseBranch)
-      console.log('title ', title)
-      if (mergeable === null) {
-          mergeable = false
-      }
-
       const res = await postCreatePullRequest(
         args.owner,
         `${args.owner}/${args.repo}`,
@@ -343,21 +361,22 @@ const root = {
         title // get title
       );
       console.log('res', res)
-    }
+  }
 
-      const resSetVote = await postSetVote(
-        args.owner,
-        `${args.owner}/${args.repo}`,
-        args.defaultHash,
-        args.childDefaultHash,
-        mergeable,
-        args.contributor_id,
-        args.side
-      );
+   const resSetVote = await postSetVote(
+     args.owner,
+     `${args.owner}/${args.repo}`,
+     args.defaultHash,
+     args.childDefaultHash,
+     mergeable,
+     args.contributor_id,
+     args.side
+   );
+
    // Marginal vote that exceeded quorum, vote yes was majority.
     prVoteStatus = await postGetPullRequest(
       args.owner,
-      args.repo,
+      `${args.owner}/${args.repo}`,
       args.defaultHash,
       args.contributor_id,
       args.side
