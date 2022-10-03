@@ -58,6 +58,29 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.createPullRequest;
   },
+  createLinkedPullRequest: async (
+    owner,
+    repo,
+    parentDefaultHash,
+    defaultHash,
+    childDefaultHash,
+    head,
+    branchDefaultHash,
+    remoteURL,
+    baseBranch,
+    fork_branch,
+    title
+  ) => {
+    const res = await superagent
+      .post(privateStore)
+      .send({
+        query: `{ createLinkedPullRequest(owner: "${owner}", repo: "${repo}", parentDefaultHash: "${parentDefaultHash}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
+      })
+      .set("accept", "json");
+
+    const json = JSON.parse(res.text);
+    return json.data.createLinkedPullRequest;
+  },
   postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
       .post(privateStore)

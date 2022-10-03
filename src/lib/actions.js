@@ -17,6 +17,7 @@ const {
   //postSetVote,
 } = require("./../utils/requests");
 const {
+  createLinkedPullRequest,
   postCreatePullRequest,
   postCreateRepo,
   postGetContributorTokenAmount,
@@ -385,6 +386,40 @@ const root = {
       console.log('res', res)
     } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
        console.log('PR updated and is mergeable')
+
+       const resLinkedPR = await createLinkedPullRequest(
+         args.owner,
+         `${args.owner}/${args.repo}`,
+         /*parentDefaultHash:*/ args.defaultHash,
+         /*defaultHash:*/ args.childDefaultHash,
+         /*childDefaultHash:*/ args.childDefaultHash,
+         /*head:*/ args.childDefaultHash,
+         /*branchDefaultHash*/ "branchDefaultHash",
+         remoteURL, // get remoteURl
+         baseBranch, // get baseBranch
+         forkBranch, // get forkBranch
+         title // get title
+       );
+
+       if (resLinkedPR  === "201") {
+          console.log('Created mergeable linked pr.')
+	  // New linked pr has default and child that's same as
+	  // the child of the parent.
+          args.defaultHash = args.childDefaultHash
+       } else {
+         console.log("problem creating linked pull request")
+         console.log(args.owner)
+         console.log(`${args.owner}/${args.repo}`)
+         console.log(/*parentDefaultHash:*/ args.defaultHash)
+         console.log(/*defaultHash:*/ args.childDefaultHash)
+         console.log(/*childDefaultHash:*/ args.childDefaultHash)
+         console.log(/*head:*/ args.childDefaultHash)
+         console.log(/*branchDefaultHash*/ "branchDefaultHash")
+         console.log(remoteURL)// get remoteURL)
+         console.log(baseBranch) // get baseBranch)
+         console.log(forkBranch) // get forkBranch)
+         console.log(title) // get title)
+       }
     } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
        console.log('PR updated but is unmergeable')
     }
