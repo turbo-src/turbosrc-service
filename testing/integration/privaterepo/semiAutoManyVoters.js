@@ -331,7 +331,7 @@ describe('Vote.', function () {
         );
         assert.deepEqual(
           openStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest5", "childDefaultHash": "issue_5", "defaultHash": "issue_5" },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest5", "childDefaultHash": "3baa5aec09d458cd1cd935ab144ef7f68462cd71", "defaultHash": "3baa5aec09d458cd1cd935ab144ef7f68462cd71" },
           "Fail keep open even though initial vote below quorum"
         );
       });
