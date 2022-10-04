@@ -399,12 +399,12 @@ describe('Vote.', function () {
         );
         assert.deepEqual(
           openStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "issue_4", "defaultHash": "issue_4" },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "90a37db47574c1c16e0a9865f809ca2283e6a412", "defaultHash": "90a37db47574c1c16e0a9865f809ca2283e6a412" },
           "Fail open on initial vote below quorum"
         );
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "issue_4", "defaultHash": "issue_4" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest4", "childDefaultHash": "90a37db47574c1c16e0a9865f809ca2283e6a412", "defaultHash": "90a37db47574c1c16e0a9865f809ca2283e6a412" },
           "Fail to merge even though it was voted in."
         );
       });
