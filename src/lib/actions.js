@@ -115,11 +115,11 @@ async function convertDefaultHash(owner, repo, defaultHash) {
       console.log(head)
       console.log(tsrcID)
 
-      if (tsrcID === head && tsrcID !== "500") {
+      if (tsrcID === head && tsrcID !== "500" ) {
         convertedDefaulHash = head
         convertedChildDefaulHash = head
         return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
-      } else if (tsrcID !== head && tsrcID !== "500") {
+      } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
 	childDefaultHash = tsrcID
         convertedDefaulHash = tsrcID
         convertedChildDefaulHash = head
