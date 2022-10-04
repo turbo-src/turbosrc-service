@@ -196,8 +196,6 @@ const root = {
     }
   },
   getPRvoteYesTotals: async function (args) {
-    console.log('gprvyes')
-    console.log(args)
     const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
     args.defaultHash = convertedHashes.defaultHash
     args.childDefaultHash = convertedHashes.childDefaultHash
@@ -212,8 +210,6 @@ const root = {
     return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
-    console.log('gprvno')
-    console.log(args)
     const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
     args.defaultHash = convertedHashes.defaultHash
     args.childDefaultHash = convertedHashes.childDefaultHash
@@ -228,8 +224,6 @@ const root = {
     return voteNo;
   },
   getPRvoteTotals: async function (args) {
-    console.log('gpvt')
-    console.log(args)
     const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
     args.defaultHash = convertedHashes.defaultHash
     args.childDefaultHash = convertedHashes.childDefaultHash
@@ -403,7 +397,6 @@ const root = {
         forkBranch, // get forkBranch
         title // get title
       );
-      console.log('res', res)
     } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
        console.log('PR updated and is mergeable')
 
