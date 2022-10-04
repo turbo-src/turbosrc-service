@@ -242,7 +242,7 @@ var root = {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getVoteTotals;
+    return json.data.getPRvoteTotals;
   },
   postGetPRvoteYesTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent

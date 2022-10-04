@@ -87,8 +87,10 @@ const {
 
 async function getGitHubPRhead(owner, repo, issueID) {
     issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
+   console.log('issueID ', issueID)
     const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
 
+   console.log('ggprh', gitHubPullRequest)
     const head = gitHubPullRequest.head.sha
     console.log('gHprHead', head)
     return head
@@ -194,6 +196,11 @@ const root = {
     }
   },
   getPRvoteYesTotals: async function (args) {
+    console.log('gprvyes')
+    console.log(args)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
+    args.defaultHash = convertedHashes.defaultHash
+    args.childDefaultHash = convertedHashes.childDefaultHash
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -205,6 +212,11 @@ const root = {
     return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
+    console.log('gprvno')
+    console.log(args)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
+    args.defaultHash = convertedHashes.defaultHash
+    args.childDefaultHash = convertedHashes.childDefaultHash
     const voteNo = await postGetPRvoteNoTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -215,17 +227,22 @@ const root = {
 
     return voteNo;
   },
-  //getPRvoteTotals: async function (args) {
-  // const vote = await postGetPRvoteTotals(
-  //     args.owner,
-  //     `${args.owner}/${args.repo}`,
-  //     args.defaultHash,
-  //     args.contributor_id,
-  //     "",
-  // )
+  getPRvoteTotals: async function (args) {
+    console.log('gpvt')
+    console.log(args)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
+    args.defaultHash = convertedHashes.defaultHash
+    args.childDefaultHash = convertedHashes.childDefaultHash
+    const vote = await postGetPRvoteTotals(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.defaultHash,
+      args.contributor_id,
+      ""
+    );
 
-  // return vote
-  //},
+    return vote;
+  },
   getContributorTokenAmount: async function (database, args) {
     //const contributorTokenAmount = getContributorTokenAmount(database, args)
     const contributorTokenAmount = await postGetContributorTokenAmount(

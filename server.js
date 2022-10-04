@@ -336,13 +336,9 @@ var root = {
     return voteNoTotals
   },
   getPRvoteTotals: async (args) => {
-    const voteYesTotals = await getPRvoteYesTotals(args)
-    const voteNoTotals = await getPRvoteNoTotals(args)
-  
-    var voteTotals = Number(voteYesTotals) + Number(voteNoTotals)
-    voteTotals = voteTotals/1_000_000
+    const voteTotals = await getPRvoteTotals(args)
 
-    return `${voteTotals}`
+    return voteTotals
   },
   pullFork: async (args) => {
     superagent
