@@ -14,6 +14,10 @@ const {
         getGithubContributor,
       } = require('../../../src/utils/config')
 
+//const {
+//  getGitHubPullRequest,
+//} = require("../../../src/utils/gitHubUtil");
+
 var snooze_ms = 5000
 
 // We call this at the top of each test case, otherwise nodeosd could
@@ -32,9 +36,9 @@ describe('Pull request', function () {
 	//name space service
         const gitHubPullRequest =
 	    await getGitHubPullRequest(
-            /*owner:*/ "turbo-src",
-            /*repo:*/ "git-service",
-	    "defaultHash2"
+            /*owner:*/ "7db9a",
+            /*repo:*/ "demo",
+	    "issue_1"
 	    )
         console.log(gitHubPullRequest)
         assert.equal(
