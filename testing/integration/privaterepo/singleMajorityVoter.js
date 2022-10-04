@@ -70,7 +70,7 @@ describe('Vote.', function () {
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "issue_2", "defaultHash": "issue_2" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
          { status: 200, type: 2 },
           "Fail to merge even though it was voted in."
         );
