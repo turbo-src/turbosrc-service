@@ -255,6 +255,9 @@ const root = {
     return contributorTokenAmount;
   },
   getPullRequest: async function (args) {
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
+    args.defaultHash = convertedHashes.defaultHash
+    args.childDefaultHash = convertedHashes.childDefaultHash
     const status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
