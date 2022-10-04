@@ -90,20 +90,20 @@ async function getGitHubPRhead(owner, repo, issueID) {
    console.log('issueID ', issueID)
     const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
 
-   console.log('ggprh', gitHubPullRequest)
     const head = gitHubPullRequest.head.sha
     console.log('gHprHead', head)
     return head
 }
 
-async function convertDefaultHash(owner, repo, defaultHash) {
+async function convertDefaultHash(owner, repo, defaultHash, write) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
+   try {
     let resPostTsrcID
 
     let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
-   let convertedChildDefaulHash
-   let convertedDefaulHash
+   let convertedChildDefaultHash
+   let convertedDefaultHash
     console.log('tsrcID ', tsrcID)
     const onlineMode = await getTurbosrcMode()
     if (onlineMode === 'online') {
@@ -112,57 +112,67 @@ async function convertDefaultHash(owner, repo, defaultHash) {
       console.log(repo)
       console.log(defaultHash)
       const head = await getGitHubPRhead(owner, repo, defaultHash)
-      console.log(head)
-      console.log(tsrcID)
+      console.log('head ', head)
+      console.log('tsrcID 100', tsrcID)
 
-      if (tsrcID === head && tsrcID !== "500" ) {
-        convertedDefaulHash = head
-        convertedChildDefaulHash = head
-        return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
+      if (head === null || head === undefined ) {
+        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+      } else if (tsrcID === head && tsrcID !== "500" ) {
+        convertedDefaultHash = head
+        convertedChildDefaultHash = head
+        return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
       } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
 	childDefaultHash = tsrcID
-        convertedDefaulHash = tsrcID
-        convertedChildDefaulHash = head
+        convertedDefaultHash = tsrcID
+        convertedChildDefaultHash = head
 	console.log("Updated?")
-	console.log("tsrcID/default ", convertedDefaulHash)
-	console.log("child", convertedChildDefaulHash)
+	console.log("tsrcID/default ", convertedDefaultHash)
+	console.log("child", convertedChildDefaultHash)
 	
-          return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
-      } else { 
+          return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+      } else if (write) { 
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
         console.log('resPostTsrcID: ', resPostTsrcID)
         console.log(head)
         if (resPostTsrcID === "201") {
           console.log('resPostTsrcID: ', resPostTsrcID)
-          convertedDefaulHash = head
-          convertedChildDefaulHash = head
-          return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
+          convertedDefaultHash = head
+          convertedChildDefaultHash = head
+          return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
         } else {
           console.log('defaultHash instead resPostTsrcID: ', defaultHash)
-          convertedDefaulHash = defaultHash
-          convertedChildDefaulHash = defaultHash
-        return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash: convertedChildDefaulHash }
+          convertedDefaultHash = defaultHash
+          convertedChildDefaultHash = defaultHash
+        return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
         }
+      } else {
+        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
+
     } else {
       if (tsrcID === head && tsrcID !== "500") {
         resPostTsrcID = tsrcID
-      } else { 
+      } else if (write) { 
 	// Offline so we don't get the HEAD of the PR from GH.
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
+      } else {
+        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
       if (resPostTsrcID === 201) {
-        convertedDefaulHash = defaultHash
-        convertedChildDefaulHash = defaultHash
-        return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash:convertedChildDefaulHash }
+        convertedDefaultHash = defaultHash
+        convertedChildDefaultHash = defaultHash
+        return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
       } else {
-        return { status: "500", defaultHash: defaulHash, childDefaultHash: defaulHash }
+        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
     }
 
-    convertedDefaulHash = defaultHash
-    convertedChildDefaulHash = defaultHash
-    return { status: 201, defaultHash: convertedDefaulHash, childDefaultHash:convertedChildDefaulHash }
+    convertedDefaultHash = defaultHash
+    convertedChildDefaultHash = defaultHash
+    return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
+    } catch(error) {
+        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+    }
 }
 
 const root = {
@@ -196,9 +206,12 @@ const root = {
     }
   },
   getPRvoteYesTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    args.defaultHash = convertedHashes.defaultHash
-    args.childDefaultHash = convertedHashes.childDefaultHash
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
+
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -210,9 +223,11 @@ const root = {
     return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    args.defaultHash = convertedHashes.defaultHash
-    args.childDefaultHash = convertedHashes.childDefaultHash
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
     const voteNo = await postGetPRvoteNoTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -224,9 +239,11 @@ const root = {
     return voteNo;
   },
   getPRvoteTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    args.defaultHash = convertedHashes.defaultHash
-    args.childDefaultHash = convertedHashes.childDefaultHash
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
     const vote = await postGetPRvoteTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -249,9 +266,11 @@ const root = {
     return contributorTokenAmount;
   },
   getPullRequest: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    args.defaultHash = convertedHashes.defaultHash
-    args.childDefaultHash = convertedHashes.childDefaultHash
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
     const status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -337,132 +356,136 @@ const root = {
     const originalDefaultHash = args.defaultHash
     console.log('defaultHash: ', args.defaultHash)
     console.log('childDefaultHash: ', args.childDefaultHash)
-    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash)
-    args.defaultHash = convertedHashes.defaultHash
-    args.childDefaultHash = convertedHashes.childDefaultHash
+    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
 
-    //if (originalDefaultHash === args.childDefaultHash) {
-    //  args.childDefaultHash = args.defaultHash
-    //} else {
-    //  args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
-    //  args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
-    //}
+      //if (originalDefaultHash === args.childDefaultHash) {
+      //  args.childDefaultHash = args.defaultHash
+      //} else {
+      //  args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
+      //  args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
+      //}
 
-    console.log('after defaultHash: ', args.defaultHash)
-    console.log('after childDefaultHash: ', args.childDefaultHash)
+      console.log('after defaultHash: ', args.defaultHash)
+      console.log('after childDefaultHash: ', args.childDefaultHash)
 
-    console.log('args after')
-    console.log(args)
-    let mergeable
-    let prVoteStatus = await postGetPullRequest(
-      args.owner,
-      `${args.owner}/${args.repo}`,
-      args.defaultHash,
-      args.contributor_id,
-      args.side
-    );
-    console.log('prVoteStatus: ', prVoteStatus)
-
-    const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
-    
-    if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
-      console.log("Can't vote because trouble finding Github Pull request.")
-    }
-    console.log('arrive')
-    mergeable = gitHubPullRequest.mergeable
-    const baseBranch = gitHubPullRequest.base.ref
-    const forkBranch = gitHubPullRequest.head.ref
-    const head =  gitHubPullRequest.head.sha
-    const remoteURL = gitHubPullRequest.head.repo.git_url
-    const title = gitHubPullRequest.title
-    console.log('baseBranch ', baseBranch)
-    console.log('title ', title)
-    if (mergeable === null) {
-        mergeable = false
-    }
-
-    if (prVoteStatus.status === 404) {
-      // get github pull request to get below data
-      // to pass into below arguments.
-      
-      const res = await postCreatePullRequest(
+      console.log('args after')
+      console.log(args)
+      let mergeable
+      let prVoteStatus = await postGetPullRequest(
         args.owner,
         `${args.owner}/${args.repo}`,
         args.defaultHash,
-        args.childDefaultHash,
-        head, // get head
-        args.branchDefaultHash,
-        remoteURL, // get remoteURl
-        baseBranch, // get baseBranch
-        forkBranch, // get forkBranch
-        title // get title
+        args.contributor_id,
+        args.side
       );
-    } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
-       console.log('PR updated and is mergeable')
+      console.log('prVoteStatus: ', prVoteStatus)
 
-       const resLinkedPR = await createLinkedPullRequest(
-         args.owner,
-         `${args.owner}/${args.repo}`,
-         /*parentDefaultHash:*/ args.defaultHash,
-         /*defaultHash:*/ args.childDefaultHash,
-         /*childDefaultHash:*/ args.childDefaultHash,
-         /*head:*/ args.childDefaultHash,
-         /*branchDefaultHash*/ "branchDefaultHash",
-         remoteURL, // get remoteURl
-         baseBranch, // get baseBranch
-         forkBranch, // get forkBranch
-         title // get title
-       );
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
+      
+      if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
+        console.log("Can't vote because trouble finding Github Pull request.")
+      }
+      console.log('arrive')
+      mergeable = gitHubPullRequest.mergeable
+      const baseBranch = gitHubPullRequest.base.ref
+      const forkBranch = gitHubPullRequest.head.ref
+      const head =  gitHubPullRequest.head.sha
+      const remoteURL = gitHubPullRequest.head.repo.git_url
+      const title = gitHubPullRequest.title
+      console.log('baseBranch ', baseBranch)
+      console.log('title ', title)
+      if (mergeable === null) {
+          mergeable = false
+      }
 
-       if (resLinkedPR  === "201") {
-          console.log('Created mergeable linked pr.')
-	  // New linked pr has default and child that's same as
-	  // the child of the parent.
-          args.defaultHash = args.childDefaultHash
-       } else {
-         console.log("problem creating linked pull request")
-         console.log(args.owner)
-         console.log(`${args.owner}/${args.repo}`)
-         console.log(/*parentDefaultHash:*/ args.defaultHash)
-         console.log(/*defaultHash:*/ args.childDefaultHash)
-         console.log(/*childDefaultHash:*/ args.childDefaultHash)
-         console.log(/*head:*/ args.childDefaultHash)
-         console.log(/*branchDefaultHash*/ "branchDefaultHash")
-         console.log(remoteURL)// get remoteURL)
-         console.log(baseBranch) // get baseBranch)
-         console.log(forkBranch) // get forkBranch)
-         console.log(title) // get title)
-       }
-    } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
-       console.log('PR updated but is unmergeable')
+      if (prVoteStatus.status === 404) {
+        // get github pull request to get below data
+        // to pass into below arguments.
+        
+        const res = await postCreatePullRequest(
+          args.owner,
+          `${args.owner}/${args.repo}`,
+          args.defaultHash,
+          args.childDefaultHash,
+          head, // get head
+          args.branchDefaultHash,
+          remoteURL, // get remoteURl
+          baseBranch, // get baseBranch
+          forkBranch, // get forkBranch
+          title // get title
+        );
+      } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
+         console.log('PR updated and is mergeable')
+
+         const resLinkedPR = await createLinkedPullRequest(
+           args.owner,
+           `${args.owner}/${args.repo}`,
+           /*parentDefaultHash:*/ args.defaultHash,
+           /*defaultHash:*/ args.childDefaultHash,
+           /*childDefaultHash:*/ args.childDefaultHash,
+           /*head:*/ args.childDefaultHash,
+           /*branchDefaultHash*/ "branchDefaultHash",
+           remoteURL, // get remoteURl
+           baseBranch, // get baseBranch
+           forkBranch, // get forkBranch
+           title // get title
+         );
+
+         if (resLinkedPR  === "201") {
+            console.log('Created mergeable linked pr.')
+            // New linked pr has default and child that's same as
+            // the child of the parent.
+            args.defaultHash = args.childDefaultHash
+         } else {
+           console.log("problem creating linked pull request")
+           console.log(args.owner)
+           console.log(`${args.owner}/${args.repo}`)
+           console.log(/*parentDefaultHash:*/ args.defaultHash)
+           console.log(/*defaultHash:*/ args.childDefaultHash)
+           console.log(/*childDefaultHash:*/ args.childDefaultHash)
+           console.log(/*head:*/ args.childDefaultHash)
+           console.log(/*branchDefaultHash*/ "branchDefaultHash")
+           console.log(remoteURL)// get remoteURL)
+           console.log(baseBranch) // get baseBranch)
+           console.log(forkBranch) // get forkBranch)
+           console.log(title) // get title)
+         }
+      } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
+         console.log('PR updated but is unmergeable')
+      }
+
+     const resSetVote = await postSetVote(
+       args.owner,
+       `${args.owner}/${args.repo}`,
+       args.defaultHash,
+       args.childDefaultHash,
+       mergeable,
+       args.contributor_id,
+       args.side
+     );
+
+     // Marginal vote that exceeded quorum, vote yes was majority.
+      prVoteStatus = await postGetPullRequest(
+        args.owner,
+        `${args.owner}/${args.repo}`,
+        args.defaultHash,
+        args.contributor_id,
+        args.side
+      );
+
+      // Merge if turborsc pull request status says there are enough votes to merge.
+      if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
+         console.log(`Github merge (${args.defaultHash}) disabled)`)
+        /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.defaultHash)
+      } 
+
+      return resSetVote;
+    } else {
+      return 403
     }
-
-   const resSetVote = await postSetVote(
-     args.owner,
-     `${args.owner}/${args.repo}`,
-     args.defaultHash,
-     args.childDefaultHash,
-     mergeable,
-     args.contributor_id,
-     args.side
-   );
-
-   // Marginal vote that exceeded quorum, vote yes was majority.
-    prVoteStatus = await postGetPullRequest(
-      args.owner,
-      `${args.owner}/${args.repo}`,
-      args.defaultHash,
-      args.contributor_id,
-      args.side
-    );
-
-    // Merge if turborsc pull request status says there are enough votes to merge.
-    if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
-       console.log(`Github merge (${args.defaultHash}) disabled)`)
-      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.defaultHash)
-    } 
-
-    return resSetVote;
   },
   updatePullRequest: async function (database, args, tokens) {
     const defaultHash = args.defaultHash;
