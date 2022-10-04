@@ -91,8 +91,10 @@ async function getGitHubPRhead(owner, repo, issueID) {
     const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
 
     const head = gitHubPullRequest.head.sha
+    const mergeable = gitHubPullRequest.mergeable
     console.log('gHprHead', head)
-    return head
+    console.log('gHprMergeable', mergeable)
+    return { head: head, mergeable: mergeable }
 }
 
 async function convertDefaultHash(owner, repo, defaultHash, write) {
@@ -100,8 +102,8 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
     // It'll also record the defaultHash against the tsrcID for later use.
    try {
     let resPostTsrcID
-
-    let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
+   let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
+   let mergeable = false
    let convertedChildDefaultHash
    let convertedDefaultHash
     console.log('tsrcID ', tsrcID)
@@ -111,16 +113,19 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       console.log(owner)
       console.log(repo)
       console.log(defaultHash)
-      const head = await getGitHubPRhead(owner, repo, defaultHash)
+      const resGH = await getGitHubPRhead(owner, repo, defaultHash)
+      const head = resGH.head
+      mergeable = resGH.mergeable
       console.log('head ', head)
+      console.log('mergeable ', mergeable)
       console.log('tsrcID 100', tsrcID)
 
       if (head === null || head === undefined ) {
-        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       } else if (tsrcID === head && tsrcID !== "500" ) {
         convertedDefaultHash = head
         convertedChildDefaultHash = head
-        return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
       } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
 	childDefaultHash = tsrcID
         convertedDefaultHash = tsrcID
@@ -129,7 +134,7 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
 	console.log("tsrcID/default ", convertedDefaultHash)
 	console.log("child", convertedChildDefaultHash)
 	
-          return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
       } else if (write) { 
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
         console.log('resPostTsrcID: ', resPostTsrcID)
@@ -138,15 +143,15 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
           console.log('resPostTsrcID: ', resPostTsrcID)
           convertedDefaultHash = head
           convertedChildDefaultHash = head
-          return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
         } else {
           console.log('defaultHash instead resPostTsrcID: ', defaultHash)
           convertedDefaultHash = defaultHash
           convertedChildDefaultHash = defaultHash
-        return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
         }
       } else {
-        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
 
     } else {
@@ -156,22 +161,22 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
 	// Offline so we don't get the HEAD of the PR from GH.
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
       } else {
-        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
       if (resPostTsrcID === 201) {
         convertedDefaultHash = defaultHash
         convertedChildDefaultHash = defaultHash
-        return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
       } else {
-        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
     }
 
     convertedDefaultHash = defaultHash
     convertedChildDefaultHash = defaultHash
-    return { status: 201, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
+    return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
     } catch(error) {
-        return { status: 500, defaultHash: defaultHash, childDefaultHash: defaultHash }
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
     }
 }
 
@@ -271,14 +276,16 @@ const root = {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
-    const status = await postGetPullRequest(
+    let status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
       args.defaultHash,
       "",
       ""
     );
-
+   
+    status.mergeableCodeHost = convertedHashes.mergeable
+   
     return status;
   },
   pullAndVoteStatus: async function (database, pullReqRepoHead, args) {

@@ -77,6 +77,7 @@ var schema = buildSchema(`
     branchDefaultHash:String!
     remoteURL: String!
     baseBranch: String!
+    mergeableCodeHost: Boolean!
   }
 
   type ghPullRequest {
