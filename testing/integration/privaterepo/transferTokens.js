@@ -154,6 +154,8 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
         /*side:*/ "no",
+        /*token:*/ token
+	
     );
 
     const contributorToken = await postGetContributorTokenAmount(
@@ -162,6 +164,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ contributor_id,
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const amContributorToken = await postGetContributorTokenAmount(
@@ -170,6 +173,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const jcContributorToken = await postGetContributorTokenAmount(
@@ -178,6 +182,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const pcContributorToken = await postGetContributorTokenAmount(
@@ -186,6 +191,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const mbContributorToken = await postGetContributorTokenAmount(
@@ -194,6 +200,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const npContributorToken = await postGetContributorTokenAmount(
@@ -202,6 +209,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const nnContributorToken = await postGetContributorTokenAmount(
@@ -210,6 +218,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const jpContributorToken = await postGetContributorTokenAmount(
@@ -218,6 +227,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const tsContributorToken = await postGetContributorTokenAmount(
@@ -226,6 +236,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const afContributorToken = await postGetContributorTokenAmount(
@@ -234,6 +245,8 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
         /*side:*/ "no",
+        /*token:*/ token
+    );
     );
 
     const dsContributorToken = await postGetContributorTokenAmount(
@@ -242,6 +255,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     const riContributorToken = await postGetContributorTokenAmount(
@@ -250,6 +264,7 @@ before(async () => {
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
         /*side:*/ "no",
+        /*token:*/ token
     );
 
     assert.deepEqual(

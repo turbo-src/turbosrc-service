@@ -57,6 +57,7 @@ describe('Create repo', function () {
             /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "no",
+            /*token:*/ token
         );
 
         assert.deepEqual(

@@ -249,7 +249,8 @@ var root = {
     repo,
     defaultHash,
     contributor_id,
-    side
+    side,
+    token
   ) => {
     const res = await superagent
       .post(`${port}/graphql`)
@@ -260,7 +261,7 @@ var root = {
         //{ query: '{ getVoteAll(defaultHash: "default") { vote_code } }' }
         //{ query: `{ getVoteEverything }` }
         {
-          query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
+          query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") { status, amount } }`,
         }
         //{ query: '{ setVote(defaultHash: "default" contributorId: "2", side: 1 ) { vote_code }' }
       ) // sends a JSON post body
