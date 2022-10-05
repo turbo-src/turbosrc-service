@@ -272,10 +272,12 @@ const root = {
   },
   getPullRequest: async function (args) {
     const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    let mergeableCodeHost = true
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
+    mergeableCodeHost = convertedHashes.mergeable
     let status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -283,8 +285,8 @@ const root = {
       "",
       ""
     );
-   
-    status.mergeableCodeHost = convertedHashes.mergeable
+
+    status.mergeableCodeHost = mergeableCodeHost
    
     return status;
   },
