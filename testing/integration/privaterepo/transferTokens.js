@@ -247,7 +247,6 @@ before(async () => {
         /*side:*/ "no",
         /*token:*/ token
     );
-    );
 
     const dsContributorToken = await postGetContributorTokenAmount(
         /*owner:*/ contributor_name,

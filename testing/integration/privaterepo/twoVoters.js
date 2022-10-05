@@ -15,6 +15,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 var snooze_ms = 1500;;
 
@@ -30,6 +33,7 @@ describe('Voting.', function () {
     describe('Two voters vote - exceed quorum.', function () {
       it("Should close open and close vote, then merge.", async () => {
         const contributor_name = await getGithubContributor()
+	const token = await getGithubToken()
         await snooze(snooze_ms);
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
@@ -48,6 +52,7 @@ describe('Voting.', function () {
 	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
+	    /*token:*/ token
         );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
@@ -98,6 +103,7 @@ describe('Voting.', function () {
 	    /*mergeable:*/ true,
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
+	    /*token:*/ token
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
