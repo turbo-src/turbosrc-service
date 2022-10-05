@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
@@ -30,7 +30,7 @@ describe('Pull requests', function () {
     //    await postCreateRepo(
     //        /*owner:*/ "vim",
     //        /*repo:*/ "vim",
-    //        /*pr_id:*/ "issue_4955",
+    //        /*defaultHash:*/ "defaultHash4955",
     //        /*contributor:*/ contributor_name,
     //        /*side:*/ "yes",
     //    );
@@ -43,7 +43,7 @@ describe('Pull requests', function () {
         await postMergePullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_8",
+            /*defaultHash:*/ "defaultHash8",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );

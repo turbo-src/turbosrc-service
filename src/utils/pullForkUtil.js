@@ -60,7 +60,7 @@ async function tarRepo(baseDir, fork) {
 
 //Right now it just makes the dir with oid as a name.
 const pullForkUtil = {
-  // Fork is the issue_id or other uuid of fork from pull request.
+  // Fork is the defaultHash or other uuid of fork from pull request.
   pullForkUtil: async function(repo, forkOid, url, branch) {
     const baseDir = 'repos/' + repo
     const dir = baseDir + '/' + forkOid;
@@ -114,14 +114,14 @@ const pullForkUtil = {
      // sha256
   },
   getPRhead: async(args) => {
-    const pr_id = args.pr_id
+    const defaultHash = args.defaultHash
     // User should do this instead and pass it in request so we don't overuse our github api.
     console.log('owner ' + args.owner)
     console.log('repo ' + args.repo)
-    console.log('pr_id ' + pr_id.split('_')[1])
+    console.log('defaultHash ' + defaultHash)
     var baseRepoName = args.repo
     var baseRepoOwner = args.owner
-    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, pr_id.split('_')[1])
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, defaultHash)
     var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
 
     return [resGetPR, pullReqRepoHead]

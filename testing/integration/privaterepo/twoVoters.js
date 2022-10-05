@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
@@ -15,6 +15,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 var snooze_ms = 1500;;
 
@@ -30,11 +33,12 @@ describe('Voting.', function () {
     describe('Two voters vote - exceed quorum.', function () {
       it("Should close open and close vote, then merge.", async () => {
         const contributor_name = await getGithubContributor()
+	const token = await getGithubToken()
         await snooze(snooze_ms);
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "issue_1",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -43,15 +47,18 @@ describe('Voting.', function () {
         const voteRes = await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
+            /*childDefaultHash:*/ "issue_1",
+	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
+	    /*token:*/ token
         );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -59,22 +66,22 @@ describe('Voting.', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -83,7 +90,7 @@ describe('Voting.', function () {
         const maryID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ "mary",
         );
 
@@ -91,15 +98,18 @@ describe('Voting.', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
+            /*childDefaultHash:*/ "issue_1",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
+	    /*token:*/ token
         );
         await snooze(snooze_ms);
-        const mergeStatus = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
             /*contributor_id:*/ maryID,
             /*side:*/ "yes",
         );
@@ -107,7 +117,7 @@ describe('Voting.', function () {
         const voteTotalsFinal = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "issue_1",
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
@@ -115,7 +125,7 @@ describe('Voting.', function () {
         //console.log(status)
         assert.equal(
             voteRes,
-            "open",
+            201,
             "Fail to vote."
         );
         assert.equal(
@@ -131,9 +141,9 @@ describe('Voting.', function () {
         assert.equal(
             voteTotals, '0.034', "Fail to add votes no."
         );
-        assert.equal(
-            openStatus,
-            "open",
+        assert.deepEqual(
+	    openStatus,
+            { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "a3ff288b25106ad094699ac4dc1897a413d2cdb8", defaultHash: "a3ff288b25106ad094699ac4dc1897a413d2cdb8" },
             "Fail to stay open."
         );
         assert.equal(
@@ -144,7 +154,7 @@ describe('Voting.', function () {
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, type: 2 },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "a3ff288b25106ad094699ac4dc1897a413d2cdb8", defaultHash: "a3ff288b25106ad094699ac4dc1897a413d2cdb8" },
           "Fail to merge even though it was voted in."
         );
       });

@@ -96,6 +96,9 @@ Launch the services.
 docker-compose -f docker/docker-compose.yml up
 ```
 
+## Nix
+
+If running nix, please set envar `TSRC_ENV=localdev` or `TSRC_ENV=online`. `localdev` is for developing on localhost and `online` when deployed to a cloud service and such.
 
 
 ## Testing
@@ -142,7 +145,7 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 
 2. Fix tar command for reproducibility.
 
-3. On the server, map github HEAD and issue_id with sha256.
+3. On the server, map github HEAD and defaultHash with sha256.
 
 4. Use only sha256 in contract layer logic.
 
@@ -153,16 +156,16 @@ injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkR
 ## GraphQL API reference
 
 ```
-{ getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String) { status, type } }
+{ getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String) { status, type } }
 ```
 ### Types
 
-#### PRvoteStatus
+#### PullRequest
 
-Return type of getPRvoteStatus
+Return type of getPullRequest
 
 ```
-  type PRvoteStatus {
+  type PullRequest {
     status: Int!
     type: Int!
   }

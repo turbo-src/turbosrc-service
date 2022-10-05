@@ -1,6 +1,7 @@
 const { getPRhead } = require("./../utils/pullForkUtil");
 const {
   getPullRequest,
+  getGitHubPullRequest,
   mergePullRequest,
   closePullRequest,
 } = require("./../utils/gitHubUtil");
@@ -16,11 +17,13 @@ const {
   //postSetVote,
 } = require("./../utils/requests");
 const {
+  createLinkedPullRequest,
+  postCreatePullRequest,
   postCreateRepo,
   postGetContributorTokenAmount,
   postTransferTokens,
   postSetVote,
-  postGetPRvoteStatus,
+  postGetPullRequest,
   postGetPRvoteYesTotals,
   postGetPRvoteNoTotals,
   postGetPRvoteTotals,
@@ -34,6 +37,17 @@ const {
   postGetContributorSignature,
   getUser
 } = require("./../utils/nameSpaceRequests");
+
+const {
+  postCreateIssue,
+  postGetIssueID,
+  postGetTsrcID
+} = require("./../utils/ghServiceRequests");
+
+const {
+        getTurbosrcMode
+      } = require('./../utils/config')
+
 const {
   //createRepo,
   createTokenSupply,
@@ -71,10 +85,121 @@ const {
   //getContributorTokenAmount
 } = require("./state");
 
+async function getGitHubPRhead(owner, repo, issueID) {
+    issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
+   console.log('issueID ', issueID)
+    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
+
+    const head = gitHubPullRequest.head.sha
+    const mergeable = gitHubPullRequest.mergeable
+    console.log('gHprHead', head)
+    console.log('gHprMergeable', mergeable)
+    return { head: head, mergeable: mergeable }
+}
+
+async function convertDefaultHash(owner, repo, defaultHash, write) {
+    // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
+    // It'll also record the defaultHash against the tsrcID for later use.
+   try {
+    let resPostTsrcID
+   let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
+   let mergeable = false
+   let convertedChildDefaultHash
+   let convertedDefaultHash
+    console.log('tsrcID ', tsrcID)
+    const onlineMode = await getTurbosrcMode()
+    if (onlineMode === 'online') {
+      console.log('args 100')
+      console.log(owner)
+      console.log(repo)
+      console.log(defaultHash)
+      const resGH = await getGitHubPRhead(owner, repo, defaultHash)
+      const head = resGH.head
+      mergeable = resGH.mergeable
+      console.log('head ', head)
+      console.log('mergeable ', mergeable)
+      console.log('tsrcID 100', tsrcID)
+
+      if (head === null || head === undefined ) {
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+      } else if (tsrcID === head && tsrcID !== "500" ) {
+        convertedDefaultHash = head
+        convertedChildDefaultHash = head
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+      } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
+	childDefaultHash = tsrcID
+        convertedDefaultHash = tsrcID
+        convertedChildDefaultHash = head
+	console.log("Updated?")
+	console.log("tsrcID/default ", convertedDefaultHash)
+	console.log("child", convertedChildDefaultHash)
+	
+          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+      } else if (write) { 
+        resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
+        console.log('resPostTsrcID: ', resPostTsrcID)
+        console.log(head)
+        if (resPostTsrcID === "201") {
+          console.log('resPostTsrcID: ', resPostTsrcID)
+          convertedDefaultHash = head
+          convertedChildDefaultHash = head
+          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+        } else {
+          console.log('defaultHash instead resPostTsrcID: ', defaultHash)
+          convertedDefaultHash = defaultHash
+          convertedChildDefaultHash = defaultHash
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+        }
+      } else {
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+      }
+
+    } else {
+      if (tsrcID === head && tsrcID !== "500") {
+        resPostTsrcID = tsrcID
+      } else if (write) { 
+	// Offline so we don't get the HEAD of the PR from GH.
+        resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
+      } else {
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+      }
+      if (resPostTsrcID === 201) {
+        convertedDefaultHash = defaultHash
+        convertedChildDefaultHash = defaultHash
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
+      } else {
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+      }
+    }
+
+    convertedDefaultHash = defaultHash
+    convertedChildDefaultHash = defaultHash
+    return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
+    } catch(error) {
+        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+    }
+}
+
 const root = {
+  createTsrcPullRequest: async (args) => {
+
+    const res = await postCreatePullRequest(
+      args.owner,
+      args.repo,
+      args.defaultHash,
+      args.childDefaultHash,
+      args.head,
+      args.branchDefaultHash,
+      args.remoteURL,
+      args.baseBranch,
+      args.fork_branch,
+      args.title
+    );
+    return res
+  },
   // Also a root 'methods' in graphql query, by the same name
   getPRvote: function (database, args) {
-    const prID = args.pr_id.split("_")[1];
+    const defaultHash = args.defaultHash;
 
     const tsPullRequest = getTSpullRequest(database, args);
 
@@ -86,10 +211,16 @@ const root = {
     }
   },
   getPRvoteYesTotals: async function (args) {
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
+
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       ""
     );
@@ -97,52 +228,71 @@ const root = {
     return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
     const voteNo = await postGetPRvoteNoTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       ""
     );
 
     return voteNo;
   },
-  //getPRvoteTotals: async function (args) {
-  // const vote = await postGetPRvoteTotals(
-  //     args.owner,
-  //     `${args.owner}/${args.repo}`,
-  //     args.pr_id,
-  //     args.contributor_id,
-  //     "",
-  // )
+  getPRvoteTotals: async function (args) {
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
+    const vote = await postGetPRvoteTotals(
+      args.owner,
+      `${args.owner}/${args.repo}`,
+      args.defaultHash,
+      args.contributor_id,
+      ""
+    );
 
-  // return vote
-  //},
+    return vote;
+  },
   getContributorTokenAmount: async function (database, args) {
     //const contributorTokenAmount = getContributorTokenAmount(database, args)
     const contributorTokenAmount = await postGetContributorTokenAmount(
       "",
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side,
       args.token
     );
     return contributorTokenAmount;
   },
-  getPRvoteStatus: async function (args) {
-    const status = await postGetPRvoteStatus(
+  getPullRequest: async function (args) {
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    let mergeableCodeHost = true
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
+    }
+    mergeableCodeHost = convertedHashes.mergeable
+    let status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       "",
       ""
     );
 
+    status.mergeableCodeHost = mergeableCodeHost
+   
     return status;
   },
   pullAndVoteStatus: async function (database, pullReqRepoHead, args) {
-    const prID = args.pr_id.split("_")[1];
+    const defaultHash = args.defaultHash;
     var votedAlready;
 
     const activePullRequests = getAllTSpullRequests(database, args);
@@ -150,7 +300,7 @@ const root = {
 
     //Fix: shouldn't make state changes in status check.
     if (numberActivePullRequests === 0) {
-      database = setOpenPullRequest(database, args, prID);
+      database = setOpenPullRequest(database, args, defaultHash);
     }
     const openPullRequest = getOpenPullRequest(database, args);
 
@@ -160,10 +310,10 @@ const root = {
     // specific pull request.
     console.log("owner " + args.owner);
     console.log("repo " + args.repo);
-    console.log("pr_id " + prID);
+    console.log("defaultHash " + defaultHash);
     console.log("tokens " + tokens);
 
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
+    const prVoteStatusNow = module.exports.getPullRequest(database, args);
     if (prVoteStatusNow === "none") {
       votedAlready = false;
     } else {
@@ -173,7 +323,7 @@ const root = {
     }
 
     const openPullRequestStatus =
-      openPullRequest === prID || openPullRequest === "";
+      openPullRequest === defaultHash || openPullRequest === "";
 
     console.log("op pr status: " + openPullRequestStatus);
 
@@ -206,38 +356,151 @@ const root = {
     //}
   },
   setVote: async function (args) {
+    console.log(args)
+    const onlineMode = await getTurbosrcMode()
+    console.log('')
+    console.log('onlineMode', onlineMode)
+    console.log('')
+    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
+    // If ran online, it'll convert the defaultHashs into a tsrcIDs.
+    const originalDefaultHash = args.defaultHash
+    console.log('defaultHash: ', args.defaultHash)
+    console.log('childDefaultHash: ', args.childDefaultHash)
+    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true)
+    if (convertedHashes.status === 201) {
+      args.defaultHash = convertedHashes.defaultHash
+      args.childDefaultHash = convertedHashes.childDefaultHash
 
-    //console.log('\nvote code:\n' + vote_code)
-    const resSetVote = await postSetVote(
-      args.owner,
-      `${args.owner}/${args.repo}`,
-      args.pr_id,
-      args.contributor_id,
-      args.side,
-      args.token
-    );
+      //if (originalDefaultHash === args.childDefaultHash) {
+      //  args.childDefaultHash = args.defaultHash
+      //} else {
+      //  args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
+      //  args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
+      //}
 
-   // Marginal vote that exceeded quorum, vote yes was majority.
-    const prVoteStatus = await postGetPRvoteStatus(
-      args.owner,
-      `${args.owner}/${args.repo}`,
-      args.pr_id,
-      args.contributor_id,
-      args.side
-    );
+      console.log('after defaultHash: ', args.defaultHash)
+      console.log('after childDefaultHash: ', args.childDefaultHash)
 
-    // Merge if turborsc pull request status says there are enough votes to merge.
-    if (prVoteStatus.status === 200 && prVoteStatus.type === 2) {
-       console.log(`Github merge (${args.pr_id}) disabled)`)
-      /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.pr_id)
-    
+      console.log('args after')
+      console.log(args)
+      let mergeable
+      let prVoteStatus = await postGetPullRequest(
+        args.owner,
+        `${args.owner}/${args.repo}`,
+        args.defaultHash,
+        args.contributor_id,
+        args.side,
+        args.token
+      );
+      console.log('prVoteStatus: ', prVoteStatus)
 
-    return resSetVote;
-  }
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
+      
+      if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
+        console.log("Can't vote because trouble finding Github Pull request.")
+      }
+      console.log('arrive')
+      mergeable = gitHubPullRequest.mergeable
+      const baseBranch = gitHubPullRequest.base.ref
+      const forkBranch = gitHubPullRequest.head.ref
+      const head =  gitHubPullRequest.head.sha
+      const remoteURL = gitHubPullRequest.head.repo.git_url
+      const title = gitHubPullRequest.title
+      console.log('baseBranch ', baseBranch)
+      console.log('title ', title)
+      if (mergeable === null) {
+          mergeable = false
+      }
+
+      if (prVoteStatus.status === 404) {
+        // get github pull request to get below data
+        // to pass into below arguments.
+        
+        const res = await postCreatePullRequest(
+          args.owner,
+          `${args.owner}/${args.repo}`,
+          args.defaultHash,
+          args.childDefaultHash,
+          head, // get head
+          args.branchDefaultHash,
+          remoteURL, // get remoteURl
+          baseBranch, // get baseBranch
+          forkBranch, // get forkBranch
+          title // get title
+        );
+      } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
+         console.log('PR updated and is mergeable')
+
+         const resLinkedPR = await createLinkedPullRequest(
+           args.owner,
+           `${args.owner}/${args.repo}`,
+           /*parentDefaultHash:*/ args.defaultHash,
+           /*defaultHash:*/ args.childDefaultHash,
+           /*childDefaultHash:*/ args.childDefaultHash,
+           /*head:*/ args.childDefaultHash,
+           /*branchDefaultHash*/ "branchDefaultHash",
+           remoteURL, // get remoteURl
+           baseBranch, // get baseBranch
+           forkBranch, // get forkBranch
+           title // get title
+         );
+
+         if (resLinkedPR  === "201") {
+            console.log('Created mergeable linked pr.')
+            // New linked pr has default and child that's same as
+            // the child of the parent.
+            args.defaultHash = args.childDefaultHash
+         } else {
+           console.log("problem creating linked pull request")
+           console.log(args.owner)
+           console.log(`${args.owner}/${args.repo}`)
+           console.log(/*parentDefaultHash:*/ args.defaultHash)
+           console.log(/*defaultHash:*/ args.childDefaultHash)
+           console.log(/*childDefaultHash:*/ args.childDefaultHash)
+           console.log(/*head:*/ args.childDefaultHash)
+           console.log(/*branchDefaultHash*/ "branchDefaultHash")
+           console.log(remoteURL)// get remoteURL)
+           console.log(baseBranch) // get baseBranch)
+           console.log(forkBranch) // get forkBranch)
+           console.log(title) // get title)
+         }
+      } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
+         console.log('PR updated but is unmergeable')
+      }
+
+     const resSetVote = await postSetVote(
+       args.owner,
+       `${args.owner}/${args.repo}`,
+       args.defaultHash,
+       args.childDefaultHash,
+       mergeable,
+       args.contributor_id,
+       args.side
+     );
+
+     // Marginal vote that exceeded quorum, vote yes was majority.
+      prVoteStatus = await postGetPullRequest(
+        args.owner,
+        `${args.owner}/${args.repo}`,
+        args.defaultHash,
+        args.contributor_id,
+        args.side
+      );
+
+      // Merge if turborsc pull request status says there are enough votes to merge.
+      if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
+         console.log(`Github merge (${args.defaultHash}) disabled)`)
+        /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, args.defaultHash)
+      } 
+
+      return resSetVote;
+    } else {
+      return 403
+    }
   },
-  updatePRvoteStatus: async function (database, args, tokens) {
-    const prID = args.pr_id.split("_")[1];
-    const prVoteStatusNow = module.exports.getPRvoteStatus(database, args);
+  updatePullRequest: async function (database, args, tokens) {
+    const defaultHash = args.defaultHash;
+    const prVoteStatusNow = module.exports.getPullRequest(database, args);
     console.log(database);
     prVoteStatusUpdated = prVoteStatusNow;
 
@@ -245,7 +508,7 @@ const root = {
       await postSetContributorVotedTokensTestDB(
         args.owner,
         args.repo,
-        args.pr_id,
+        args.defaultHash,
         args.contributor_id,
         args.side,
         tokens
@@ -264,7 +527,7 @@ const root = {
         await postAddToTotalVotedYesTokensDB(
           args.owner,
           args.repo,
-          args.pr_id,
+          args.defaultHash,
           args.contributor_id,
           args.side,
           tokens
@@ -276,7 +539,7 @@ const root = {
         database = addToTotalVotedNoTokens(database, args, tokens);
       }
 
-      prVoteStatusUpdated = module.exports.getPRvoteStatus(database, args);
+      prVoteStatusUpdated = module.exports.getPullRequest(database, args);
 
       database = setPullRequestStatus(database, args, prVoteStatusUpdated);
 
@@ -363,11 +626,11 @@ const root = {
 
     return resGetContributorSignature;
   },
-  createRepo: async (database, pullRequestsDB, args) => {
+  createRepo: async (args) => {
     const resCreateRepo = await postCreateRepo(
       "",
       `${args.owner}/${args.repo}`,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side,
       // args.head?
@@ -380,7 +643,7 @@ const root = {
     return resCreateRepo;
   },
   newPullRequest: async (database, pullRequestsDB, args) => {
-    const prVoteStatus = module.exports.getPRvoteStatus(database, args);
+    const prVoteStatus = module.exports.getPullRequest(database, args);
 
     const resNewPullRequest = newPullRequest(
       database,
@@ -392,7 +655,7 @@ const root = {
     await postNewPullRequestTestDB(
       args.owner,
       args.repo,
-      args.pr_id,
+      args.defaultHash,
       args.contributor_id,
       args.side,
       prVoteStatus

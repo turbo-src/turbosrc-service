@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postGetPRvoteTotals,
@@ -22,7 +22,7 @@ describe('Vote to stay open, then close', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -30,7 +30,7 @@ describe('Vote to stay open, then close', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -38,7 +38,7 @@ describe('Vote to stay open, then close', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -50,7 +50,7 @@ describe('Vote to stay open, then close', function () {
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -58,22 +58,22 @@ describe('Vote to stay open, then close', function () {
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -81,15 +81,15 @@ describe('Vote to stay open, then close', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
+        const closeStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6598",
+            /*defaultHash:*/ "defaultHash6598",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );

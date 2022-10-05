@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
@@ -21,7 +21,7 @@ describe('Open pull requests', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_4955",
+            /*defaultHash:*/ "defaultHash4955",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -32,15 +32,15 @@ describe('Open pull requests', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_4955",
+            /*defaultHash:*/ "defaultHash4955",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const status = await postGetPRvoteStatus(
+        const status = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_4955",
+            /*defaultHash:*/ "defaultHash4955",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -48,15 +48,15 @@ describe('Open pull requests', function () {
         //await postNewPullRequest(
         //    /*owner:*/ "vim",
         //    /*repo:*/ "vim",
-        //    /*pr_id:*/ "issue_4901",
+        //    /*defaultHash:*/ "defaultHash4901",
         //    /*contributor_id:*/ "7db9a",
         //    /*side:*/ "yes",
         //);
         //await snooze(1500);
-        //const statusDuplicatePR = await postGetPRvoteStatus(
+        //const statusDuplicatePR = await postGetPullRequest(
         //    /*owner:*/ "vim",
         //    /*repo:*/ "vim",
-        //    /*pr_id:*/ "issue_4901",
+        //    /*defaultHash:*/ "defaultHash4901",
         //    /*contributor_id:*/ "7db9a",
         //    /*side:*/ "yes",
         //);

@@ -12,6 +12,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 var snooze_ms = 5000
 
@@ -27,20 +30,22 @@ describe('Create repo', function () {
     describe.only('Create repo', function () {
       it("Should do create repo", async () => {
         const contributor_name = await getGithubContributor()
+	const token = await getGithubToken()
 
 	//name space service
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "",
             /*contributor_name:*/ contributor_name,
         );
         const resCreateRepo = await postCreateRepo(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "",
+            /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "",
+	    /*token:*/ token
         );
 
         const resRepoStatus = await getRepoStatus(`${contributor_name}/demo`);
@@ -49,9 +54,10 @@ describe('Create repo', function () {
         const contributorTokenAmount = await postGetContributorTokenAmount(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "no",
+            /*token:*/ token
         );
 
         assert.deepEqual(

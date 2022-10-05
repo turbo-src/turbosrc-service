@@ -25,11 +25,11 @@ var root = {
         return json.data.createUser;
       });
   },
-  postCreateRepo: async (owner, repo, pr_id, contributor_id, side) => {
+  postCreateRepo: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createRepo(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
 
@@ -37,27 +37,55 @@ var root = {
     return json.data.createRepo;
   },
   postCreatePullRequest: async (
-    /*owner:*/ owner,
-    /*repo:*/ repo,
-    /*fork_branch:*/ fork_branch,
-    /*pr_id:*/ pr_id,
-    /*title:*/ title
+    owner,
+    repo,
+    defaultHash,
+    childDefaultHash,
+    head,
+    branchDefaultHash,
+    remoteURL,
+    baseBranch,
+    fork_branch,
+    title
   ) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", fork_branch: "${fork_branch}", pr_id: "${pr_id}", title: "${title}") }`,
+        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
       })
       .set("accept", "json");
 
     const json = JSON.parse(res.text);
     return json.data.createPullRequest;
   },
-  postGetContributorName: async (owner, repo, pr_id, contributor_id) => {
+  createLinkedPullRequest: async (
+    owner,
+    repo,
+    parentDefaultHash,
+    defaultHash,
+    childDefaultHash,
+    head,
+    branchDefaultHash,
+    remoteURL,
+    baseBranch,
+    fork_branch,
+    title
+  ) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorName(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}") }`,
+        query: `{ createLinkedPullRequest(owner: "${owner}", repo: "${repo}", parentDefaultHash: "${parentDefaultHash}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
+      })
+      .set("accept", "json");
+
+    const json = JSON.parse(res.text);
+    return json.data.createLinkedPullRequest;
+  },
+  postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
+    const res = await superagent
+      .post(privateStore)
+      .send({
+        query: `{ getContributorName(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`,
       })
       .set("accept", "json");
     // .end((err, res) => {
@@ -67,11 +95,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorName;
   },
-  postGetContributorID: async (owner, repo, pr_id, contributor_name) => {
+  postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -80,11 +108,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorID;
   },
-  postGetContributorSignature: async (owner, repo, pr_id, contributor_name) => {
+  postGetContributorSignature: async (owner, repo, defaultHash, contributor_name) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -122,14 +150,14 @@ var root = {
   postGetContributorTokenAmount: async (
     owner,
     repo,
-    pr_id,
+    defaultHash,
     contributor_id,
     side
   ) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
+        query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
       }) // sends a JSON post body
       .set("accept", "json");
     //.end((err, res) => {
@@ -142,7 +170,7 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: "${amount}") }`,
+        query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: ${amount}) }`,
       }) // sends a JSON post body
       .set("accept", "json");
     //   .end((err, res) => {
@@ -151,11 +179,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.transferTokens;
   },
-  postSetVote: async (owner, repo, pr_id, contributor_id, side) => {
+  postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ setVote(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+	      query: `{ setVote(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", mergeable: ${mergeable}, contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //   .end((err, res) => {
@@ -164,24 +192,24 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.setVote;
   },
-  postGetPRvoteStatus: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteStatus(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") { status, type } }`,
+        query: `{ getMostRecentLinkedPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash, head, branchDefaultHash, remoteURL, baseBranch } }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getPRvoteStatus;
+    return json.data.getMostRecentLinkedPullRequest;
   },
   postSetQuorum: async (repo, contributor_id, quorum) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ setQuorum(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`,
+        query: `{ setQuorum(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`,
       })
       .set("accept", "json")
       .end((err, res) => {
@@ -203,24 +231,24 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getQuorum;
   },
-  postGetPRvoteTotals: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getVoteTotals;
+    return json.data.getPRvoteTotals;
   },
-  postGetPRvoteYesTotals: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteYesTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {
@@ -229,11 +257,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPRvoteYesTotals;
   },
-  postGetPRvoteNoTotals: async (owner, repo, pr_id, contributor_id, side) => {
+  postGetPRvoteNoTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", pr_id: "${pr_id}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
       })
       .set("accept", "json");
     //.end((err, res) => {

@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteTotals,
         postCreateRepo,
         postNewPullRequest
@@ -21,7 +21,7 @@ describe('Vote and get tally', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -29,7 +29,7 @@ describe('Vote and get tally', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -37,7 +37,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -45,7 +45,7 @@ describe('Vote and get tally', function () {
         const sevenDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -53,7 +53,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
@@ -61,7 +61,7 @@ describe('Vote and get tally', function () {
         const amDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "am",
             /*side:*/ "yes",
         );
@@ -69,7 +69,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
@@ -77,7 +77,7 @@ describe('Vote and get tally', function () {
         const jcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "jc",
             /*side:*/ "yes",
         );
@@ -85,7 +85,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
@@ -93,7 +93,7 @@ describe('Vote and get tally', function () {
         const pcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "pc",
             /*side:*/ "yes",
         );
@@ -101,7 +101,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
@@ -109,7 +109,7 @@ describe('Vote and get tally', function () {
         const mbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "mb",
             /*side:*/ "yes",
         );
@@ -117,7 +117,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
@@ -125,7 +125,7 @@ describe('Vote and get tally', function () {
         const npVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "np",
             /*side:*/ "yes",
         );
@@ -133,7 +133,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
@@ -141,7 +141,7 @@ describe('Vote and get tally', function () {
         const nnVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "nn",
             /*side:*/ "yes",
         );
@@ -149,7 +149,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
@@ -157,7 +157,7 @@ describe('Vote and get tally', function () {
         const jpVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "jp",
             /*side:*/ "yes",
         );
@@ -165,7 +165,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
@@ -173,7 +173,7 @@ describe('Vote and get tally', function () {
         const tsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ts",
             /*side:*/ "yes",
         );
@@ -181,7 +181,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "af",
             /*side:*/ "yes",
         );
@@ -189,7 +189,7 @@ describe('Vote and get tally', function () {
         const afVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "af",
             /*side:*/ "yes",
         );
@@ -197,7 +197,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ds",
             /*side:*/ "yes",
         );
@@ -205,7 +205,7 @@ describe('Vote and get tally', function () {
         const dsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ds",
             /*side:*/ "yes",
         );
@@ -213,7 +213,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -221,7 +221,7 @@ describe('Vote and get tally', function () {
         const riVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -280,10 +280,10 @@ describe('Vote and get tally', function () {
         //    "0.499999",
         //    "Fail to add votes."
         //);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "ri",
             /*side:*/ "yes",
         );
@@ -293,15 +293,15 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
+        const closeStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
@@ -309,7 +309,7 @@ describe('Vote and get tally', function () {
         const maryVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6519",
+            /*defaultHash:*/ "defaultHash6519",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );

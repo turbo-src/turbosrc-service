@@ -3,7 +3,7 @@ const fsPromises = require('fs').promises;
 const {
         postCreateRepo,
         postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postNewPullRequest,
         postGetContributorID,
         postGetContributorName
@@ -30,7 +30,7 @@ describe('vote', function () {
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor_name:*/ contributor_name,
         );
 
@@ -38,15 +38,17 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "issue_3",
+            /*childDefaultHash:*/ "issue_3",
+	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const openStatus = await postGetPRvoteStatus(
+        const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "issue_3",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -55,15 +57,19 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "issue_3",
+            /*childDefaultHash:*/ "issue_3",
+	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const duplicateStatus = await postGetPRvoteStatus(
+        const duplicateStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "issue_3",
+            /*childDefaultHash:*/ "issue_3",
+	    /*mergeable:*/ true,
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
@@ -75,33 +81,35 @@ describe('vote', function () {
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "issue_3",
+            /*childDefaultHash:*/ "issue_3",
+	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const mergeStatus = await postGetPRvoteStatus(
+        const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_3",
+            /*defaultHash:*/ "issue_3",
             /*contributor:*/ contributor_name,
             /*side:*/ "yes",
         );
 
         assert.deepEqual(
           openStatus,
-          { status: 200, type: 0 },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail open on initial vote below quorum"
         );
 
         assert.deepEqual(
           duplicateStatus,
-          { status: 200, type: 0 },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail keep open even though initial vote below quorum"
         );
         assert.deepEqual(
           mergeStatus,
-         { status: 200, type: 2 },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail to merge even though it was voted in."
         );
       });

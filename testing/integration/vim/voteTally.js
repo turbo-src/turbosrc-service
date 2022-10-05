@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteTotals,
         postCreateRepo,
         postNewPullRequest
@@ -21,7 +21,7 @@ describe('Vote and get tally', function () {
         await postCreateRepo(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -29,7 +29,7 @@ describe('Vote and get tally', function () {
         await postNewPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -37,7 +37,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -45,7 +45,7 @@ describe('Vote and get tally', function () {
         const afterVoteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -53,7 +53,7 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -61,7 +61,7 @@ describe('Vote and get tally', function () {
         const duplicateVoteTotals = await postGetPRvoteTotals(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );
@@ -69,15 +69,15 @@ describe('Vote and get tally', function () {
         await postSetVote(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );
         await snooze(1500);
-        const closeStatus = await postGetPRvoteStatus(
+        const closeStatus = await postGetPullRequest(
             /*owner:*/ "vim",
             /*repo:*/ "vim",
-            /*pr_id:*/ "issue_6772",
+            /*defaultHash:*/ "defaultHash6772",
             /*contributor_id:*/ "mary",
             /*side:*/ "yes",
         );

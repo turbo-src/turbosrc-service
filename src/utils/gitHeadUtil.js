@@ -2,24 +2,7 @@ const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
-
-async function getGithubToken() {
-    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
-                       .catch((err) => console.error('Failed to read file', err));
-
-    let json = JSON.parse(data);
-    let user = json.github.user
-    let apiToken = json.github.apiToken
-    if (apiToken === undefined) {
-      throw new Error("Failed to load Github user " + user + "'s api key.");
-
-    } else {
-      console.log("Successfully read Github " + user + "'s api key.");
-    }
-
-    return apiToken
-
-}
+const { getGithubToken } = require("./gitHubUtil")
 
 const gitHeadUtil = {
   gitHeadUtil: async function(owner, repo, forkBranch, headMinusNum) {

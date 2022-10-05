@@ -31,7 +31,7 @@ describe('vote', function () {
         const contributorTokenAmount = await postGetContributorTokenAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
-            /*pr_id:*/ "issue_4",
+            /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
             /*side:*/ "no",
         );

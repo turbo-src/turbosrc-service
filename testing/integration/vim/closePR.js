@@ -1,6 +1,6 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPRvoteStatus,
+        postGetPullRequest,
         postGetPRvoteYesTotals,
         postGetPRvoteNoTotals,
         postCreateRepo,
@@ -23,7 +23,7 @@ describe('Pull requests', function () {
     //    await postCreateRepo(
     //        /*owner:*/ "vim",
     //        /*repo:*/ "vim",
-    //        /*pr_id:*/ "issue_4955",
+    //        /*defaultHash:*/ "defaultHash4955",
     //        /*contributor_id:*/ "7db9a",
     //        /*side:*/ "yes",
     //    );
@@ -34,7 +34,7 @@ describe('Pull requests', function () {
         await postClosePullRequest(
             /*owner:*/ "turbo-src",
             /*repo:*/ "testrepo-white",
-            /*pr_id:*/ "issue_1",
+            /*defaultHash:*/ "defaultHash1",
             /*contributor_id:*/ "7db9a",
             /*side:*/ "yes",
         );

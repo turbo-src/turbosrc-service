@@ -10,12 +10,13 @@ const { getPRhead } = require('./src/utils/pullForkUtil');
 const { gitHeadUtil } = require('./src/utils/gitHeadUtil');
 const { update } = require('tar');
 const {
+  createTsrcPullRequest,
   transferTokens,
   getPRvoteTotals,
   getPRvoteYesTotals,
   getPRvoteNoTotals,
   getPRvote,
-  getPRvoteStatus,
+  getPullRequest,
   newPullRequest,
   setVote,
   createUser,
@@ -33,7 +34,6 @@ const {
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
-       getPullRequest,
        createPullRequest,
        closePullRequest,
        mergePullRequest,
@@ -41,14 +41,13 @@ const {
        verify
       } = require('./src/utils/gitHubUtil');
 
-// pr_id is the issue_id, which are the same for now.
-// issue_id !== pr_uid in the future.
+// defaultHash is the defaultHash, which are the same for now.
+// defaultHash !== pr_uid in the future.
 // The pr_uid will be the OID of the HEAD from the pull requesters linked repository.
 // We may actually choose to calculate the sha256 of the repo at said HEAD to eliminate all doubt of collisions in OID (sha) and to be able to verify that the pull requester and the merger have the absolute identical versions.
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
-
 async function getGithubUser() {
     const data = await fsPromises.readFile('/usr/src/app/.config.json')
                        .catch((err) => console.error('Failed to read file', err));
@@ -69,6 +68,20 @@ async function getGithubUser() {
 var schema = buildSchema(`
   type PullRequest {
     status: Int!
+    state: String!
+    repo_id: String!
+    fork_branch: String!
+    defaultHash: String!
+    childDefaultHash: String!
+    head: String!
+    branchDefaultHash:String!
+    remoteURL: String!
+    baseBranch: String!
+    mergeableCodeHost: Boolean!
+  }
+
+  type ghPullRequest {
+    status: Int!
     mergeable: Boolean!
     mergeCommitSha: String!
     state: String!
@@ -78,11 +91,6 @@ var schema = buildSchema(`
   type RepoStatus {
     status: Int!
     exists: Boolean!
-  }
-
-  type PRvoteStatus {
-    status: Int!
-    type: Int!
   }
 
   type ContributorTokenAmount {
@@ -98,32 +106,32 @@ var schema = buildSchema(`
   }
 
   type Query {
-    getContributorTokenAmount(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
+    createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
+    getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
-    getContributorName(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getContributorID(owner: String, repo: String, pr_id: String, contributor_name: String): String,
-    getContributorSignature(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    transferTokens(owner: String, repo: String, from: String, to: String, amount: String, token: String): String,
-    pullFork(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getPRforkStatus(owner: String, repo: String, pr_id: String, contributor_id: String): String,
-    getVote(pr_id: String, contributor_id: String): String,
-    getVoteAll(pr_id: String): PullRequest,
+    getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
+    getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
+    getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
+    transferTokens(owner: String, repo: String, from: String, to: String, amount: Int, token: String): String,
+    pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
+    getVote(defaultHash: String, contributor_id: String): String,
+    getVoteAll(defaultHash: String): ghPullRequest,
     getVoteEverything: String,
-    setVote(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, token: String): String,
-    createRepo(owner: String, repo: String, pr_id: String, contributor_id: String, side: String, token: String): String,
-    newPullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteStatus(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): PRvoteStatus,
-    getGitHubPullRequest(owner: String, repo: String, pr_id: String): PullRequest,
-    getPRvoteTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteYesTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    getPRvoteNoTotals(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    setVote(owner: String, repo: String, defaultHash: String, childDefaultHash: String, mergeable: Boolean, contributor_id: String, side: String, token: String): String,
+    createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): String,
+    newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
+    getGitHubPullRequest(owner: String, repo: String, defaultHash: String): ghPullRequest,
+    getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getRepoStatus(repo_id: String): RepoStatus,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
-    verifyPullRequest(pr_id: String): String,
-    createPullRequest(owner: String, repo: String, fork_branch: String, pr_id: String, title: String): String,
-    closePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
-    mergePullRequest(owner: String, repo: String, pr_id: String, contributor_id: String, side: String): String,
+    verifyPullRequest(defaultHash: String): String,
+    createPullRequest(owner: String, repo: String, fork_branch: String, defaultHash: String, title: String): String,
+    closePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    mergePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     fork(owner: String, repo: String, org: String): String,
   }
 `);
@@ -195,6 +203,10 @@ var root = {
   //getVote: (args) => {
   //  return pullRequestsDB[args.contributor_id]
   //},
+  createTsrcPullRequest: async (args) => {
+    const res = await createTsrcPullRequest(args);
+    return res
+  },
   createUser: async (args) => {
     const verified = await verify(args.contributor_id, args.token, args.contributor_name)
 
@@ -265,23 +277,35 @@ var root = {
 
     return res
   },
-  getVoteAll: async (pr_id) => {
-    return pullRequestsDB[pr_id]
+  getVoteAll: async (defaultHash) => {
+    return pullRequestsDB[defaultHash]
   },
   getVoteEverything: async () => {
     return JSON.stringify(pullRequestsDB)
   },
-  getPRvoteStatus: async (args) => {
-    const status = await getPRvoteStatus(args)
+  getPullRequest: async (args) => {
+    const status = await getPullRequest(args)
 
     return status
   },
   getGitHubPullRequest: async (args) => {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
+    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
     try {
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(prID))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
 
-      var mergeable = gitHubPullRequest.mergeable
+      mergeable = gitHubPullRequest.mergeable
+      const baseBranch = gitHubPullRequest.base.ref
+      const forkBranch = gitHubPullRequest.head.ref
+      const head =  gitHubPullRequest.head.sha
+      const remoteURL = gitHubPullRequest.head.repo.git_url
+      const title = gitHubPullRequest.title
+      console.log('baseBranch ', baseBranch)
+      console.log('title ', title)
+      if (mergeable === null) {
+          mergeable = false
+      }
+
       var mergeCommitSha
       const state = gitHubPullRequest.state
       if (gitHubPullRequest.merge_commit_sha === null) {
@@ -289,7 +313,6 @@ var root = {
       } else {
          mergeCommitSha = gitHubPullRequest.merge_commit_sha
       }
-      const baseBranch = gitHubPullRequest.base.ref
       if (mergeable === null) {
           mergeable = false
       }
@@ -326,57 +349,15 @@ var root = {
     return voteNoTotals
   },
   getPRvoteTotals: async (args) => {
-    const voteYesTotals = await getPRvoteYesTotals(args)
-    const voteNoTotals = await getPRvoteNoTotals(args)
-  
-    var voteTotals = Number(voteYesTotals) + Number(voteNoTotals)
-    voteTotals = voteTotals/1_000_000
+    const voteTotals = await getPRvoteTotals(args)
 
-    return `${voteTotals}`
-  },
-  getPRforkStatus: async (args) => {
-    var res;
-    const prID = (args.pr_id).split('_')[1]
-    // User should do this instead and pass it in request so we don't overuse our github api.
-    console.log('owner ' + args.owner)
-    console.log('repo ' + args.repo)
-    console.log('pr_id ' + prID)
-    var baseRepoName = args.repo
-    var baseRepoOwner = args.owner
-    console.log(args.owner)
-    console.log(baseRepoOwner)
-    console.log(prID)
-    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, prID)
-    console.log(resGetPR)
-    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
-    const baseDir = 'repos/' + args.repo;
-    const pullForkDir = baseDir + '/' + pullReqRepoHead;
-
-    console.log('pullReqRepoHead ' + pullReqRepoHead);
-
-    // 404 means the repo doesn't exist on github, per api call.
-    if (resGetPR !== 404 && pullReqRepoHead !== 404) {
-    // Check if there is already a dir for the pull fork.
-      if (!fs.existsSync(pullForkDir)) {
-        res = "pull"
-        console.log("pull")
-      } else {
-         res =  "valid"
-         console.log("valid")
-      }
-    } else {
-      res = "notOnGithub"
-      console.log("notOnGithub")
-    }
-    console.log("final result")
-    console.log(res)
-    return res
+    return voteTotals
   },
   pullFork: async (args) => {
     superagent
       .post('http://localhost:4001/graphql')
       .send(
-        { query: `{ getPRfork(owner: "${args.owner}", repo: "${args.repo}", pr_id: "${args.pr_id}", contributor_id: "${args.contributor_id}") }` }
+        { query: `{ getPRfork(owner: "${args.owner}", repo: "${args.repo}", defaultHash: "${args.defaultHash}", contributor_id: "${args.contributor_id}") }` }
       ) // sends a JSON post body
       .set('accept', 'json')
       .end((err, res) => {
@@ -399,7 +380,7 @@ var root = {
     fakeTurboSrcReposDB = resNewPullRequest.db
     pullRequestsDB = resNewPullRequest.pullRequestsDB
 
-    return pullRequestsDB[args.pr_id]
+    return pullRequestsDB[args.defaultHash]
   },
   createRepo: async (args) => {
     // name space server
@@ -413,13 +394,13 @@ var root = {
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
-    await createPullRequest(args.owner, args.repo, args.fork_branch, args.pr_id.split('_')[1], args.title)
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title)
   },
   closePullRequest: async (args) => {
-    await closePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+    await closePullRequest(args.owner, args.repo, args.defaultHash)
   },
   mergePullRequest: async (args) => {
-    await mergePullRequest(args.owner, args.repo, args.pr_id.split('_')[1])
+    await mergePullRequest(args.owner, args.repo, args.defaultHash)
   },
   fork: async (args) => {
     await fork(args.owner, args.repo, args.org)

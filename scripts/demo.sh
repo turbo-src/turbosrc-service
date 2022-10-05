@@ -6,15 +6,15 @@
 \cp .config.json testing/integration/privaterepo/
 
 # Delete fork of demo.
-./testing/gihtub-maker.sh
+#./testing/gihtub-maker.sh
 
-npm test testing/integration/privaterepo/preTestForkRepo.js
+#npm test testing/integration/privaterepo/preTestForkRepo.js
 
-sleep 5
-
-npm test testing/integration/privaterepo/preTestCreatePRs.js
-
-sleep 5
+#sleep 5
+#
+#npm test testing/integration/privaterepo/preTestCreatePRs.js
+#
+#sleep 5
 
 npm test testing/integration/privaterepo/createUser.js
 sleep 5

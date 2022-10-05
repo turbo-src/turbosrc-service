@@ -35,7 +35,7 @@ const root = {
     }
   },
   createTokenSupply: function (database, tokens, args) {
-    const prID = args.pr_id.split('_')[1]
+    const defaultHash = args.defaultHash
 
     database[args.owner + "/" + args.repo].tokenSupply = tokens
 
@@ -69,21 +69,21 @@ const root = {
     return  database
   },
   newPullRequest: function (database, pullRequestsDB, args, prVoteStatus) {
-    const prID = args.pr_id.split('_')[1]
+    const defaultHash = args.defaultHash
 
     const tokens = database[args.owner + "/" + args.repo].contributors[args.contributor_id]
     const vote_code = prVoteStatus + "%" + args.repo + "%" + args.contributor_id + "%" + tokens + "%" + args.side
 
-    pullRequestsDB[args.pr_id] = [vote_code]
+    pullRequestsDB[args.defaultHash] = [vote_code]
 
-    database[args.owner + "/" + args.repo].pullRequests[prID] = {}
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash] = {}
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].pullRequestStatus = 'open'
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].pullRequestStatus = 'open'
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = 0
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = 0
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = 0
-    database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens = {}
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedTokens = 0
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedYesTokens = 0
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedNoTokens = 0
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].votedTokens = {}
 
     return {
              pullRequestsDB: pullRequestsDB,
@@ -96,9 +96,9 @@ const root = {
     return tokens
   },
   setContributorVotedTokens: function (database, args, tokens, side) {
-   const prID = (args.pr_id).split('_')[1]
+   const defaultHash = (args.defaultHash)
 
-   database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id] = {
+   database[args.owner + "/" + args.repo].pullRequests[defaultHash].votedTokens[args.contributor_id] = {
      tokens: tokens,
      side: side
    }
@@ -106,23 +106,23 @@ const root = {
    return database
   },
   setVoteSide: function (database, args) {
-   const prID = (args.pr_id).split('_')[1]
+   const defaultHash = (args.defaultHash)
 
-   database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id].side = args.side
+   database[args.owner + "/" + args.repo].pullRequests[defaultHash].votedTokens[args.contributor_id].side = args.side
 
    return database
   },
-  // Soon to be tprID. Right now it's the HEAD of the
+  // Soon to be tdefaultHash. Right now it's the HEAD of the
   // pull request fork on Github.
-  setTSrepoHead: function (database, args, tprID) {
-   database[args.owner + "/" + args.repo].head = tprID
+  setTSrepoHead: function (database, args, tdefaultHash) {
+   database[args.owner + "/" + args.repo].head = tdefaultHash
 
    return database
   },
   setPullRequestStatus: function(database, args, status) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    database[args.owner + "/" + args.repo].pullRequests[prID]['pullRequestStatus'] = status
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash]['pullRequestStatus'] = status
 
     return database
   },
@@ -142,8 +142,8 @@ const root = {
     return database
   },
   getTSpullRequest: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
-    const pullRequest = database[args.owner + "/" + args.repo].pullRequests[prID]
+    const defaultHash = (args.defaultHash)
+    const pullRequest = database[args.owner + "/" + args.repo].pullRequests[defaultHash]
 
     return pullRequest
   },
@@ -153,23 +153,23 @@ const root = {
     return allTSpullRequests
   },
   deleteTSpullRequest: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    delete database[args.owner + "/" + args.repo].pullRequests[prID]
+    delete database[args.owner + "/" + args.repo].pullRequests[defaultHash]
 
     return database
   },
   getContributorVotedTokens: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const votedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens[args.contributor_id]
+    const votedTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].votedTokens[args.contributor_id]
 
     return votedTokens
   },
   getAllVotedTokens: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].votedTokens
+    const allVotedTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].votedTokens
 
     return allVotedTokens
   },
@@ -189,28 +189,28 @@ const root = {
     return quorum
   },
   getTotalVotedTokens: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+    const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedTokens
 
     return totalVotedTokens
   },
   getTotalVotedYesTokens: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
+    const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedYesTokens
 
     return totalVotedYesTokens
   },
   getPullRequestFromHistory: function(pullRequestsDB, args) {
-    var pullRequest = pullRequestsDB[args.pr_id]
+    var pullRequest = pullRequestsDB[args.defaultHash]
 
     return pullRequest
   },
   getTotalVotedNoTokens: function(database, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
+    const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedNoTokens
 
     return totalVotedNoTokens
   },
@@ -224,55 +224,55 @@ const root = {
     return contributor_exists
   },
   addToTotalVotedTokens: function(database, args, tokens) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens
+    const totalVotedTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedTokens
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedTokens = totalVotedTokens + tokens
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedTokens = totalVotedTokens + tokens
 
     return database
   },
   addToTotalVotedYesTokens: function(database, args, tokens) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens
+    const totalVotedYesTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedYesTokens
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedYesTokens = totalVotedYesTokens + tokens
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedYesTokens = totalVotedYesTokens + tokens
 
     return database
   },
   addToTotalVotedNoTokens: function(database, args, tokens) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens
+    const totalVotedNoTokens = database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedNoTokens
 
-    database[args.owner + "/" + args.repo].pullRequests[prID].totalVotedNoTokens = totalVotedNoTokens + tokens
+    database[args.owner + "/" + args.repo].pullRequests[defaultHash].totalVotedNoTokens = totalVotedNoTokens + tokens
 
     return database
   },
   addToMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    pullRequestVoteMergeHistory.push(prID)
+    pullRequestVoteMergeHistory.push(defaultHash)
 
     return pullRequestVoteMergeHistory
   },
   addToRejectPullRequestHistory: function(pullRequestVoteCloseHistory, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    pullRequestVoteCloseHistory.push(prID)
+    pullRequestVoteCloseHistory.push(defaultHash)
 
     return pullRequestVoteCloseHistory
   },
   checkMergePullRequestHistory: function(pullRequestVoteMergeHistory, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    return pullRequestVoteMergeHistory.includes(prID)
+    return pullRequestVoteMergeHistory.includes(defaultHash)
   },
   checkRejectPullRequestHistory: function(pullRequestVoteCloseHistory, args) {
-    const prID = (args.pr_id).split('_')[1]
+    const defaultHash = (args.defaultHash)
 
-    return pullRequestVoteCloseHistory.includes(prID)
+    return pullRequestVoteCloseHistory.includes(defaultHash)
   },
 }
 
