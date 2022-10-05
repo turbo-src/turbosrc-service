@@ -223,11 +223,11 @@ var root = {
     console.log(json);
     return json.data.getContributorSignature;
   },
-  postCreateRepo: async (owner, repo, defaultHash, contributor_id, side) => {
+  postCreateRepo: async (owner, repo, defaultHash, contributor_id, side, token) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
-        query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") }`,
       })
       .set("accept", "json");
 

@@ -47,7 +47,6 @@ const {
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
-
 async function getGithubUser() {
     const data = await fsPromises.readFile('/usr/src/app/.config.json')
                        .catch((err) => console.error('Failed to read file', err));
@@ -119,7 +118,7 @@ var schema = buildSchema(`
     getVoteAll(defaultHash: String): ghPullRequest,
     getVoteEverything: String,
     setVote(owner: String, repo: String, defaultHash: String, childDefaultHash: String, mergeable: Boolean, contributor_id: String, side: String): String,
-    createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
+    createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): String,
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
     getGitHubPullRequest(owner: String, repo: String, defaultHash: String): ghPullRequest,

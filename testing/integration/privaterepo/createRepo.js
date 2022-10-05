@@ -12,6 +12,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 var snooze_ms = 5000
 
@@ -27,6 +30,7 @@ describe('Create repo', function () {
     describe.only('Create repo', function () {
       it("Should do create repo", async () => {
         const contributor_name = await getGithubContributor()
+	const token = await getGithubToken()
 
 	//name space service
         const contributor_id = await postGetContributorID(
@@ -41,6 +45,7 @@ describe('Create repo', function () {
             /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "",
+	    /*token:*/ token
         );
 
         const resRepoStatus = await getRepoStatus(`${contributor_name}/demo`);
