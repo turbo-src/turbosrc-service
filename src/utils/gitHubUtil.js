@@ -2,6 +2,7 @@ const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
+const jwt = require("jsonwebtoken");
 const { postGetContributorName } = require('./requests');
 
 const gitHubUtil = {
