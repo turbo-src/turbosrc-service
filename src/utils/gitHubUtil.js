@@ -2,7 +2,7 @@ const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
-
+const { postGetContributorName } = require('./requests');
 
 const gitHubUtil = {
 
@@ -21,6 +21,38 @@ getGithubToken: async function() {
     }
 
     return apiToken
+
+},
+verify: async function(contributor_id, token, contributor_name){
+  try {
+    if(!contributor_id || !token) {
+      return false
+    }
+    // Trade contributor_id for our contributor_name in our PG database
+    // If contributor_name in ags above, then it is a createUser
+
+    let githubUsername = contributor_name || await postGetContributorName("","","",contributor_id)
+
+    const octokit = new Octokit({ auth: token });
+
+    // Request Github user info with token got from Github, stored in Chrome storage while using extension
+    const res = await octokit.request(`GET /users/${githubUsername}`)
+
+    // If res was successful and was querying the user associated with the contributor_id return true
+    return Promise.resolve(res).then((object) => {
+      if(githubUsername === object.data.login) {
+        console.log('verified token thru github')
+        return true
+      } else {
+        console.log('github token invalid')
+        return false
+      }
+     })
+
+  } catch (error) {
+    console.log('error verifying github token')
+    return 500
+  }
 
 },
   getGitHubPullRequest: async function(owner, repo, pull) {

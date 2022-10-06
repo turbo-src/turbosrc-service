@@ -37,7 +37,8 @@ const {
        createPullRequest,
        closePullRequest,
        mergePullRequest,
-       fork
+       fork,
+       verify
       } = require('./src/utils/gitHubUtil');
 
 // defaultHash is the defaultHash, which are the same for now.
@@ -367,7 +368,11 @@ var root = {
   },
   createRepo: async (args) => {
     // name space server
+    const verified = await verify(args.contributor_id, args.token)
+
+    if(verified === true) {
       return await createRepo(args)
+    }
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
