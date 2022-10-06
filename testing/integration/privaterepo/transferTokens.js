@@ -54,6 +54,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ maryID,
         /*amount:*/ 500_001,
+        /*token:*/ token
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
