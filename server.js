@@ -232,6 +232,9 @@ var root = {
     return contributorTokenAmount
   },
   transferTokens: async (args) => {
+    const verified = await verify(args.from, args.token)
+
+    if(verified === true) {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
@@ -245,6 +248,7 @@ var root = {
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
     }
+  }
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
@@ -354,9 +358,13 @@ var root = {
     return "something"
   },
   setVote: async (args) => {
+      const verified = await verify(args.contributor_id, args.token)
+
+    if(verified === true) {
       const resultSetVote = await setVote(args)
 
       return resultSetVote
+    }
   },
   newPullRequest: async (args) => {
     const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
