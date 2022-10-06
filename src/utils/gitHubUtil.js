@@ -32,8 +32,8 @@ verify: async function(contributor_id, token, contributor_name){
     // If contributor_name in ags above, then it is a createUser
 
     let githubUsername = contributor_name || await postGetContributorName("","","",contributor_id)
-
-    const octokit = new Octokit({ auth: token });
+    const tokenRes = jwt.verify(token, process.env.JWT)
+    const octokit = new Octokit({ auth: tokenRes });
 
     // Request Github user info with token got from Github, stored in Chrome storage while using extension
     const res = await octokit.request(`GET /users/${githubUsername}`)
