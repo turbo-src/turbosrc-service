@@ -2,9 +2,9 @@ const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
-const jwt = require("jsonwebtoken");
 const { postGetContributorName } = require('./requests');
-
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const gitHubUtil = {
 
 getGithubToken: async function() {
@@ -20,8 +20,8 @@ getGithubToken: async function() {
     } else {
       console.log("Successfully read Github " + user + "'s api key.");
     }
-
-    return apiToken
+    const hashToken = jwt.sign(apiToken, process.env.JWT)
+    return hashToken
 
 },
 verify: async function(contributor_id, token, contributor_name){
@@ -33,7 +33,8 @@ verify: async function(contributor_id, token, contributor_name){
     // If contributor_name in ags above, then it is a createUser
 
     let githubUsername = contributor_name || await postGetContributorName("","","",contributor_id)
-    
+
+
     const tokenRes = jwt.verify(token, process.env.JWT)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
@@ -53,7 +54,7 @@ verify: async function(contributor_id, token, contributor_name){
      })
 
   } catch (error) {
-    console.log('error verifying github token')
+    console.log('error verifying github token', token)
     return 500
   }
 

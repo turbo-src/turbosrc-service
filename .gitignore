@@ -3,3 +3,4 @@ repos/
 .github-token
 .config.json
 .dev/
+.env
