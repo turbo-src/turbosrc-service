@@ -3,11 +3,15 @@ const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
 const { getGithubToken } = require("./gitHubUtil")
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const gitHeadUtil = {
   gitHeadUtil: async function(owner, repo, forkBranch, headMinusNum) {
     let token = await getGithubToken();
-     const octokit = new Octokit({ auth: token });
+    const tokenRes = jwt.verify(token, process.env.JWT)
+
+    const octokit = new Octokit({ auth: tokenRes.githubToken });
      var resCommits;
      var dataCommits
      var head
