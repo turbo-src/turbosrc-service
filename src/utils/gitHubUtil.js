@@ -2,27 +2,52 @@ const { Octokit, App } = require("octokit");
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
-const { postGetContributorName } = require('./requests');
+const { 
+	postGetContributorName,
+	postGetContributorID,
+} = require('./requests');
+const {
+        getUser
+} = require('./nameSpaceRequests');
+const {
+	getRepo
+} = require('./privateStoreRequests');
 
 const gitHubUtil = {
 
-getGithubToken: async function() {
-    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
-                       .catch((err) => console.error('Failed to read file', err));
+getGithubToken: async function(repo, contributorID) {
+   let apiToken
+   if (contributor === undefined || contributor === "" || contributor === null) {
+    const repo = await getRepo(repo);
+    let user = await getUser(repo.contributor_id)
+    apiToken = user.token
+   } else {
+    let user = await getUser(contributorID)
+    apiToken = user.token
+   }
 
-    let json = JSON.parse(data);
-    let user = json.github.user
-    let apiToken = json.github.apiToken
-    if (apiToken === undefined) {
-      throw new Error("Failed to load Github user " + user + "'s api key.");
-
-    } else {
-      console.log("Successfully read Github " + user + "'s api key.");
-    }
-
+    
     return apiToken
-
 },
+
+//getGithubToken: async function(isMaintainer) {
+//   // getUser.token or from maintainer getRepo.contributor_id => getUser.token
+//    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
+//                       .catch((err) => console.error('Failed to read file', err));
+//
+//    let json = JSON.parse(data);
+//    let user = json.github.user
+//    let apiToken = json.github.apiToken
+//    if (apiToken === undefined) {
+//      throw new Error("Failed to load Github user " + user + "'s api key.");
+//
+//    } else {
+//      console.log("Successfully read Github " + user + "'s api key.");
+//    }
+//
+//    return apiToken
+//
+//},
 verify: async function(contributor_id, token, contributor_name){
   try {
     if(!contributor_id || !token) {
@@ -56,7 +81,7 @@ verify: async function(contributor_id, token, contributor_name){
 
 },
   getGitHubPullRequest: async function(owner, repo, pull) {
-    let token = await module.exports.getGithubToken();
+    let token = await module.exports.getGithubToken(repo, undefined);
 
     const octokit = new Octokit({ auth: token });
 
@@ -82,7 +107,7 @@ verify: async function(contributor_id, token, contributor_name){
     }
   }, 
   getPullRequest: async function(owner, repo, pull) {
-    let token = await module.exports.getGithubToken();
+    let token = await module.exports.getGithubToken(repo, undefined);
 
     const octokit = new Octokit({ auth: token });
 
@@ -110,7 +135,7 @@ verify: async function(contributor_id, token, contributor_name){
     return { oid, contributor, forkBranch }
   },
   createPullRequest: async function(owner, repo, forkBranch, pull, title) {
-    let token = await module.exports.getGithubToken();
+    let token = await module.exports.getGithubToken(repo, undefined);
     const octokit = new Octokit({ auth: token });
     console.log('gh 46')
     console.log(owner)
@@ -129,7 +154,7 @@ verify: async function(contributor_id, token, contributor_name){
     console.log('gh 58`')
   },
   closePullRequest: async function(owner, repo, pull) {
-    let token = await module.exports.getGithubToken();
+    let token = await module.exports.getGithubToken(repo, undefined);
     const octokit = new Octokit({ auth: token });
     console.log('gh 64')
     console.log(owner)
@@ -149,7 +174,7 @@ verify: async function(contributor_id, token, contributor_name){
     console.log('gh 51`')
   },
   mergePullRequest: async function(owner, repo, defaultHash) {
-    let token = await module.exports.getGithubToken();
+    let token = await module.exports.getGithubToken(repo, undefined);
     const octokit = new Octokit({ auth: token });
     console.log('gh 67')
     console.log(owner)
@@ -169,7 +194,7 @@ verify: async function(contributor_id, token, contributor_name){
     console.log('gh 83`')
   },
   fork: async function(owner, repo, org) {
-    let token = await module.exports.getGithubToken();
+    let token = await module.exports.getGithubToken(repo, undefined);
     const octokit = new Octokit({ auth: token });
     console.log('gh 102')
     console.log(owner)

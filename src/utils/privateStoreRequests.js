@@ -121,6 +121,19 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getContributorSignature;
   },
+  getRepo: async (repo_id) => {
+    const res = await superagent
+      .post(privateStore)
+      .send({
+        query: `{ getRepo(repo: "${repo}") }`,
+      })
+      .set("accept", "json");
+    //.end((err, res) => {
+    // Calling the end function will send the request
+    //});
+    const json = JSON.parse(res.text);
+    return json.data.getRepo;
+  },
   getRepoStatus: async (repo_id) => {
     const res = await superagent
       .post(privateStore)
