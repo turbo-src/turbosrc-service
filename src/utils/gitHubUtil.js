@@ -3,8 +3,11 @@ const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
 const { postGetContributorName } = require('./requests');
+const { getJWT } = require('./config')
+
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+
 const gitHubUtil = {
 
 getGithubToken: async function() {
@@ -23,6 +26,14 @@ getGithubToken: async function() {
    return apiToken
 },
 verify: async function(contributor_id, token, contributor_name){
+  const jwtF = await getJWT()
+  console.log("")
+  console.log("token ", token)
+  console.log("$JWT ", jwtF)
+  console.log('type', typeof jwtF)
+  const tokenResF = jwt.verify(token, jwt)
+  console.log("tokenResF ", tokenResF)
+  console.log("")
   try {
     if(!contributor_id || !token) {
       return false
@@ -33,7 +44,8 @@ verify: async function(contributor_id, token, contributor_name){
     let githubUsername = contributor_name || await postGetContributorName("","","",contributor_id)
 
 
-    const tokenRes = jwt.verify(token, process.env.JWT)
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
 
@@ -61,7 +73,8 @@ verify: async function(contributor_id, token, contributor_name){
     let token = await module.exports.getGithubToken();
 
   
-    const tokenRes = jwt.verify(token, process.env.JWT)
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     console.log('token', token,'tokenRes:', tokenRes)
@@ -89,7 +102,8 @@ verify: async function(contributor_id, token, contributor_name){
   getPullRequest: async function(owner, repo, pull) {
     let token = await module.exports.getGithubToken();
 
-    const tokenRes = jwt.verify(token, process.env.JWT)
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
 
@@ -118,7 +132,9 @@ verify: async function(contributor_id, token, contributor_name){
   },
   createPullRequest: async function(owner, repo, forkBranch, pull, title) {
     let token = await module.exports.getGithubToken();
-    const tokenRes = jwt.verify(token, process.env.JWT)
+
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     console.log('gh 46')
@@ -139,7 +155,8 @@ verify: async function(contributor_id, token, contributor_name){
   },
   closePullRequest: async function(owner, repo, pull) {
     let token = await module.exports.getGithubToken();
-    const tokenRes = jwt.verify(token, process.env.JWT)
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     console.log('gh 64')
@@ -161,7 +178,8 @@ verify: async function(contributor_id, token, contributor_name){
   },
   mergePullRequest: async function(owner, repo, defaultHash) {
     let token = await module.exports.getGithubToken();
-    const tokenRes = jwt.verify(token, process.env.JWT)
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     console.log('gh 67')
@@ -183,7 +201,8 @@ verify: async function(contributor_id, token, contributor_name){
   },
   fork: async function(owner, repo, org) {
     let token = await module.exports.getGithubToken();
-    const tokenRes = jwt.verify(token, process.env.JWT)
+    const jwt = await getJWT()
+    const tokenRes = jwt.verify(token, jwt)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     console.log('gh 102')

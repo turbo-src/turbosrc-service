@@ -62,6 +62,21 @@ var root = {
 
     return mode
   },
+  getJWT: async () => {
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let jwt = json.turbosrc.jwt
+    if (jwt === undefined) {
+      throw new Error("Failed to load jwt " + jwt);
+
+    } else {
+      console.log("Successfully read contributor " + jwt);
+    }
+
+    return jwt
+  },
 }
 
 module.exports = root

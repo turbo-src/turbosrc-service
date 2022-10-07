@@ -233,6 +233,9 @@ var root = {
   },
   transferTokens: async (args) => {
     const verified = await verify(args.from, args.token)
+    console.log("")
+    console.log("235 server")
+    console.log("")
 
     if(verified === true) {
     //const from = nameSpaceDB['users'][args.from]
