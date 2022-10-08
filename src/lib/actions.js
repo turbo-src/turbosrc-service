@@ -106,6 +106,7 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
    let mergeable = false
    let convertedChildDefaultHash
    let convertedDefaultHash
+   let head
     console.log('tsrcID ', tsrcID)
     const onlineMode = await getTurbosrcMode()
     if (onlineMode === 'online') {
@@ -114,8 +115,12 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       console.log(repo)
       console.log(defaultHash)
       const resGH = await getGitHubPRhead(owner, repo, defaultHash)
-      const head = resGH.head
+      head = resGH.head
       mergeable = resGH.mergeable
+    } else {
+      head = defaultHash
+      mergeable = true
+    }
       console.log('head ', head)
       console.log('mergeable ', mergeable)
       console.log('tsrcID 100', tsrcID)
@@ -153,25 +158,6 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       } else {
         return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
-
-    } else {
-      if (tsrcID === head && tsrcID !== "500") {
-        resPostTsrcID = tsrcID
-      } else if (write) { 
-	// Offline so we don't get the HEAD of the PR from GH.
-        resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
-      } else {
-        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-      }
-      if (resPostTsrcID === 201) {
-        convertedDefaultHash = defaultHash
-        convertedChildDefaultHash = defaultHash
-        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
-      } else {
-        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-      }
-    }
-
     convertedDefaultHash = defaultHash
     convertedChildDefaultHash = defaultHash
     return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
