@@ -3,7 +3,10 @@ const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
 const { postGetContributorName } = require('./requests');
-const { getJWT } = require('./config')
+const {
+	getJWT,
+        getTurbosrcMode
+} = require('./config')
 
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
@@ -26,50 +29,55 @@ getGithubToken: async function() {
    return apiToken
 },
 verify: async function(contributor_id, token){
-  const jwtTokenFromConfig = await getJWT()
-  console.log('contributor: ', contributor_id)
-  console.log('jwtToken from Config: ', jwtTokenFromConfig)
-  const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-  console.log('decrypted jwtToken from Config: ', tokenRes)
-  try {
-    if(!contributor_id || !token) {
-      return false
-    }
-    // Trade contributor_id for our contributor_name in our PG database
-    // If contributor_name in ags above, then it is a createUser
-
-    let githubUsername = await postGetContributorName("","","",contributor_id)
-
-
-    console.log("")
-    console.log('inside verify try catch')
-    console.log("")
-    //const jwtTokenFromConfig = await getJWT()
-    //console.log('jwtToken from Config: ', jwtTokenFromConfig)
-    //const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-    //console.log('decrypted jwtToken from Config: ', tokenRes)
-
-    const octokit = new Octokit({ auth: tokenRes.githubToken });
-
-    // Request Github user info with token got from Github, stored in Chrome storage while using extension
-    const res = await octokit.request(`GET /users/${githubUsername}`)
-
-    // If res was successful and was querying the user associated with the contributor_id return true
-    return Promise.resolve(res).then((object) => {
-      if(githubUsername === object.data.login) {
-        console.log('verified token thru github')
-        return true
-      } else {
-        console.log('github token invalid', token)
+  const onlineMode = await getTurbosrcMode()
+  if (onlineMode !== 'online') {
+    console.log('verify offline (default true)')
+    return true
+  } else {
+    const jwtTokenFromConfig = await getJWT()
+    console.log('contributor: ', contributor_id)
+    console.log('jwtToken from Config: ', jwtTokenFromConfig)
+    const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+    console.log('decrypted jwtToken from Config: ', tokenRes)
+    try {
+      if(!contributor_id || !token) {
         return false
       }
-     })
+      // Trade contributor_id for our contributor_name in our PG database
+      // If contributor_name in ags above, then it is a createUser
 
-  } catch (error) {
-    console.log('error verifying github token', token)
-    return 500
+      let githubUsername = await postGetContributorName("","","",contributor_id)
+
+
+      console.log("")
+      console.log('inside verify try catch')
+      console.log("")
+      //const jwtTokenFromConfig = await getJWT()
+      //console.log('jwtToken from Config: ', jwtTokenFromConfig)
+      //const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+      //console.log('decrypted jwtToken from Config: ', tokenRes)
+
+      const octokit = new Octokit({ auth: tokenRes.githubToken });
+
+      // Request Github user info with token got from Github, stored in Chrome storage while using extension
+      const res = await octokit.request(`GET /users/${githubUsername}`)
+
+      // If res was successful and was querying the user associated with the contributor_id return true
+      return Promise.resolve(res).then((object) => {
+        if(githubUsername === object.data.login) {
+          console.log('verified token thru github')
+          return true
+        } else {
+          console.log('github token invalid', token)
+          return false
+        }
+       })
+
+    } catch (error) {
+      console.log('error verifying github token', token)
+      return 500
+    }
   }
-
 },
   getGitHubPullRequest: async function(owner, repo, pull) {
     let token = await module.exports.getGithubToken();
