@@ -3,7 +3,10 @@ const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
 var path = require("path");
 const { postGetContributorName } = require('./requests');
-const { getJWT } = require('./config')
+const {
+	getJWT,
+        getTurbosrcMode
+} = require('./config')
 
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
@@ -26,6 +29,11 @@ getGithubToken: async function() {
    return apiToken
 },
 verify: async function(contributor_id, token){
+  const onlineMode = await getTurbosrcMode()
+  if (onlineMode === 'offline') {
+    return true
+  }
+
   const jwtTokenFromConfig = await getJWT()
   console.log('contributor: ', contributor_id)
   console.log('jwtToken from Config: ', jwtTokenFromConfig)
@@ -44,8 +52,7 @@ verify: async function(contributor_id, token){
     console.log("")
     console.log('inside verify try catch')
     console.log("")
-    //const jwtTokenFromConfig = await getJWT()
-    //console.log('jwtToken from Config: ', jwtTokenFromConfig)
+    //const jwtTokenFromConfig = await getJWT() console.log('jwtToken from Config: ', jwtTokenFromConfig)
     //const tokenRes = jwt.verify(token, jwtTokenFromConfig)
     //console.log('decrypted jwtToken from Config: ', tokenRes)
 
@@ -56,6 +63,7 @@ verify: async function(contributor_id, token){
 
     // If res was successful and was querying the user associated with the contributor_id return true
     return Promise.resolve(res).then((object) => {
+      console.log('github user', githubUsername, object.data.login)
       if(githubUsername === object.data.login) {
         console.log('verified token thru github')
         return true
