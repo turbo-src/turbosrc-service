@@ -91,12 +91,9 @@ var root = {
     
 
     console.log('mode', endpoint.mode)
-    if (endpoint.mode === 'online') {
-      console.log(serviceName, 'url', endpoint.onlineURL)
-      return endpoint.onlineURL 
-    } else if (endpoint.mode === 'offline') {
-      console.log(serviceName, 'url', endpoint.offlineURL)
-      return endpoint.offlineURL
+    if (endpoint.url !== undefined && endpoint.url !== null) {
+      console.log(serviceName, 'url', endpoint.url)
+      return endpoint.url
     } else {
       throw new Error("Failed to load endpoint mode " + endpoint.mode + " of " + serviceName);
     }
