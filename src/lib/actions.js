@@ -100,10 +100,10 @@ async function getGitHubPRhead(owner, repo, issueID) {
 async function convertDefaultHash(owner, repo, defaultHash, write) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
+   let mergeable = true
    try {
     let resPostTsrcID
    let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
-   let mergeable = false
    let convertedChildDefaultHash
    let convertedDefaultHash
     console.log('tsrcID ', tsrcID)
