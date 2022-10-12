@@ -57,7 +57,7 @@ var root = {
       throw new Error("Failed to load mode " + mode);
 
     } else {
-      console.log("Successfully read contributor " + mode);
+      console.log("Successfully read mode " + mode);
     }
 
     return mode
@@ -72,7 +72,7 @@ var root = {
       throw new Error("Failed to load jwt " + jwt);
 
     } else {
-      console.log("Successfully read contributor " + jwt);
+      console.log("Successfully read jwt " + jwt);
     }
 
     return jwt
