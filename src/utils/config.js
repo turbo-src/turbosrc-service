@@ -52,7 +52,7 @@ var root = {
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
-    let mode = json.turbosrc.mode
+    let mode = json.turbosrc.endpoint.mode
     if (mode === undefined) {
       throw new Error("Failed to load mode " + mode);
 
@@ -76,6 +76,30 @@ var root = {
     }
 
     return jwt
+  },
+  getServiceEndpoint: async (serviceName) => {
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let endpoint = json[serviceName].endpoint
+    if (endpoint === undefined) {
+      throw new Error("Failed to load endpoint " + endpoint);
+    } else {
+      console.log("Successfully read service endpoint " + serviceName);
+    }
+    
+
+    console.log('mode', endpoint.mode)
+    if (endpoint.mode === 'online') {
+      console.log(serviceName, 'url', endpoint.onlineURL)
+      return endpoint.onlineURL 
+    } else if (endpoint.mode === 'offline') {
+      console.log(serviceName, 'url', endpoint.offlineURL)
+      return endpoint.offlineURL
+    } else {
+      throw new Error("Failed to load endpoint mode " + endpoint.mode + " of " + serviceName);
+    }
   },
 }
 
