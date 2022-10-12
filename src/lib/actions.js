@@ -101,6 +101,7 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
    let mergeable = true
+   let head
    try {
     let resPostTsrcID
    let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
@@ -114,12 +115,17 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       console.log(repo)
       console.log(defaultHash)
       const resGH = await getGitHubPRhead(owner, repo, defaultHash)
-      const head = resGH.head
+      head = resGH.head
       mergeable = resGH.mergeable
       console.log('head ', head)
       console.log('mergeable ', mergeable)
       console.log('tsrcID 100', tsrcID)
-
+    } else if (onlineMode === 'offline' && tsrcID !== "500") {
+        head = tscrcID
+    } else if (onlineMode === 'offline' && tsrcID === "500") {
+        head = defaultHash
+    }
+      
       if (head === null || head === undefined ) {
         return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       } else if (tsrcID === head && tsrcID !== "500" ) {
@@ -153,24 +159,6 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       } else {
         return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
-
-    } else {
-      if (tsrcID === head && tsrcID !== "500") {
-        resPostTsrcID = tsrcID
-      } else if (write) { 
-	// Offline so we don't get the HEAD of the PR from GH.
-        resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, defaultHash)
-      } else {
-        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-      }
-      if (resPostTsrcID === 201) {
-        convertedDefaultHash = defaultHash
-        convertedChildDefaultHash = defaultHash
-        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
-      } else {
-        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-      }
-    }
 
     convertedDefaultHash = defaultHash
     convertedChildDefaultHash = defaultHash
@@ -278,6 +266,7 @@ const root = {
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
     mergeableCodeHost = convertedHashes.mergeable
+    console.log('mergeableCodeHost', mergeableCodeHost)
     let status = await postGetPullRequest(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -285,6 +274,8 @@ const root = {
       "",
       ""
     );
+
+    console.log('getPR', status)
 
     status.mergeableCodeHost = mergeableCodeHost
    
