@@ -1,8 +1,8 @@
 const superagent = require("superagent");
 
-const namespaceUrl = "http://localhost:4003/graphql"
+const { getServiceEndpoint } = require('./config')
 
-//const namespaceUrl =
+//const endpoint =
 //  process.env.NODE_ENV === "fly"
 //    ? "https://namespace-db.fly.dev/graphql"
 //    : "http://localhost:4003/graphql"
@@ -16,8 +16,9 @@ var root = {
     contributor_signature,
     token
   ) => {
+    const endpoint = await getServiceEndpoint("namespace")
     const res = await superagent
-      .post(namespaceUrl)
+      .post(endpoint)
       .send({
         query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") }`,
       })
@@ -27,8 +28,9 @@ var root = {
     return json.data.createUser;
   },
   postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
+    const endpoint = await getServiceEndpoint("namespace")
     const res = await superagent
-      .post(namespaceUrl)
+      .post(endpoint)
       .send({
         query: `{ getContributorName(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`,
       })
@@ -41,8 +43,9 @@ var root = {
     return json.data.getContributorName;
   },
   postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
+    const endpoint = await getServiceEndpoint("namespace")
     const res = await superagent
-      .post(namespaceUrl)
+      .post(endpoint)
       .send({
         query: `{ getContributorID(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
       })
@@ -54,8 +57,9 @@ var root = {
     return json.data.getContributorID;
   },
   postGetContributorSignature: async (owner, repo, defaultHash, contributor_id) => {
+    const endpoint = await getServiceEndpoint("namespace")
     const res = await superagent
-      .post(namespaceUrl)
+      .post(endpoint)
       .send({
         query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`,
       })
@@ -67,8 +71,9 @@ var root = {
     return json.data.getContributorSignature;
   },
   getUser: async (contributor_id) => {
+    const endpoint = await getServiceEndpoint("namespace")
     const res = await superagent
-      .post(namespaceUrl)
+      .post(endpoint)
       .send({
         query: `{ getUser(contributor_id: "${contributor_id}") {contributor_name, contributor_id, contributor_signature, token}}`,
       })
