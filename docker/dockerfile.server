@@ -5,12 +5,12 @@ FROM node:17-alpine3.14
 # where available (npm@5+)
 COPY package*.json /usr/local/
 
-# Only on deployment branches
-COPY .config.json /usr/local/
-
 ENV NODE_PATH=/usr/local/node_modules
 
 RUN npm install --prefix /usr/local
+
+# Only on deployment branches
+COPY .config.json /usr/local/
 
 # If you are building your code for production
 # RUN npm ci --only=production
