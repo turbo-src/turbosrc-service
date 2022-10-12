@@ -1,6 +1,7 @@
 const superagent = require("superagent");
 
-const privateStore = "http://localhost:4002/graphql"
+
+const { getServiceEndpoint } = require('./config')
 
 //const privateStore =
 //  process.env.NODE_ENV === "fly"
@@ -15,6 +16,7 @@ var root = {
     contributor_name,
     contributor_signature
   ) => {
+    const privateStore = await getServiceEndpoint("offchain")
     superagent
       .post(privateStore)
       .send({
@@ -28,6 +30,7 @@ var root = {
       });
   },
   postCreateRepo: async (owner, repo, defaultHash, contributor_id, side) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -50,6 +53,7 @@ var root = {
     fork_branch,
     title
   ) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -73,6 +77,7 @@ var root = {
     fork_branch,
     title
   ) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -84,6 +89,7 @@ var root = {
     return json.data.createLinkedPullRequest;
   },
   postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -98,6 +104,7 @@ var root = {
     return json.data.getContributorName;
   },
   postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -111,6 +118,7 @@ var root = {
     return json.data.getContributorID;
   },
   postGetContributorSignature: async (owner, repo, defaultHash, contributor_name) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -124,6 +132,7 @@ var root = {
     return json.data.getContributorSignature;
   },
   getRepoStatus: async (repo_id) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -137,6 +146,7 @@ var root = {
     return json.data.getRepoStatus;
   },
   postGetAuthorizedContributor: async (contributor_id, repo_id) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -156,6 +166,7 @@ var root = {
     contributor_id,
     side
   ) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -169,6 +180,7 @@ var root = {
     return json.data.getContributorTokenAmount;
   },
   postTransferTokens: async (owner, repo, from, to, amount) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -182,6 +194,7 @@ var root = {
     return json.data.transferTokens;
   },
   postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -195,6 +208,7 @@ var root = {
     return json.data.setVote;
   },
   postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -208,6 +222,7 @@ var root = {
     return json.data.getMostRecentLinkedPullRequest;
   },
   postSetQuorum: async (repo, contributor_id, quorum) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -221,6 +236,7 @@ var root = {
     return json.data.setQuorum;
   },
   postGetQuorum: async (repo) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -234,6 +250,7 @@ var root = {
     return json.data.getQuorum;
   },
   postGetPRvoteTotals: async (owner, repo, defaultHash, contributor_id, side) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -247,6 +264,7 @@ var root = {
     return json.data.getPRvoteTotals;
   },
   postGetPRvoteYesTotals: async (owner, repo, defaultHash, contributor_id, side) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
@@ -260,6 +278,7 @@ var root = {
     return json.data.getPRvoteYesTotals;
   },
   postGetPRvoteNoTotals: async (owner, repo, defaultHash, contributor_id, side) => {
+    const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
