@@ -1,9 +1,11 @@
 const superagent = require("superagent");
 
-const privateStore =
-  process.env.NODE_ENV === "fly"
-    ? "https://private-store.fly.dev/graphql"
-    : "http://localhost:4002/graphql"
+const privateStore = "http://localhost:4002/graphql"
+
+//const privateStore =
+//  process.env.NODE_ENV === "fly"
+//    ? "https://private-store.fly.dev/graphql"
+//    : "http://localhost:4002/graphql"
 
 var root = {
   postCreateUser: async (
