@@ -4,7 +4,7 @@ const { getServiceEndpoint } = require('./config')
 
 //const port =
 //  process.env.NODE_ENV === "fly"
-//    ? "https://namespace-db.fly.dev"
+//    ? "https://gh-service.fly.dev/graphql "
 //    : "http://localhost:4004";
 
 var root = {
