@@ -2,7 +2,7 @@ const superagent = require("superagent");
 
 const port =
   process.env.NODE_ENV === "fly"
-    ? "https://gh-service.fly.dev"
+    ? "https://namespacedb-service.fly.dev"
     : "http://localhost:4004";
 
 var root = {
