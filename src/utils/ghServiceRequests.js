@@ -2,7 +2,7 @@ const superagent = require("superagent");
 
 const port =
   process.env.NODE_ENV === "fly"
-    ? "https://namespacedb-service.fly.dev"
+    ? "https://namespace-db.fly.dev"
     : "http://localhost:4004";
 
 var root = {
