@@ -2,5 +2,7 @@ node_modules/
 repos/
 .github-token
 .config.json
+.credentials
+configs/
 .dev/
 .env
