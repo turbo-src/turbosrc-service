@@ -13,6 +13,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 var snooze_ms = 1500;;
 
@@ -26,7 +29,7 @@ describe('vote', function () {
     describe('Vote duplicate with minority voter', function () {
       it("Prevent duplicate vote", async () => {
         const contributor_name = await getGithubContributor()
-        await snooze(snooze_ms);
+	const token = await getGithubToken()
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -34,7 +37,15 @@ describe('vote', function () {
             /*contributor_name:*/ contributor_name,
         );
 
-        //user
+        const yuhhID = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "issue_2",
+            /*contributor:*/ "yuhh-h",
+        );
+        const testerTokenA = await getGithubToken("a")
+
+        await snooze(snooze_ms);
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -43,6 +54,7 @@ describe('vote', function () {
 	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
+	    /*token:*/ token
         );
         await snooze(snooze_ms);
         const openStatus = await postGetPullRequest(
@@ -62,6 +74,7 @@ describe('vote', function () {
 	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
+	    /*token:*/ token
         );
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPullRequest(
@@ -84,8 +97,9 @@ describe('vote', function () {
             /*defaultHash:*/ "issue_3",
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+            /*contributor_id:*/ yuhhID,
             /*side:*/ "yes",
+	    /*token:*/ testerTokenA
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
@@ -98,18 +112,18 @@ describe('vote', function () {
 
         assert.deepEqual(
           openStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail open on initial vote below quorum"
         );
 
         assert.deepEqual(
           duplicateStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
+         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail keep open even though initial vote below quorum"
         );
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail to merge even though it was voted in."
         );
       });
