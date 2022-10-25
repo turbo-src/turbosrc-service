@@ -87,6 +87,7 @@ describe('Voting.', function () {
         );
         await snooze(snooze_ms);
 
+        const testerTokenA = await getGithubToken("a")
         const yuhhID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -103,7 +104,7 @@ describe('Voting.', function () {
 	    /*mergeable:*/ true,
             /*contributor_id:*/ yuhhID,
             /*side:*/ "yes",
-	    /*token:*/ token
+	    /*token:*/ testerTokenA
         );
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
