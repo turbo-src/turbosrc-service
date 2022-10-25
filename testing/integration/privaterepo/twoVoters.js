@@ -146,18 +146,20 @@ describe('Voting.', function () {
         );
         assert.deepEqual(
 	    openStatus,
-            { status: 200, state: "pre-open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", mergeableCodeHost: true, "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
+            { status: 200, state: "open" /* was "pre-open" but transfered less tokens out*/, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", mergeableCodeHost: true, "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
             "Fail to stay open."
         );
         assert.equal(
             voteTotalsFinal,
-            '0.534001',
+	    '1',
+            //'0.534001',
             "Fail to tally all votes."
         );
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "mergeableCodeHost": true,
+ "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
           "Fail to merge even though it was voted in."
         );
       });

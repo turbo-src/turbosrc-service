@@ -14,6 +14,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 var snooze_ms = 1500;
 
@@ -26,6 +29,15 @@ describe('Vote.', function () {
     // Increase mocha(testing framework) time, otherwise tests fails
     before(async () => {
         const contributor_name = await getGithubContributor()
+
+        const yuhhID = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "issue_2",
+            /*contributor:*/ "yuhh-h",
+        );
+
+        const testerTokenA = await getGithubToken("a")
         await snooze(snooze_ms);
 
         await postSetVote(
@@ -34,8 +46,9 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_2",
             /*childDefaultHash:*/ "issue_2",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+            /*contributor_id:*/ yuhhID,
             /*side:*/ "yes",
+	    /*token:*/ testerTokenA
         );
 
     });
@@ -48,7 +61,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor_id:*/ "mary",
+            /*contributor:*/ "yuhh-h",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -64,13 +77,13 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "yuhh-h",
             /*side:*/ "yes",
         );
-
+ 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
+         { status: 200, state: "merge", "mergeableCodeHost": true, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
          { status: 200, type: 2 },
           "Fail to merge even though it was voted in."
         );
