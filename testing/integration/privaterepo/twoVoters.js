@@ -67,7 +67,7 @@ describe('Voting.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "yuhh",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
@@ -87,21 +87,21 @@ describe('Voting.', function () {
         );
         await snooze(snooze_ms);
 
-        const maryID = await postGetContributorID(
+        const yuhhID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor:*/ "mary",
+            /*contributor:*/ "yuhh-h",
         );
 
-        //mary
+        //yuhh-h
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
             /*childDefaultHash:*/ "issue_1",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ maryID,
+            /*contributor_id:*/ yuhhID,
             /*side:*/ "yes",
 	    /*token:*/ token
         );
@@ -110,7 +110,7 @@ describe('Voting.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor_id:*/ maryID,
+            /*contributor_id:*/ yuhhID,
             /*side:*/ "yes",
         );
 
@@ -143,7 +143,7 @@ describe('Voting.', function () {
         );
         assert.deepEqual(
 	    openStatus,
-            { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "a3ff288b25106ad094699ac4dc1897a413d2cdb8", defaultHash: "a3ff288b25106ad094699ac4dc1897a413d2cdb8" },
+            { status: 200, state: "pre-open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", mergeableCodeHost: true, "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
             "Fail to stay open."
         );
         assert.equal(
@@ -154,7 +154,7 @@ describe('Voting.', function () {
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "a3ff288b25106ad094699ac4dc1897a413d2cdb8", defaultHash: "a3ff288b25106ad094699ac4dc1897a413d2cdb8" },
+         { status: 200, state: "merge", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
           "Fail to merge even though it was voted in."
         );
       });
