@@ -13,18 +13,23 @@ const jwt = require("jsonwebtoken");
 
 const gitHubUtil = {
 
-getGithubToken: async function() {
+getGithubToken: async function(user) {
+    let apiToken
     const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
-    let user = json.github.user
-    let apiToken = json.github.apiToken
+    if (user === undefined) {
+       apiToken = json.apiToken
+       user = json.github.user
+    } else {
+       apiToken = json.testers[user].user.apiToken
+    }
     if (apiToken === undefined) {
       throw new Error("Failed to load Github user " + user + "'s api key.");
 
     } else {
-      console.log("Successfully read Github " + user + "'s api key.");
+      console.log("Successfully read Github " + user  + "'s api key.");
     }
    return apiToken
 },
