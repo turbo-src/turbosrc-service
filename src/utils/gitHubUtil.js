@@ -19,11 +19,13 @@ getGithubToken: async function(user) {
                        .catch((err) => console.error('Failed to read file', err));
 
     let json = JSON.parse(data);
+    console.log('user ' + user);
     if (user === undefined) {
-       apiToken = json.apiToken
+       apiToken = json.github.apiToken
        user = json.github.user
     } else {
-       apiToken = json.testers[user].user.apiToken
+       apiToken = json.testers[user].apiToken
+       user = json.testers[user].user
     }
     if (apiToken === undefined) {
       throw new Error("Failed to load Github user " + user + "'s api key.");
