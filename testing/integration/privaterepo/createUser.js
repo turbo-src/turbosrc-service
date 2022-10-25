@@ -43,13 +43,13 @@ describe('Create users', function () {
             /*token:*/ token
         );
 
-	const testerTokenA = await getGithubToken("yuhh-h")
+	const testerTokenA = await getGithubToken("a")
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
             /*contributor_id:*/ "yuhhhF0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
             /*contributor_name:*/ "yuhh-h",
-            /*contributor_signature:*/ "yuhhhe400825a03c9cf1544d33bcffc35a0f4ae9884f1826b124acd9152bc262"
+            /*contributor_signature:*/ "yuhhhe400825a03c9cf1544d33bcffc35a0f4ae9884f1826b124acd9152bc262",
             /*token:*/ testerTokenA
         );
 
