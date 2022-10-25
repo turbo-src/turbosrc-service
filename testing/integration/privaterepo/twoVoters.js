@@ -131,7 +131,8 @@ describe('Voting.', function () {
         );
         assert.equal(
             voteYesTotals,
-            '34000',
+	    '499999',
+            //'34000',
             "Fail to add votes yes."
         );
         assert.equal(
@@ -140,7 +141,8 @@ describe('Voting.', function () {
             "Fail to add votes no."
         );
         assert.equal(
-            voteTotals, '0.034', "Fail to add votes no."
+            //voteTotals, '0.034', "Fail to add votes no."
+            voteTotals, '0.499999', "Fail to add votes no."
         );
         assert.deepEqual(
 	    openStatus,
