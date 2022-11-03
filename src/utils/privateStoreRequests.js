@@ -2,7 +2,7 @@ const superagent = require("superagent");
 
 const privateStore =
   process.env.NODE_ENV === "fly"
-    ? "https://turbosrc-reibase-namespace.fly.dev/graphql"
+    ? "https://turbosrc-reibase-engine.fly.dev/graphql"
     : "http://localhost:4002/graphql"
 
 var root = {
