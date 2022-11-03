@@ -2,7 +2,7 @@ const superagent = require("superagent");
 
 const namespaceUrl =
   process.env.NODE_ENV === "fly"
-    ? "https://namespace-db.fly.dev/graphql"
+    ? "https://turbosrc-reibase-namespace.fly.dev/graphql"
     : "http://localhost:4003/graphql"
 
 var root = {
