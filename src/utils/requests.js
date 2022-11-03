@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const port =
   process.env.NODE_ENV === "fly"
-    ? "https://turbosrc-service.fly.dev"
+    ? "https://turbosrc-reibase-service.fly.dev"
     : "http://localhost:4000";
 
 var root = {
