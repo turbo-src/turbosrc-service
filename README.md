@@ -39,7 +39,7 @@ Create docker volume.
 
 ### config
 
-You'll need a config file. Fill in as appropriate.
+You'll need a `.config.json` file. Fill in as appropriate.
 
 ```
 {
