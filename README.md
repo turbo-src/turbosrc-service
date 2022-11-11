@@ -1,58 +1,27 @@
 <p align="center">
-  <a href="https://nixos.org#gh-light-mode-only">
+  <a href="https://turbosrc.org">
     <img src="images/turbosrc-light-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
-  <a href="https://nixos.org#gh-dark-mode-only">
+  <a href="https://turbosrc.org">
     <img src="images/turbosrc-dark-big.png" width="500px" alt="TurboSrc logo"/>
   </a>
 </p>
+
+Further documentation is forthcoming.
 
 ## Install
 
 Clone.
 
 ```
-git clone https://github.com/turbo-src/service turbo-src-service
-cd turbo-src-service
+git clone https://github.com/turbo-src/service
 ```
 
-Click on your Github profile > Settings > Developer Settings > Personal Access Tokens > Generate new token
+You can run it on bare metal. There is also node2nix (run `nix-shell -A shell`).
 
-Make sure the repo and delete repo options are checked off.
+### Docker
 
-Create the `.config.json` file and add your Github user, organization and token.
-
-```
-{
-  "github": {
-    "organization": "myOrg",
-    "user": "myGithub",
-    "apiToken": "ghp_475fh..."
-  },
-  "turbosrc": {
-    "store": {
-      "repo": {
-        "addr": "0x682...,
-        "key": "2706a..."
-      },
-      "contributor": {
-        "addr": "0x18F...",
-        "key": "ae41e..."
-      }
-    }
-  }
-}
-```
-
-Make the development and testing scripts executable.
-
-```
-cp ../package*.json .
-chmod +x \
-scripts/demo.sh \
-scripts/run-tests.sh \
-testing/gihtub-maker.sh
-```
+It's best to run outside of docker, but if you do you'll need to setup a network for the subservics it talks to.
 
 Build docker server image.
 
@@ -68,116 +37,58 @@ docker build -t turbo-src-pfserver:0.0.1 -f docker/dockerfile.pfserver .
 
 Create docker volume.
 
-```
-docker volume create turbo-src-server-node-modules-data-volume
-```
+### config
 
-#### Install GihtubMakerTool
-
-https://github.com/turbo-src/GihtubMakerTools
-
-## Development workflow
-
-Build docker server image.
+You'll need a config file. Fill in as appropriate.
 
 ```
-docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
-```
-
-Build docker pull fork server image.
-
-```
-docker build -t turbo-src-pfserver:0.0.1 -f docker/dockerfile.pfserver .
-```
-
-Launch the services.
-
-```
-docker-compose -f docker/docker-compose.yml up
-```
-
-## Nix
-
-If running nix, please set envar `TSRC_ENV=localdev` or `TSRC_ENV=online`. `localdev` is for developing on localhost and `online` when deployed to a cloud service and such.
-
-
-## Testing
-
-```
-./scripts/run-tests.sh
-```
-
-## Other
-
-To see server logs.
-
-`docker logs turbo-src-server`
-
-`docker logs turbo-src-pfserver`
-
-See tags for which versions of the extension it's compatible with.
-
-## Notes
-
-See pullForkUtil, tarRepo function must be modified.
-
-Reproducible tar archive (tar > v1.28). Personally performed on v1.34.
-
-```
-tar --sort=name \
-      --mtime="@${SOURCE_DATE_EPOCH}" \
-      --owner=0 --group=0 --numeric-owner \
-      --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-      -cf FILENAME.tar DIRECTORY
-```
-
-Get the hash.
-```
-sha256sum FILENAME.tar
-```
-
-https://reproducible-builds.org/docs/archives/
-
-
-injects.js postPullFork -> pullForkServer.js getPRfork -> pullForkRepo.pullForkRepojj
-
-1. Try and return sha256 in getPRfork,then with postPullFork
-
-2. Fix tar command for reproducibility.
-
-3. On the server, map github HEAD and defaultHash with sha256.
-
-4. Use only sha256 in contract layer logic.
-
-* contract (vote) server
-* github server (github actions and move all github api calls to here.)
-* business server (graphql_express) - calls contract and github server
-
-## GraphQL API reference
-
-```
-{ getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String) { status, type } }
-```
-### Types
-
-#### PullRequest
-
-Return type of getPullRequest
-
-```
-  type PullRequest {
-    status: Int!
-    type: Int!
-  }
-```
-`status` is the http code and `type` indicates `open`, `merge`, or `close`
-
-open is 1
-
-merge is 2
-
-close is 3
-
-A status 200 indicates success while a 500 indicates an error from the service.
-
-## Contributions
+{
+    "github": {
+        "organization": "YOUR_GH_ORGANIZATION",
+        "user": "YOUR_GH_USERNAME",
+        "apiToken": "YOUR_GH_API_KEY"
+    },
+    "turbosrc": {
+        "endpoint": {
+          "mode": "online",
+           "url": "http://localhost:4000/graphql"
+        },
+        "jwt": "JWT_SECRET",
+        "store": {
+            "repo": {
+                "addr": "REPO_ADDR",
+                "key": "REPO_KEY"
+            },
+            "contributor": {
+                "addr": "YOUR_ADDR",
+                "key": "YOUR_KEY"
+            }
+        }
+    },
+    "offchain": {
+        "endpoint": {
+          "mode": "online",
+          "url": "http://localhost:4002/graphql"
+        }
+    },
+    "namespace": {
+        "endpoint": {
+          "mode": "online",
+          "url": "http://localhost:4003/graphql"
+        }
+    },
+    "gh": {
+        "endpoint": {
+          "mode": "online",
+          "url": "http://localhost:4004/graphql"
+        }
+    },
+    "testers": {
+        "a": {
+          "user": "TESTER_GH_USERNAME",
+          "key": "TESTER_GH_KEY", 
+	  "apiToken": "TESTER_GH_API_KEY"
+        }
+    }
+}
+``
