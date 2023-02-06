@@ -44,6 +44,8 @@ describe('Create users', function () {
         );
 
 	const testerTokenA = await getGithubToken("a")
+	const testerTokenB = await getGithubToken("b")
+
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
@@ -53,14 +55,16 @@ describe('Create users', function () {
             /*token:*/ testerTokenA
         );
 
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
-        //    /*contributor_name:*/ "am",
-        //    /*contributor_signature:*/ "b1dbf781fe8c40dbea3d6f773d435861134990f9f46729724962b6d0a9f55fcd",
-        //    /*token:*/ token
-        //);
+        // tester b
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0xafC193df9bB3d6d6062029b3E67243C00C17d534",
+            /*contributor_name:*/ "tsrctester2",
+            /*contributor_signature:*/ "257be612b5cb88dfe83a82d04ba8d7a79fadba81ea46c87ce33f51c5beeb6a34",
+            /*token:*/ token,
+            /*token:*/ testerTokenB
+        );
 
         //await postCreateUser(
         //    /*owner:*/ "",
