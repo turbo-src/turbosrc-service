@@ -47,9 +47,9 @@ describe('Create users', function () {
         await postCreateUser(
             /*owner:*/ "",
             /*repo:*/ "",
-            /*contributor_id:*/ "yuhhhF0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
-            /*contributor_name:*/ "yuhh-h",
-            /*contributor_signature:*/ "yuhhhe400825a03c9cf1544d33bcffc35a0f4ae9884f1826b124acd9152bc262",
+            /*contributor_id:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
+            /*contributor_name:*/ "tsrctester1",
+            /*contributor_signature:*/ "e0c911adbce919ea366cdeb5015b18b0e7980e659c3a89cd962a29ff743370b8",
             /*token:*/ testerTokenA
         );
 
@@ -163,11 +163,11 @@ describe('Create users', function () {
             /*contributor_name:*/ contributor_name,
         );
 
-        const yuhhName = await postGetContributorName(
+        const tsrctester1Name = await postGetContributorName(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
-            /*contributor:*/ "yuhhhF0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
+            /*contributor:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
         );
         const userName = await postGetContributorName(
             /*owner:*/ contributor_name,
@@ -177,8 +177,8 @@ describe('Create users', function () {
         );
 
         assert.equal(
-            yuhhName,
-            "yuhh-h",
+            tsrctester1Name,
+            "tsrctester1",
             "Fail to get contributors's name from namspace db by contributor id."
         );
         assert.equal(

@@ -43,17 +43,17 @@ before(async () => {
     );
     console.log("contributor id: " + contributor_id)
     const testerTokenA = await getGithubToken("a")
-    const yuhhID = await postGetContributorID(
+    const tsrctester1ID = await postGetContributorID(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
-        /*contributor_name:*/ "yuhh-h",
+        /*contributor_name:*/ "tsrctester1",
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
-        /*to:*/ yuhhID,
+        /*to:*/ tsrctester1ID,
         /*amount:*/ 500_001,
         /*token:*/ testerTokenA
     );
@@ -150,11 +150,11 @@ before(async () => {
     // Transfer requests perhaps are in buffer.
     await snooze(snooze_ms*5);
 
-    const yuhhContributorToken = await postGetContributorTokenAmount(
+    const tsrctester1ContributorToken = await postGetContributorTokenAmount(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
-        /*contributor:*/ "yuhhhF0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E",
+        /*contributor:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
         /*side:*/ "no",
         /*token:*/ testerTokenA
 	
@@ -341,21 +341,21 @@ before(async () => {
     //);
 
     assert.deepEqual(
-        yuhhContributorToken,
+        tsrctester1ContributorToken,
 	{ status: 200, amount: 500_001 },
         "Fail to get amount."
     );
 
-    const yuhhName = await postGetContributorName(
+    const tsrctester1Name = await postGetContributorName(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
-        /*contributor:*/ "yuhhhF0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E"
+        /*contributor:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662"
     );
 
     assert.equal(
-        yuhhName,
-        "yuhh-h",
+        tsrctester1Name,
+        "tsrctester1",
         "Fail to get contributors's name from namspace db by contributor id."
     );
   });

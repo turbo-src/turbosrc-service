@@ -67,7 +67,7 @@ describe('Voting.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor_id:*/ "yuhh",
+            /*contributor_id:*/ "tsrctester1",
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
@@ -88,21 +88,21 @@ describe('Voting.', function () {
         await snooze(snooze_ms);
 
         const testerTokenA = await getGithubToken("a")
-        const yuhhID = await postGetContributorID(
+        const tsrctester1ID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor:*/ "yuhh-h",
+            /*contributor:*/ "tsrctester1",
         );
 
-        //yuhh-h
+        //tsrctester1
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
             /*childDefaultHash:*/ "issue_1",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ yuhhID,
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
@@ -111,7 +111,7 @@ describe('Voting.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor_id:*/ yuhhID,
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
         );
 

@@ -37,11 +37,11 @@ describe('vote', function () {
             /*contributor_name:*/ contributor_name,
         );
 
-        const yuhhID = await postGetContributorID(
+        const tsrctester1ID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "yuhh-h",
+            /*contributor:*/ "tsrctester1",
         );
         const testerTokenA = await getGithubToken("a")
 
@@ -97,7 +97,7 @@ describe('vote', function () {
             /*defaultHash:*/ "issue_3",
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ yuhhID,
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );

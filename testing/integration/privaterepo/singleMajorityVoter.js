@@ -30,11 +30,11 @@ describe('Vote.', function () {
     before(async () => {
         const contributor_name = await getGithubContributor()
 
-        const yuhhID = await postGetContributorID(
+        const tsrctester1ID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "yuhh-h",
+            /*contributor:*/ "tsrctester1",
         );
 
         const testerTokenA = await getGithubToken("a")
@@ -46,7 +46,7 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_2",
             /*childDefaultHash:*/ "issue_2",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ yuhhID,
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
@@ -61,7 +61,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "yuhh-h",
+            /*contributor:*/ "tsrctester1",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -77,7 +77,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor_id:*/ "yuhh-h",
+            /*contributor_id:*/ "tsrctester1",
             /*side:*/ "yes",
         );
  
