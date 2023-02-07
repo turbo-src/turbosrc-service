@@ -43,11 +43,88 @@ before(async () => {
     );
     console.log("contributor id: " + contributor_id)
     const testerTokenA = await getGithubToken("a")
+	const testerTokenB = await getGithubToken("b")
+	const testerTokenC = await getGithubToken("c")
+	const testerTokenD = await getGithubToken("d")
+	const testerTokenE = await getGithubToken("e")
+	const testerTokenF = await getGithubToken("f")
+	const testerTokenG = await getGithubToken("g")
+	const testerTokenH = await getGithubToken("h")
+	const testerTokenI = await getGithubToken("i")
+	const testerTokenJ = await getGithubToken("j")
+	const testerTokenK = await getGithubToken("k")
+
     const tsrctester1ID = await postGetContributorID(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
         /*contributor_name:*/ "tsrctester1",
+    );
+    const tsrctester2ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tsrctester2",
+    );
+    const tsrctester3ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tsrctester3",
+    );
+    const tsrctester4ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tsrctester4",
+    );
+    const tsrctester5ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tsrctester5",
+    );
+    const tsrctester6ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester6tsrc",
+    );
+    const tsrctester7ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester7tsrc",
+    );
+    const tsrctester8ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester8tsrc",
+    );
+    const tsrctester9ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester9tsrc",
+    );
+    const tsrctester10ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester10tsrc",
+    );
+    const tsrctester11ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester11tsrc",
+    );
+    const tsrctester12ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor_name:*/ "tester12tsrc",
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -57,94 +134,94 @@ before(async () => {
         /*amount:*/ 500_001,
         /*token:*/ testerTokenA
     );
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
-    //    /*amount:*/ 15_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
-    //    /*amount:*/ 10_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
-    //    /*amount:*/ 75_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
-    //    /*amount:*/ 75_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
-    //    /*amount:*/ 5_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
-    //    /*amount:*/ 100_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
-    //    /*amount:*/ 50_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
-    //    /*amount:*/ 10_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
-    //    /*amount:*/ 50_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
-    //    /*amount:*/ 75_000,
-    //    /*token:*/ token
-    //);
-    //await postTransferTokens(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*from:*/ contributor_id,
-    //    /*to:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
-    //    /*amount:*/ 999,
-    //    /*token:*/ token
-    //);
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester1ID,
+        /*amount:*/ 15_000,
+        /*token:*/ token
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester2ID,
+        /*amount:*/ 10_000,
+        /*token:*/ testerTokenB
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester3ID,
+        /*amount:*/ 75_000,
+        /*token:*/ testerTokenC
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester4ID,
+        /*amount:*/ 75_000,
+        /*token:*/ testerTokenD
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester5ID,
+        /*amount:*/ 5_000,
+        /*token:*/ testerTokenE
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester6ID,
+        /*amount:*/ 100_000,
+        /*token:*/ testerTokenF
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester7ID,
+        /*amount:*/ 50_000,
+        /*token:*/ testerTokenG
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester8ID,
+        /*amount:*/ 10_000,
+        /*token:*/ testerTokenH
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester9ID,
+        /*amount:*/ 50_000,
+        /*token:*/ testerTokenI
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ testerTokenJ,
+        /*amount:*/ 75_000,
+        /*token:*/ testerTokenJ
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
+        /*to:*/ tsrctester11ID,
+        /*amount:*/ 999,
+        /*token:*/ testerTokenK
+    );
 
     // Give offchain service a chance to write transfer amounts.
     // Transfer requests perhaps are in buffer.
@@ -154,10 +231,9 @@ before(async () => {
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
-        /*contributor:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
+        /*contributor:*/ tsrctester1ID,
         /*side:*/ "no",
         /*token:*/ testerTokenA
-	
     );
 
     const contributorToken = await postGetContributorTokenAmount(
@@ -259,14 +335,14 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const riContributorToken = await postGetContributorTokenAmount(
-    //    /*owner:*/ contributor_name,
-    //    /*repo:*/ "demo",
-    //    /*defaultHash:*/ "defaultHash4",
-    //    /*contributor:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
-    //    /*side:*/ "no",
-    //    /*token:*/ token
-    //);
+    const kContributorToken = await postGetContributorTokenAmount(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "defaultHash4",
+        /*contributor:*/ tsrctester11ID,
+        /*side:*/ "no",
+        /*token:*/ testerTokenK
+    );
 
     //assert.deepEqual(
     //    contributorToken,
@@ -334,11 +410,11 @@ before(async () => {
     //    "Fail to get amount."
     //);
 
-    //assert.deepEqual(
-    //    riContributorToken,
-    //    { status: 200, amount: 999 },
-    //    "Fail to get amount."
-    //);
+    assert.deepEqual(
+        kContributorToken,
+        { status: 200, amount: 999 },
+        "Fail to get amount."
+    );
 
     assert.deepEqual(
         tsrctester1ContributorToken,
