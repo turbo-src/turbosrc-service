@@ -45,7 +45,15 @@ describe('Create users', function () {
 
 	const testerTokenA = await getGithubToken("a")
 	const testerTokenB = await getGithubToken("b")
-	const testerTokenC = await getGithubToken("b")
+	const testerTokenC = await getGithubToken("c")
+	const testerTokenD = await getGithubToken("d")
+	const testerTokenE = await getGithubToken("e")
+	const testerTokenF = await getGithubToken("f")
+	const testerTokenG = await getGithubToken("g")
+	const testerTokenH = await getGithubToken("h")
+	const testerTokenI = await getGithubToken("i")
+	const testerTokenJ = await getGithubToken("j")
+	const testerTokenK = await getGithubToken("k")
 
         await postCreateUser(
             /*owner:*/ "",
