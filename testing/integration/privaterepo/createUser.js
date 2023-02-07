@@ -68,104 +68,104 @@ describe('Create users', function () {
         );
 
         // tester c
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x695e603Ce6eE04095D59397871e81A3Af105CA50",
-        //    /*contributor_name:*/ "tsrctester3",
-        //    /*contributor_signature:*/ "ebe2e68c5c16503f237290e2f83faa77b913cd2b460f6acdf8e96fffe59b65b6",
-        //    /*token:*/ testerTokenC
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x695e603Ce6eE04095D59397871e81A3Af105CA50",
+            /*contributor_name:*/ "tsrctester3",
+            /*contributor_signature:*/ "ebe2e68c5c16503f237290e2f83faa77b913cd2b460f6acdf8e96fffe59b65b6",
+            /*token:*/ testerTokenC
+        );
 
         // tester d
-        // await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x96fBb54D303309E5b901B0B1eAD598437762C543",
-        //    /*contributor_name:*/ "tsrctester4",
-        //    /*contributor_signature:*/ "e50c4f3115d053fd65732af4dfd06ad9df0466a768fdaf72b57ebab9835833af",
-        //    /*token:*/ testerTokenD
-        //);
+         await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x96fBb54D303309E5b901B0B1eAD598437762C543",
+            /*contributor_name:*/ "tsrctester4",
+            /*contributor_signature:*/ "e50c4f3115d053fd65732af4dfd06ad9df0466a768fdaf72b57ebab9835833af",
+            /*token:*/ testerTokenD
+        );
 
         // tester e
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x0bfc3B651cC7b708f2F680C7A6ef339164d92b4e",
-        //    /*contributor_name:*/ "tsrctester5",
-        //    /*contributor_signature:*/ "6985a523cee22eb00c965c7d9253b500e37d660552e063932298c463cb4c4fdc",
-        //    /*token:*/ testerTokenE
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x0bfc3B651cC7b708f2F680C7A6ef339164d92b4e",
+            /*contributor_name:*/ "tsrctester5",
+            /*contributor_signature:*/ "6985a523cee22eb00c965c7d9253b500e37d660552e063932298c463cb4c4fdc",
+            /*token:*/ testerTokenE
+        );
 
         // tester f
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x28A9Bc213FE9D13533Bef161fA335cea929faA2c",
-        //    /*contributor_name:*/ "tester6tsrc",
-        //    /*contributor_signature:*/ "095677c14f375d75c7e6e10a89411bb80acf751fbaa53a11fbacc3ee9ae24f79",
-        //    /*token:*/ testerTokenF
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x28A9Bc213FE9D13533Bef161fA335cea929faA2c",
+            /*contributor_name:*/ "tester6tsrc",
+            /*contributor_signature:*/ "095677c14f375d75c7e6e10a89411bb80acf751fbaa53a11fbacc3ee9ae24f79",
+            /*token:*/ testerTokenF
+        );
 
         // tester g
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x691F5015fc0e08BE75e0c0cbA32e584B9Ff095Bc",
-        //    /*contributor_name:*/ "tester7tsrc",
-        //    /*contributor_signature:*/ "d93020658954c1171d5db19c5ec0abc66c041767120143072aafcef577490b21",
-        //    /*token:*/ testerTokenG
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x691F5015fc0e08BE75e0c0cbA32e584B9Ff095Bc",
+            /*contributor_name:*/ "tester7tsrc",
+            /*contributor_signature:*/ "d93020658954c1171d5db19c5ec0abc66c041767120143072aafcef577490b21",
+            /*token:*/ testerTokenG
+        );
 
         // tester h
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x4b9455F77652bc3Bf497D91e1b42790D99bbBfE8",
-        //    /*contributor_name:*/ "tester8tsrc",
-        //    /*contributor_signature:*/ "5ba1efba1ec15013425bdfc3fc696e06f03e6f035425b13aa27ec1ca98ad2a18",
-        //    /*token:*/ testerTokenH
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x4b9455F77652bc3Bf497D91e1b42790D99bbBfE8",
+            /*contributor_name:*/ "tester8tsrc",
+            /*contributor_signature:*/ "5ba1efba1ec15013425bdfc3fc696e06f03e6f035425b13aa27ec1ca98ad2a18",
+            /*token:*/ testerTokenH
+        );
 
         // tester i
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0xA6aADF3EAbf72A6FFb98a82547cAa67566724e31",
-        //    /*contributor_name:*/ "tester9tsrc",
-        //    /*contributor_signature:*/ "8aef7b2e940826692068ef53d26178a30c35015faac2d5c5637fb7f839266b1c",
-        //    /*token:*/ testerTokenI
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0xA6aADF3EAbf72A6FFb98a82547cAa67566724e31",
+            /*contributor_name:*/ "tester9tsrc",
+            /*contributor_signature:*/ "8aef7b2e940826692068ef53d26178a30c35015faac2d5c5637fb7f839266b1c",
+            /*token:*/ testerTokenI
+        );
 
         // tester j
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x82438B428dE8A93Eb7405FAB7c0D2401fbC59c29",
-        //    /*contributor_name:*/ "tester10tsrc",
-        //    /*contributor_signature:*/ "0ee7910469516cd64658ca56394b193082185639c9bca3f0bc116a0deddc6ac2",
-        //    /*token:*/ testerTokenJ
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x82438B428dE8A93Eb7405FAB7c0D2401fbC59c29",
+            /*contributor_name:*/ "tester10tsrc",
+            /*contributor_signature:*/ "0ee7910469516cd64658ca56394b193082185639c9bca3f0bc116a0deddc6ac2",
+            /*token:*/ testerTokenJ
+        );
 
         // tester k
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x21eAA0fB258F83a7D481498c971dC03930d26c15",
-        //    /*contributor_name:*/ "tester11tsrc",
-        //    /*contributor_signature:*/ "ee2e9b952cbadbe5276be4c458d070fcc4d52664a71c8c92665e5cd078e17580",
-        //    /*token:*/ testerTokenK
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x21eAA0fB258F83a7D481498c971dC03930d26c15",
+            /*contributor_name:*/ "tester11tsrc",
+            /*contributor_signature:*/ "ee2e9b952cbadbe5276be4c458d070fcc4d52664a71c8c92665e5cd078e17580",
+            /*token:*/ testerTokenK
+        );
 
         // tester l
-        //await postCreateUser(
-        //    /*owner:*/ "",
-        //    /*repo:*/ "",
-        //    /*contributor_id:*/ "0x79b7Bf5717F93db6869baf6ddBf71d84728061F0",
-        //    /*contributor_name:*/ "tester12tsrc",
-        //    /*contributor_signature:*/ "55b8ca31d38a3ba656e28d4bba151504d6490f8c0ff2967aa0ef036bab155bf8",
-        //    /*token:*/ testerTokenL
-        //);
+        await postCreateUser(
+            /*owner:*/ "",
+            /*repo:*/ "",
+            /*contributor_id:*/ "0x79b7Bf5717F93db6869baf6ddBf71d84728061F0",
+            /*contributor_name:*/ "tester12tsrc",
+            /*contributor_signature:*/ "55b8ca31d38a3ba656e28d4bba151504d6490f8c0ff2967aa0ef036bab155bf8",
+            /*token:*/ testerTokenL
+        );
 
     });
     describe.only('Get contributor name.', function () {
