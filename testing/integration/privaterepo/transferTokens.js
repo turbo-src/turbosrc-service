@@ -210,7 +210,7 @@ before(async () => {
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
-        /*to:*/ testerTokenJ,
+        /*to:*/ tsrctester10ID,
         /*amount:*/ 75_000,
         /*token:*/ testerTokenJ
     );
