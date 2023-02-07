@@ -194,6 +194,14 @@ describe('Create users', function () {
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
         );
+
+        const tsrctester12Name = await postGetContributorName(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "defaultHash4",
+            /*contributor:*/ "0x79b7Bf5717F93db6869baf6ddBf71d84728061F0",
+        );
+
         const userName = await postGetContributorName(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -205,6 +213,12 @@ describe('Create users', function () {
             tsrctester1Name,
             "tsrctester1",
             "Fail to get contributors's name from namspace db by contributor id."
+        );
+        // ...skiped 2 - 11, but should test eventually.
+        assert.equal(
+            tsrctester12Name,
+            "tester12tsrc",
+            "Fail to get tester 12/L contributors's name from namspace db by contributor id."
         );
         assert.equal(
             userName,
