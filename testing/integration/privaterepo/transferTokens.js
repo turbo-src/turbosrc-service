@@ -53,6 +53,7 @@ before(async () => {
 	const testerTokenI = await getGithubToken("i")
 	const testerTokenJ = await getGithubToken("j")
 	const testerTokenK = await getGithubToken("k")
+	const testerTokenL = await getGithubToken("l")
 
     const tsrctester1ID = await postGetContributorID(
         /*owner:*/ contributor_name,
@@ -132,14 +133,6 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester1ID,
         /*amount:*/ 500_001,
-        /*token:*/ testerTokenA
-    );
-    await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
-        /*from:*/ contributor_id,
-        /*to:*/ tsrctester1ID,
-        /*amount:*/ 15_000,
         /*token:*/ token
     );
     await postTransferTokens(
@@ -147,7 +140,7 @@ before(async () => {
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
         /*to:*/ tsrctester2ID,
-        /*amount:*/ 10_000,
+        /*amount:*/ 15_000,
         /*token:*/ testerTokenB
     );
     await postTransferTokens(
@@ -155,14 +148,14 @@ before(async () => {
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
         /*to:*/ tsrctester3ID,
-        /*amount:*/ 75_000,
+        /*amount:*/ 10_000,
         /*token:*/ testerTokenC
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
-        /*to:*/ tsrctester4ID,
+        /*to:*/ tsrctester3ID,
         /*amount:*/ 75_000,
         /*token:*/ testerTokenD
     );
@@ -170,9 +163,17 @@ before(async () => {
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*from:*/ contributor_id,
+        /*to:*/ tsrctester4ID,
+        /*amount:*/ 75_000,
+        /*token:*/ testerTokenE
+    );
+    await postTransferTokens(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*from:*/ contributor_id,
         /*to:*/ tsrctester5ID,
         /*amount:*/ 5_000,
-        /*token:*/ testerTokenE
+        /*token:*/ testerTokenF
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -180,7 +181,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester6ID,
         /*amount:*/ 100_000,
-        /*token:*/ testerTokenF
+        /*token:*/ testerTokenG
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -188,7 +189,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester7ID,
         /*amount:*/ 50_000,
-        /*token:*/ testerTokenG
+        /*token:*/ testerTokenH
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -196,7 +197,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester8ID,
         /*amount:*/ 10_000,
-        /*token:*/ testerTokenH
+        /*token:*/ testerTokenI
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -204,7 +205,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester9ID,
         /*amount:*/ 50_000,
-        /*token:*/ testerTokenI
+        /*token:*/ testerTokenJ
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -212,7 +213,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester10ID,
         /*amount:*/ 75_000,
-        /*token:*/ testerTokenJ
+        /*token:*/ testerTokenK
     );
     await postTransferTokens(
         /*owner:*/ contributor_name,
@@ -220,7 +221,7 @@ before(async () => {
         /*from:*/ contributor_id,
         /*to:*/ tsrctester11ID,
         /*amount:*/ 999,
-        /*token:*/ testerTokenK
+        /*token:*/ testerTokenL
     );
 
     // Give offchain service a chance to write transfer amounts.
