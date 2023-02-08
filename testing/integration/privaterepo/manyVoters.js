@@ -14,6 +14,9 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+const {
+       getGithubToken,
+      } = require('../../../src/utils/gitHubUtil.js')
 
 
 var snooze_ms = 1500;;
@@ -36,6 +39,23 @@ describe('Vote.', function () {
             /*contributor_name:*/ contributor_name,
         );
 
+    // The main person in .config spinnning up turbosrc
+	const token = await getGithubToken()
+
+    const testerTokenA = await getGithubToken("a")
+	const testerTokenB = await getGithubToken("b")
+	const testerTokenC = await getGithubToken("c")
+	const testerTokenD = await getGithubToken("d")
+	const testerTokenE = await getGithubToken("e")
+	const testerTokenF = await getGithubToken("f")
+	const testerTokenG = await getGithubToken("g")
+	const testerTokenH = await getGithubToken("h")
+	const testerTokenI = await getGithubToken("i")
+	const testerTokenJ = await getGithubToken("j")
+	const testerTokenK = await getGithubToken("k")
+	const testerTokenL = await getGithubToken("l")
+
+
         //user
         await postSetVote(
             /*owner:*/ contributor_name,
@@ -45,6 +65,7 @@ describe('Vote.', function () {
 	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
+	        /*token:*/ token
         );
         await snooze(snooze_ms);
         const sevenDbVoteCumm = await postGetPRvoteTotals(
@@ -62,15 +83,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x571BD871120767344b4EE3Ec309c74a3D98aAf0B",
+            /*contributor_id:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
             /*side:*/ "yes",
+            /*token:*/ testerTokenA
         );
         await snooze(snooze_ms);
         const amDbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "am",
+            /*contributor_name:*/ "tsrctester1",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -81,15 +103,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x493D1c854301054e5D0b0bCFE3cfAe893d573dBa",
+            /*contributor_id:*/ "0xafC193df9bB3d6d6062029b3E67243C00C17d534",
             /*side:*/ "no",
+            /*token:*/ testerTokenB
         );
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "jc",
+            /*contributor_name:*/ "tsrctester2",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -100,15 +123,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x5061EF86EFcF6Ad2fdcefF8FE9E014a1Ca6801c2",
+            /*contributor_id:*/ "0x695e603Ce6eE04095D59397871e81A3Af105CA50",
             /*side:*/ "yes",
+            /*token:*/ testerTokenC
         );
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "pc",
+            /*contributor_name:*/ "tsrctester3",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -119,15 +143,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
+            /*contributor_id:*/ "0x96fBb54D303309E5b901B0B1eAD598437762C543",
             /*side:*/ "yes",
+            /*token:*/ testerTokenD
         );
         await snooze(snooze_ms);
         const mbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "mb",
+            /*contributor_name:*/ "tsrctester4",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -138,15 +163,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x55f8B1594beB8eA1fD366c0C138B26e70C03a6ec",
+            /*contributor_id:*/ "0x0bfc3B651cC7b708f2F680C7A6ef339164d92b4e",
             /*side:*/ "yes",
+            /*token:*/ testerTokenE
         );
         await snooze(snooze_ms);
         const npVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "np",
+            /*contributor_name:*/ "tsrctester5",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -157,15 +183,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x45dD192B318e2f1d242954E016492BDF9446381e",
+            /*contributor_id:*/ "0x28A9Bc213FE9D13533Bef161fA335cea929faA2c",
             /*side:*/ "yes",
+            /*token:*/ testerTokenF
         );
         await snooze(snooze_ms);
         const nnVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "nn",
+            /*contributor_name:*/ "tester6tsrc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -176,15 +203,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x1d344C9A2Ee5c0a24336dd1A0c5c79ccD50D06C9",
+            /*contributor_id:*/ "0x691F5015fc0e08BE75e0c0cbA32e584B9Ff095Bc",
             /*side:*/ "yes",
+            /*token:*/ testerTokenG
         );
         await snooze(snooze_ms);
         const jpVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "jp",
+            /*contributor_name:*/ "tester7tsrc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -195,15 +223,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x9095B61290249584d9d0447657a03Cf23BF7a325",
+            /*contributor_id:*/ "0x4b9455F77652bc3Bf497D91e1b42790D99bbBfE8",
             /*side:*/ "yes",
+            /*token:*/ testerTokenH
         );
         await snooze(snooze_ms);
         const tsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "ts",
+            /*contributor_name:*/ "tester8tsrc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -214,15 +243,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0xd30Dcb56A4d3EC2dC8591588455A5Da4C3c84eCD",
+            /*contributor_id:*/ "0xA6aADF3EAbf72A6FFb98a82547cAa67566724e31",
             /*side:*/ "no",
+            /*token:*/ testerTokenI
         );
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "af",
+            /*contributor_name:*/ "tester9tsrc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -233,15 +263,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x1d0798e209A07715765F1486CA64f3D2399aF719",
+            /*contributor_id:*/ "0x82438B428dE8A93Eb7405FAB7c0D2401fbC59c29",
             /*side:*/ "no",
+            /*token:*/ testerTokenJ
         );
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "ds",
+            /*contributor_name:*/ "tester10tsrc",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -252,15 +283,16 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0xDB7A25D3B4C5506779bD9f9f1A5AA0DB525Fa6A8",
+            /*contributor_id:*/ "0x21eAA0fB258F83a7D481498c971dC03930d26c15",
             /*side:*/ "no",
+            /*token:*/ testerTokenK
         );
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "ri",
+            /*contributor_name:*/ "tester11tsrc",
             /*side:*/ "yes",
         );
         assert.equal(
@@ -328,7 +360,7 @@ describe('Vote.', function () {
 
         //Now close vote.
         await snooze(snooze_ms);
-        // mary
+        // "tsrctester1",
         await postSetVote(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -343,7 +375,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "tsrctester1",
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -351,7 +383,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "mary",
+            /*contributor_id:*/ "tsrctester1",
             /*side:*/ "yes",
         );
 
@@ -359,7 +391,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "jc",
+            /*contributor_name:*/ "tsrctester2",
             /*side:*/ "yes",
         );
 
