@@ -26,7 +26,7 @@ var snooze_ms = 1500;;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Vote.', function () {
-    this.timeout(snooze_ms*50);
+    this.timeout(snooze_ms*70);
     // Increase mocha(testing framework) time, otherwise tests fails
     describe('Many voters vote.', function () {
       it("Should increment vote and then close and merge on quorum.", async () => {
@@ -76,26 +76,7 @@ describe('Vote.', function () {
             /*side:*/ "no",
         );
         await snooze(snooze_ms);
-        //am
-        await postSetVote(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
-            /*childDefaultHash:*/ "issue_4",
-	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
-            /*side:*/ "yes",
-            /*token:*/ testerTokenA
-        );
-        await snooze(snooze_ms);
-        const amDbVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
-            /*contributor_name:*/ "tsrctester1",
-            /*side:*/ "yes",
-        );
-        await snooze(snooze_ms);
+
         //jc
         await postSetVote(
             /*owner:*/ contributor_name,
@@ -295,6 +276,28 @@ describe('Vote.', function () {
             /*contributor_name:*/ "tester11tsrc",
             /*side:*/ "yes",
         );
+
+        await snooze(snooze_ms);
+
+        // tester 12/L
+        await postSetVote(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "issue_4",
+            /*childDefaultHash:*/ "issue_4",
+	    /*mergeable:*/ true,
+            /*contributor_id:*/ "0x79b7Bf5717F93db6869baf6ddBf71d84728061F0",
+            /*side:*/ "no",
+            /*token:*/ testerTokenL
+        );
+        await snooze(snooze_ms);
+        const tester12tsrcVoteCumm = await postGetPRvoteTotals(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "issue_4",
+            /*contributor_name:*/ "tester12tsrc",
+            /*side:*/ "yes",
+        );
         assert.equal(
             sevenDbVoteCumm,
             "0.034",
@@ -358,18 +361,27 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
 
+        const tsrctester1ID = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "issue_4",
+            /*contributor:*/ "tsrctester1",
+        );
+
         //Now close vote.
         await snooze(snooze_ms);
         // "tsrctester1",
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo: */ "demo",
             /*defaultHash:*/ "issue_4",
             /*childDefaultHash:*/ "issue_4",
 	    /*mergeable:*/ true,
-            /*contributor_id:*/ "0x09EAF54C0fc9F2b077ebC96e3FeD47051f7fb626",
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
+	    /*token:*/ testerTokenA
         );
+
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
@@ -379,13 +391,6 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
-        const maryVoteCumm = await postGetPRvoteTotals(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "tsrctester1",
-            /*side:*/ "yes",
-        );
 
         var jcVoteYesTotal = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
@@ -425,7 +430,7 @@ describe('Vote.', function () {
         );
 
         assert.equal(
-            riVoteCumm,
+            tester12tsrcVoteCumm,
             "0.499999",
             "Fail to add votes."
         );
