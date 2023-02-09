@@ -11,8 +11,7 @@ Further documentation is forthcoming.
 
 ## Install
 
-Clone.
-
+### Clone
 ```
 git clone https://github.com/turbo-src/service
 ```
