@@ -36,13 +36,12 @@ npm install
 node server
 ```
 
-### Config
-You'll need a `.config.json` file in the root directory:
+## Custom Variables
+### Create a Github Personal Access Token with repo scopes
+[How to Make a Github personal access token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-- Replace YOUR_USERNAME with your Github username
-- Replace JWT with a secret value
-- Use https://token.dev/ to replace YOUR_ENCRYPTED_TOKEN with the JWT string returned from:<br />
-
+### Encrypt your token:
+Use https://token.dev/ with the following:
 ```
 Header:
 {
@@ -56,9 +55,17 @@ Payload:
 }
 
 Signing Key:
-JWT
+<Your signing key>
 ```
-[How to Make a Github personal access token with "repo" scopes](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+The returned JWT string will be your encrypted token
+
+### Config
+You'll need a `.config.json` file in the root directory.
+
+- Replace YOUR_USERNAME with your Github username
+- Replace JWT with your signing key
+- Replace YOUR_ENCRYPTED_TOKEN with the JWT string from above
+
 ```
 {
     "github": {
