@@ -43,16 +43,16 @@ You'll need a `.config.json` file. Fill in as appropriate.
 ```
 {
     "github": {
-        "organization": "YOUR_GH_ORGANIZATION",
-        "user": "YOUR_GH_USERNAME",
-        "apiToken": "YOUR_GH_API_KEY"
+        "organization": "turbo-src",
+        "user": "YOUR_USERNAME",
+        "apiToken": "YOUR_ENCRYPTED_GITHUB_TOKEN"
     },
     "turbosrc": {
         "endpoint": {
           "mode": "online",
            "url": "http://localhost:4000/graphql"
         },
-        "jwt": "JWT_SECRET",
+        "jwt": "mary",
         "store": {
             "repo": {
                 "addr": "REPO_ADDR",
@@ -84,9 +84,64 @@ You'll need a `.config.json` file. Fill in as appropriate.
     },
     "testers": {
         "a": {
-          "user": "TESTER_GH_USERNAME",
-          "key": "TESTER_GH_KEY", 
-	  "apiToken": "TESTER_GH_API_KEY"
+          "user": "tsrctester1",
+          "key": "TEST_KEY_1",
+	      "apiToken": "ENCRYPTED_TOKEN_1"
+        },
+        "b": {
+          "user": "tsrctester2",
+          "key": "TEST_KEY_2",
+	      "apiToken": "ENCRYPTED_TOKEN_2"
+        },
+        "c": {
+          "user": "tsrctester3",
+          "key": "TEST_KEY_3",
+	      "apiToken": "ENCRYPTED_TOKEN_3"
+        },
+        "d": {
+          "user": "tsrctester4",
+          "key": "TEST_KEY_4",
+	      "apiToken": "ENCRYPTED_TOKEN_4"
+        },
+        "e": {
+          "user": "tsrctester5",
+          "key": "TEST_KEY_5",
+	      "apiToken": "ENCRYPTED_TOKEN_5"
+        },
+        "f": {
+          "user": "tsrctester6",
+          "key": "TEST_KEY_6",
+	      "apiToken": "ENCRYPTED_TOKEN_6"
+        },
+        "g": {
+          "user": "tsrctester7",
+          "key": "TEST_KEY_7",
+	      "apiToken": "ENCRYPTED_TOKEN_7"
+        },
+        "h": {
+          "user": "tsrctester8",
+          "key": "TEST_KEY_8",
+	      "apiToken": "ENCRYPTED_TOKEN_8"
+        },
+        "i": {
+          "user": "tsrctester9",
+          "key": "TEST_KEY_9",
+	      "apiToken": "ENCRYPTED_TOKEN_9"
+        },
+        "j": {
+          "user": "tsrctester10",
+          "key": "TEST_KEY_10",
+	      "apiToken": "ENCRYPTED_TOKEN_10"
+        },
+        "k": {
+          "user": "tsrctester11",
+          "key": "TEST_KEY_11",
+	      "apiToken": "ENCRYPTED_TOKEN_11"
+        },
+        "l": {
+          "user": "tsrctester12",
+          "key": "TEST_KEY_12",
+	      "apiToken": "ENCRYPTED_TOKEN_12"
         }
     }
 }
