@@ -41,9 +41,22 @@ You'll need a `.config.json` file. Fill in as appropriate.
 
 - Replace YOUR_USERNAME with your Github username
 - Replace JWT with a secret value
-- Replace YOUR_ENCRYPTED_TOKEN with the value returned from:
+- Use https://token.dev/ to replace YOUR_ENCRYPTED_TOKEN with the JWT string returned from:<br />
+
 ```
-jwt.sign({ githubToken: <your github acess token> }, JWT)
+Header:
+{
+  "typ": "JWT",
+  "alg": "HS256"
+}
+
+Payload:
+{
+  "githubToken": <Your Github Access Token>
+}
+
+Signing Key:
+JWT
 ```
 
 ```
