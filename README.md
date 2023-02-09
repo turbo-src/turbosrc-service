@@ -16,7 +16,16 @@ Further documentation is forthcoming.
 git clone https://github.com/turbo-src/service
 ```
 
-## Install NVM to run Node v12.22.0:
+## Then install dependencies using Node v12.22.0
+```
+npm install
+```
+## Start server
+```
+node server
+```
+
+## To run Node v12.22.0 install and use NVM:
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
@@ -27,17 +36,9 @@ nvm install v12.22.0
 ```
 nvm use v12.22.0
 ```
-## Then install dependencies
-```
-npm install
-```
-## Start server
-```
-node server
-```
-### config
 
-You'll need a `.config.json` file. Fill in as appropriate.
+### Config
+You'll need a `.config.json` file in the root directory:
 
 - Replace YOUR_USERNAME with your Github username
 - Replace JWT with a secret value
