@@ -15,10 +15,10 @@ Clone.
 
 ```
 git clone https://github.com/turbo-src/service
+```
 
 ## Use NVM to run Node v12.22.0
 
-```
 ## Run the following command to install NVM:
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
