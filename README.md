@@ -17,26 +17,21 @@ Clone.
 git clone https://github.com/turbo-src/service
 ```
 
-You can run it on bare metal. There is also node2nix (run `nix-shell -A shell`).
-
-### Docker
-
-It's best to run outside of docker, but if you do you'll need to setup a network for the subservics it talks to.
-
-Build docker server image.
-
+## Use NVM
 ```
-docker build -t turbo-src-server:0.0.1 -f docker/dockerfile.server .
+nvm install v12.22.0
 ```
-
-Build docker pull fork server image.
-
 ```
-docker build -t turbo-src-pfserver:0.0.1 -f docker/dockerfile.pfserver .
+nvm use v12.22.0
 ```
-
-Create docker volume.
-
+## Install dependencies
+```
+npm install
+```
+## Start server
+```
+node server
+```
 ### config
 
 You'll need a `.config.json` file. Fill in as appropriate.
