@@ -27,11 +27,11 @@ nvm install v12.22.0
 nvm use v12.22.0
 ```
 
-## Then install dependencies using Node v12.22.0
+### Then install dependencies using Node v12.22.0
 ```
 npm install
 ```
-## Start server
+### Start server
 ```
 node server
 ```
@@ -59,7 +59,7 @@ Signing Key:
 ```
 The returned JWT string will be your encrypted token
 
-### Config
+## Config
 You'll need a `.config.json` file in the root directory.
 
 - Replace YOUR_USERNAME with your Github username
