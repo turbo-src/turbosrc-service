@@ -44,14 +44,14 @@ You'll need a `.config.json` file. Fill in as appropriate.
     "github": {
         "organization": "turbo-src",
         "user": "YOUR_USERNAME",
-        "apiToken": "YOUR_ENCRYPTED_GITHUB_TOKEN"
+        "apiToken": "YOUR_GITHUB_ACCESS_TOKEN_SIGNED_WITH_JWT"
     },
     "turbosrc": {
         "endpoint": {
           "mode": "online",
            "url": "http://localhost:4000/graphql"
         },
-        "jwt": "JWT_HASH_VALUE",
+        "jwt": "JWT",
         "store": {
             "repo": {
                 "addr": "REPO_ADDR",
