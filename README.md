@@ -39,8 +39,9 @@ node server
 
 You'll need a `.config.json` file. Fill in as appropriate.
 
-replace YOUR_TOKEN with: jwt.sign({ githubToken: your_github_access_token }, JWT)
-replace JWT with a secret value
+- replace YOUR_USERNAME with your Github username
+- replace YOUR_TOKEN with: jwt.sign({ githubToken: <your github acess token> }, JWT) <br />
+- replace JWT with a secret value
 
 ```
 {
