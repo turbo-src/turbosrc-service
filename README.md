@@ -39,16 +39,19 @@ node server
 
 You'll need a `.config.json` file. Fill in as appropriate.
 
-- replace YOUR_USERNAME with your Github username
-- replace YOUR_TOKEN with: jwt.sign({ githubToken: <your github acess token> }, JWT) <br />
-- replace JWT with a secret value
+- Replace YOUR_USERNAME with your Github username
+- Replace JWT with a secret value
+- Replace YOUR_ENCRYPTED_TOKEN with the value returned from:
+```
+jwt.sign({ githubToken: <your github acess token> }, JWT)
+```
 
 ```
 {
     "github": {
         "organization": "turbo-src",
         "user": "YOUR_USERNAME",
-        "apiToken": "YOUR_TOKEN"
+        "apiToken": "YOUR_ENCRYPTED_TOKEN"
     },
     "turbosrc": {
         "endpoint": {
