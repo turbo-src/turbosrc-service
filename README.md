@@ -15,16 +15,22 @@ Clone.
 
 ```
 git clone https://github.com/turbo-src/service
-```
 
-## Use NVM
+## Use NVM to run Node v12.22.0
+
+```
+## Run the following command to install NVM:
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+```
+## Close and reopen terminal
 ```
 nvm install v12.22.0
 ```
 ```
 nvm use v12.22.0
 ```
-## Install dependencies
+## Then install dependencies
 ```
 npm install
 ```
