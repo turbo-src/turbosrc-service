@@ -52,7 +52,7 @@ You'll need a `.config.json` file. Fill in as appropriate.
           "mode": "online",
            "url": "http://localhost:4000/graphql"
         },
-        "jwt": "mary",
+        "jwt": "JWT_HASH_VALUE",
         "store": {
             "repo": {
                 "addr": "REPO_ADDR",
