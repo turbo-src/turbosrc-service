@@ -52,13 +52,13 @@ Header:
 
 Payload:
 {
-  "githubToken": <Your Github Access Token>
+  "githubToken": "<Your Github Access Token>"
 }
 
 Signing Key:
 JWT
 ```
-
+[Make a Github personal access token with "repo" scopes](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 ```
 {
     "github": {
