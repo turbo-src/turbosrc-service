@@ -112,13 +112,13 @@ describe('vote', function () {
 
         assert.deepEqual(
           openStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
+         { status: 200, state: "pre-open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail open on initial vote below quorum"
         );
 
         assert.deepEqual(
           duplicateStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
+         { status: 200, state: "pre-open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest3", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
           "Fail keep open even though initial vote below quorum"
         );
         assert.deepEqual(
