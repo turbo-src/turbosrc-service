@@ -131,8 +131,7 @@ describe('Voting.', function () {
         );
         assert.equal(
             voteYesTotals,
-	    '499999',
-            //'34000',
+            '34000',
             "Fail to add votes yes."
         );
         assert.equal(
@@ -141,18 +140,16 @@ describe('Voting.', function () {
             "Fail to add votes no."
         );
         assert.equal(
-            //voteTotals, '0.034', "Fail to add votes no."
-            voteTotals, '0.499999', "Fail to add votes no."
+            voteTotals, '0.034', "Fail to add votes no."
         );
         assert.deepEqual(
 	    openStatus,
-            { status: 200, state: "open" /* was "pre-open" but transfered less tokens out*/, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", mergeableCodeHost: true, "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
+            { status: 200, state: "pre-open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest1", mergeableCodeHost: true, "childDefaultHash": "dcdaa43d22e488b99ff1b0a86255540ce0449cd7", defaultHash: "dcdaa43d22e488b99ff1b0a86255540ce0449cd7" },
             "Fail to stay open."
         );
         assert.equal(
             voteTotalsFinal,
-	    '1',
-            //'0.534001',
+            '0.534001',
             "Fail to tally all votes."
         );
 
