@@ -92,9 +92,9 @@ checkGithubTokenPermissions: async function(contributor_name, token){
   }
   let permissions = {}
   let octokit;
-  
+  const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+
   try {
-    const tokenRes = jwt.verify(token, process.env.JWT);
     octokit = new Octokit({ auth: tokenRes.githubToken });
     //Check if user has public_repo scope
   const scopes = await octokit.request(`GET /users/${user.login}`);
