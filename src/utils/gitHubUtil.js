@@ -119,7 +119,7 @@ checkGithubTokenPermissions: async function(repo, owner, contributor_name, token
 
   return permissions
   } catch (error) {
-    console.log('error verifying github token', token)
+    console.log('error checking permissions of github token', token)
     return 500
   }
 

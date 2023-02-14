@@ -38,7 +38,8 @@ const {
        closePullRequest,
        mergePullRequest,
        fork,
-       verify
+       verify,
+       checkGithubTokenPermissions
       } = require('./src/utils/gitHubUtil');
 
 // defaultHash is the defaultHash, which are the same for now.
@@ -231,6 +232,10 @@ var root = {
   getContributorSignature: async (args) => {
     const res = await getContributorSignature(args)
     return res
+  },
+  checkGithubTokenPermissions: async (args) => {
+    const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
+    return permissions
   },
   getContributorTokenAmount: async (args) => {
     const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
