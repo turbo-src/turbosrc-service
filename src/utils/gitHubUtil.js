@@ -87,13 +87,37 @@ verify: async function(contributor_id, token){
 
 },
 checkGithubTokenPermissions: async function(contributor_name, token){
-
+  if (!repo || !owner) {
+    return;
+  }
+  let permissions = {}
+  let octokit;
+  
   try {
-    if(!contributor_id || !token) {
-      return false
+    const tokenRes = jwt.verify(token, process.env.JWT);
+    octokit = new Octokit({ auth: tokenRes.githubToken });
+    //Check if user has public_repo scope
+  const scopes = await octokit.request(`GET /users/${user.login}`);
+
+  Promise.resolve(res).then(object => {
+    if (object.headers['x-oauth-scopes'].split(',').includes('public_repo')) {
+      permissions.public_repo = true
+    } else {
+      permissions.public_repo = false
     }
+  });
 
+  const pushPermissions = await octokit.request(`GET /repos/${owner}/${repo}`);
 
+  Promise.resolve(res).then(object => {
+    if (object.data.permissions.push) {
+      permissions.push = true
+    } else {
+      permissions.push = false
+    }
+  });
+
+  return permissions
   } catch (error) {
     console.log('error verifying github token', token)
     return 500
