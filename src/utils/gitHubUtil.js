@@ -86,6 +86,20 @@ verify: async function(contributor_id, token){
   }
 
 },
+checkGithubTokenPermissions: async function(contributor_name, token){
+
+  try {
+    if(!contributor_id || !token) {
+      return false
+    }
+
+
+  } catch (error) {
+    console.log('error verifying github token', token)
+    return 500
+  }
+
+},
   getGitHubPullRequest: async function(owner, repo, pull) {
     let token = await module.exports.getGithubToken();
 
