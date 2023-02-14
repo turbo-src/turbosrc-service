@@ -86,15 +86,16 @@ verify: async function(contributor_id, token){
   }
 
 },
-checkGithubTokenPermissions: async function(repo, owner, contributor_name, token){
+checkGithubTokenPermissions: async function(owner, repo, contributor_name, token){
   if (!repo || !owner) {
     return;
   }
   let permissions = {}
   let octokit;
+  const jwtTokenFromConfig = await getJWT()
   const tokenRes = jwt.verify(token, jwtTokenFromConfig)
   try {
-      octokit = new Octokit({ auth: tokenRes });
+      octokit = new Octokit({ auth: tokenRes.githubToken });
       //Check if user has public_repo scope:
       const scopesRes = await octokit.request(`GET /users/${contributor_name}`);
 
@@ -119,8 +120,10 @@ checkGithubTokenPermissions: async function(repo, owner, contributor_name, token
 
   return permissions
   } catch (error) {
-    console.log('error checking permissions of github token', token)
-    return 500
+    console.log('error checking permissions of github token', tokenRes)
+    permissions.public_repo_scopes = false
+    permissions.push_permissions = false
+    return permissions
   }
 
 },
