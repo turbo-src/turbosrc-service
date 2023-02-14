@@ -100,9 +100,9 @@ checkGithubTokenPermissions: async function(repo, owner, contributor_name, token
 
     Promise.resolve(scopesRes).then(object => {
       if (object.headers['x-oauth-scopes'].split(',').includes('public_repo')) {
-        permissions.public_repo = true
+        permissions.public_repo_scopes = true
       } else {
-        permissions.public_repo = false
+        permissions.public_repo_scopes = false
     }
   });
 
@@ -111,9 +111,9 @@ checkGithubTokenPermissions: async function(repo, owner, contributor_name, token
 
     Promise.resolve(permissionsRes).then(object => {
       if (object.data.permissions.push) {
-        permissions.push = true
+        permissions.push_permissions = true
       } else {
-        permissions.push = false
+        permissions.push_permissions = false
       }
     });
 
