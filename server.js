@@ -106,8 +106,8 @@ var schema = buildSchema(`
   }
 
   type Permissions {
-    scopes: Boolean!
-    permissions: Boolean!
+    public_repo_scopes: Boolean!
+    push_permissions: Boolean!
   }
 
   type Query {
