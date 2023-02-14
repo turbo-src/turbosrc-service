@@ -38,7 +38,8 @@ const {
        closePullRequest,
        mergePullRequest,
        fork,
-       verify
+       verify,
+       checkGithubTokenPermissions
       } = require('./src/utils/gitHubUtil');
 
 // defaultHash is the defaultHash, which are the same for now.
@@ -105,11 +106,17 @@ var schema = buildSchema(`
     token: String!
   }
 
+  type Permissions {
+    public_repo_scopes: Boolean!
+    push_permissions: Boolean!
+  }
+
   type Query {
     createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
+    checkGithubTokenPermissions(owner: String, repo: String, contributor_name: String, token: String): Permissions,
     getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
@@ -225,6 +232,10 @@ var root = {
   getContributorSignature: async (args) => {
     const res = await getContributorSignature(args)
     return res
+  },
+  checkGithubTokenPermissions: async (args) => {
+    const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
+    return permissions
   },
   getContributorTokenAmount: async (args) => {
     const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
