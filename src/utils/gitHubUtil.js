@@ -8,6 +8,10 @@ const {
         getTurbosrcMode
 } = require('./config')
 
+const {
+  getUser
+} = require('../../src/lib/actions.js')
+
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
@@ -128,11 +132,22 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
-    let token = await module.exports.getGithubToken();
-
+    //let token = await module.exports.getGithubToken();
+    console.log('contributor_id:', contributor_id)
+    let args = {}
+    args.contributor_id = contributor_id
+    console.log('args.contributor_id:', args.contributor_id)
+    let res = await getUser(args)
+    const token = res.token
+    console.log(typeof token)
+    console.log('token:', token)
   
     const jwtTokenFromConfig = await getJWT()
+    console.log('138')
+    console.log(token)
     const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+    console.log('141')
+    console.log('tokenRes', tokenRes)
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     console.log('token', token,'tokenRes:', tokenRes)
