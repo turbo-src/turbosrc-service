@@ -129,7 +129,7 @@ var schema = buildSchema(`
     createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): String,
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
-    getGitHubPullRequest(owner: String, repo: String, defaultHash: String): ghPullRequest,
+    getGitHubPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String): ghPullRequest,
     getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
@@ -295,10 +295,11 @@ var root = {
     return status
   },
   getGitHubPullRequest: async (args) => {
+    const contributor_id = args.contributor_id
     const defaultHash = (args.defaultHash)
     const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
     try {
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), contributor_id)
 
       mergeable = gitHubPullRequest.mergeable
       const baseBranch = gitHubPullRequest.base.ref

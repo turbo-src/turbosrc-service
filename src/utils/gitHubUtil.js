@@ -127,7 +127,7 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
   }
 
 },
-  getGitHubPullRequest: async function(owner, repo, pull) {
+  getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
     let token = await module.exports.getGithubToken();
 
   

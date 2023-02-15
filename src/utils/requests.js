@@ -389,11 +389,11 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPullRequest;
   },
-  getGitHubPullRequest: async (owner, repo, defaultHash) => {
+  getGitHubPullRequest: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
-        query: `{ getGitHubPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}") { status, mergeable, mergeCommitSha, state, baseBranch } }`,
+        query: `{ getGitHubPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") { status, mergeable, mergeCommitSha, state, baseBranch } }`,
       })
       .set("accept", "json");
     //.end((err, res) => {

@@ -38,17 +38,18 @@ describe('Pull request', function () {
 	    await getGitHubPullRequest(
             /*owner:*/ "7db9a",
             /*repo:*/ "demo",
-	    "issue_1"
+	    "issue_1",
+      "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E"
 	    )
         console.log(gitHubPullRequest)
         assert.equal(
             gitHubPullRequest.mergeable,
-		    false , // Github can return null, but module converts null to false
+		    true , // Github can return null, but module converts null to false
             "Failed to be mergeable."
         );
         assert.equal(
             gitHubPullRequest.state,
-	    "closed",
+	    "open",
             "Failed to be mergeable."
         );
 
@@ -57,12 +58,12 @@ describe('Pull request', function () {
             gitHubPullRequest.mergeCommitSha,
 	    // when PR is open it is "264e4bfe8ce188e2e7b0ad9d6250c75d9bcef468",
 	    // Does it stay the same if it was rebased and commited, via option on Github.
-	    "8bd57d78bc3de856eb0c882717c4db52894a7624", // Same as head after commit.
+	    "22d729a304649327fb2fb33b74308f6820366de3", // Same as head after commit.
             "Failed to merge commit sha."
         );
         assert.equal(
             gitHubPullRequest.baseBranch, // base branch
-	    "feature",
+	    "master",
             "Failed to get base branch."
         );
 

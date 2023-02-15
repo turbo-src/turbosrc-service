@@ -88,7 +88,7 @@ const {
 async function getGitHubPRhead(owner, repo, issueID) {
     issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
    console.log('issueID ', issueID)
-    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
+    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID, "")
 
     const head = gitHubPullRequest.head.sha
     const mergeable = gitHubPullRequest.mergeable
@@ -383,7 +383,7 @@ const root = {
       );
       console.log('prVoteStatus: ', prVoteStatus)
 
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), "")
       
       if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
         console.log("Can't vote because trouble finding Github Pull request.")
