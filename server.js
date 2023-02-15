@@ -298,9 +298,11 @@ var root = {
     const contributor_id = args.contributor_id
     const defaultHash = (args.defaultHash)
     const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
+    console.log('before try catch')
     try {
       const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), contributor_id)
 
+      console.log('try catch')
       mergeable = gitHubPullRequest.mergeable
       const baseBranch = gitHubPullRequest.base.ref
       const forkBranch = gitHubPullRequest.head.ref
