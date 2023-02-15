@@ -85,10 +85,10 @@ const {
   //getContributorTokenAmount
 } = require("./state");
 
-async function getGitHubPRhead(owner, repo, issueID) {
+async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
     issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
    console.log('issueID ', issueID)
-    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID, "")
+    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID, contributor_id)
 
     const head = gitHubPullRequest.head.sha
     const mergeable = gitHubPullRequest.mergeable
