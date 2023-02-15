@@ -97,7 +97,7 @@ async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
     return { head: head, mergeable: mergeable }
 }
 
-async function convertDefaultHash(owner, repo, defaultHash, write) {
+async function convertDefaultHash(owner, repo, defaultHash, write, contributor_id) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
    let mergeable = true
@@ -114,7 +114,7 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       console.log(owner)
       console.log(repo)
       console.log(defaultHash)
-      const resGH = await getGitHubPRhead(owner, repo, defaultHash)
+      const resGH = await getGitHubPRhead(owner, repo, defaultHash, contributor_id)
       head = resGH.head
       mergeable = resGH.mergeable
       console.log('head ', head)
@@ -216,7 +216,7 @@ const root = {
     return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -232,7 +232,7 @@ const root = {
     return voteNo;
   },
   getPRvoteTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -259,7 +259,7 @@ const root = {
     return contributorTokenAmount;
   },
   getPullRequest: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     let mergeableCodeHost = true
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
@@ -356,7 +356,7 @@ const root = {
     const originalDefaultHash = args.defaultHash
     console.log('defaultHash: ', args.defaultHash)
     console.log('childDefaultHash: ', args.childDefaultHash)
-    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true)
+    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
