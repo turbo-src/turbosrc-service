@@ -30,7 +30,8 @@ const {
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
   getContributorTokenAmount,
-  getUser
+  getUser,
+  findOrCreateUser
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -116,6 +117,7 @@ var schema = buildSchema(`
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
+    findOrCreateUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): User,
     checkGithubTokenPermissions(owner: String, repo: String, contributor_name: String, token: String): Permissions,
     getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
@@ -219,6 +221,10 @@ var root = {
   },
   getUser: async (args) => {
     const res = await getUser(args);
+    return res;
+  },
+  findOrCreateUser: async (args) => {
+    const res = await findOrCreateUser(args);
     return res;
   },
   getContributorName: async (args) => {

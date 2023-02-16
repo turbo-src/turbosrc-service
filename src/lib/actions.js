@@ -35,7 +35,8 @@ const {
   postGetContributorID,
   postGetContributorName,
   postGetContributorSignature,
-  getUser
+  getUser,
+  findOrCreateUser
 } = require("./../utils/nameSpaceRequests");
 
 const {
@@ -572,6 +573,16 @@ const root = {
   getUser: async (args) => {
     const resgetUser = await getUser(args.contributor_id);
     return resgetUser;
+  },
+  findOrCreateUser: async (args) => {
+    const resfindOrCreateUser = await findOrCreateUser(
+    "",
+	  "",
+	  args.contributor_id,
+	  args.contributor_name,
+	  args.contributor_signature,
+    args.token);
+    return resfindOrCreateUser;
   },
   getContributorName: async (args) => {
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
