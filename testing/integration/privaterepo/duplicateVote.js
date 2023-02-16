@@ -81,8 +81,6 @@ describe('vote', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
-            /*childDefaultHash:*/ "issue_3",
-	    /*mergeable:*/ true,
             /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
         );
