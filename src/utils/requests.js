@@ -246,6 +246,22 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getUser;
   },
+  findOrCreateUser: async (
+    owner,
+    repo,
+    contributor_id,
+    contributor_name,
+    contributor_signature,
+    token) => {
+    const res = await superagent
+      .post(`${port}/graphql`)
+      .send({
+        query: `{ findOrCreateUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") {contributor_name, contributor_id, contributor_signature, token}}`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.findOrCreateUser;
+  },
   postGetContributorTokenAmount: async (
     owner,
     repo,
