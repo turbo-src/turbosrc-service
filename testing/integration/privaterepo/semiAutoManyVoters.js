@@ -57,6 +57,78 @@ describe('Vote.', function () {
 	const testerTokenK = await getGithubToken("k")
 	const testerTokenL = await getGithubToken("l")
 
+    const tsrctester1ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_5",
+        /*contributor_id:*/ "tsrctester1",
+    );
+    const tsrctester2ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_5",
+        /*contributor_id:*/ "tsrctester2",
+    );
+    const tsrctester3ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_5",
+        /*contributor_id:*/ "tsrctester3",
+    );
+    const tsrctester4ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_5",
+        /*contributor_id:*/ "tsrctester4",
+    );
+    const tsrctester5ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_5",
+        /*contributor_id:*/ "tsrctester5",
+    );
+    const tsrctester6ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester6tsrc",
+    );
+    const tsrctester7ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester7tsrc",
+    );
+    const tsrctester8ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester8tsrc",
+    );
+    const tsrctester9ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester9tsrc",
+    );
+    const tsrctester10ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester10tsrc",
+    );
+    const tsrctester11ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester11tsrc",
+    );
+    const tsrctester12ID = await postGetContributorID(
+        /*owner:*/ contributor_name,
+        /*repo:*/ "demo",
+        /*defaultHash:*/ "issue_4",
+        /*contributor_id:*/ "tester12tsrc",
+    );
         //jc
         await postSetVote(
             /*owner:*/ contributor_name,
@@ -73,7 +145,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tsrctester2",
+            /*contributor_id:*/ tester2ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -88,12 +160,13 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenC
         );
+
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tsrctester3",
+            /*contributor_id:*/ tester3ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -113,7 +186,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tsrctester4",
+            /*contributor_id:*/ tester4ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -133,7 +206,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tsrctester5",
+            /*contributor_id:*/ tester5ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -153,7 +226,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester6tsrc",
+            /*contributor_id:*/ tester6ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -173,7 +246,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester7tsrc",
+            /*contributor_id:*/ tester7ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -193,7 +266,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester8tsrc",
+            /*contributor_id:*/ tester8ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -213,7 +286,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester9tsrc",
+            /*contributor_id:*/ tester9ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -233,7 +306,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester10tsrc",
+            /*contributor_id:*/ tester10ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -253,12 +326,10 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester11tsrc",
+            /*contributor_id:*/ tester11ID,
             /*side:*/ "yes",
         );
-
         await snooze(snooze_ms);
-
         // tester 12/L
         await postSetVote(
             /*owner:*/ contributor_name,
@@ -275,7 +346,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_name:*/ "tester12tsrc",
+            /*contributor_id:*/ tester12ID,
             /*side:*/ "yes",
         );
 
@@ -329,13 +400,6 @@ describe('Vote.', function () {
         //    "0.499999",
         //    "Fail to add votes."
         //);
-        const tsrctester1ID = await postGetContributorID(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_5",
-            /*contributor:*/ "tsrctester1",
-        );
-
         // Transfer closing vote power to manual vote close.
         await snooze(snooze_ms);
 
@@ -347,14 +411,12 @@ describe('Vote.', function () {
             /*amount:*/ 499_999,
             /*token:*/ testerTokenA
         );
-
         await snooze(snooze_ms);
-
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ "tsrctester1",
+            /*contributor_id:*/ tsrctester11ID,
             /*side:*/ "yes",
         );
 
