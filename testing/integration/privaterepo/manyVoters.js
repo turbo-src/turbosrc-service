@@ -50,7 +50,6 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "tsrctester2",
         );
-
         const tsrctester3ID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -69,18 +68,11 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "tsrctester5",
         );
-
         const tsrctester6ID = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "tester6tsrc",
-        );
-        const tsrctester7ID = await postGetContributorID(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
-            /*contributor_id:*/ "tester7tsrc",
         );
         const tsrctester7ID = await postGetContributorID(
             /*owner:*/ contributor_name,
@@ -118,7 +110,6 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ "tester12tsrc",
         );
-
     // The main person in .config spinnning up turbosrc
 	const token = await getGithubToken()
 
@@ -440,14 +431,6 @@ describe('Vote.', function () {
             /*contributor_name:*/ tsrctester11ID,
             /*side:*/ "yes",
         );
-
-        const tsrctester1ID = await postGetContributorID(
-            /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
-            /*defaultHash:*/ "issue_4",
-            /*contributor:*/ "tsrctester1",
-        );
-
         //Now close vote.
         await snooze(snooze_ms);
         // "tsrctester1",
