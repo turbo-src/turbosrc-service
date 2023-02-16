@@ -34,7 +34,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "tsrctester1",
+            /*contributor_name:*/ "tsrctester1",
         );
 
         const testerTokenA = await getGithubToken("a")
@@ -59,7 +59,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "tsrctester1",
+            /*contributor_name:*/ "tsrctester1",
         );
 
         await snooze(snooze_ms);
@@ -88,28 +88,23 @@ describe('Vote.', function () {
             /*side:*/ "yes",
         );
 
-        assert.equal(
-            tsrctester1ID,
-            ""
+        assert.deepEqual(
+          mergeStatus,
+         { status: 200, state: "merge", "mergeableCodeHost": true, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
+         { status: 200, type: 2 },
+          "Fail to merge even though it was voted in."
         );
 
-        //assert.deepEqual(
-        //  mergeStatus,
-        // { status: 200, state: "merge", "mergeableCodeHost": true, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
-        // { status: 200, type: 2 },
-        //  "Fail to merge even though it was voted in."
-        //);
-
-        //assert.equal(
-        //    voteYesTotals,
-        //    "500001",
-        //    "Fail to add votes yes."
-        //);
-        //assert.equal(
-        //    voteNoTotals,
-        //    "0",
-        //    "Fail to zero out voteNoTotals after vote close."
-        //);
+        assert.equal(
+            voteYesTotals,
+            "500001",
+            "Fail to add votes yes."
+        );
+        assert.equal(
+            voteNoTotals,
+            "0",
+            "Fail to zero out voteNoTotals after vote close."
+        );
       });
     });
 });
