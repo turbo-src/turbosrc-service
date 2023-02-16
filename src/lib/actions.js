@@ -575,14 +575,14 @@ const root = {
     return resgetUser;
   },
   findOrCreateUser: async (args) => {
-    const resfindOrCreateUser = await findOrCreateUser(
+    const resFindOrCreateUser = await findOrCreateUser(
     "",
 	  "",
 	  args.contributor_id,
 	  args.contributor_name,
 	  args.contributor_signature,
     args.token);
-    return resfindOrCreateUser;
+    return resFindOrCreateUser;
   },
   getContributorName: async (args) => {
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
