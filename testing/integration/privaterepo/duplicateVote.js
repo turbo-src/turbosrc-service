@@ -41,7 +41,7 @@ describe('vote', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "tsrctester1",
+            /*contributor_name:*/ "tsrctester1",
         );
         const testerTokenA = await getGithubToken("a")
 
@@ -52,7 +52,7 @@ describe('vote', function () {
             /*defaultHash:*/ "issue_3",
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
-            /*contributor:*/ contributor_id,
+            /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
 	    /*token:*/ token
         );
@@ -61,7 +61,7 @@ describe('vote', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
-            /*contributor:*/ contributor_name,
+            /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -72,7 +72,7 @@ describe('vote', function () {
             /*defaultHash:*/ "issue_3",
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
-            /*contributor:*/ contributor_id,
+            /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
 	    /*token:*/ token
         );
@@ -83,7 +83,7 @@ describe('vote', function () {
             /*defaultHash:*/ "issue_3",
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
-            /*contributor:*/ contributor_name,
+            /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
         );
 
@@ -106,7 +106,7 @@ describe('vote', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
-            /*contributor:*/ contributor_name,
+            /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
         );
 
