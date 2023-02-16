@@ -299,6 +299,12 @@ var root = {
     const defaultHash = (args.defaultHash)
     const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
     console.log('before try catch')
+    if (contributor_id === undefined || contributor_id === 'undefined' || contributor_id === '') {
+      debugger
+
+    } else if (defaultHash === undefined || defaultHash === 'undefined' || defaultHash === '') {
+      debugger
+    }
     try {
       const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), contributor_id)
 

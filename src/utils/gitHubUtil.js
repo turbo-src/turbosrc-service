@@ -133,6 +133,7 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
     //let token = await module.exports.getGithubToken();
+    
     console.log('contributor_id getGitHubPullRequest:', contributor_id)
     let args = {}
     args.contributor_id = contributor_id
@@ -153,7 +154,6 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
       console.log('Error in getUser:', error)
     }
 
-    debugger
     const jwtTokenFromConfig = await getJWT()
     console.log('138')
     console.log(token)
