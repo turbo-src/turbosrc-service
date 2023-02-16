@@ -85,10 +85,14 @@ const {
   //getContributorTokenAmount
 } = require("./state");
 
-async function getGitHubPRhead(owner, repo, issueID) {
+async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
     issueID = (issueID).split('_')[1] // Need this for check gitHubPullRequest.
    console.log('issueID ', issueID)
-    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID)
+   console.log('contributor_id 91', contributor_id)
+   console.log(owner, repo, issueID, contributor_id)
+    const gitHubPullRequest = await getGitHubPullRequest(owner, repo, issueID, contributor_id)
+    console.log('github')
+    console.log('github', gitHubPullRequest)
 
     const head = gitHubPullRequest.head.sha
     const mergeable = gitHubPullRequest.mergeable
@@ -97,9 +101,10 @@ async function getGitHubPRhead(owner, repo, issueID) {
     return { head: head, mergeable: mergeable }
 }
 
-async function convertDefaultHash(owner, repo, defaultHash, write) {
+async function convertDefaultHash(owner, repo, defaultHash, write, contributor_id) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
+    console.log('contributor_id 104', contributor_id)
    let mergeable = true
    let head
    try {
@@ -114,7 +119,7 @@ async function convertDefaultHash(owner, repo, defaultHash, write) {
       console.log(owner)
       console.log(repo)
       console.log(defaultHash)
-      const resGH = await getGitHubPRhead(owner, repo, defaultHash)
+      const resGH = await getGitHubPRhead(owner, repo, defaultHash, contributor_id)
       head = resGH.head
       mergeable = resGH.mergeable
       console.log('head ', head)
@@ -199,11 +204,16 @@ const root = {
     }
   },
   getPRvoteYesTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    
+    console.log('yes:', args.contributor_id)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
+
+    console.log('convertedHash:', args.defaultHash, convertedHashes.defaultHash)
+
 
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
@@ -216,7 +226,8 @@ const root = {
     return voteYes;
   },
   getPRvoteNoTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    console.log('no:', args.contributor_id)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -232,7 +243,8 @@ const root = {
     return voteNo;
   },
   getPRvoteTotals: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    console.log('totals:', args.contributor_id)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -259,7 +271,8 @@ const root = {
     return contributorTokenAmount;
   },
   getPullRequest: async function (args) {
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false)
+    console.log('pr:', args.contributor_id)
+    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     let mergeableCodeHost = true
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
@@ -356,7 +369,8 @@ const root = {
     const originalDefaultHash = args.defaultHash
     console.log('defaultHash: ', args.defaultHash)
     console.log('childDefaultHash: ', args.childDefaultHash)
-    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true)
+    console.log('set vote 369 :', args.contributor_id)
+    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -383,7 +397,7 @@ const root = {
       );
       console.log('prVoteStatus: ', prVoteStatus)
 
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID))
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), args.contributor_id)
       
       if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
         console.log("Can't vote because trouble finding Github Pull request.")

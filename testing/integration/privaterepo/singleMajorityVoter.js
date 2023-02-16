@@ -34,7 +34,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "tsrctester1",
+            /*contributor_name:*/ "tsrctester1",
         );
 
         const testerTokenA = await getGithubToken("a")
@@ -55,13 +55,20 @@ describe('Vote.', function () {
     describe.only('A single majority voter votes.', function () {
       it("Should close vote and then merge.", async () => {
         const contributor_name = await getGithubContributor()
+        const tsrctester1ID = await postGetContributorID(
+            /*owner:*/ contributor_name,
+            /*repo:*/ "demo",
+            /*defaultHash:*/ "issue_2",
+            /*contributor_name:*/ "tsrctester1",
+        );
+
         await snooze(snooze_ms);
 
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ "tsrctester1",
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -69,7 +76,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor:*/ contributor_name,
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -77,10 +84,10 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
-            /*contributor_id:*/ "tsrctester1",
+            /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
         );
- 
+
         assert.deepEqual(
           mergeStatus,
          { status: 200, state: "merge", "mergeableCodeHost": true, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
