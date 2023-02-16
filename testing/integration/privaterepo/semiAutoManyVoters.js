@@ -145,7 +145,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester2ID,
+            /*contributor_id:*/ tsrctester2ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -166,7 +166,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester3ID,
+            /*contributor_id:*/ tsrctester3ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -186,7 +186,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester4ID,
+            /*contributor_id:*/ tsrctester4ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -206,7 +206,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester5ID,
+            /*contributor_id:*/ tsrctester5ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -226,7 +226,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester6ID,
+            /*contributor_id:*/ tsrctester6ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -246,7 +246,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester7ID,
+            /*contributor_id:*/ tsrctester7ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -266,7 +266,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester8ID,
+            /*contributor_id:*/ tsrctester8ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -286,7 +286,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester9ID,
+            /*contributor_id:*/ tsrctester9ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -306,7 +306,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester10ID,
+            /*contributor_id:*/ tsrctester10ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -326,7 +326,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester11ID,
+            /*contributor_id:*/ tsrctester11ID,
             /*side:*/ "yes",
         );
         await snooze(snooze_ms);
@@ -346,7 +346,7 @@ describe('Vote.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_5",
-            /*contributor_id:*/ tester12ID,
+            /*contributor_id:*/ tsrctester12ID,
             /*side:*/ "yes",
         );
 
