@@ -71,6 +71,7 @@ var root = {
     return json.data.getContributorSignature;
   },
   getUser: async (contributor_id) => {
+    console.log('made it to getUser')
     const endpoint = await getServiceEndpoint("namespace")
     const res = await superagent
       .post(endpoint)

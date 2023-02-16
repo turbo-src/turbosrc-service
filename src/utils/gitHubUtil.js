@@ -10,7 +10,7 @@ const {
 
 const {
   getUser
-} = require('../../src/lib/actions.js')
+} = require("./nameSpaceRequests");
 
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
@@ -133,15 +133,27 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
     //let token = await module.exports.getGithubToken();
-    console.log('contributor_id:', contributor_id)
+    console.log('contributor_id getGitHubPullRequest:', contributor_id)
     let args = {}
     args.contributor_id = contributor_id
     console.log('args.contributor_id:', args.contributor_id)
-    let res = await getUser(args)
-    const token = res.token
+    let res
+    let token
+    try {
+      res = await getUser(contributor_id)
+    } catch (error) {
+      console.log('Error in getUser:', error)
+    }
+    console.log('made it here after getUser ')
+    try {
+    token = res.token
     console.log(typeof token)
     console.log('token:', token)
-  
+    } catch (error) {
+      console.log('Error in getUser:', error)
+    }
+
+    debugger
     const jwtTokenFromConfig = await getJWT()
     console.log('138')
     console.log(token)

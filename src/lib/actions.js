@@ -212,6 +212,9 @@ const root = {
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
 
+    console.log('convertedHash:', args.defaultHash, convertedHashes.defaultHash)
+
+
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
       `${args.owner}/${args.repo}`,
@@ -240,7 +243,7 @@ const root = {
     return voteNo;
   },
   getPRvoteTotals: async function (args) {
-    console.log('totals:', arg.contributor_id)
+    console.log('totals:', args.contributor_id)
     const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
