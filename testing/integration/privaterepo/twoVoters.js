@@ -67,7 +67,7 @@ describe('Voting.', function () {
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_1",
-            /*contributor_id:*/ "tsrctester1",
+            /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
         const voteTotals = await postGetPRvoteTotals(
