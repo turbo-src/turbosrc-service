@@ -11,7 +11,31 @@ Further documentation is forthcoming.
 
 ## Dev usage
 
-Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.
+***Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.***
+
+Start turbosrc.
+
+```
+./tsrc-dev start
+```
+
+Stop turbosrc.
+
+```
+./tsrc-dev stop
+```
+
+Restart turbosrc.
+
+```
+./tsrc-dev restart
+```
+
+Run tests.
+
+```
+./tsrc-dev test
+````
 
 ## Install
 
