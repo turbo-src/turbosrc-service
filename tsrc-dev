@@ -6,8 +6,13 @@ usage() {
 }
 
 stop_services() {
-  echo "Stopping services..."
+  echo "Stopping all services (node server.js and docker services)..."
+  sleep 1
+  echo "Stoping turbosrc-service...assuming it's on port 4000."
+  sleep 1
   kill $(lsof -t -i :4000)
+  echo "Stopping services on docker..."
+  sleep 1
   docker-compose -f ../turbosrc-namespace/docker-compose.yml down
   docker-compose -f ../turbosrc-engine/docker-compose.yml down
   docker-compose -f ../turbosrc-gh/docker-compose.yml down
@@ -19,6 +24,8 @@ start_services() {
   docker-compose -f ../turbosrc-namespace/docker-compose.yml up --build -d
   docker-compose -f ../turbosrc-engine/docker-compose.yml up --build -d
   docker-compose -f ../turbosrc-gh/docker-compose.yml up --build -d
+  echo ""
+  echo "See output of turbosrc-server/server.js in turbosrc-service.out"
 }
 
 if [[ $# -ne 1 ]]; then
@@ -29,7 +36,6 @@ if [[ "$1" == "stop" ]]; then
   stop_services
 elif [[ "$1" == "start" ]]; then
   start_services
-  echo "See output of turbosrc-server/server.js in turbosrc-service.out"
 elif [[ "$1" == "restart" ]]; then
   stop_services
   start_services
