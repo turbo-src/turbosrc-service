@@ -6,15 +6,43 @@
 \cp .config.json testing/integration/privaterepo/
 
 # Delete fork of demo.
-#./testing/gihtub-maker.sh
+docker run -it \
+gihtub-maker-tools \
+-d -r demo
 
-#npm test testing/integration/privaterepo/preTestForkRepo.js
+# Fork the demo.
+docker run -it fork-repo node fork-repo.js "turbo-src/demo"
 
-#sleep 5
-#
-#npm test testing/integration/privaterepo/preTestCreatePRs.js
-#
-#sleep 5
+sleep 5
+
+# Create pull requests.
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest1" "refactor(lsp): remove redundant client cleanup" "auto pull request"
+
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest2" "refactor(uncrustify): set maximum number of consecutive newlines"
+
+
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest3" "ci(mingw): only enable -municode for MinGW"
+
+
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest3" "docs: add missing termdebug docs from Vim runtime updates"
+
+
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest4" "refactor: missing parenthesis may cause unexpected problems"
+
+
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest5" "refactor: missing parenthesis may cause unexpected problems"
+
+
+docker run -it create-pull-requests \
+python create_pull_requests.py "7db9a" "demo" "master" "pullRequest6" "refactor(normal): convert function comments to doxygen format"
+
+sleep 5
 
 npm test testing/integration/privaterepo/createUser.js
 sleep 5
@@ -38,9 +66,9 @@ echo ""
 echo "You must wait untile the automated voting is complete before you can vote."
 
 
-echo ""
-echo "Please run"
-echo ""
-echo "docker-compose -f docker/docker-compose.yml down"
-echo ""
-echo "When finished"
+#echo ""
+#echo "Please run"
+#echo ""
+#echo "docker-compose -f docker/docker-compose.yml down"
+#echo ""
+#echo "When finished"
