@@ -1,0 +1,38 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage: $0 [start|stop|restart]"
+  exit 1
+}
+
+stop_services() {
+  echo "Stopping services..."
+  kill $(lsof -t -i :4000)
+  docker-compose -f ../turbosrc-namespace/docker-compose.yml down
+  docker-compose -f ../turbosrc-engine/docker-compose.yml down
+  docker-compose -f ../turbosrc-gh/docker-compose.yml down
+}
+
+start_services() {
+  echo "Starting services..."
+  node server.js > turbosrc-service.out 2>&1 &
+  docker-compose -f ../turbosrc-namespace/docker-compose.yml up --build -d
+  docker-compose -f ../turbosrc-engine/docker-compose.yml up --build -d
+  docker-compose -f ../turbosrc-gh/docker-compose.yml up --build -d
+}
+
+if [[ $# -ne 1 ]]; then
+  usage
+fi
+
+if [[ "$1" == "stop" ]]; then
+  stop_services
+elif [[ "$1" == "start" ]]; then
+  start_services
+  echo "See output of turbosrc-server/server.js in turbosrc-service.out"
+elif [[ "$1" == "restart" ]]; then
+  stop_services
+  start_services
+else
+  usage
+fi
