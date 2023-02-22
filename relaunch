@@ -1,4 +1,5 @@
 # Stop services
+kill $(lsof -t -i :4000) # Assumes that turbosrc-service is running on port 4000
 docker-compose -f ../turbosrc-namespace/docker-compose.yml down
 docker-compose -f ../turbosrc-engine/docker-compose.yml down
 docker-compose -f ../turbosrc-gh/docker-compose.yml down
