@@ -54,7 +54,7 @@ npm test testing/integration/privaterepo/duplicateVote.js
 sleep 5
 npm test testing/integration/privaterepo/manyVoters.js
 sleep 5
-npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js
+npm test testing/integration/privaterepo/semiAutoManyVoters.js
 sleep 5
 
 echo "Please run the final test that requires to actually vote on the extension to merge or close."
