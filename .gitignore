@@ -1,5 +1,6 @@
 node_modules/
 repos/
+turbosrc-service.out
 .github-token
 .config.json
 .credentials

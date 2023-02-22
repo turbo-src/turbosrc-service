@@ -9,6 +9,34 @@
 
 Further documentation is forthcoming.
 
+## Dev usage
+
+***Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.***
+
+Start turbosrc.
+
+```
+./tsrc-dev start
+```
+
+Stop turbosrc.
+
+```
+./tsrc-dev stop
+```
+
+Restart turbosrc.
+
+```
+./tsrc-dev restart
+```
+
+Run tests.
+
+```
+./tsrc-dev test
+````
+
 ## Install
 
 ### Clone
@@ -21,23 +49,8 @@ git clone https://github.com/turbo-src/service
 [How to Make a Github personal access token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
 ### Encrypt your token:
-Use https://token.dev/ with the following:
-```
-Header:
-{
-  "typ": "JWT",
-  "alg": "HS256"
-}
 
-Payload:
-{
-  "githubToken": "<Your Github Access Token>"
-}
-
-Signing Key:
-<Your signing key>
-```
-The returned JWT string will be your encrypted token
+See here https://github.com/turbo-src/jwt_hash_decrypt
 
 ## Config
 You'll need a `.config.json` file in the root directory.
