@@ -38,22 +38,24 @@ python create_pull_requests.py "7db9a" "demo" "master" "pullRequest5" "refactor:
 docker run -it create-pull-requests \
 python create_pull_requests.py "7db9a" "demo" "master" "pullRequest6" "refactor(normal): convert function comments to doxygen format" "auto pull request"
 
-#sleep 5
-#
-#npm test testing/integration/privaterepo/createUser.js
-#sleep 5
-#npm test testing/integration/privaterepo/transferTokens.js
-#sleep 5
-#npm test testing/integration/privaterepo/twoVoters.js
-#sleep 5
-#npm test testing/integration/privaterepo/singleMajorityVoter.js
-#sleep 5
-#npm test testing/integration/privaterepo/duplicateVote.js
-#sleep 5
-#npm test testing/integration/privaterepo/manyVoters.js
-#sleep 5
-#npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js
-#sleep 5
+sleep 5
+
+npm test testing/integration/privaterepo/createUser.js
+sleep 5
+npm test testing/integration/privaterepo/createRepo.js
+sleep 5
+npm test testing/integration/privaterepo/transferTokens.js
+sleep 5
+npm test testing/integration/privaterepo/twoVoters.js
+sleep 5
+npm test testing/integration/privaterepo/singleMajorityVoter.js
+sleep 5
+npm test testing/integration/privaterepo/duplicateVote.js
+sleep 5
+npm test testing/integration/privaterepo/manyVoters.js
+sleep 5
+npm test testing/integration/privaterepo/semiAutoTestCreatePRs.js
+sleep 5
 
 echo "Please run the final test that requires to actually vote on the extension to merge or close."
 echo ""
