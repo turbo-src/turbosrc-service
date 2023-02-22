@@ -57,11 +57,8 @@ sleep 5
 npm test testing/integration/privaterepo/semiAutoManyVoters.js
 sleep 5
 
-echo "Please run the final test that requires to actually vote on the extension to merge or close."
-echo ""
-echo "npm test testing/integration/privaterepo/semiAutoManyVoters.js"
-echo ""
-echo "You must wait untile the automated voting is complete before you can vote."
+echo "Please go to your browser and naviagate to the demo page in your github."
+echo "Then please vote on pull request #6 to merge or close it."
 
 
 #echo ""

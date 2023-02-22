@@ -1,0 +1,10 @@
+# Stop services
+docker-compose -f ../turbosrc-namespace/docker-compose.yml down
+docker-compose -f ../turbosrc-engine/docker-compose.yml down
+docker-compose -f ../turbosrc-gh/docker-compose.yml down
+
+# Start services
+node server.js > turbosrc-service.out 2>&1 &
+docker-compose -f ../turbosrc-namespace/docker-compose.yml up --build -d
+docker-compose -f ../turbosrc-engine/docker-compose.yml up --build -d
+docker-compose -f ../turbosrc-gh/docker-compose.yml up --build -d
