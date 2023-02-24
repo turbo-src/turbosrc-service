@@ -1,7 +1,8 @@
 #!/bin/bash
 
 usage() {
-  echo "Usage: $0 [start|stop|restart|test]"
+  echo "Usage: $0 [start|stop|restart|test [USERNAME REPO ACTION]]"
+  echo "  test: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
   exit 1
 }
 
@@ -29,11 +30,19 @@ start_services() {
 }
 
 run_tests() {
-  echo "Running tests..."
-  scripts/tests.sh
+  if [[ $# -ne 3 ]]; then
+    echo "Usage: $0 test <username> <repository> <action>"
+    exit 1
+  fi
+
+  USERNAME=$1
+  REPO=$2
+  ACTION=$3
+
+  ./tsrc-test $USERNAME $REPO $ACTION
 }
 
-if [[ $# -ne 1 ]]; then
+if [[ $# -lt 1 ]]; then
   usage
 fi
 
@@ -45,7 +54,8 @@ elif [[ "$1" == "restart" ]]; then
   stop_services
   start_services
 elif [[ "$1" == "test" ]]; then
-  run_tests
+  shift
+  run_tests "$@"
 else
   usage
 fi
