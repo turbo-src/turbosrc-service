@@ -69,21 +69,16 @@ verify: async function(contributor_id, token){
 
     const octokit = new Octokit({ auth: tokenRes.githubToken });
 
-    // Request Github user info with token got from Github, stored in Chrome storage while using extension
-    const res = await octokit.request(`GET /users/${githubUsername}`)
-
     // If res was successful and was querying the user associated with the contributor_id return true
-    return Promise.resolve(res).then((object) => {
-      console.log('github user', githubUsername, object.data.login)
-      if(githubUsername === object.data.login) {
-        console.log('verified token thru github')
-        return true
-      } else {
-        console.log('github token invalid', token)
-        return false
-      }
-     })
+    const res = await octokit.request(`GET /users/${githubUsername}`);
 
+    if (githubUsername === res.data.login) {
+      console.log('verified token thru github');
+      return true;
+    } else {
+      console.log('github token invalid', token);
+      return false;
+    }
   } catch (error) {
     console.log('error verifying github token', token)
     return 500
@@ -112,7 +107,7 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
   });
 
       //Check if user has push permissions to this repo:
-      const permissionsRes = await octokit.request(`GET /repos/${owner}/${repo}`);
+    const permissionsRes = await octokit.request(`GET /repos/${owner}/${repo}`);
 
     Promise.resolve(permissionsRes).then(object => {
       if (object.data.permissions.push) {
