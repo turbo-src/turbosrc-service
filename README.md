@@ -13,10 +13,6 @@ Further documentation is forthcoming.
 
 ***Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.***
 
-```
-./tsrc-dev start
-```
-
 Start turbosrc.
 
 ```
@@ -35,7 +31,7 @@ Restart turbosrc.
 ./tsrc-dev restart
 ```
 
-Test.
+Test turbosrc
 
 ```
 ./tsrc-dev test <username> <repository> execute_all
@@ -73,6 +69,10 @@ Here is a sample below for more granular control over testing.
 
 ```
 ./tsrc-dev test <username> <repository> create_pull_request
+````
+
+```
+./tsrc-dev test <username> <repository> run_tests
 ````
 
 ## Install
