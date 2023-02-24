@@ -31,7 +31,7 @@ start_services() {
 
 run_tests() {
   if [[ $# -ne 3 ]]; then
-    echo "Usage: $0 test <username> <repository> <action>"
+    echo "Usage: $0 <username> <repository> [delete_fork|fork_repo|create_pull_request|run_tests|execute_all|execute_all_except_tests]"
     exit 1
   fi
 
