@@ -46,29 +46,15 @@ verify: async function(contributor_id, token){
   }
 
   const jwtTokenFromConfig = await getJWT()
-  console.log('contributor: ', contributor_id)
-  console.log('jwtToken from Config: ', jwtTokenFromConfig)
   const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-  console.log('decrypted jwtToken from Config: ', tokenRes)
   try {
     if(!contributor_id || !token) {
       return false
     }
     // Trade contributor_id for our contributor_name in our PG database
     // If contributor_name in ags above, then it is a createUser
-
     let githubUsername = await postGetContributorName("","","",contributor_id)
-
-
-    console.log("")
-    console.log('inside verify try catch')
-    console.log("")
-    //const jwtTokenFromConfig = await getJWT() console.log('jwtToken from Config: ', jwtTokenFromConfig)
-    //const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-    //console.log('decrypted jwtToken from Config: ', tokenRes)
-
     const octokit = new Octokit({ auth: tokenRes.githubToken });
-
     // If res was successful and was querying the user associated with the contributor_id return true
     const res = await octokit.request(`GET /users/${githubUsername}`);
 
