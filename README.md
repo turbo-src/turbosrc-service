@@ -31,10 +31,48 @@ Restart turbosrc.
 ./tsrc-dev restart
 ```
 
-Run tests.
+Test turbosrc
 
 ```
-./tsrc-dev test
+./tsrc-dev test <username> <repository> execute_all
+````
+
+Example usage with user "7db9a" and repo "demo". Essentially, just replace your username and keep everything as is for basic usage.
+
+```
+./tsrc-dev test 7db9a demo execute_all
+````
+
+`username` is your GH personal username name. `repository` is the repo forked from turbo-src for testing.
+
+### More on tests with tsrc-dev
+
+`tsrc-dev test` is a subcommand.
+
+Build test environment and run all tests.
+
+```
+./tsrc-dev test <username> <repository> execute_all
+````
+
+There are various other commands with `tsrc-dev test`. For further usage just enter `tsrc-dev test`.
+
+Here is a sample below for more granular control over testing.
+
+```
+./tsrc-dev test <username> <repository> delete_fork
+````
+
+```
+./tsrc-dev test <username> <repository> fork_repo
+````
+
+```
+./tsrc-dev test <username> <repository> create_pull_request
+````
+
+```
+./tsrc-dev test <username> <repository> run_tests
 ````
 
 ## Install
