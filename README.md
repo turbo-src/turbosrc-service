@@ -13,6 +13,10 @@ Further documentation is forthcoming.
 
 ***Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.***
 
+```
+./tsrc-dev start
+```
+
 Start turbosrc.
 
 ```
@@ -31,10 +35,30 @@ Restart turbosrc.
 ./tsrc-dev restart
 ```
 
-Run tests.
+Run all tests.
 
 ```
-./tsrc-dev test
+./tsrc-dev test <username> <repository> run_tests
+````
+
+Example usage:
+
+```
+./tsrc-dev test 7db9a demo run_tests
+```
+
+The above is all you need but below provides more granular control.
+
+```
+./tsrc-dev test <username> <repository> delete_fork
+````
+
+```
+./tsrc-dev test <username> <repository> fork_repo
+````
+
+```
+./tsrc-dev test <username> <repository> create_pull_request
 ````
 
 ## Install
