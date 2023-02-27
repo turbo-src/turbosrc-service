@@ -47,29 +47,40 @@ verify: async function(contributor_id, token){
 
   const jwtTokenFromConfig = await getJWT()
   const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-  try {
-    if(!contributor_id || !token) {
-      return false
-    }
-    // Trade contributor_id for our contributor_name in our PG database
-    // If contributor_name in ags above, then it is a createUser
-    let githubUsername = await postGetContributorName("","","",contributor_id)
-    const octokit = new Octokit({ auth: tokenRes.githubToken });
-    // If res was successful and was querying the user associated with the contributor_id return true
-    const res = await octokit.request(`GET /users/${githubUsername}`);
 
-    if (githubUsername === res.data.login) {
-      console.log('verified token thru github');
-      return true;
-    } else {
-      console.log('github token invalid', token);
-      return false;
-    }
+  if(!contributor_id || !token) {
+    return false
+  }
+
+  // Trade contributor_id for our contributor_name in our PG database
+  // If contributor_name in ags above, then it is a createUser
+  let githubUsername
+  try {
+    githubUsername = await postGetContributorName("","","",contributor_id)
   } catch (error) {
-    console.log('error verifying github token', token)
+    console.log(`gitHubUtil verify: failed to get contributor name from namespace system for contributor ID: "${contributor_id}".`)
     return 500
   }
 
+  let octokit
+  let res
+  try {
+    octokit = new Octokit({ auth: tokenRes.githubToken });
+    // If res was successful and was querying the user associated with the contributor_id return true
+    res = await octokit.request(`GET /users/${githubUsername}`);
+
+  } catch (error) {
+    console.log(`gitHubUtil verify: Github request for Github username "${githubUsername}" failed`)
+    return 500
+  }
+
+  if (githubUsername === res.data.login) {
+    console.log('verified token thru github');
+    return true;
+  } else {
+    console.log('github token invalid', token);
+    return false;
+  }
 },
 checkGithubTokenPermissions: async function(owner, repo, contributor_name, token){
   if (!repo || !owner) {
