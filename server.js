@@ -4,7 +4,6 @@ const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
-//const { createClient } = require('redis');
 const superagent = require('superagent');
 const { getPRhead } = require('./src/utils/pullForkUtil');
 const { gitHeadUtil } = require('./src/utils/gitHeadUtil');
@@ -180,7 +179,6 @@ var fakeTurboSrcReposDB = {};
 const repoAccounts = [
   'default/default',
 ]
-//const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
 
 const fakeAuthorizedContributors = {
   'default': ['default'],
@@ -250,21 +248,16 @@ var root = {
   },
   transferTokens: async (args) => {
     const verified = await verify(args.from, args.token)
-    console.log("")
-    console.log("235 server")
-    console.log("")
 
     if(verified === true) {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
-   console.log("to: " + args.to)
     // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
    const contributorName = await getContributorName(
      {contributor_id: args.to}
     )
     if (contributorName !== null) {
-      console.log("contributor name: " + contributorName)
       const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
       fakeTurboSrcReposDB = restTransferTokens.db
     }
@@ -304,7 +297,6 @@ var root = {
     const contributor_id = args.contributor_id
     const defaultHash = (args.defaultHash)
     const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
-    console.log('before try catch')
     if (contributor_id === undefined || contributor_id === 'undefined' || contributor_id === '') {
       debugger
 
@@ -314,15 +306,13 @@ var root = {
     try {
       const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), contributor_id)
 
-      console.log('try catch')
       mergeable = gitHubPullRequest.mergeable
       const baseBranch = gitHubPullRequest.base.ref
       const forkBranch = gitHubPullRequest.head.ref
       const head =  gitHubPullRequest.head.sha
       const remoteURL = gitHubPullRequest.head.repo.git_url
       const title = gitHubPullRequest.title
-      console.log('baseBranch ', baseBranch)
-      console.log('title ', title)
+      
       if (mergeable === null) {
           mergeable = false
       }
@@ -444,12 +434,6 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true,
 }));
 var way = false;
-//if (way === true) {
-//     console.log("true");
-//     return true;
-//   } else {
-//     console.log("false");
-//     return false;
-//}
+
 app.listen(4000);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
