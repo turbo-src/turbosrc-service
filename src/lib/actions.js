@@ -395,7 +395,6 @@ const root = {
         }
 
       //Pull requests only exist in our db if they have been voted on.
-      //This covers brand new PRs and PRs that have been updated. The updated PR will inherit the votes from the old PR.
       //If this is a pull request which has not been voted on yet, create it:
       if (prVoteStatus.status === 404) {
           await postCreatePullRequest(
@@ -411,8 +410,8 @@ const root = {
           title // get title
         );
       } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
-         console.log('PR updated and is mergeable')
-
+         console.log('PR updated and is mergeable, not in conflict.')
+         // The linked PR will inherit the votes from the parent PR
          const resLinkedPR = await createLinkedPullRequest(
            args.owner,
            `${args.owner}/${args.repo}`,
@@ -429,15 +428,15 @@ const root = {
 
          if (resLinkedPR  === "201") {
             console.log('Created mergeable linked pr.')
-            // New linked pr has default and child that's same as
-            // the child of the parent.
+            // New linked pr has default and child that's same as the child of the parent.
             args.defaultHash = args.childDefaultHash
-         } else {
+          } else {
            console.log("problem creating linked pull request")
-         }
+          }
+
       } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
-         console.log('PR updated but is unmergeable')
-      }
+         console.log('PR updated but is unmergeable, is in conflict')
+        }
 
      const resSetVote = await postSetVote(
        args.owner,
@@ -460,7 +459,7 @@ const root = {
 
       // Merge if turborsc pull request status says there are enough votes to merge.
       if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
-      // Comment out line below to not actually merge pull request. Status will still be merged in our db.
+      // Comment out line below to disable live merging. Status will still be merged in our db either way.
       // await mergePullRequest(args.owner, args.repo, Number(issueID))
       }
 
