@@ -419,15 +419,15 @@ const root = {
          const resLinkedPR = await createLinkedPullRequest(
            args.owner,
            `${args.owner}/${args.repo}`,
-           /*parentDefaultHash:*/ args.defaultHash,
-           /*defaultHash:*/ args.childDefaultHash,
-           /*childDefaultHash:*/ args.childDefaultHash,
-           /*head:*/ args.childDefaultHash,
-           /*branchDefaultHash*/ "branchDefaultHash",
-           remoteURL, // get remoteURl
-           baseBranch, // get baseBranch
-           forkBranch, // get forkBranch
-           title // get title
+           args.defaultHash,
+           args.childDefaultHash,
+           args.childDefaultHash,
+           args.childDefaultHash,
+           "branchDefaultHash",
+           remoteURL,
+           baseBranch,
+           forkBranch,
+           title
          );
 
          if (resLinkedPR  === "201") {
@@ -453,22 +453,22 @@ const root = {
        args.side
      );
 
-      // Marginal vote that exceeded quorum, vote yes was majority.
-      prVoteStatus = await postGetPullRequest(
-        args.owner,
-        `${args.owner}/${args.repo}`,
-        args.defaultHash,
-        args.contributor_id,
-        args.side
-      );
+    // Now get the vote totals for the PR:
+    prVoteStatus = await postGetPullRequest(
+    args.owner,
+    `${args.owner}/${args.repo}`,
+    args.defaultHash,
+    args.contributor_id,
+    args.side
+    );
 
-      // Merge if turborsc pull request status says there are enough votes to merge.
-      if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
-      // Comment out line below to disable live merging. Status will still be merged in our db either way:
-      // await mergePullRequest(args.owner, args.repo, Number(issueID))
-      }
+    // Merge if turborsc pull request status says there are enough votes to merge.
+    if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
+    // Comment out line below to disable actual merging into the codebase. Status will still be merged in our db either way:
+    // await mergePullRequest(args.owner, args.repo, Number(issueID))
+    }
 
-      return resSetVote;
+    return resSetVote;
     } else {
       return 403
     }
