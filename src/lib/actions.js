@@ -360,8 +360,10 @@ const root = {
     //}
   },
   setVote: async function (args) {
-    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
-    // If ran online, it will find the default hash's assoiciated tsrcID in GH Service
+    // Need this for check gitHubPullRequest
+    const issueID = (args.defaultHash).split('_')[1]
+    
+    // If ran online, it will find the default hash's associated tsrcID in GH Service
     convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
     
       if (convertedHashes.status === 201) {
@@ -378,23 +380,24 @@ const root = {
         args.side
         );
 
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), args.contributor_id)
-        if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
-        console.log("Can't vote because trouble finding Github Pull request.")
-        }
+        const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), args.contributor_id)
 
-      mergeable = gitHubPullRequest.mergeable
-      const baseBranch = gitHubPullRequest.base.ref
-      const forkBranch = gitHubPullRequest.head.ref
-      const head =  gitHubPullRequest.head.sha
-      const remoteURL = gitHubPullRequest.head.repo.git_url
-      const title = gitHubPullRequest.title
-      
+        if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
+          console.log("Can't vote because trouble finding Github Pull request.")
+          }
+
+        mergeable = gitHubPullRequest.mergeable
+        const baseBranch = gitHubPullRequest.base.ref
+        const forkBranch = gitHubPullRequest.head.ref
+        const head =  gitHubPullRequest.head.sha
+        const remoteURL = gitHubPullRequest.head.repo.git_url
+        const title = gitHubPullRequest.title
+
         if (mergeable === null) {
           mergeable = false
         }
 
-      //Pull requests only exist in our db if they have been voted on.
+      //Pull requests only exist in our db if they have been voted on
       //If this is a pull request which has not been voted on yet, create it:
       if (prVoteStatus.status === 404) {
           await postCreatePullRequest(
@@ -411,7 +414,8 @@ const root = {
         );
       } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
          console.log('PR updated and is mergeable, not in conflict.')
-         // The linked PR will inherit the votes from the parent PR
+
+         // The linked PR will inherit the votes from its parent PR
          const resLinkedPR = await createLinkedPullRequest(
            args.owner,
            `${args.owner}/${args.repo}`,
@@ -431,13 +435,14 @@ const root = {
             // New linked pr has default and child that's same as the child of the parent.
             args.defaultHash = args.childDefaultHash
           } else {
-           console.log("problem creating linked pull request")
+            console.log("problem creating linked pull request")
           }
 
       } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
          console.log('PR updated but is unmergeable, is in conflict')
         }
-
+    
+    // Now that is established which head of the PR we are voting on, we can create the vote:
      const resSetVote = await postSetVote(
        args.owner,
        `${args.owner}/${args.repo}`,
@@ -448,7 +453,7 @@ const root = {
        args.side
      );
 
-     // Marginal vote that exceeded quorum, vote yes was majority.
+      // Marginal vote that exceeded quorum, vote yes was majority.
       prVoteStatus = await postGetPullRequest(
         args.owner,
         `${args.owner}/${args.repo}`,
@@ -459,7 +464,7 @@ const root = {
 
       // Merge if turborsc pull request status says there are enough votes to merge.
       if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
-      // Comment out line below to disable live merging. Status will still be merged in our db either way.
+      // Comment out line below to disable live merging. Status will still be merged in our db either way:
       // await mergePullRequest(args.owner, args.repo, Number(issueID))
       }
 
