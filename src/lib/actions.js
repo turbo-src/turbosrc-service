@@ -105,6 +105,9 @@ async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
 async function convertDefaultHash(owner, repo, defaultHash, write, contributor_id) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
+
+    // childDefaultHash is the most recent commit head of the pull request branch
+    // defaultHash is the next most recent commit head of the pull request branch
    let mergeable = true
    let head
    let convertedChildDefaultHash
@@ -112,50 +115,59 @@ async function convertDefaultHash(owner, repo, defaultHash, write, contributor_i
    let resPostTsrcID
    let tsrcID
    const onlineMode = await getTurbosrcMode()
+
    try {
+    //Get tsrcID from GH service
     tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
     
     if (onlineMode === 'online') {
+      //Get pull request from GitHub
       const resGH = await getGitHubPRhead(owner, repo, defaultHash, contributor_id)
       head = resGH.head
       mergeable = resGH.mergeable
     } else if (onlineMode === 'offline' && tsrcID !== "500") {
-        head = tscrcID
+        head = tsrcID
     } else if (onlineMode === 'offline' && tsrcID === "500") {
         head = defaultHash
     }
-
+    
+    // Error handling
     if (head === null || head === undefined ) {
         return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-    } else if (tsrcID === head && tsrcID !== "500" ) {
+    }
+
+    // Compare tsrcID with head from github
+    if (tsrcID === head && tsrcID !== "500" ) {
+      // if tsrcID is the same as the head from Github, then return it as the defaultHash
         convertedDefaultHash = head
         convertedChildDefaultHash = head
         return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
     } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
-	      childDefaultHash = tsrcID
+      // if tsrcID is different from the head from Github, then return it as the new defaultHash
+        // childDefaultHash = tsrcID [not needed]
         convertedDefaultHash = tsrcID
         convertedChildDefaultHash = head
         return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
-      } else if (write) {
+    } else if (write) {
+      //If write is true, then create a new issue in the GH service for future reference
+      //defaultHash and head are the same value
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
-        if (resPostTsrcID === "201") {
+        // if (resPostTsrcID === "201") {
           convertedDefaultHash = head
           convertedChildDefaultHash = head
           return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
-        } else {
-          convertedDefaultHash = defaultHash
-          convertedChildDefaultHash = defaultHash
-          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
-        }
-      } else {
-          return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-      }
-
-    convertedDefaultHash = defaultHash
-    convertedChildDefaultHash = defaultHash
-    return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash:convertedChildDefaultHash }
+        // }
+        // else {
+        //   convertedDefaultHash = defaultHash
+        //   convertedChildDefaultHash = defaultHash
+        //   return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+        // }
+    }
+    // else {
+    //       return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+    // }
     } catch(error) {
-        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+          return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
     }
 }
 
