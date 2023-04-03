@@ -105,65 +105,50 @@ async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
 async function convertDefaultHash(owner, repo, defaultHash, write, contributor_id) {
     // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
     // It'll also record the defaultHash against the tsrcID for later use.
-    console.log('contributor_id 104', contributor_id)
    let mergeable = true
    let head
-   try {
-    let resPostTsrcID
-   let tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
    let convertedChildDefaultHash
    let convertedDefaultHash
-    console.log('tsrcID ', tsrcID)
-    const onlineMode = await getTurbosrcMode()
+   let resPostTsrcID
+   let tsrcID
+   const onlineMode = await getTurbosrcMode()
+   try {
+    tsrcID = await postGetTsrcID(`${owner}/${repo}`, defaultHash)
+    
     if (onlineMode === 'online') {
-      console.log('args 100')
-      console.log(owner)
-      console.log(repo)
-      console.log(defaultHash)
       const resGH = await getGitHubPRhead(owner, repo, defaultHash, contributor_id)
       head = resGH.head
       mergeable = resGH.mergeable
-      console.log('head ', head)
-      console.log('mergeable ', mergeable)
-      console.log('tsrcID 100', tsrcID)
     } else if (onlineMode === 'offline' && tsrcID !== "500") {
         head = tscrcID
     } else if (onlineMode === 'offline' && tsrcID === "500") {
         head = defaultHash
     }
-      
-      if (head === null || head === undefined ) {
+
+    if (head === null || head === undefined ) {
         return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
-      } else if (tsrcID === head && tsrcID !== "500" ) {
+    } else if (tsrcID === head && tsrcID !== "500" ) {
         convertedDefaultHash = head
         convertedChildDefaultHash = head
         return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
-      } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
-	childDefaultHash = tsrcID
+    } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
+	      childDefaultHash = tsrcID
         convertedDefaultHash = tsrcID
         convertedChildDefaultHash = head
-	console.log("Updated?")
-	console.log("tsrcID/default ", convertedDefaultHash)
-	console.log("child", convertedChildDefaultHash)
-	
-          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
-      } else if (write) { 
+        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+      } else if (write) {
         resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
-        console.log('resPostTsrcID: ', resPostTsrcID)
-        console.log(head)
         if (resPostTsrcID === "201") {
-          console.log('resPostTsrcID: ', resPostTsrcID)
           convertedDefaultHash = head
           convertedChildDefaultHash = head
           return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
         } else {
-          console.log('defaultHash instead resPostTsrcID: ', defaultHash)
           convertedDefaultHash = defaultHash
           convertedChildDefaultHash = defaultHash
-        return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
+          return { status: 201, mergeable: mergeable, defaultHash: convertedDefaultHash, childDefaultHash: convertedChildDefaultHash }
         }
       } else {
-        return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
+          return { status: 500, mergeable: mergeable, defaultHash: defaultHash, childDefaultHash: defaultHash }
       }
 
     convertedDefaultHash = defaultHash
