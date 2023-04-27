@@ -358,67 +358,47 @@ const root = {
     //}
   },
   setVote: async function (args) {
-    console.log(args)
-    const onlineMode = await getTurbosrcMode()
-    console.log('')
-    console.log('onlineMode', onlineMode)
-    console.log('')
-    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
-    // If ran online, it'll convert the defaultHashs into a tsrcIDs.
-    const originalDefaultHash = args.defaultHash
-    console.log('defaultHash: ', args.defaultHash)
-    console.log('childDefaultHash: ', args.childDefaultHash)
-    console.log('set vote 369 :', args.contributor_id)
+    // Need this for check gitHubPullRequest
+    const issueID = (args.defaultHash).split('_')[1]
+    
+    // If ran online, it will find the default hash's associated tsrcID in GH Service
     convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
-    if (convertedHashes.status === 201) {
-      args.defaultHash = convertedHashes.defaultHash
-      args.childDefaultHash = convertedHashes.childDefaultHash
+    
+      if (convertedHashes.status === 201) {
+        args.defaultHash = convertedHashes.defaultHash
+        args.childDefaultHash = convertedHashes.childDefaultHash
 
-      //if (originalDefaultHash === args.childDefaultHash) {
-      //  args.childDefaultHash = args.defaultHash
-      //} else {
-      //  args.childDefaultHash = await getGitHubPRhead(args.owner, args.repo, originalDefaultHash)
-      //  args.childDefaultHash = await convertDefaultHash(args.owner, args.repo, args.childDefaultHash)
-      //}
+        let mergeable
 
-      console.log('after defaultHash: ', args.defaultHash)
-      console.log('after childDefaultHash: ', args.childDefaultHash)
-
-      console.log('args after')
-      console.log(args)
-      let mergeable
-      let prVoteStatus = await postGetPullRequest(
+        let prVoteStatus = await postGetPullRequest(
         args.owner,
         `${args.owner}/${args.repo}`,
         args.defaultHash,
         args.contributor_id,
         args.side
-      );
-      console.log('prVoteStatus: ', prVoteStatus)
+        );
 
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), args.contributor_id)
-      
-      if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
-        console.log("Can't vote because trouble finding Github Pull request.")
-      }
-      console.log('arrive')
-      mergeable = gitHubPullRequest.mergeable
-      const baseBranch = gitHubPullRequest.base.ref
-      const forkBranch = gitHubPullRequest.head.ref
-      const head =  gitHubPullRequest.head.sha
-      const remoteURL = gitHubPullRequest.head.repo.git_url
-      const title = gitHubPullRequest.title
-      console.log('baseBranch ', baseBranch)
-      console.log('title ', title)
-      if (mergeable === null) {
+        const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), args.contributor_id)
+
+        if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
+          console.log("Can't vote because trouble finding Github Pull request.")
+          }
+
+        mergeable = gitHubPullRequest.mergeable
+        const baseBranch = gitHubPullRequest.base.ref
+        const forkBranch = gitHubPullRequest.head.ref
+        const head =  gitHubPullRequest.head.sha
+        const remoteURL = gitHubPullRequest.head.repo.git_url
+        const title = gitHubPullRequest.title
+
+        if (mergeable === null) {
           mergeable = false
-      }
+        }
 
+      //Pull requests only exist in our db if they have been voted on
+      //If this is a pull request which has not been voted on yet, create it:
       if (prVoteStatus.status === 404) {
-        // get github pull request to get below data
-        // to pass into below arguments.
-        
-        const res = await postCreatePullRequest(
+          await postCreatePullRequest(
           args.owner,
           `${args.owner}/${args.repo}`,
           args.defaultHash,
@@ -431,45 +411,36 @@ const root = {
           title // get title
         );
       } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
-         console.log('PR updated and is mergeable')
+         console.log('PR updated and is mergeable, not in conflict.')
 
+         // The linked PR will inherit the votes from its parent PR
          const resLinkedPR = await createLinkedPullRequest(
            args.owner,
            `${args.owner}/${args.repo}`,
-           /*parentDefaultHash:*/ args.defaultHash,
-           /*defaultHash:*/ args.childDefaultHash,
-           /*childDefaultHash:*/ args.childDefaultHash,
-           /*head:*/ args.childDefaultHash,
-           /*branchDefaultHash*/ "branchDefaultHash",
-           remoteURL, // get remoteURl
-           baseBranch, // get baseBranch
-           forkBranch, // get forkBranch
-           title // get title
+           args.defaultHash,
+           args.childDefaultHash,
+           args.childDefaultHash,
+           args.childDefaultHash,
+           "branchDefaultHash",
+           remoteURL,
+           baseBranch,
+           forkBranch,
+           title
          );
 
          if (resLinkedPR  === "201") {
             console.log('Created mergeable linked pr.')
-            // New linked pr has default and child that's same as
-            // the child of the parent.
+            // New linked pr has default and child that's same as the child of the parent.
             args.defaultHash = args.childDefaultHash
-         } else {
-           console.log("problem creating linked pull request")
-           console.log(args.owner)
-           console.log(`${args.owner}/${args.repo}`)
-           console.log(/*parentDefaultHash:*/ args.defaultHash)
-           console.log(/*defaultHash:*/ args.childDefaultHash)
-           console.log(/*childDefaultHash:*/ args.childDefaultHash)
-           console.log(/*head:*/ args.childDefaultHash)
-           console.log(/*branchDefaultHash*/ "branchDefaultHash")
-           console.log(remoteURL)// get remoteURL)
-           console.log(baseBranch) // get baseBranch)
-           console.log(forkBranch) // get forkBranch)
-           console.log(title) // get title)
-         }
-      } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
-         console.log('PR updated but is unmergeable')
-      }
+          } else {
+            console.log("problem creating linked pull request")
+          }
 
+      } else if (args.defaultHash !== args.childDefaultHash && !mergeable) {
+         console.log('PR updated but is unmergeable, is in conflict')
+        }
+    
+    // Now that is established which head of the PR we are voting on, we can create the vote:
      const resSetVote = await postSetVote(
        args.owner,
        `${args.owner}/${args.repo}`,
@@ -480,22 +451,22 @@ const root = {
        args.side
      );
 
-     // Marginal vote that exceeded quorum, vote yes was majority.
-      prVoteStatus = await postGetPullRequest(
-        args.owner,
-        `${args.owner}/${args.repo}`,
-        args.defaultHash,
-        args.contributor_id,
-        args.side
-      );
+    // Now get the vote totals for the PR:
+    prVoteStatus = await postGetPullRequest(
+    args.owner,
+    `${args.owner}/${args.repo}`,
+    args.defaultHash,
+    args.contributor_id,
+    args.side
+    );
 
-      // Merge if turborsc pull request status says there are enough votes to merge.
-      if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
-         console.log(`Github merge (${args.defaultHash}) disabled)`)
-        /*resSetVote =*/ //await mergePullRequest(args.owner, args.repo, Number(issueID))
-      } 
+    // Merge if turborsc pull request status says there are enough votes to merge.
+    if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
+    // Comment out line below to disable actual merging into the codebase. Status will still be merged in our db either way:
+    // await mergePullRequest(args.owner, args.repo, Number(issueID))
+    }
 
-      return resSetVote;
+    return resSetVote;
     } else {
       return 403
     }
