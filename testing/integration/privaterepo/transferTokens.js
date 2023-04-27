@@ -22,7 +22,7 @@ async function readDBfile(file) {
     return data
 }
 
-var snooze_ms = 400;
+var snooze_ms = 200;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).

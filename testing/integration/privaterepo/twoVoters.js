@@ -19,7 +19,7 @@ const {
        getGithubToken,
       } = require('../../../src/utils/gitHubUtil.js')
 
-var snooze_ms = 6000;
+var snooze_ms = 1500;;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
