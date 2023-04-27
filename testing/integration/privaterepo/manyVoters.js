@@ -19,7 +19,7 @@ const {
       } = require('../../../src/utils/gitHubUtil.js')
 
 
-var snooze_ms = 1500;;
+var snooze_ms = 3000;;
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
