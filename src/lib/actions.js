@@ -29,7 +29,7 @@ const {
   postGetPRvoteTotals,
   postGetAuthorizedContributor,
   getRepoStatus,
-} = require("./../utils/privateStoreRequests");
+} = require("./../utils/engineRequests");
 const {
   postCreateUser,
   postGetContributorID,
