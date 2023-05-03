@@ -291,6 +291,17 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPRvoteNoTotals;
   },
+  getVotes: async (repo, defaultHash) => {
+    const privateStore = await getServiceEndpoint("offchain")
+    const res = await superagent
+      .post(privateStore)
+      .send({
+        query: `{ getVotes(repo: "${repo}", defaultHash: "${defaultHash}") { status, votes { contributor_id, side, votePower, createdAt } } }`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.getVotes;
+  },
 };
 
 module.exports = root;

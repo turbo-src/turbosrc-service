@@ -29,6 +29,7 @@ const {
   postGetPRvoteTotals,
   postGetAuthorizedContributor,
   getRepoStatus,
+  getVotes
 } = require("./../utils/engineRequests");
 const {
   postCreateUser,
@@ -223,6 +224,13 @@ const root = {
     );
 
     return voteYes;
+  },
+  getVotes: async (args) => {
+    const resGetVotes = await getVotes(
+      args.repo,
+      args.defaultHash,
+    );
+    return resGetVotes;
   },
   getPRvoteNoTotals: async function (args) {
     console.log('no:', args.contributor_id)
