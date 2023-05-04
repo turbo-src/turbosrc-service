@@ -29,7 +29,7 @@ const {
   postGetPRvoteTotals,
   postGetAuthorizedContributor,
   getRepoStatus,
-  getVotes
+  postGetVotes
 } = require("./../utils/engineRequests");
 const {
   postCreateUser,
@@ -225,11 +225,16 @@ const root = {
 
     return voteYes;
   },
-  getVotes: async (args) => {
-    const resGetVotes = await getVotes(
-      args.repo,
-      args.defaultHash,
-    );
+  getVotes: async (repoID, defaultHash, contributor_id) => {
+    const owner = repoID.split('/')[0]
+    const repo = repoID.split('/')[1]
+    const convertedDefaultHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
+    let childDefaultHash
+    if (convertedDefaultHash.status === 201) {
+      defaultHash = convertedHash.defaultHash
+      childDefaultHash = convertedHash.childDefaultHash
+    }
+    const resGetVotes = await postGetVotes(repoID, defaultHash, contributor_id);
     return resGetVotes;
   },
   getPRvoteNoTotals: async function (args) {

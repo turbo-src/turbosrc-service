@@ -35,6 +35,7 @@ function run_tests() {
   npm test --prefix turbosrc-service/ testing/integration/privaterepo/duplicateVote.js && sleep 5
   npm test --prefix turbosrc-service/ testing/integration/privaterepo/manyVoters.js && sleep 5
   npm test --prefix turbosrc-service/ testing/integration/privaterepo/semiAutoManyVoters.js && sleep 5
+  npm test --prefix turbosrc-service/ testing/integration/privaterepo/getVotes.js && sleep 5
 }
 
 function execute_all_except_tests() {

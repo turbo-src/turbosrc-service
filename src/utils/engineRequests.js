@@ -291,12 +291,13 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPRvoteNoTotals;
   },
-  getVotes: async (repo, defaultHash) => {
+  postGetVotes: async (repo, defaultHash, contributor_id) => {
+    console.log('postGetVotes', repo, defaultHash)
     const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getVotes(repo: "${repo}", defaultHash: "${defaultHash}") { status, votes { contributor_id, side, votePower, createdAt } } }`,
+        query: `{ getVotes(repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") { status, votes { contributor_id, side, votePower, createdAt } } }`,
       })
       .set("accept", "json");
     const json = JSON.parse(res.text);

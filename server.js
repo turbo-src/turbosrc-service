@@ -145,7 +145,7 @@ var schema = buildSchema(`
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
     getGitHubPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String): ghPullRequest,
-    getVotes(repo: String, defaultHash: String): VoteData,
+    getVotes(repo: String, defaultHash: String, contributor_id: String): VoteData,
     getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
@@ -377,6 +377,7 @@ var root = {
     return await getVotes(
       args.repo,
       args.defaultHash,
+      args.contributor_id
     );
   },
   getPRvoteYesTotals: async (args) => {
