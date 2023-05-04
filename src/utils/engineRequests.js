@@ -292,7 +292,6 @@ var root = {
     return json.data.getPRvoteNoTotals;
   },
   postGetVotes: async (repo, defaultHash, contributor_id) => {
-    console.log('postGetVotes', repo, defaultHash)
     const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
