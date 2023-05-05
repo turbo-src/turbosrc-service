@@ -116,13 +116,49 @@ var schema = buildSchema(`
   type Vote {
     contributor_id: String!
     side: String!
-    votePower: String!
+    votePower: Int!
     createdAt: String!
   }
 
+  type ContributorVoteData {
+    voted: Boolean!
+    side: String!
+    votePower: Int!
+    createdAt: String!
+    contributor_id: String!
+  }
+
+  type VoteTotals {
+    totalVotes: Int!
+    totalYesVotes: Int!
+    totalNoVotes: Int!
+    votesToQuorum: Int!
+    votesToMerge: Int!
+    votesToClose: Int!
+    totalVotePercent: String!
+    yesPercent: String!
+    noPercent: String!
+  }
+
   type VoteData {
-    status: Int!
+    contributor: ContributorVoteData!
+    voteTotals: VoteTotals!
     votes: [Vote]!
+  }
+
+  type GetVotes {
+    status: Int!
+    repo_id: String!
+    title: String!
+    head: String!
+    remoteUrl: String!
+    baseBranch: String!
+    forkBranch: String!
+    childDefaultHash: String!
+    defaultHash: String!
+    mergeable: Boolean!
+    state: String!
+    voteData: VoteData!
   }
 
   type Query {
@@ -145,7 +181,7 @@ var schema = buildSchema(`
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
     getGitHubPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String): ghPullRequest,
-    getVotes(repo: String, defaultHash: String, contributor_id: String): VoteData,
+    getVotes(repo: String, defaultHash: String, contributor_id: String): GetVotes,
     getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
