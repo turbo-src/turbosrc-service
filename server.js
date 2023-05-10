@@ -31,7 +31,8 @@ const {
   checkRejectPullRequestHistory,
   getContributorTokenAmount,
   getUser,
-  findOrCreateUser
+  findOrCreateUser,
+  getVotes
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -112,6 +113,54 @@ var schema = buildSchema(`
     push_permissions: Boolean!
   }
 
+  type Vote {
+    contributor_id: String!
+    side: String!
+    votePower: Int!
+    createdAt: String!
+  }
+
+  type ContributorVoteData {
+    voted: Boolean!
+    side: String!
+    votePower: Int!
+    createdAt: String!
+    contributor_id: String!
+  }
+
+  type VoteTotals {
+    totalVotes: Int!
+    totalYesVotes: Int!
+    totalNoVotes: Int!
+    votesToQuorum: Int!
+    votesToMerge: Int!
+    votesToClose: Int!
+    totalVotePercent: String!
+    yesPercent: String!
+    noPercent: String!
+  }
+
+  type VoteData {
+    contributor: ContributorVoteData!
+    voteTotals: VoteTotals!
+    votes: [Vote]!
+  }
+
+  type GetVotes {
+    status: Int!
+    repo_id: String!
+    title: String!
+    head: String!
+    remoteURL: String!
+    baseBranch: String!
+    forkBranch: String!
+    childDefaultHash: String!
+    defaultHash: String!
+    mergeable: Boolean!
+    state: String!
+    voteData: VoteData!
+  }
+
   type Query {
     createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
@@ -132,6 +181,7 @@ var schema = buildSchema(`
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
     getGitHubPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String): ghPullRequest,
+    getVotes(repo: String, defaultHash: String, contributor_id: String): GetVotes,
     getPRvoteTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteYesTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPRvoteNoTotals(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
@@ -358,6 +408,13 @@ var root = {
   getPRpercentVotedQuorum: async (args) => {
     const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
     return voteTotals.percentVotedQuorum
+  },
+  getVotes: async (args) => {
+    return await getVotes(
+      args.repo,
+      args.defaultHash,
+      args.contributor_id
+    );
   },
   getPRvoteYesTotals: async (args) => {
     const voteYesTotals = await getPRvoteYesTotals(args)
