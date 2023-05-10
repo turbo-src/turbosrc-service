@@ -228,9 +228,9 @@ const root = {
   getVotes: async (repoID, defaultHash, contributor_id) => {
     const owner = repoID.split('/')[0]
     const repo = repoID.split('/')[1]
-    const convertedDefaultHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
+    const convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
     let childDefaultHash
-    if (convertedDefaultHash.status === 201) {
+    if (convertedHash.status === 201) {
       defaultHash = convertedHash.defaultHash
       childDefaultHash = convertedHash.childDefaultHash
     }
