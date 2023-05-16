@@ -157,7 +157,6 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
       //  pull_number: 42
       //})
       //console.log(res)
-
       const data = res.data
 
       return data

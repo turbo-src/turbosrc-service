@@ -226,16 +226,39 @@ const root = {
     return voteYes;
   },
   getVotes: async (repoID, defaultHash, contributor_id) => {
+    console.log('GETVOTES CALLED')
     const owner = repoID.split('/')[0]
     const repo = repoID.split('/')[1]
-    const convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
-    let childDefaultHash
-    if (convertedHash.status === 201) {
-      defaultHash = convertedHash.defaultHash
-      childDefaultHash = convertedHash.childDefaultHash
+    let response = {}
+    let convertedHash = {}
+    convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
+    console.log('GETVOTES CONVERTED HASH', convertedHash)
+
+    if(!convertedHash) {
+      console.log('getvotes !convertedHash', defaultHash, convertedHash, contributor_id)
+      response = await postGetVotes(repoID, defaultHash, contributor_id)
+      console.log('getvotes response ', response)
+    } else if (convertedHash.status === 201) {
+      console.log('getvotes 201', defaultHash, convertedHash)
+      response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
     }
-    const resGetVotes = await postGetVotes(repoID, defaultHash, contributor_id);
-    return resGetVotes;
+
+    if(response.status === 404) {
+      const githubRes = await getGitHubPullRequest(owner, repo, defaultHash.split("_")[1], contributor_id)
+      console.log('GITHUB RES GETVOTES', githubRes)
+      // Set pull request meta data from Github if pr is not in our db
+      response.status = 200
+      response.title = githubRes.title || 'nada'
+      response.remoteURL = githubRes.remoteURL  || 'nada'
+      response.baseBranch = githubRes.base.ref || 'nada'
+      response.forkBranch = githubRes.head.ref || 'nada'
+      response.defaultHash = githubRes.head.sha || 'nada'
+      response.childDefaultHash = githubRes.head.sha || 'nada'
+      response.state = githubRes.state || 'nada'
+      response.mergeable = githubRes.mergeable || 'nada'
+    }
+    console.log('ACTIONS GETVOTES:', response)
+    return response;
   },
   getPRvoteNoTotals: async function (args) {
     console.log('no:', args.contributor_id)

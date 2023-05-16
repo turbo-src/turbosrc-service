@@ -297,8 +297,8 @@ var root = {
       .post(privateStore)
       .send({
         query: `
-        { getVotes(repo: "${repo}", defaultHash: "${defaultHash}", contributor_id:"${contributor_id}") 
-{ status, repo_id, title, head, remoteURL, baseBranch, forkBranch, childDefaultHash, defaultHash, mergeable, state
+        { getVotes(repo: "${repo}", defaultHash: "${defaultHash}", contributor_id:"${contributor_id}") {
+            status, repo_id, title, head, remoteURL, baseBranch, forkBranch, childDefaultHash, defaultHash, mergeable, state,
             voteData {
               contributor {
                 voted, side, votePower, createdAt, contributor_id
@@ -314,6 +314,7 @@ var root = {
       })
       .set("accept", "json");
     const json = JSON.parse(res.text);
+    console.log('RES SERVICE ==>', json.data.getVotes)
     return json.data.getVotes;
   },
 };
