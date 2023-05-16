@@ -233,20 +233,11 @@ const root = {
     let convertedHash = {}
     // Step 1: convert the issue_id of the PR to the defaultHash, ie the head
     // default hash in the args here is the issue_id :)
-    convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
+    // If it is a brand new pr not in our db then it will return undefined so just use the default hash, er.. issue_id :)
+    convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id) || defaultHash
 
-    if(!convertedHash) {
-      // Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
-      response = await postGetVotes(repoID, defaultHash, contributor_id)
-    } else if (convertedHash.status === 201) {
-      // If there is a pr in our db we look it up by the default hash, ie head instead of the issue_id
-      response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
-    }
-    // NB - Can't we just use the converted default hash or do below and omit the first if statement above? 
-    // I don't think so because on the back end pull requests are found by head, ie default hash, not issue_id
-    // I still wonder if we can omit checking the db with the default hash but only check it with the convertedHash,
-    // which will be undefined, so we already know it won't be found, we're just getting the contributor data at that point
-    // TO DO: omit the if(!convertedHash) statement above 
+    // Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
+    response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
 
     if(response.status === 404) {
       // Step 3: Set pull request meta data from Github if pr is not in our db
