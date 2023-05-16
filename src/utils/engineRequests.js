@@ -314,7 +314,6 @@ var root = {
       })
       .set("accept", "json");
     const json = JSON.parse(res.text);
-    console.log('RES SERVICE ==>', json.data.getVotes)
     return json.data.getVotes;
   },
 };

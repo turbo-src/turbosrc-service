@@ -226,38 +226,41 @@ const root = {
     return voteYes;
   },
   getVotes: async (repoID, defaultHash, contributor_id) => {
-    console.log('GETVOTES CALLED')
     const owner = repoID.split('/')[0]
     const repo = repoID.split('/')[1]
+    const pull = defaultHash.split("_")[1] // issue_1 becomes 1 for github api
     let response = {}
     let convertedHash = {}
+    // Step 1: convert the issue_id of the PR to the defaultHash, ie the head
+    // default hash in the args here is the issue_id :)
     convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
-    console.log('GETVOTES CONVERTED HASH', convertedHash)
 
     if(!convertedHash) {
-      console.log('getvotes !convertedHash', defaultHash, convertedHash, contributor_id)
+      // Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
       response = await postGetVotes(repoID, defaultHash, contributor_id)
-      console.log('getvotes response ', response)
     } else if (convertedHash.status === 201) {
-      console.log('getvotes 201', defaultHash, convertedHash)
+      // If there is a pr in our db we look it up by the default hash, ie head instead of the issue_id
       response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
     }
+    // NB - Can't we just use the converted default hash or do below and omit the first if statement above? 
+    // I don't think so because on the back end pull requests are found by head, ie default hash, not issue_id
+    // I still wonder if we can omit checking the db with the default hash but only check it with the convertedHash,
+    // which will be undefined, so we already know it won't be found, we're just getting the contributor data at that point
+    // TO DO: omit the if(!convertedHash) statement above 
 
     if(response.status === 404) {
-      const githubRes = await getGitHubPullRequest(owner, repo, defaultHash.split("_")[1], contributor_id)
-      console.log('GITHUB RES GETVOTES', githubRes)
-      // Set pull request meta data from Github if pr is not in our db
+      // Step 3: Set pull request meta data from Github if pr is not in our db
+      const githubRes = await getGitHubPullRequest(owner, repo, pull, contributor_id)
       response.status = 200
-      response.title = githubRes.title || 'nada'
-      response.remoteURL = githubRes.remoteURL  || 'nada'
-      response.baseBranch = githubRes.base.ref || 'nada'
-      response.forkBranch = githubRes.head.ref || 'nada'
-      response.defaultHash = githubRes.head.sha || 'nada'
-      response.childDefaultHash = githubRes.head.sha || 'nada'
-      response.state = githubRes.state || 'nada'
-      response.mergeable = githubRes.mergeable || 'nada'
+      response.title = githubRes.title || 'unable to fetch pull request data'
+      response.remoteURL = githubRes.remoteURL  || 'unable to fetch pull request data'
+      response.baseBranch = githubRes.base.ref || 'unable to fetch pull request data'
+      response.forkBranch = githubRes.head.ref || 'unable to fetch pull request data'
+      response.defaultHash = githubRes.head.sha || 'unable to fetch pull request data'
+      response.childDefaultHash = githubRes.head.sha || 'unable to fetch pull request data'
+      response.state = githubRes.state || 'unable to fetch pull request data'
+      response.mergeable = githubRes.mergeable || 'unable to fetch pull request data'
     }
-    console.log('ACTIONS GETVOTES:', response)
     return response;
   },
   getPRvoteNoTotals: async function (args) {
