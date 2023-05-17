@@ -250,7 +250,7 @@ const root = {
       response.defaultHash = githubRes.head.sha || 'unable to fetch pull request data'
       response.childDefaultHash = githubRes.head.sha || 'unable to fetch pull request data'
       response.state = githubRes.state || 'unable to fetch pull request data'
-      response.mergeable = githubRes.mergeable || 'unable to fetch pull request data'
+      response.mergeable = githubRes.mergeable || true
     }
     return response;
   },
