@@ -138,6 +138,7 @@ var schema = buildSchema(`
     totalVotePercent: Float!
     yesPercent: Float!
     noPercent: Float!
+    quorum: Float!
   }
 
   type VoteData {
