@@ -523,8 +523,13 @@ var way = false;
 app.get('/', (req, res) => {
   res.status(200).send();
 });
+
 io.on('connection', (socket) => {
   console.log('a user connected');
+
+  socket.on('vote cast', () => {
+    io.emit('vote cast');
+  });
 });
 
 server.listen(4000, () => {
