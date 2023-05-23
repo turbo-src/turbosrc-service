@@ -29,7 +29,8 @@ const {
   postGetPRvoteTotals,
   postGetAuthorizedContributor,
   getRepoStatus,
-  postGetVotes
+  postGetVotes,
+  postGetRepoData
 } = require("./../utils/engineRequests");
 const {
   postCreateUser,
@@ -252,6 +253,10 @@ const root = {
       response.state = githubRes.state || 'unable to fetch pull request data'
       response.mergeable = githubRes.mergeable || true
     }
+    return response;
+  },
+  getRepoData: async (repo_id, contributor_id) => {
+    let response = await postGetRepoData(repo_id, contributor_id);
     return response;
   },
   getPRvoteNoTotals: async function (args) {

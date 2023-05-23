@@ -32,7 +32,8 @@ const {
   getContributorTokenAmount,
   getUser,
   findOrCreateUser,
-  getVotes
+  getVotes,
+  getRepoData
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -120,6 +121,12 @@ var schema = buildSchema(`
     createdAt: String!
   }
 
+  type RepoContributor {
+    contributor_id: String!
+    contributor: Boolean!
+    votePower: Int!
+}
+
   type ContributorVoteData {
     voted: Boolean!
     side: String!
@@ -162,6 +169,17 @@ var schema = buildSchema(`
     voteData: VoteData!
   }
 
+  type RepoData {
+    status: Int!  
+    repo_id: String!
+    owner: String!
+    contributor_id: String!
+    head: String!
+    quorum: Float!
+    contributor: RepoContributor!
+    pullRequests: [GetVotes]! 
+  }
+  
   type Query {
     createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
@@ -193,6 +211,7 @@ var schema = buildSchema(`
     closePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     fork(owner: String, repo: String, org: String): String,
+    getRepoData(repo_id: String, contributor_id: String): RepoData,
   }
 `);
 
@@ -414,6 +433,12 @@ var root = {
     return await getVotes(
       args.repo,
       args.defaultHash,
+      args.contributor_id
+    );
+  },
+  getRepoData: async (args) => {
+    return await getRepoData(
+      args.repo_id,
       args.contributor_id
     );
   },
