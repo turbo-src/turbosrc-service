@@ -309,6 +309,7 @@ var root = {
               votes { contributor_id, side, votePower, createdAt }
               },
             }
+          }
       `,
       })
       .set("accept", "json");
