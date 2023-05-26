@@ -297,14 +297,14 @@ var root = {
       .post(privateStore)
       .send({
         query: `
-        { getVotes(repo: "${repo}", defaultHash: "${defaultHash}", contributor_id:"${contributor_id}") 
-{ status, repo_id, title, head, remoteURL, baseBranch, forkBranch, childDefaultHash, defaultHash, mergeable, state
+        { getVotes(repo: "${repo}", defaultHash: "${defaultHash}", contributor_id:"${contributor_id}") {
+            status, repo_id, title, head, remoteURL, baseBranch, forkBranch, childDefaultHash, defaultHash, mergeable, state,
             voteData {
               contributor {
                 voted, side, votePower, createdAt, contributor_id
               },
               voteTotals {
-                totalVotes, totalYesVotes, totalNoVotes, votesToQuorum, votesToMerge, votesToClose, totalVotePercent, yesPercent, noPercent 
+                totalVotes, totalYesVotes, totalNoVotes, votesToQuorum, votesToMerge, votesToClose, totalVotePercent, yesPercent, noPercent, quorum
               },
               votes { contributor_id, side, votePower, createdAt }
               },

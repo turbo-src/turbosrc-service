@@ -228,14 +228,31 @@ const root = {
   getVotes: async (repoID, defaultHash, contributor_id) => {
     const owner = repoID.split('/')[0]
     const repo = repoID.split('/')[1]
-    const convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id)
-    let childDefaultHash
-    if (convertedHash.status === 201) {
-      defaultHash = convertedHash.defaultHash
-      childDefaultHash = convertedHash.childDefaultHash
+    const pull = defaultHash.split("_")[1] // issue_1 becomes 1 for github api
+    let response = {}
+    let convertedHash = {}
+    // Step 1: convert the issue_id of the PR to the defaultHash, ie the head
+    // default hash in the args here is the issue_id :)
+    // If it is a brand new pr not in our db then it will return undefined so just use the default hash, er.. issue_id :)
+    convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id) || defaultHash
+
+    // Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
+    response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
+
+    if(response.status === 404) {
+      // Step 3: Set pull request meta data from Github if pr is not in our db
+      const githubRes = await getGitHubPullRequest(owner, repo, pull, contributor_id)
+      response.status = 200
+      response.title = githubRes.title || 'unable to fetch pull request data'
+      response.remoteURL = githubRes.remoteURL  || 'unable to fetch pull request data'
+      response.baseBranch = githubRes.base.ref || 'unable to fetch pull request data'
+      response.forkBranch = githubRes.head.ref || 'unable to fetch pull request data'
+      response.defaultHash = githubRes.head.sha || 'unable to fetch pull request data'
+      response.childDefaultHash = githubRes.head.sha || 'unable to fetch pull request data'
+      response.state = githubRes.state || 'unable to fetch pull request data'
+      response.mergeable = githubRes.mergeable || true
     }
-    const resGetVotes = await postGetVotes(repoID, defaultHash, contributor_id);
-    return resGetVotes;
+    return response;
   },
   getPRvoteNoTotals: async function (args) {
     console.log('no:', args.contributor_id)
