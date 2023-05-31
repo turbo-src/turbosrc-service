@@ -16,6 +16,7 @@ const {
 const {
        getGithubToken,
       } = require('../../../src/utils/gitHubUtil.js')
+      const {socket} = require("../../../socketConfig")
 
 var snooze_ms = 1500;;
 
@@ -56,6 +57,8 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
+        socket.emit('vote cast')
+
         await snooze(snooze_ms);
         const openStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
@@ -76,6 +79,8 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
+        socket.emit('vote cast')
+
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
@@ -99,6 +104,8 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
+        socket.emit('vote cast')
+
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
@@ -107,6 +114,7 @@ describe('vote', function () {
             /*contributor_id:*/ contributor_id,
             /*side:*/ "yes",
         );
+        socket.disconnect()
 
         assert.deepEqual(
           openStatus,

@@ -15,6 +15,7 @@ const {
         getContributorAddress,
         getGithubContributor,
       } = require('../../../src/utils/config')
+      const {socket} = require("../../../socketConfig")
 
 var snooze_ms = 1500;;
 
@@ -63,6 +64,8 @@ describe('Voting.', function () {
             /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
             /*side:*/ "yes",
         );
+        socket.emit('vote cast')
+
         await snooze(snooze_ms);
         const afterMergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
@@ -79,6 +82,7 @@ describe('Voting.', function () {
             /*contributor:*/ contributor_id,
             /*side:*/ "yes",
         );
+        socket.disconnect()
 
         assert.equal(
             voteTotalsFinal,
