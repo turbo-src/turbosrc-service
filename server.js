@@ -527,8 +527,8 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('vote cast', () => {
-    io.emit('vote cast');
+  socket.on('vote cast', (user, repo, issueID) => {
+    io.emit('vote received', user, repo, issueID);
   });
 });
 

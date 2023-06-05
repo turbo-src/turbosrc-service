@@ -64,7 +64,7 @@ describe('Voting.', function () {
             /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
             /*side:*/ "yes",
         );
-        socket.emit('vote cast')
+        socket.emit('vote cast', contributor_name, "demo", "defaultHash1")
 
         await snooze(snooze_ms);
         const afterMergeStatus = await postGetPullRequest(

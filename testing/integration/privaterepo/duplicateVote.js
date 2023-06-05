@@ -57,7 +57,7 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
-        socket.emit('vote cast')
+        socket.emit('vote cast', contributor_name, "demo", "issue_3")
 
         await snooze(snooze_ms);
         const openStatus = await postGetPullRequest(
@@ -79,7 +79,7 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
-        socket.emit('vote cast')
+        socket.emit('vote cast', contributor_name, "demo", "issue_3")
 
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPullRequest(
@@ -104,7 +104,7 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
-        socket.emit('vote cast')
+        socket.emit('vote cast', contributor_name, "demo", "issue_3")
 
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(

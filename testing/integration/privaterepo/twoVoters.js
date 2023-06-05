@@ -54,7 +54,7 @@ describe('Voting.', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
-        socket.emit('vote cast')
+        socket.emit('vote cast', contributor_name, "demo", "issue_1")
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
@@ -107,7 +107,7 @@ describe('Voting.', function () {
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
-        socket.emit('vote cast')
+        socket.emit('vote cast', contributor_name, "demo", "issue_1")
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
