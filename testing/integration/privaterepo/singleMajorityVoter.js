@@ -17,6 +17,7 @@ const {
 const {
        getGithubToken,
       } = require('../../../src/utils/gitHubUtil.js')
+      const {socket} = require("../../../socketConfig")
 
 var snooze_ms = 1500;
 
@@ -50,6 +51,8 @@ describe('Vote.', function () {
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
+        socket.emit('vote cast', contributor_name, "demo", "issue_2")
+        socket.disconnect()
 
     });
     describe.only('A single majority voter votes.', function () {
