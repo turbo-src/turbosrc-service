@@ -162,6 +162,17 @@ var schema = buildSchema(`
     voteData: VoteData!
   }
 
+  type TransferReceipt {
+    status: Int!
+    repo: String!
+    to: String!
+    from: String!
+    amount: Int!
+    createdAt: String!
+    network: String!
+    id: String!
+  }
+
   type Query {
     createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
@@ -172,7 +183,7 @@ var schema = buildSchema(`
     getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
-    transferTokens(owner: String, repo: String, from: String, to: String, amount: Int, token: String): String,
+    transferTokens(owner: String, repo: String, from: String, to: String, amount: Int, token: String): TransferReceipt,
     pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getVote(defaultHash: String, contributor_id: String): String,
     getVoteAll(defaultHash: String): ghPullRequest,
@@ -316,8 +327,9 @@ var root = {
     )
     if (contributorName !== null) {
       console.log("contributor name: " + contributorName)
-      const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
-      fakeTurboSrcReposDB = restTransferTokens.db
+      const resTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
+      fakeTurboSrcReposDB = resTransferTokens.db
+      return resTransferTokens
     }
   }
   },
