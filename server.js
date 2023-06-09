@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsPromises = require('fs').promises;
 const express = require('express');
+const { Server } = require("socket.io");
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
@@ -179,7 +180,18 @@ var schema = buildSchema(`
     contributor: RepoContributor!
     pullRequests: [GetVotes]! 
   }
-  
+
+  type TransferReceipt {
+    status: Int!
+    repo: String!
+    to: String!
+    from: String!
+    amount: Int!
+    createdAt: String!
+    network: String!
+    id: String!
+  }
+
   type Query {
     createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
@@ -190,7 +202,7 @@ var schema = buildSchema(`
     getContributorName(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getContributorID(owner: String, repo: String, defaultHash: String, contributor_name: String): String,
     getContributorSignature(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
-    transferTokens(owner: String, repo: String, from: String, to: String, amount: Int, token: String): String,
+    transferTokens(owner: String, repo: String, from: String, to: String, amount: Int, token: String): TransferReceipt,
     pullFork(owner: String, repo: String, defaultHash: String, contributor_id: String): String,
     getVote(defaultHash: String, contributor_id: String): String,
     getVoteAll(defaultHash: String): ghPullRequest,
@@ -335,8 +347,9 @@ var root = {
     )
     if (contributorName !== null) {
       console.log("contributor name: " + contributorName)
-      const restTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
-      fakeTurboSrcReposDB = restTransferTokens.db
+      const resTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
+      fakeTurboSrcReposDB = resTransferTokens.db
+      return resTransferTokens
     }
   }
   },
@@ -511,8 +524,18 @@ var root = {
 }
 
 var app = express();
-//app.use(loggingMiddleware);
 app.use(cors());
+const http = require('http');
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+      origin: "https://github.com",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    }
+});
+//app.use(loggingMiddleware);
 app.use(function (req, res, next) {
     let originalSend = res.send;
     res.send = function (data) {
@@ -534,5 +557,18 @@ var way = false;
 //     console.log("false");
 //     return false;
 //}
-app.listen(4000);
-console.log('Running a GraphQL API server at localhost:4000/graphql');
+app.get('/', (req, res) => {
+  res.status(200).send();
+});
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('vote cast', (user, repo, issueID) => {
+    io.emit('vote received', user, repo, issueID);
+  });
+});
+
+server.listen(4000, () => {
+  console.log('listening on *:4000');
+});
