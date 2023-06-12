@@ -164,7 +164,12 @@ You'll need a `.config.json` file in the root directory of turbosrc-service. Cop
 }
 ```
 
-## Install NVM to use Node v12.22.0:
+### Install dependencies using Node v12.22.0
+```
+npm install
+```
+
+### How to use Node v12.22.0 with NVM:
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
@@ -176,12 +181,7 @@ nvm install v12.22.0
 nvm use v12.22.0
 ```
 
-### Then install dependencies using Node v12.22.0
-```
-npm install
-```
-
-### Start turbosrc.
+### Start Turbosrc.
 
 ```
 ./tsrc-dev start
