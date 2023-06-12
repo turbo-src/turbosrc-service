@@ -173,7 +173,7 @@ npm install
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
-### Close and reopen terminal
+Close and reopen terminal:
 ```
 nvm install v12.22.0
 ```
