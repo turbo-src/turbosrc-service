@@ -26,6 +26,23 @@ git clone https://github.com/turbo-src/service
 
 ### Encrypt your token:
 
+https://token.dev/
+
+Payload:
+```
+{
+  "githubtoken": "<YOUR GITHUB TOKEN>"
+}
+```
+Header:
+```
+{
+  "typ": "JWT",
+  "alg": "HS256"
+}
+```
+
+### Or:
 See here https://github.com/turbo-src/jwt_hash_decrypt for install.
 
 Make sure to encrypt the string of your api token in this manner:
