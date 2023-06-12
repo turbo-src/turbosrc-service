@@ -26,6 +26,7 @@
     "redis": "^4.0.0",
     "simple-git": "^2.48.0",
     "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.2",
     "superagent": "^6.1.0",
     "tar": "^6.1.11"
   },
