@@ -41,16 +41,6 @@ Payload:
   "githubToken": "<YOUR GITHUB TOKEN>"
 }
 ```
-
-### Or:
-See here https://github.com/turbo-src/jwt_hash_decrypt for install.
-
-Make sure to encrypt the string of your api token in this manner:
-
-```
-node jwt_hash_decrypt.js --secret=SECRET --string='{"githubToken": "ghp_123"}'
-```
-
 ## Config
 You'll need a `.config.json` file in the root directory of turbosrc-service. Copy the one below and add your information:
 - Replace YOUR_USERNAME with your Github username
