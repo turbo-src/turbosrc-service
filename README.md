@@ -52,10 +52,9 @@ node jwt_hash_decrypt.js --secret=SECRET --string='{"githubToken": "ghp_123"}'
 ```
 
 ## Config
-You'll need a `.config.json` file in the root directory.
-
+You'll need a `.config.json` file in the root directory of turbosrc-service. Copy the one below and add your information:
 - Replace YOUR_USERNAME with your Github username
-- Replace JWT with your signing key
+- Replace SIGNING_KEY with your signing key
 - Replace YOUR_ENCRYPTED_TOKEN with the JWT string from above
 
 ```
@@ -70,7 +69,7 @@ You'll need a `.config.json` file in the root directory.
           "mode": "online",
            "url": "http://localhost:4000/graphql"
         },
-        "jwt": "JWT",
+        "jwt": "SIGNING_KEY",
         "store": {
             "repo": {
                 "addr": "REPO_ADDR",
