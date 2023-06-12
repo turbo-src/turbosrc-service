@@ -31,7 +31,7 @@ https://token.dev/
 Payload:
 ```
 {
-  "githubtoken": "<YOUR GITHUB TOKEN>"
+  "githubToken": "<YOUR GITHUB TOKEN>"
 }
 ```
 Header:
