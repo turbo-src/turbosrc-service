@@ -28,17 +28,17 @@ git clone https://github.com/turbo-src/service
 
 https://token.dev/
 
-Payload:
-```
-{
-  "githubToken": "<YOUR GITHUB TOKEN>"
-}
-```
 Header:
 ```
 {
   "typ": "JWT",
   "alg": "HS256"
+}
+```
+Payload:
+```
+{
+  "githubToken": "<YOUR GITHUB TOKEN>"
 }
 ```
 
