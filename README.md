@@ -169,7 +169,7 @@ You'll need a `.config.json` file in the root directory of turbosrc-service. Cop
 npm install
 ```
 
-### To install and use Node v12.22.0 with NVM:
+### How to install and use Node v12.22.0 with NVM:
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
