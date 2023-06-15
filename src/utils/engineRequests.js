@@ -51,13 +51,14 @@ var root = {
     remoteURL,
     baseBranch,
     fork_branch,
-    title
+    title,
+    issue_id
   ) => {
     const privateStore = await getServiceEndpoint("offchain")
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
+        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}", issue_id: "${issue_id}") }`,
       })
       .set("accept", "json");
 
@@ -337,6 +338,7 @@ var root = {
       pullRequests { 
         state,
         repo_id,
+        issue_id,
         forkBranch,
         baseBranch,
         defaultHash,

@@ -187,7 +187,8 @@ const root = {
       args.remoteURL,
       args.baseBranch,
       args.fork_branch,
-      args.title
+      args.title,
+      args.issue_id
     );
     return res
   },
@@ -395,7 +396,7 @@ const root = {
   setVote: async function (args) {
     // Need this for check gitHubPullRequest
     const issueID = (args.defaultHash).split('_')[1]
-    
+    const issue_id = args.defaultHash
     // If ran online, it will find the default hash's associated tsrcID in GH Service
     convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
     
@@ -443,7 +444,8 @@ const root = {
           remoteURL, // get remoteURl
           baseBranch, // get baseBranch
           forkBranch, // get forkBranch
-          title // get title
+          title, // get title
+          issue_id
         );
       } else if (args.defaultHash !== args.childDefaultHash && mergeable) {
          console.log('PR updated and is mergeable, not in conflict.')
