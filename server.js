@@ -220,7 +220,7 @@ var schema = buildSchema(`
     getRepoStatus(repo_id: String): RepoStatus,
     getAuthorizedContributor(contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(defaultHash: String): String,
-    createPullRequest(owner: String, repo: String, fork_branch: String, defaultHash: String, title: String, issue_id: String): String,
+    createPullRequest(owner: String, repo: String, fork_branch: String, defaultHash: String, title: String): String,
     closePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     mergePullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     fork(owner: String, repo: String, org: String): String,
