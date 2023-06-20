@@ -13,68 +13,6 @@ Further documentation is forthcoming.
 
 ***Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.***
 
-Start turbosrc.
-
-```
-./tsrc-dev start
-```
-
-Stop turbosrc.
-
-```
-./tsrc-dev stop
-```
-
-Restart turbosrc.
-
-```
-./tsrc-dev restart
-```
-
-Test turbosrc
-
-```
-./tsrc-dev test <username> <repository> execute_all
-````
-
-Example usage with user "7db9a" and repo "demo". Essentially, just replace your username and keep everything as is for basic usage.
-
-```
-./tsrc-dev test 7db9a demo execute_all
-````
-
-`username` is your GH personal username name. `repository` is the repo forked from turbo-src for testing.
-
-### More on tests with tsrc-dev
-
-`tsrc-dev test` is a subcommand.
-
-Build test environment and run all tests.
-
-```
-./tsrc-dev test <username> <repository> execute_all
-````
-
-There are various other commands with `tsrc-dev test`. For further usage just enter `tsrc-dev test`.
-
-Here is a sample below for more granular control over testing.
-
-```
-./tsrc-dev test <username> <repository> delete_fork
-````
-
-```
-./tsrc-dev test <username> <repository> fork_repo
-````
-
-```
-./tsrc-dev test <username> <repository> create_pull_request
-````
-
-```
-./tsrc-dev test <username> <repository> run_tests
-````
-
 ## Install
 
 ### Clone
@@ -82,26 +20,31 @@ Here is a sample below for more granular control over testing.
 git clone https://github.com/turbo-src/service
 ```
 
-## Custom Variables
-### Create a Github Personal Access Token with repo scopes
-[How to Make a Github personal access token](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+### Config
+You'll need a `.config.json` file in the root directory of turbosrc-service.
 
-### Encrypt your token:
+#### 1. A Github API Token
 
-See here https://github.com/turbo-src/jwt_hash_decrypt for install.
+[See here.](https://docs.github.com/en/enterprise-server@3.4/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
 
-Make sure to encrypt the string of your api token in this manner:
+#### 2. Create YOUR_SECRET
+
+It can be anything, as long as no one can guess it.
+
+#### 3. Create YOUR_ENCRYPTED_TOKEN
+
+To create `YOUR_ENCRYPTED_TOKEN`, install [`jwt_hash_encrypt`](github.com/turbo-src/jwt_hash_decrypt) and run the command below (edit with your info).
 
 ```
-node jwt_hash_decrypt.js --secret=SECRET --string='{"githubToken": "ghp_123"}'
+node jwt_hash_decrypt.js --secret=YOUR_SECRET --string='{"githubToken": "ghp..."}'
 ```
-
-## Config
-You'll need a `.config.json` file in the root directory.
-
+#### 4. Create `turbosrc-service/.config.json`
+   
 - Replace YOUR_USERNAME with your Github username
-- Replace JWT with your signing key
-- Replace YOUR_ENCRYPTED_TOKEN with the JWT string from above
+- Replace YOUR_SECRET with your secret to sign the token
+- Replace YOUR_ENCRYPTED_TOKEN with the JWT string from **'step 2'** above
+
+
 
 ```
 {
@@ -115,7 +58,7 @@ You'll need a `.config.json` file in the root directory.
           "mode": "online",
            "url": "http://localhost:4000/graphql"
         },
-        "jwt": "JWT",
+        "jwt": "YOUR_SECRET",
         "store": {
             "repo": {
                 "addr": "REPO_ADDR",
@@ -210,11 +153,16 @@ You'll need a `.config.json` file in the root directory.
 }
 ```
 
-## Install NVM to use Node v12.22.0:
+## Install dependencies using Node v12.22.0
+```
+npm install
+```
+
+### How to install and use Node v12.22.0 with NVM:
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
 ```
-### Close and reopen terminal
+Close and reopen terminal:
 ```
 nvm install v12.22.0
 ```
@@ -222,11 +170,64 @@ nvm install v12.22.0
 nvm use v12.22.0
 ```
 
-### Then install dependencies using Node v12.22.0
+## Start Turbosrc.
+
 ```
-npm install
+./tsrc-dev start
 ```
-### Start server
+
+## Stop turbosrc.
+
 ```
-node server
+./tsrc-dev stop
 ```
+
+## Restart turbosrc.
+
+```
+./tsrc-dev restart
+```
+
+## Test turbosrc
+
+```
+./tsrc-dev test <username> <repository> execute_all
+````
+
+Example usage with user "7db9a" and repo "demo". Essentially, just replace your username and keep everything as is for basic usage.
+
+```
+./tsrc-dev test 7db9a demo execute_all
+````
+
+`username` is your GH personal username name. `repository` is the repo forked from turbo-src for testing.
+
+### More on tests with tsrc-dev
+
+`tsrc-dev test` is a subcommand.
+
+Build test environment and run all tests.
+
+```
+./tsrc-dev test <username> <repository> execute_all
+````
+
+There are various other commands with `tsrc-dev test`. For further usage just enter `tsrc-dev test`.
+
+Here is a sample below for more granular control over testing.
+
+```
+./tsrc-dev test <username> <repository> delete_fork
+````
+
+```
+./tsrc-dev test <username> <repository> fork_repo
+````
+
+```
+./tsrc-dev test <username> <repository> create_pull_request
+````
+
+```
+./tsrc-dev test <username> <repository> run_tests
+````
