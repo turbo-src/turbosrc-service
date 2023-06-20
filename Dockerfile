@@ -1,36 +1,22 @@
-FROM debian:bullseye as builder
+# We start from a Node.js 16 image. You can adjust this to your project's needs
+FROM node:12
 
-ARG NODE_VERSION=12.22.0
-
-RUN apt-get update; apt install -y curl python-is-python3 pkg-config build-essential
-RUN curl https://get.volta.sh | bash
-ENV VOLTA_HOME /root/.volta
-ENV PATH /root/.volta/bin:$PATH
-RUN volta install node@${NODE_VERSION}
-
-#######################################################################
-
-RUN mkdir /app
+# Create app directory
 WORKDIR /app
 
-# NPM will not install any package listed in "devDependencies" when NODE_ENV is set to "production",
-# to install all modules: "npm install --production=false".
-# Ref: https://docs.npmjs.com/cli/v9/commands/npm-install#description
+# Install app dependencies
+# We're copying both package.json AND package-lock.json. If you don't use lock files, you might not have the latter
+COPY package*.json ./
 
-ENV NODE_ENV production
+# If you have production-specific dependencies, you can use --only=production
+# Also, using `npm ci` to install dependencies for more reliable and reproducible builds.
+RUN npm ci
 
+# Bundle app source
 COPY . .
 
-RUN npm install
-FROM debian:bullseye
+# Your app starts with "node server.js", so we'll use that
+CMD [ "node", "server.js" ]
 
-LABEL fly_launch_runtime="nodejs"
-
-COPY --from=builder /root/.volta /root/.volta
-COPY --from=builder /app /app
-
-WORKDIR /app
-ENV NODE_ENV production
-ENV PATH /root/.volta/bin:$PATH
-
-CMD [ "npm", "run", "start" ]
+# Expose the port that your app runs on. Adjust this if you're using a different port
+EXPOSE 4000
