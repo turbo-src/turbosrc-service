@@ -158,6 +158,7 @@ var schema = buildSchema(`
   type GetVotes {
     status: Int!
     repo_id: String!
+    issue_id: String!
     title: String!
     head: String!
     remoteURL: String!
@@ -193,7 +194,7 @@ var schema = buildSchema(`
   }
 
   type Query {
-    createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String): String,
+    createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String, issue_id: String): String,
     getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
@@ -509,7 +510,7 @@ var root = {
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
-    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title)
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title, args.issue_id)
   },
   closePullRequest: async (args) => {
     await closePullRequest(args.owner, args.repo, args.defaultHash)
