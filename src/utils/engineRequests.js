@@ -58,7 +58,7 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}", issue_id: "${issue_id}") }`,
+        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}", fork_branch: "${fork_branch}", title: "${title}", issue_id: "${issue_id}") }`,
       })
       .set("accept", "json");
 
@@ -339,6 +339,7 @@ var root = {
         state,
         repo_id,
         issue_id,
+        title,
         forkBranch,
         baseBranch,
         defaultHash,
