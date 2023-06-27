@@ -351,6 +351,7 @@ var root = {
         contributor {
         contributor_id,
         voted,
+        side,
         votePower,
         createdAt,
         },
