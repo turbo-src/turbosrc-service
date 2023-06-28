@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-        postGetContributorTokenAmount,
+        postGetVotePowerAmount,
         postCreateRepo,
         getRepoStatus,
         postGetContributorID,
@@ -51,7 +51,7 @@ describe('Create repo', function () {
         const resRepoStatus = await getRepoStatus(`${contributor_name}/demo`);
 
         await snooze(snooze_ms);
-        const contributorTokenAmount = await postGetContributorTokenAmount(
+        const contributorTokenAmount = await postGetVotePowerAmount(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
             /*defaultHash:*/ "",

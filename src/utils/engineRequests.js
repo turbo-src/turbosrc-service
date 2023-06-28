@@ -160,7 +160,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getAuthorizedContributor;
   },
-  postGetContributorTokenAmount: async (
+  postGetVotePowerAmount: async (
     owner,
     repo,
     defaultHash,
@@ -171,14 +171,14 @@ var root = {
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
+        query: `{ getVotePowerAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
       }) // sends a JSON post body
       .set("accept", "json");
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
     const json = JSON.parse(res.text);
-    return json.data.getContributorTokenAmount;
+    return json.data.getVotePowerAmount;
   },
   postTransferTokens: async (owner, repo, from, to, amount) => {
     const privateStore = await getServiceEndpoint("offchain")

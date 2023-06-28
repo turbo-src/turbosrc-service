@@ -2,7 +2,7 @@ const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
         postCreateUser,
-        postGetContributorTokenAmount,
+        postGetVotePowerAmount,
         postGetContributorID,
         postGetContributorName
       } = require('./../src/utils/requests')
