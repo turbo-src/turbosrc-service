@@ -7,8 +7,6 @@
   </a>
 </p>
 
-Further documentation is forthcoming.
-
 ## Dev usage
 
 ***Make sure you installed everything here correclty, along with the others subsystems per instructions at https://github.com/turbo-src/turbo-src.***
