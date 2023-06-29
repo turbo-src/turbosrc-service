@@ -262,7 +262,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.findOrCreateUser;
   },
-  postGetContributorTokenAmount: async (
+  postGetVotePowerAmount: async (
     owner,
     repo,
     defaultHash,
@@ -279,7 +279,7 @@ var root = {
         //{ query: '{ getVoteAll(defaultHash: "default") { vote_code } }' }
         //{ query: `{ getVoteEverything }` }
         {
-          query: `{ getContributorTokenAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") { status, amount } }`,
+          query: `{ getVotePowerAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") { status, amount } }`,
         }
         //{ query: '{ setVote(defaultHash: "default" contributorId: "2", side: 1 ) { vote_code }' }
       ) // sends a JSON post body
@@ -289,7 +289,7 @@ var root = {
     //});
     const json = JSON.parse(res.text);
     console.log(json);
-    return json.data.getContributorTokenAmount;
+    return json.data.getVotePowerAmount;
   },
   postTransferTokens: async (owner, repo, from, to, amount, token) => {
     superagent

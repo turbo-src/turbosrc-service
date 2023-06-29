@@ -30,7 +30,7 @@ const {
   getAuthorizedContributor,
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
-  getContributorTokenAmount,
+  getVotePowerAmount,
   getUser,
   findOrCreateUser,
   getVotes,
@@ -195,7 +195,7 @@ var schema = buildSchema(`
 
   type Query {
     createTsrcPullRequest(owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String, issue_id: String): String,
-    getContributorTokenAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
+    getVotePowerAmount(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
     createUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
     getUser(contributor_id: String): User,
     findOrCreateUser(owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): User,
@@ -326,8 +326,8 @@ var root = {
     const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
     return permissions
   },
-  getContributorTokenAmount: async (args) => {
-    const contributorTokenAmount = await getContributorTokenAmount(fakeTurboSrcReposDB, args)
+  getVotePowerAmount: async (args) => {
+    const contributorTokenAmount = await getVotePowerAmount(fakeTurboSrcReposDB, args)
 
     return contributorTokenAmount
   },

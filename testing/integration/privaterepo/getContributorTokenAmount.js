@@ -4,7 +4,7 @@ const {
         postCreateRepo,
         postSetVote,
         postNewPullRequest,
-        postGetContributorTokenAmount,
+        postGetVotePowerAmount,
         postGetContributorID,
         postGetContributorName,
       } = require('../../../src/utils/requests')
@@ -28,7 +28,7 @@ describe('vote', function () {
         const user  = await getGithubContributor();
 
         await snooze(snooze_ms);
-        const contributorTokenAmount = await postGetContributorTokenAmount(
+        const contributorTokenAmount = await postGetVotePowerAmount(
             /*owner:*/ user,
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
