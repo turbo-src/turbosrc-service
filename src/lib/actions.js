@@ -20,7 +20,7 @@ const {
   createLinkedPullRequest,
   postCreatePullRequest,
   postCreateRepo,
-  postGetContributorTokenAmount,
+  postGetVotePowerAmount,
   postTransferTokens,
   postSetVote,
   postGetPullRequest,
@@ -85,7 +85,7 @@ const {
   checkContributor,
   checkMergePullRequestHistory,
   checkRejectPullRequestHistory,
-  //getContributorTokenAmount
+  //getVotePowerAmount
 } = require("./state");
 
 async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
@@ -294,9 +294,9 @@ const root = {
 
     return vote;
   },
-  getContributorTokenAmount: async function (database, args) {
-    //const contributorTokenAmount = getContributorTokenAmount(database, args)
-    const contributorTokenAmount = await postGetContributorTokenAmount(
+  getVotePowerAmount: async function (database, args) {
+    //const contributorTokenAmount = getVotePowerAmount(database, args)
+    const contributorTokenAmount = await postGetVotePowerAmount(
       "",
       `${args.owner}/${args.repo}`,
       args.defaultHash,

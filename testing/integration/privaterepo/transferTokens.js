@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-        postGetContributorTokenAmount,
+        postGetVotePowerAmount,
         postTransferTokens,
         postGetContributorID,
         postGetContributorName,
@@ -228,7 +228,7 @@ before(async () => {
     // Transfer requests perhaps are in buffer.
     await snooze(snooze_ms*5);
 
-    const tsrctester1ContributorToken = await postGetContributorTokenAmount(
+    const tsrctester1ContributorToken = await postGetVotePowerAmount(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
@@ -237,7 +237,7 @@ before(async () => {
         /*token:*/ testerTokenA
     );
 
-    const contributorToken = await postGetContributorTokenAmount(
+    const contributorToken = await postGetVotePowerAmount(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
@@ -246,7 +246,7 @@ before(async () => {
         /*token:*/ token
     );
 
-    //const amContributorToken = await postGetContributorTokenAmount(
+    //const amContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -255,7 +255,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const jcContributorToken = await postGetContributorTokenAmount(
+    //const jcContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -264,7 +264,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const pcContributorToken = await postGetContributorTokenAmount(
+    //const pcContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -273,7 +273,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const mbContributorToken = await postGetContributorTokenAmount(
+    //const mbContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -282,7 +282,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const npContributorToken = await postGetContributorTokenAmount(
+    //const npContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -291,7 +291,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const nnContributorToken = await postGetContributorTokenAmount(
+    //const nnContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -300,7 +300,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const jpContributorToken = await postGetContributorTokenAmount(
+    //const jpContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -309,7 +309,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const tsContributorToken = await postGetContributorTokenAmount(
+    //const tsContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -318,7 +318,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const afContributorToken = await postGetContributorTokenAmount(
+    //const afContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -327,7 +327,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    //const dsContributorToken = await postGetContributorTokenAmount(
+    //const dsContributorToken = await postGetVotePowerAmount(
     //    /*owner:*/ contributor_name,
     //    /*repo:*/ "demo",
     //    /*defaultHash:*/ "defaultHash4",
@@ -336,7 +336,7 @@ before(async () => {
     //    /*token:*/ token
     //);
 
-    const kContributorToken = await postGetContributorTokenAmount(
+    const kContributorToken = await postGetVotePowerAmount(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
         /*defaultHash:*/ "defaultHash4",
