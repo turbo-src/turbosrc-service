@@ -152,7 +152,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "mary",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const maryContributorTokenAmount = Number(maryContributorTokenAmountRes)
@@ -162,7 +162,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ user,
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const contributorTokenAmount = Number(contributorTokenAmountRes)
@@ -172,7 +172,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "am",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const amContributorTokenAmount = Number(amContributorTokenAmountRes)
@@ -182,7 +182,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "jc",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const jcContributorTokenAmount = Number(jcContributorTokenAmountRes)
@@ -192,7 +192,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "pc",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const pcContributorTokenAmount = Number(pcContributorTokenAmountRes)
@@ -202,7 +202,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "mb",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const mbContributorTokenAmount = Number(mbContributorTokenAmountRes)
@@ -212,7 +212,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "np",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const npContributorTokenAmount = Number(npContributorTokenAmountRes)
@@ -222,7 +222,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "nn",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const nnContributorTokenAmount = Number(nnContributorTokenAmountRes)
@@ -232,7 +232,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "jp",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const jpContributorTokenAmount = Number(jpContributorTokenAmountRes)
@@ -242,7 +242,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "ts",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const tsContributorTokenAmount = Number(tsContributorTokenAmountRes)
@@ -252,7 +252,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "af",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const afContributorTokenAmount = Number(afContributorTokenAmountRes)
@@ -262,7 +262,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "ds",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const dsContributorTokenAmount = Number(dsContributorTokenAmountRes)
@@ -272,7 +272,7 @@ describe('Create repo', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor:*/ "ri",
-            /*side:*/ "no",
+            /*side:*/ false,
         );
 
         const riContributorTokenAmount = Number(riContributorTokenAmountRes)

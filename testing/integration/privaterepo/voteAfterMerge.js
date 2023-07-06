@@ -62,7 +62,7 @@ describe('Voting.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash1",
             /*contributor_id:*/ "0x232b9E710e897aEb18FEbe410526B987641BaE5f",
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         socket.emit('vote cast', contributor_name, "demo", "defaultHash1")
 

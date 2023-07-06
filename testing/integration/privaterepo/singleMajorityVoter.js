@@ -48,7 +48,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_2",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ "yes",
+            /*side:*/ true,
 	    /*token:*/ testerTokenA
         );
         socket.emit('vote cast', contributor_name, "demo", "issue_2")
@@ -72,7 +72,7 @@ describe('Vote.', function () {
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
@@ -80,7 +80,7 @@ describe('Vote.', function () {
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         await snooze(snooze_ms);
         const voteNoTotals = await postGetPRvoteNoTotals(
@@ -88,7 +88,7 @@ describe('Vote.', function () {
             /*repo: */ "demo",
             /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
 
         assert.deepEqual(

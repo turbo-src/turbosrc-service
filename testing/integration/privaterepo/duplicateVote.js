@@ -54,7 +54,7 @@ describe('vote', function () {
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ contributor_id,
-            /*side:*/ "yes",
+            /*side:*/ true,
 	    /*token:*/ token
         );
         socket.emit('vote cast', contributor_name, "demo", "issue_3")
@@ -65,7 +65,7 @@ describe('vote', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
             /*contributor_id:*/ contributor_id,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         await snooze(snooze_ms);
         //user
@@ -76,7 +76,7 @@ describe('vote', function () {
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ contributor_id,
-            /*side:*/ "yes",
+            /*side:*/ true,
 	    /*token:*/ token
         );
         socket.emit('vote cast', contributor_name, "demo", "issue_3")
@@ -87,7 +87,7 @@ describe('vote', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
             /*contributor_id:*/ contributor_id,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
 
         // Close vote otherwise other tests on same server instance won't work.
@@ -101,7 +101,7 @@ describe('vote', function () {
             /*childDefaultHash:*/ "issue_3",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ "yes",
+            /*side:*/ true,
 	    /*token:*/ testerTokenA
         );
         socket.emit('vote cast', contributor_name, "demo", "issue_3")
@@ -112,7 +112,7 @@ describe('vote', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
             /*contributor_id:*/ contributor_id,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         socket.disconnect()
 

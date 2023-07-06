@@ -32,7 +32,7 @@ describe('Pull requests', function () {
     //        /*repo:*/ "vim",
     //        /*defaultHash:*/ "defaultHash4955",
     //        /*contributor:*/ contributor_name,
-    //        /*side:*/ "yes",
+    //        /*side:*/ true,
     //    );
     //});
     describe.only('Merge pull request.', function () {
@@ -45,7 +45,7 @@ describe('Pull requests', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash8",
             /*contributor:*/ contributor_name,
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         assert.equal(
             true,

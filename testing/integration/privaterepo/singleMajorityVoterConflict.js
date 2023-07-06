@@ -34,7 +34,7 @@ describe('Vote.', function () {
             /*repo: */ "demo",
             /*defaultHash:*/ "defaultHash6",
             /*contributor_id:*/ "0x18F0Ef5F737ccD11B439D52E4c4be5ed8Cd7Ca8E", // test user
-            /*side:*/ "yes",
+            /*side:*/ true,
         );
         socket.emit('vote cast', contributor_name, "demo", "defaultHash6")
         socket.disconnect()
