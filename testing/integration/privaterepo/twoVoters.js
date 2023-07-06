@@ -51,7 +51,7 @@ describe('Voting.', function () {
             /*childDefaultHash:*/ "issue_1",
 	    /*mergeable:*/ true,
             /*contributor:*/ contributor_id,
-            /*side:*/ "yes",
+            /*side:*/ true,
 	    /*token:*/ token
         );
         socket.emit('vote cast', contributor_name, "demo", "issue_1")
@@ -104,7 +104,7 @@ describe('Voting.', function () {
             /*childDefaultHash:*/ "issue_1",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ "yes",
+            /*side:*/ true,
 	    /*token:*/ testerTokenA
         );
         socket.emit('vote cast', contributor_name, "demo", "issue_1")

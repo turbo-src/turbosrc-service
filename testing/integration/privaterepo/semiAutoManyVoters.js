@@ -138,7 +138,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0xafC193df9bB3d6d6062029b3E67243C00C17d534",
-            /*side:*/ "no",
+            /*side:*/ false,
             /*token:*/ testerTokenB
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -159,7 +159,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x695e603Ce6eE04095D59397871e81A3Af105CA50",
-            /*side:*/ "yes",
+            /*side:*/ true,
             /*token:*/ testerTokenC
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -181,7 +181,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x96fBb54D303309E5b901B0B1eAD598437762C543",
-            /*side:*/ "yes",
+            /*side:*/ true,
             /*token:*/ testerTokenD
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -203,7 +203,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x0bfc3B651cC7b708f2F680C7A6ef339164d92b4e",
-            /*side:*/ "yes",
+            /*side:*/ true,
             /*token:*/ testerTokenE
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -225,7 +225,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x28A9Bc213FE9D13533Bef161fA335cea929faA2c",
-            /*side:*/ "yes",
+            /*side:*/ true,
             /*token:*/ testerTokenF
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -247,7 +247,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x691F5015fc0e08BE75e0c0cbA32e584B9Ff095Bc",
-            /*side:*/ "yes",
+            /*side:*/ true,
             /*token:*/ testerTokenG
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -269,7 +269,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x4b9455F77652bc3Bf497D91e1b42790D99bbBfE8",
-            /*side:*/ "yes",
+            /*side:*/ true,
             /*token:*/ testerTokenH
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -291,7 +291,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0xA6aADF3EAbf72A6FFb98a82547cAa67566724e31",
-            /*side:*/ "no",
+            /*side:*/ false,
             /*token:*/ testerTokenI
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -313,7 +313,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x82438B428dE8A93Eb7405FAB7c0D2401fbC59c29",
-            /*side:*/ "no",
+            /*side:*/ false,
             /*token:*/ testerTokenJ
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -335,7 +335,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x21eAA0fB258F83a7D481498c971dC03930d26c15",
-            /*side:*/ "no",
+            /*side:*/ false,
             /*token:*/ testerTokenK
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")
@@ -357,7 +357,7 @@ describe('Vote.', function () {
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
             /*contributor_id:*/ "0x79b7Bf5717F93db6869baf6ddBf71d84728061F0",
-            /*side:*/ "no",
+            /*side:*/ false,
             /*token:*/ testerTokenL
         );
        socket.emit('vote cast', contributor_name, "demo", "issue_5")

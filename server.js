@@ -117,7 +117,7 @@ var schema = buildSchema(`
 
   type Vote {
     contributor_id: String!
-    side: String!
+    side: Boolean!
     votePower: Int!
     createdAt: String!
   }
@@ -130,7 +130,7 @@ var schema = buildSchema(`
 
   type ContributorVoteData {
     voted: Boolean!
-    side: String!
+    side: Boolean!
     votePower: Int!
     createdAt: String!
     contributor_id: String!
@@ -208,7 +208,7 @@ var schema = buildSchema(`
     getVote(defaultHash: String, contributor_id: String): String,
     getVoteAll(defaultHash: String): ghPullRequest,
     getVoteEverything: String,
-    setVote(owner: String, repo: String, defaultHash: String, childDefaultHash: String, mergeable: Boolean, contributor_id: String, side: String, token: String): String,
+    setVote(owner: String, repo: String, defaultHash: String, childDefaultHash: String, mergeable: Boolean, contributor_id: String, side: Boolean, token: String): String,
     createRepo(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): String,
     newPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
