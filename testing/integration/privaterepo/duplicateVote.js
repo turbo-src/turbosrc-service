@@ -65,7 +65,7 @@ describe('vote', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
             /*contributor_id:*/ contributor_id,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         //user
@@ -87,7 +87,7 @@ describe('vote', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
             /*contributor_id:*/ contributor_id,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
 
         // Close vote otherwise other tests on same server instance won't work.
@@ -112,7 +112,7 @@ describe('vote', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_3",
             /*contributor_id:*/ contributor_id,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         socket.disconnect()
 

@@ -147,7 +147,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor:*/ contributor_id,
-            /*side:*/ false,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
 
@@ -170,7 +170,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester2ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // pc
@@ -192,7 +192,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester3ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         //mb
@@ -214,7 +214,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester4ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // np
@@ -236,7 +236,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester5ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // nn
@@ -258,7 +258,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_name:*/ tsrctester6ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // jp
@@ -280,7 +280,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_name:*/ tsrctester7ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // ts
@@ -302,7 +302,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_name:*/ tsrctester8ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // af
@@ -346,7 +346,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_name:*/ tsrctester10ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
         // ri
@@ -368,7 +368,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester11ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
 
         await snooze(snooze_ms);
@@ -392,7 +392,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester12ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         assert.equal(
             sevenDbVoteCumm,
@@ -477,7 +477,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester1ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
         await snooze(snooze_ms);
 
@@ -486,7 +486,7 @@ describe('Vote.', function () {
             /*repo:*/ "demo",
             /*defaultHash:*/ "issue_4",
             /*contributor_id:*/ tsrctester2ID,
-            /*side:*/ true,
+            /*side:*/ "yes",
         );
 
         jcVoteYesTotal = Number(jcVoteYesTotal);
