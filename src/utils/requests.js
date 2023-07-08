@@ -2,7 +2,7 @@ const { Parser } = require("graphql/language/parser");
 const superagent = require("superagent");
 require("dotenv").config();
 
-const port = "http://localhost:4000";
+const port = "http://turbosrc-egress-router:4006";
 
 //const port =
 //  process.env.NODE_ENV === "fly"
