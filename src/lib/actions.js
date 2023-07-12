@@ -29,7 +29,6 @@ const {
   postGetTsrcID,
 } = require("./../utils/ghServiceRequests");
 
-const { getTurbosrcMode } = require("./../utils/config");
 
 const {
   newPullRequest,
