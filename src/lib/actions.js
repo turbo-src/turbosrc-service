@@ -104,74 +104,74 @@ async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
     return { head: head, mergeable: mergeable }
 }
 
-async function convertDefaultHash(owner, repo, defaultHash, write, contributor_id) {
-    // When online it'll transform the defaultHash (e.g. issueID) into a tsrcID (e.g. PR commit head oid).
-    // It'll also record the defaultHash against the tsrcID for later use.
+async function convertIssueID(owner, repo, issueID, write, contributor_id) {
+	// This will exchange the issueID (eg. issue_4) into a tsrcID (e.g. commit head sha256).
+	// It will also record the sha256 against the issueID for future reference.
 
-    // childDefaultHash is the most recent commit head of the pull request branch
-    // defaultHash is the next most recent commit head of the pull request branch
-   const repoID = `${owner}/${repo}`
-   let head
-   let tsrcID
-   let res = { status: 201,
-               mergeable: true,
-               defaultHash: '',
-               childDefaultHash: ''
-             }
-   const onlineMode = await getTurbosrcMode() === 'online' ? true : false
+	// childDefaultHash is the most recent commit head sha256 of the pull request branch
+	// defaultHash is the next most recent commit head sha256 of the pull request branch
+	const repoID = `${owner}/${repo}`;
+	let head;
+	let ghService;
+	let res = {
+		status: 201,
+		mergeable: true,
+		defaultHash: "",
+		childDefaultHash: "",
+	};
 
-  try {
-    // Get tsrcID from GH service
-    tsrcID = await postGetTsrcID(repoID, defaultHash)
+	try {
+		// Get tsrcID from GH service
+		ghService = await postGetTsrcID(repoID, issueID);
+		// Get pull request from GitHub
+		const githubRes = await getGitHubPRhead(
+			owner,
+			repo,
+			issueID,
+			contributor_id
+		);
+		head = githubRes.head;
+		res.mergeable = githubRes.mergeable;
 
-    if (onlineMode) {
-      // Get pull request from GitHub
-      // The head of the pull request is the most up to date commit head
-      const githubRes = await getGitHubPRhead(owner, repo, defaultHash, contributor_id)
-      head = githubRes.head
-      res.mergeable = githubRes.mergeable
-    } else if (!onlineMode && tsrcID !== "500") {
-        head = tsrcID
-    } else if (!onlineMode && tsrcID === "500") {
-        head = defaultHash
-    }
+		// Error handling
+		if (head === null || head === undefined) {
+			throw new Error();
+		}
 
-    // Error handling
-    if (head === null || head === undefined) {
-      throw new Error()
-    }
+		// The tsrcID is already the most up to date commit head
+		if (ghService.tsrcID === head) {
+			res.defaultHash = head;
+			res.childDefaultHash = head;
+			return res;
+		} else if (ghService.status === 200 && ghService.tsrcID !== head) {
+			// The tsrcID is older so update the childDefaultHash to be the new head
+			// and bump the defaultHash to be the tsrcID ie. old commit head
+			res.defaultHash = ghService.tsrcID;
+			res.childDefaultHash = head;
+			return res;
+		}
 
-    // The tsrcID is already the most up to date commit head
-    if (tsrcID === head && tsrcID !== "500") {
-        res.defaultHash = head
-        res.childDefaultHash = head
-        return res
-    } else if (tsrcID !== head && tsrcID !== "500" && tsrcID != null) {
-    // The tsrcID is older so update the childDefaultHash to be the new head
-    // and bump the defaultHash to be the tsrcID ie. old commit head
-        res.defaultHash = tsrcID
-        res.childDefaultHash = head
-        return res
-    }
-
-    if (write) {
-    //If write is true, then create a new issue in the GH service for future reference
-    const resPostTsrcID = await postCreateIssue(`${owner}/${repo}`, defaultHash, head)
-    if(resPostTsrcID === "201") {
-        res.defaultHash = head
-        res.childDefaultHash = head
-    } else {
-      res.defaultHash = defaultHash
-      res.childDefaultHash = defaultHash
-    }
-    return res
-  }
-    } catch(error) {
-      res.status = 500
-      res.defaultHash = defaultHash
-      res.childDefaultHash = defaultHash
-      return res
-    }
+		if (write) {
+			//If write is true, then create a new issue in the GH service for future reference
+			const resCreateIssue = await postCreateIssue(
+				`${owner}/${repo}`,
+				issueID,
+				head
+			);
+			if (resCreateIssue.status === 201) {
+				res.defaultHash = head;
+				res.childDefaultHash = head;
+				return res;
+			} else {
+				throw new Error();
+			}
+		}
+	} catch (error) {
+		res.status = 500;
+		res.defaultHash = issueID;
+		res.childDefaultHash = issueID;
+		return res;
+	}
 }
 
 const root = {
@@ -208,7 +208,7 @@ const root = {
   getPRvoteYesTotals: async function (args) {
     
     console.log('yes:', args.contributor_id)
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -236,7 +236,7 @@ const root = {
     // Step 1: convert the issue_id of the PR to the defaultHash, ie the head
     // default hash in the args here is the issue_id :)
     // If it is a brand new pr not in our db then it will return undefined so just use the default hash, er.. issue_id :)
-    convertedHash = await convertDefaultHash(owner, repo, defaultHash, false, contributor_id) || defaultHash
+    convertedHash = await convertIssueID(owner, repo, defaultHash, false, contributor_id) || defaultHash
 
     // Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
     response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
@@ -262,7 +262,7 @@ const root = {
   },
   getPRvoteNoTotals: async function (args) {
     console.log('no:', args.contributor_id)
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -279,7 +279,7 @@ const root = {
   },
   getPRvoteTotals: async function (args) {
     console.log('totals:', args.contributor_id)
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -307,7 +307,7 @@ const root = {
   },
   getPullRequest: async function (args) {
     console.log('pr:', args.contributor_id)
-    const convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
     let mergeableCodeHost = true
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
@@ -398,7 +398,7 @@ const root = {
     const issueID = (args.defaultHash).split('_')[1]
     const issue_id = args.defaultHash
     // If ran online, it will find the default hash's associated tsrcID in GH Service
-    convertedHashes = await convertDefaultHash(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
+    convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
     
       if (convertedHashes.status === 201) {
         args.defaultHash = convertedHashes.defaultHash
