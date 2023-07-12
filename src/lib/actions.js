@@ -123,7 +123,6 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 	try {
 		// Get tsrcID from GH service
 		ghService = await postGetTsrcID(repoID, issueID);
-    console.log('gh service res =>', ghService)
 		// Get pull request from GitHub
 		const githubRes = await getGitHubPRhead(
 			owner,
@@ -141,12 +140,10 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 
 		// The tsrcID is already the most up to date commit head
 		if (ghService.tsrcID === head) {
-    console.log('hit case 1')
 			res.defaultHash = head;
 			res.childDefaultHash = head;
 			return res;
 		} else if (ghService.status === 200 && ghService.tsrcID !== head) {
-    console.log('hit case 2')
 			// The tsrcID is older so update the childDefaultHash to be the new head
 			// and bump the defaultHash to be the tsrcID ie. old commit head
 			res.defaultHash = ghService.tsrcID;
@@ -155,7 +152,6 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 		}
 
 		if (write) {
-    console.log('hit case 3')
 			//If write is true, then create a new issue in the GH service for future reference
 			const resCreateIssue = await postCreateIssue(
 				`${owner}/${repo}`,
