@@ -2,7 +2,16 @@ const { Parser } = require("graphql/language/parser");
 const superagent = require("superagent");
 require("dotenv").config();
 
-const port = "http://turbosrc-egress-router:4006";
+
+const {
+  getServiceEndpoint
+} = require('./config.js');
+
+let url;
+
+(async () => {
+  url = await getServiceEndpoint('turbosrc');
+})();
 
 //const port =
 //  process.env.NODE_ENV === "fly"
@@ -142,7 +151,7 @@ var root = {
     token
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") }`,
       })
@@ -153,7 +162,7 @@ var root = {
   },
   postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -176,7 +185,7 @@ var root = {
   },
   postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -204,7 +213,7 @@ var root = {
     contributor_id
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -227,7 +236,7 @@ var root = {
   },
   postCreateRepo: async (owner, repo, defaultHash, contributor_id, side, token) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", token: "${token}") }`,
       })
@@ -238,7 +247,7 @@ var root = {
   },
   getUser: async (contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getUser(contributor_id: "${contributor_id}") {contributor_name, contributor_id, contributor_signature, token}}`,
       })
@@ -254,7 +263,7 @@ var root = {
     contributor_signature,
     token) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ findOrCreateUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") {contributor_name, contributor_id, contributor_signature, token}}`,
       })
@@ -271,7 +280,7 @@ var root = {
     token
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -293,7 +302,7 @@ var root = {
   },
   postTransferTokens: async (owner, repo, from, to, amount, token) => {
     superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -312,7 +321,7 @@ var root = {
   },
   postNewPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -331,7 +340,7 @@ var root = {
   },
   postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -352,7 +361,7 @@ var root = {
   },
   getRepoStatus: async (repo_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getRepoStatus(repo_id: "${repo_id}" ) { status, exists } }`
       })
@@ -365,7 +374,7 @@ var root = {
   },
   get_authorized_contributor: async (contributor_id, repo_id) => {
     return await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
       })
@@ -381,7 +390,7 @@ var root = {
   },
   postGetPRforkStatus: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getPRforkStatus(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`,
       }) // sends a JSON post body
@@ -394,7 +403,7 @@ var root = {
   },
   postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash, mergeableCodeHost } }`,
       })
@@ -407,7 +416,7 @@ var root = {
   },
   getGitHubPullRequest: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getGitHubPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") { status, mergeable, mergeCommitSha, state, baseBranch } }`,
       })
@@ -426,7 +435,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -448,7 +457,7 @@ var root = {
   },
   postGetPRvoteTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -476,7 +485,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -504,7 +513,7 @@ var root = {
     side
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -526,7 +535,7 @@ var root = {
   },
   postClosePullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -545,7 +554,7 @@ var root = {
   },
   postMergePullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
@@ -575,7 +584,7 @@ var root = {
     title
   ) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ createTsrcPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
       })
@@ -586,7 +595,7 @@ var root = {
   },
   postFork: async (owner, repo, org) => {
     superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send(
         //{ query: '{ name: 'Manny', species: 'cat' }' }
         //{ query: '{ newPullRequest(defaultHash: "first", contributorId: "1", side: 1) { vote_code } }' }
