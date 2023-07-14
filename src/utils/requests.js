@@ -3,17 +3,20 @@ const superagent = require("superagent");
 require("dotenv").config();
 
 
-const turboSrcID = ""
 
 const {
-  getServiceEndpoint
+  getServiceEndpoint, getContributorAddress
 } = require('./config.js');
 
 let url;
+let turboSrcID
 
 (async () => {
   url = await getServiceEndpoint('turbosrc');
+  turboSrcID = await getContributorAddress();
 })();
+
+console.log("requests to: ", turboSrcID);
 
 //const port =
 //  process.env.NODE_ENV === "fly"
