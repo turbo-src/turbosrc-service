@@ -11,7 +11,7 @@ const turboSrcID = ""
 //    : "http://localhost:4000";
 
 var root = {
-  postCreateRepoTestDB: async (turboSrcID, owner, repo, defaultHash, contributor_id, side) => {
+  postCreateRepoTestDB: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
       .post("http://localhost:8081/graphql")
       .send(
@@ -152,7 +152,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.createUser;
   },
-  postGetContributorName: async (turboSrcID, owner, repo, defaultHash, contributor_id) => {
+  postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -175,7 +175,7 @@ var root = {
     console.log(json);
     return json.data.getContributorName;
   },
-  postGetContributorID: async (turboSrcID, owner, repo, defaultHash, contributor_name) => {
+  postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -226,7 +226,7 @@ var root = {
     console.log(json);
     return json.data.getContributorSignature;
   },
-  postCreateRepo: async (turboSrcID, owner, repo, defaultHash, contributor_id, side, token) => {
+  postCreateRepo: async (owner, repo, defaultHash, contributor_id, side, token) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -237,7 +237,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.createRepo;
   },
-  getUser: async (turboSrcID, contributor_id) => {
+  getUser: async (contributor_id) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -292,7 +292,7 @@ var root = {
     console.log(json);
     return json.data.getVotePowerAmount;
   },
-  postTransferTokens: async (turboSrcID, owner, repo, from, to, amount, token) => {
+  postTransferTokens: async (owner, repo, from, to, amount, token) => {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -311,7 +311,7 @@ var root = {
         // Calling the end function will send the request
       });
   },
-  postNewPullRequest: async (turboSrcID, owner, repo, defaultHash, contributor_id, side) => {
+  postNewPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -330,7 +330,7 @@ var root = {
         // Calling the end function will send the request
       });
   },
-  postSetVote: async (turboSrcID, owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) => {
+  postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side, token) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -351,7 +351,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.setVote;
   },
-  getRepoStatus: async (turboSrcID, repo_id) => {
+  getRepoStatus: async (repo_id) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -364,7 +364,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getRepoStatus;
   },
-  get_authorized_contributor: async (turboSrcID, contributor_id, repo_id) => {
+  get_authorized_contributor: async (contributor_id, repo_id) => {
     return await superagent
       .post(`${port}/graphql`)
       .send({
@@ -372,7 +372,7 @@ var root = {
       })
       .set("accept", "json");
   },
-  postPullFork: async (turboSrcID, owner, repo, defaultHash, contributor_id) => {
+  postPullFork: async (owner, repo, defaultHash, contributor_id) => {
     return await superagent
       .post("http://localhost:4001/graphql")
       .send({
@@ -380,7 +380,7 @@ var root = {
       }) // sends a JSON post body
       .set("accept", "json");
   },
-  postGetPRforkStatus: async (turboSrcID, owner, repo, defaultHash, contributor_id) => {
+  postGetPRforkStatus: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -393,7 +393,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPRforkStatus;
   },
-  postGetPullRequest: async (turboSrcID, owner, repo, defaultHash, contributor_id, side) => {
+  postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -406,7 +406,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getPullRequest;
   },
-  getGitHubPullRequest: async (turboSrcID, owner, repo, defaultHash, contributor_id) => {
+  getGitHubPullRequest: async (owner, repo, defaultHash, contributor_id) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send({
@@ -447,7 +447,7 @@ var root = {
     console.log(json);
     return json.data.percentVotedQuorum;
   },
-  postGetPRvoteTotals: async (turboSrcID, owner, repo, defaultHash, contributor_id, side) => {
+  postGetPRvoteTotals: async (owner, repo, defaultHash, contributor_id, side) => {
     const res = await superagent
       .post(`${port}/graphql`)
       .send(
@@ -525,7 +525,7 @@ var root = {
     //console.log(json)
     return json.data.getPRvoteNoTotals;
   },
-  postClosePullRequest: async (turboSrcID, owner, repo, defaultHash, contributor_id, side) => {
+  postClosePullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -544,7 +544,7 @@ var root = {
         // Calling the end function will send the request
       });
   },
-  postMergePullRequest: async (turboSrcID, owner, repo, defaultHash, contributor_id, side) => {
+  postMergePullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
     superagent
       .post(`${port}/graphql`)
       .send(
@@ -585,7 +585,7 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.createTsrcPullRequest;
   },
-  postFork: async (turboSrcID, owner, repo, org) => {
+  postFork: async (owner, repo, org) => {
     superagent
       .post(`${port}/graphql`)
       .send(
