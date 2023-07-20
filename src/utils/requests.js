@@ -654,6 +654,29 @@ var root = {
         // Calling the end function will send the request
       });
   },
+  findOrCreateNameSpaceRepo: async (
+    repoName,
+    repoID) => {
+    const res = await superagent
+      .post(`${port}/graphql`)
+      .send({
+        query: `{ findOrCreateNameSpaceRepo(repoName: "${repoName}", repoID: "${repoID}") {status, repoName, repoID, repoSignature, message}}`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.findOrCreateNameSpaceRepo;
+  },
+  getNameSpaceRepo: async (
+    repoNameOrID) => {
+    const res = await superagent
+      .post(`${port}/graphql`)
+      .send({
+        query: `{ getNameSpaceRepo(repoNameOrID: "${repoNameOrID}") {status, repoName, repoID, repoSignature, message}}`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.getNameSpaceRepo;
+  },
 };
 
 module.exports = root;

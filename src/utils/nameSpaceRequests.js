@@ -99,6 +99,31 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.findOrCreateUser;
   },
+  findOrCreateNameSpaceRepo: async (
+    repoName,
+    repoID) => {
+      const endpoint = await getServiceEndpoint("namespace")
+      const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `{ findOrCreateRepo(repoName: "${repoName}", repoID: "${repoID}") {status, repoName, repoID, repoSignature, message}}`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.findOrCreateRepo;
+  },
+  getNameSpaceRepo: async (
+    repoNameOrID) => {
+      const endpoint = await getServiceEndpoint("namespace")
+      const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `{ getRepo(repoNameOrID: "${repoNameOrID}") {status, repoName, repoID, repoSignature, message}}`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.getRepo;
+  },
 };
 
 module.exports = root;

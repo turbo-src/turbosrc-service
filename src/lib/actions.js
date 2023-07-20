@@ -38,7 +38,9 @@ const {
   postGetContributorName,
   postGetContributorSignature,
   getUser,
-  findOrCreateUser
+  findOrCreateUser,
+  findOrCreateNameSpaceRepo,
+  getNameSpaceRepo
 } = require("./../utils/nameSpaceRequests");
 
 const {
@@ -726,6 +728,19 @@ const root = {
     );
 
     return status;
+  },
+  findOrCreateNameSpaceRepo: async function (args) {
+    const res = await findOrCreateNameSpaceRepo(
+      args.repoName,
+      args.repoID,
+    );
+    return res;
+  },
+  getNameSpaceRepo: async function (args) {
+    const res = await getNameSpaceRepo(
+      args.repoNameOrID,
+    );
+    return res;
   },
 };
 

@@ -34,7 +34,9 @@ const {
   getUser,
   findOrCreateUser,
   getVotes,
-  getRepoData
+  getRepoData,
+  findOrCreateNameSpaceRepo,
+  getNameSpaceRepo
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -193,6 +195,14 @@ var schema = buildSchema(`
     id: String!
   }
 
+  type NameSpaceRepo {
+  status: Int!,
+  message: String!,
+  repoName: String!,
+  repoID: String!,
+  repoSignature: String!,
+}
+
   type Query {
     createTsrcPullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String, issue_id: String): String,
     getVotePowerAmount(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
@@ -225,6 +235,8 @@ var schema = buildSchema(`
     mergePullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     fork(turboSrcID: String, owner: String, repo: String, org: String): String,
     getRepoData(turboSrcID: String, repo_id: String, contributor_id: String): RepoData,
+    findOrCreateNameSpaceRepo(status: Int, message: String, repoName: String, repoID: String, repoSignature: String): NameSpaceRepo,
+    getNameSpaceRepo(repoNameOrID: String): NameSpaceRepo,
   }
 `);
 
@@ -507,6 +519,18 @@ var root = {
     if(verified === true) {
       return await createRepo(args)
     }
+  },
+  findOrCreateNameSpaceRepo: async (args) => {
+    const res = await findOrCreateNameSpaceRepo(
+      args
+    );
+    return res;
+  },
+  getNameSpaceRepo: async (args) => {
+    const res = await getNameSpaceRepo(
+      args
+    );
+    return res;
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
