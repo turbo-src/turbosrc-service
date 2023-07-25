@@ -132,7 +132,6 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 		);
 		head = githubRes.head;
 		res.mergeable = githubRes.mergeable;
-
 		// Error handling
 		if (head === null || head === undefined) {
 			throw new Error();
@@ -149,6 +148,10 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 			res.defaultHash = ghService.tsrcID;
 			res.childDefaultHash = head;
 			return res;
+		} else if (ghService.status === 404) {
+			res.defaultHash = head;
+			res.childDefaultHash = head;
+			return res;
 		}
 
 		if (write) {
@@ -161,7 +164,7 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 			if (resCreateIssue.status === 201) {
 				res.defaultHash = head;
 				res.childDefaultHash = head;
-				return res;
+        return res;
 			} else {
 				throw new Error();
 			}
