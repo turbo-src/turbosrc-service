@@ -33,7 +33,8 @@ const {
   getUser,
   findOrCreateUser,
   getVotes,
-  getRepoData
+  getRepoData,
+  getTurboSrcIDfromInstance
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -224,6 +225,7 @@ var schema = buildSchema(`
     mergePullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     fork(turboSrcID: String, owner: String, repo: String, org: String): String,
     getRepoData(turboSrcID: String, repo_id: String, contributor_id: String): RepoData,
+    getTurboSrcIDfromInstance: String!,
   }
 `);
 
@@ -520,6 +522,10 @@ var root = {
   fork: async (args) => {
     await fork(args.owner, args.repo, args.org)
   },
+  getTurboSrcIDfromInstance: () => {
+    return getTurboSrcIDfromInstance();
+  },
+
   //End of GH server endpoints.
 }
 
