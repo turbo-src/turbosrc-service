@@ -27,7 +27,7 @@ var root = {
       throw new Error("Failed to load contributor addr " + addr);
 
     } else {
-      console.log("Successfully read contributor " + addr);
+      console.log("Successfully read > contributor " + addr);
     }
 
     return addr

@@ -522,8 +522,9 @@ var root = {
   fork: async (args) => {
     await fork(args.owner, args.repo, args.org)
   },
-  getTurboSrcIDfromInstance: () => {
-    return getTurboSrcIDfromInstance();
+  getTurboSrcIDfromInstance: async () => {
+    turboSrcID = await getTurboSrcIDfromInstance();
+    return turboSrcID
   },
 
   //End of GH server endpoints.
