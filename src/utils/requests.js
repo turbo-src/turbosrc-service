@@ -5,15 +5,34 @@ require("dotenv").config();
 
 
 const {
-  getServiceEndpoint, getContributorAddress
+  getServiceEndpoint, getContributorAddress,getEgressURLoption
 } = require('./config.js');
 
 let url;
+let egressURLoption
 let turboSrcID
 
 (async () => {
-  url = await getServiceEndpoint('turbosrc');
-  turboSrcID = await getContributorAddress();
+  try {
+    if (egressURLoption !== undefined && egressURLoption !== null) {
+      console.log("Getting egress URL option");
+      url = await getEgressURLoption();
+    } else {
+      console.log("Getting service endpoint for turbosrc");
+      url = await getServiceEndpoint('turbosrc');
+    }
+  } catch (error) {
+    console.error('An error occurred while getting the URL:', error);
+  }
+
+  try {
+    console.log("Getting contributor address");
+    turboSrcID = await getContributorAddress();
+  } catch (error) {
+    console.error('An error occurred while getting the contributor address:', error);
+  }
+
+  console.log("URL:", url, "TurboSrcID:", turboSrcID);
 })();
 
 console.log("requests to: ", turboSrcID);

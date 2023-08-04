@@ -88,7 +88,7 @@ var root = {
     } else {
       console.log("Successfully read service endpoint " + serviceName);
     }
-    
+
 
     console.log('mode', endpoint.mode)
     if (endpoint.url !== undefined && endpoint.url !== null) {
@@ -97,6 +97,20 @@ var root = {
     } else {
       throw new Error("Failed to load endpoint mode " + endpoint.mode + " of " + serviceName);
     }
+  },
+  getEgressURLoption: async () => {
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    let egressURLoption = json.turbosrc.endpoint.egressURLoption
+    if (egressURLoption === undefined || egressURLoption === null) {
+      console.log("No egressURLoption: " + egressURLoption);
+    } else {
+      console.log("Successfully read egressURLoption " + egressURLoption);
+    }
+
+    return egressURLoption 
   },
 }
 

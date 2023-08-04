@@ -40,36 +40,70 @@ getGithubToken: async function(user) {
    return apiToken
 },
 verify: async function(contributor_id, token){
-  const onlineMode = await getTurbosrcMode()
-  if (onlineMode === 'offline') {
-    return true
+  let onlineMode;
+  let jwtTokenFromConfig;
+  let githubUsername;
+  let octokit;
+  let res;
+
+  try {
+    onlineMode = await getTurbosrcMode();
+  } catch (error) {
+    console.error('Error getting Turbosrc mode', error);
+    return 500;
   }
 
-  const jwtTokenFromConfig = await getJWT()
-  const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+  if (onlineMode === 'offline') {
+    return true;
+  }
+
   try {
-    if(!contributor_id || !token) {
-      return false
+    jwtTokenFromConfig = await getJWT();
+  } catch (error) {
+    console.error('Error getting JWT', error);
+    return 500;
+  }
+
+  try {
+    const tokenRes = jwt.verify(token, jwtTokenFromConfig);
+
+    if(!contributor_id) {
+      console.error('Contributor_id is missing');
+      return false;
     }
-    // Trade contributor_id for our contributor_name in our PG database
-    // If contributor_name in ags above, then it is a createUser
-    let githubUsername = await postGetContributorName("","","",contributor_id)
-    const octokit = new Octokit({ auth: tokenRes.githubToken });
-    // If res was successful and was querying the user associated with the contributor_id return true
-    const res = await octokit.request(`GET /users/${githubUsername}`);
+
+    if(!token) {
+      console.error('Token is missing');
+      return false;
+    }
+
+    try {
+      githubUsername = await postGetContributorName("","","",contributor_id);
+    } catch (error) {
+      console.error('Error getting contributor name', error);
+      return 500;
+    }
+
+    octokit = new Octokit({ auth: tokenRes.githubToken });
+
+    try {
+      res = await octokit.request(`GET /users/${githubUsername}`);
+    } catch (error) {
+      console.error('Error making Octokit request', error);
+      return 500;
+    }
 
     if (githubUsername === res.data.login) {
-      console.log('verified token thru github');
+      console.log('Verified token through Github');
       return true;
     } else {
-      console.log('github token invalid', token);
+      console.error('Github token invalid', token);
       return false;
     }
   } catch (error) {
-    console.log('error verifying github token', token)
-    return 500
+    console.error('Error verifying Github token', error);
+    return 500;
   }
-
 },
 checkGithubTokenPermissions: async function(owner, repo, contributor_name, token){
   if (!repo || !owner) {
