@@ -1,0 +1,250 @@
+{
+    "/app/filebot-store-000/turbosrc-service/README.md": {
+        "summary": "This file provides instructions for installing and configuring TurboSrc, a service related to GitHub repository management. It includes step-by-step guidance for setting up the necessary files and dependencies, as well as commands for starting, stopping, and testing TurboSrc.",
+        "sha256": "7699de1ae058e8a8f077d088b603afffc3fec8969bbaf0bfa78bb78f67006f63"
+    },
+    "/app/filebot-store-000/turbosrc-service/LICENSE": {
+        "summary": "This file is the MIT License, which grants permission to any person to use, copy, modify, merge, publish, distribute, sublicense, and sell the software for free. The license comes with conditions that must be included in all copies or substantial portions of the software, and it disclaims any warranty or liability.",
+        "sha256": "f71dd97d55cb485f6c8dd6e3d6e259ba8ef6fee29bc6d60fbcc45a448bb48584"
+    },
+    "/app/filebot-store-000/turbosrc-service/service.env": {
+        "summary": "This file is used to specify the environment in which a software application should run. The value \"dev\" indicates that the application is being developed and tested.",
+        "sha256": "0a8958c125677d66e51eb74b2f0bfc0bb623e82e9abc3e622ab8e69a935d7f59"
+    },
+    "/app/filebot-store-000/turbosrc-service/.dockerignore": {
+        "summary": "Based on the file names provided, it appears that this document may contain information related to node modules, repository locations, and npm debugging logs. However, without the actual content of the file, it is difficult to provide a more accurate summary.",
+        "sha256": "67ea767d77c601483133a9c95e4dcf53098236edc2831f8348bb612cc86da926"
+    },
+    "/app/filebot-store-000/turbosrc-service/Dockerfile": {
+        "summary": "This file is a Dockerfile used to build a Node.js application image. It sets up the project directory, installs dependencies, copies the source code, and defines the command to start the application. The Docker image exposes port 4000 for the application to run on.",
+        "sha256": "c45d385261e4da6a0ccdcfd34e4305448658ae6f36b4d3ae81b7d984d76daa11"
+    },
+    "/app/filebot-store-000/turbosrc-service/tsrc-dev": {
+        "summary": "This file is a Bash script that provides a set of commands for starting, stopping, restarting, or testing a set of services. The script accepts command line arguments to specify the desired action, such as starting or stopping the services, running tests on a specific repository, or executing a series of actions. The script also includes a usage function that displays the syntax and available options.",
+        "sha256": "117634fb9fa43a7ae462f97a82327e5248c5a3fde8e473034aec8af5d4d49123"
+    },
+    "/app/filebot-store-000/turbosrc-service/tsrc-test": {
+        "summary": "This file is a bash script that performs various operations related to GitHub repositories. It includes functions for deleting a fork, forking a repository, creating pull requests, running tests, and executing all operations except for tests. It takes command line arguments for the username, repository, and the specific operation to perform.",
+        "sha256": "ca1db550818201ddbc50e1a4194c970e59c3d6580ed2b0a017627dc8c3ac03ab"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/package.json_doc.md": {
+        "summary": "This file is a package.json file for the \"express-graphql-example\" project. It provides information on project dependencies and development dependencies, including libraries such as Express, GraphQL, Redis, and GitHub REST API client. It also includes scripts for testing and starting the server.",
+        "sha256": "2caa753a87369f287f0e827f5ea192f3f46134fa0f1dc344503e448d378fd1d3"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testdbserver.js_doc.md": {
+        "summary": "This JavaScript file is the server-side logic of a GraphQL service that manages a simulated database for a software project's pull requests, repositories, contributors, and votes. It sets up an HTTP server and a GraphQL layer using the express, cors, and express-graphql libraries. It provides various functions for interacting with the data, including creating repositories, manipulating pull requests, and managing voting.",
+        "sha256": "0cf907aac29550d625965b78348c3e2d5a5e9f203395a48ed052c5cbc5fb4b7f"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/socketConfig.js_doc.md": {
+        "summary": "This JavaScript file sets up and configures a Socket.IO client to connect to a server at `http://turbosrc-egress-router:4007/` using the websocket transport. It includes custom path and header options and logs the socket ID on connection events. The configured socket is exported for use in other modules, utilizing the `socket.io-client` package.",
+        "sha256": "857801ad744d054ad2a3979a70497bef500d033bad9d9fd570be04d6ae2e3c46"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/pullForkServer.js_doc.md": {
+        "summary": "This file, `pullForkServer.js`, implements an Express server using GraphQL and CORS. It handles requests related to pull requests and fetching fork information from GitHub repositories. It defines a GraphQL schema and resolver, and allows interaction with the GraphQL API through the route `localhost:4001/graphql`.",
+        "sha256": "d04490f6efd04205276789b668825238cf46d89056d4a8932e90fd0657e244cf"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/server.js_doc.md": {
+        "summary": "The `server.js` file is responsible for setting up an Express GraphQL API server that manages a voting system for pull requests. It includes features such as reading configuration files, creating a GraphQL schema with various Mutations and Queries, maintaining a fake database, managing pull requests on GitHub, handling user authentication and authorization, and providing endpoint operations for repository forking and pull request verification. It requires multiple dependencies including `fs`, `express`, `express-graphql`, `graphql`, `cors`, `superagent`, and `tar`.",
+        "sha256": "b2c6b32e4d73f9f7ee47050dba5030294c7ce3e17b946aad81d1f4d0b14c8e84"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/fly.toml_doc.md": {
+        "summary": "This file is the configuration file for the app \"turbosrc-reibase-alternate-service\" and includes settings for process termination, build configurations, environment variables, experimental features, service settings, and service TCP checks.",
+        "sha256": "55a4fb3f0fb01bf581421b14807426dfa646f439b2bf0c88731032d17de031f5"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/createUser.js_doc.md": {
+        "summary": "The `createUser.js` JavaScript file is part of a test suite for a filebot store application. It focuses on validating user creation functionality and retrieving contributors' details. The tests utilize async operations and imported utility functions to perform necessary actions.",
+        "sha256": "5314e4bba7c6b17abda231e36b2cbc0630d9845159dc01d032a5872d909888d5"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteToClose.js_doc.md": {
+        "summary": "The purpose of the `voteToClose.js` file is to test the functionality of the 'Vote to Close' feature in the application. It utilizes the Mocha testing framework and performs operations such as creating a repository, creating a pull request, casting a vote, and checking the status and total votes of the pull request. Asynchronous operations are handled using async/await semantics and GraphQL's Parser module is used for parsing GraphQL queries or mutations.",
+        "sha256": "0997dc3df2049ddce3c527e84af6c93e24b670560224507eafd907fff1ce6fe2"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteToOpen.js_doc.md": {
+        "summary": "This file, `voteToOpen.js`, is an integration test script used to test the \"Vote to stay open\" functionality of a system. It creates a repository, initiates a pull request, and casts a vote to keep the repository open. It then checks the outcome status and flags the test as failed if the expected status is not 'open'. The script uses timeouts and external packages for handling test assertions and working with GraphQL.",
+        "sha256": "5e0a60470aa4479afcc6d870efb61df0337986061cb98d0766840d4193d76b7b"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteDuplicate.js_doc.md": {
+        "summary": "The purpose of the `voteDuplicate.js` file is to test the functionality of a voting system used for making decisions regarding contributions to a 'vim' repository. It includes simulated requests to create a repository, create a new pull request, set a vote, and retrieve status information. The file also includes assertions to test specific outcomes related to the vote handling protocol.",
+        "sha256": "89288cf834c130ff1cd7c35b01887bf09601a2d511969a0d303d60bdfc07f314"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteDuplicatePR.js_doc.md": {
+        "summary": "The purpose of this file is to run tests related to voting on a pull request in the 'vim' repository. Specifically, it tests if the program handles duplicate pull requests correctly by checking if a closed pull request can be reopened as a new one and then closed again after a vote. It uses various npm packages and includes a snooze function to introduce a delay between operations.",
+        "sha256": "44dccb44be65e7538f616f2a5d009bd353b02996e92b7b1a8f31c2e4bd091e35"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteTally.js_doc.md": {
+        "summary": "The purpose of the \"voteTally.js\" file is to perform testing on vote casting and tallying functions in the \"vim\" repository using the Mocha framework. It includes functions for creating a repository, making a new pull request, setting a vote on a pull request, fetching vote totals and pull request details. The file also includes snooze functions to prevent data duplication errors and assertion checks to ensure accurate vote tallying and pull request closure.",
+        "sha256": "3781b5f07d4264db1e6180c4e83f689d019af74f65e4a316daddf6d7929499fc"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/noRepo.js_doc.md": {
+        "summary": "The file `noRepo.js` is a JavaScript test case file that tests the application's functionality related to repository creation. It uses the Mocha testing framework, custom methods for simulating repository operations, GraphQL's parser, and a `snooze` function to avoid data duplication errors. The main test case examines the status after creating a repo and asserts that the status remains \"none\" if the repository wasn't created.",
+        "sha256": "cd018793019aa182cc41f18bb69f75a5bb6fc0e29f053671331c5c254389a272"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/closePR.js_doc.md": {
+        "summary": "This file, `closePR.js`, is a documentation for integration testing the functionality of closing pull requests within the `turbosrc-service` of the application. It uses Mocha as the testing framework and requires various modules like assert, graphql, and requests. The key components include functions like `snooze`, `describe`, and `it` that are used for creating delays, defining test suites, and performing the actual test cases.",
+        "sha256": "41366aeeb7a4bda2b145c87244bb993a525e6e46e49ced85e6f8e1bd4a6e6873"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteToOpenThenClose.js_doc.md": {
+        "summary": "This file, \"voteToOpenThenClose.js,\" is an integration test for voting functionalities in pull requests. It creates a repository, creates a pull request, and tests the process of voting to keep it open and then closing it. The file includes functions to post votes, retrieve total votes, fetch pull request status, and prevent data handling errors with a utility function.",
+        "sha256": "54071adcbd4bdd586cba8c91ad2dfaeb6fb2f8ec227ec3f704dc21cc9d489476"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/createRepo.js_doc.md": {
+        "summary": "The file createRepo.js is a Node.js test script used for integration testing the 'Create Repository' feature of a software application. It imports dependencies and defines helper functions for testing. The script creates a new repository and pull request before running the main test suite, which checks the expected behavior of the feature.",
+        "sha256": "796c057dc1373c57cf6962b1826a6bff2f74d0311662f01e4abc8c2802a7213b"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/voteTallyMany.js_doc.md": {
+        "summary": "The purpose of the file `voteTallyMany.js` is to test the voting and vote tallying functionalities of the 'vim' TurboSRC service using the Mocha testing framework. It simulates actions such as creating pull requests, setting votes, and making assertions for vote totals and pull request statuses. The script also checks for consistency, avoidance of duplication errors, and the proper functioning of vote quorums.",
+        "sha256": "ad390401be7f0f8afe492f3b6c2300fe61f96583a27f60258a8c0875d21c598a"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/vim/openPRs.js_doc.md": {
+        "summary": "This JavaScript file is a test script for managing pull requests in a GitHub-like repository. It tests functionality related to open pull requests, including handling duplicate pull requests and reopening closed pull requests. It uses various imports, describe blocks, and Mocha's keyword to specify individual tests.",
+        "sha256": "fd7e34a285e1d60a828ad5f449712b633097448b02a64106d3b8752664fdfdb9"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/voteAfterMerge.js_doc.md": {
+        "summary": "This file is a Node.js script used for integration testing of a voting and merging scenario in a repository platform. It imports required packages and utility functions, and contains various utilities for making specific request calls related to pull requests and voting process. The script tests a scenario where two voters vote on a pull request, resulting in a merge, and includes steps to check merging status, vote totals, and validate the merging process.",
+        "sha256": "fcc4a3c63cbc992349c9c399408a2e2ba3c3c074f1a8a7def26f66bc68d7c88e"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/preTestForkRepo.js_doc.md": {
+        "summary": "This file is a JavaScript file that is used for testing the creation of a repository and a GitHub pull request. It utilizes the Mocha testing framework and node.js promises. The file contains functionality to read a `.config.json` file, initiate a fork request, and perform assertions to validate the process.",
+        "sha256": "12ef011635aa7bbc98263a6c9b111a5d8d3bed8b8fec00c3c1285057423f3f9a"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/getGitHubPullRequest.js_doc.md": {
+        "summary": "The file `getGitHubPullRequest.js` is a JavaScript file that tests the `getGitHubPullRequest` function. It sets up a test suite named 'Pull request' and includes test cases to fetch and verify pull requests from a sample repo. The file is part of an automated testing system for a system that interacts with GitHub pull requests.",
+        "sha256": "205beca902611f9a8eb38342e3f053948db206d4a408d3a21de23def0b1fe530"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/getContributorTokenAmount.js_doc.md": {
+        "summary": "This file, getContributorTokenAmount.js, is a JavaScript test case that verifies the voting power amount of a contributor on a GitHub repository. It uses helper functions to make various requests related to the repository and checks if the expected voting power amount matches the retrieved value. The script plays a critical role in ensuring the reliability of the application's voting functionality.",
+        "sha256": "742c8224c18f25dd93e17c47a386f845950d34f44ff0aab071cc127dc2e08c69"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/createUser.js_doc.md": {
+        "summary": "This file is a JavaScript testing suite written in Mocha for user creation and contributor name fetching functionality. It includes test cases for creating users and fetching contributor names. It relies on various dependencies such as 'assert', 'fs', and utility functions from other files in the 'src/utils' directory.",
+        "sha256": "afde62608603e45d52104d46e5a09c7329eddcfa31b2428ff1978151018e9c12"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/getRepoStatus.js_doc.md": {
+        "summary": "This file, 'getRepoStatus.js', is a testing module located in a private repository. It utilizes the Mocha testing library to test the repository creation process. The main task of the module is to check the status of a specific GitHub repository and assert that it meets the expected results.",
+        "sha256": "6316e8b0def380e5e4e8927e191dce5c1bf615a87c66b5f131dd6fe32240d3cc"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/transferTokens.js_doc.md": {
+        "summary": "The purpose of the `transferTokens.js` file is to contain code for an integration test that checks if the transfer of tokens is properly reflected in a database. It is part of the Turbosrc service, uses the Mocha JavaScript test framework, and includes assertions using the built-in `assert` module. The test checks multiple scenarios of token transfers to different testers and verifies the expected results.",
+        "sha256": "c782cd96a75149a2ce5fb503727c32b40a4ca677abc053767a7460c1a8ec2cd0"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/manyVoters.js_doc.md": {
+        "summary": "The purpose of the file \"manyVoters.js\" is to conduct integration testing on the voting functionality of a system. It simulates a scenario where multiple voters participate in voting on a demo repository. The file tests various components such as dependencies, variables, testing functions, post and get requests, and assertions to ensure the proper functioning of the voting system.",
+        "sha256": "8f7bb9aed6d27fc78aa34f942561db76b8a13dfeb84be4ed26cd7141859efafe"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/duplicateVote.js_doc.md": {
+        "summary": "This file (`duplicateVote.js`) is a test script for the 'vote' feature of a GitHub private repository interface using Node.js. It tests the prevention and correct handling of duplicate votes on 'pull requests' where the voter is in the minority. It covers key scenarios such as acquiring contributor information, sending votes, checking vote status, and closing the vote for subsequent tests.",
+        "sha256": "d99de533ffcb9e3257f4fe2185c188369c54a3c00f1960b16f1596a706282e29"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/semiAutoManyVoters.js_doc.md": {
+        "summary": "The `semiAutoManyVoters.js` file is an integration test script used for rigorous testing of the voting mechanism in a multi-person environment. It focuses on functionalities like casting votes, fetching voting results, obtaining contributor IDs, and transferring closing voting power. The script is designed to help developers ensure the proper functioning of vote-related functionalities in the 'demo' repository.",
+        "sha256": "160781b9d4db46ba3a45dced25024567c7b0f84c07fb199ab743c53f0a636ad0"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/preTestCreatePRs.js_doc.md": {
+        "summary": "Based on the summary provided, this file appears to be a JavaScript test script that creates multiple pull requests in a GitHub repository for integration testing. It imports necessary dependencies, defines a delay mechanism, and includes a test case that retrieves a GitHub contributor's name and creates six pull requests on the \"demo\" repository. The script requires a JavaScript runtime environment with Mocha installed, valid contributor identification, and appropriate repository permissions.",
+        "sha256": "ddb66bb8cdd50428c36d145ded18ddc5e7285ce20b93fa8aa0a30efe4bb1aa6f"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/mergePR.js_doc.md": {
+        "summary": "This file, mergePR.js, is a JavaScript test file specifically designed for merging pull requests in a private repository. Its purpose is to perform integration testing for the 'turbosrc-service' application. It contains utility functions for various repository and pull request management tasks, as well as functions to retrieve contributor details. Additionally, it includes a Mocha test case to verify the successful merging of pull requests.",
+        "sha256": "746bf8cb2855c8eb34ac08a66c0a6eb6afc25028486940832dc9782b182753c6"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/getVotes.js_doc.md": {
+        "summary": "The purpose of this file is to test the `getVotes` function from the `engineRequests` utility file. It includes a setup action, a suite of tests specifically for the `getVotes` method, and a single test case that checks if the function correctly retrieves all votes for a provided Pull Request. The file also sets a timeout value for test execution.",
+        "sha256": "8a7f23040212ce4f5fc39163e44367005f79a79aa32fdc8f5801092de0212756"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/twoVoters.js_doc.md": {
+        "summary": "The purpose of the 'twoVoters.js' file is to test the voting feature in a web service. It verifies that two voters can place votes correctly, counts and calculates vote totals accurately, tests state changes in a Pull Request, and tests endpoint functionality using various utility files. It also tests if a Pull Request can be successfully changed to 'merge' status once the required number of 'yes' votes is reached. It utilizes modules such as GraphQL's parser, promises from the File System module, and assert from Node.js for testing.",
+        "sha256": "8c043c47ada8d59d0cb128b7c7d775c8ef945ee6ede220c2f012500dc8e60340"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/singleMajorityVoterConflict.js_doc.md": {
+        "summary": "This JavaScript file serves as an integration test suite for a private repository's majority voting feature. It tests the behavior when a single majority voter casts their vote, including closing the vote, merging a pull request, and calculating the total 'Yes' and 'No' votes accurately. The file utilizes various functions and methods for processing GraphQL queries, performing API requests, handling file-system operations, validation checks, event emission, and introducing pauses to avoid data duplication or race conditions.",
+        "sha256": "5b3ccf53e4f3defd4f74cc94076768c12936f7ec08976299615317ee067de0a0"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/semiAutoTestCreatePRs.js_doc.md": {
+        "summary": "The purpose of this file is to serve as an integration test for automatically creating a pull request in a GitHub repository. It uses Mocha as the testing framework and performs various operations such as importing modules, defining sleep time, and invoking assertions to confirm the successful creation of a pull request. Note that this file may be under development or updating and may not function as intended.",
+        "sha256": "08515224d3f0199e458eadd16caa6c68da020649e693330a22b092e77f6eced4"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/createRepo.js_doc.md": {
+        "summary": "This file (`createRepo.js`) is a Node.js file using Mocha for testing the functionality of creating a new repository named \"demo\" in a private Git context. It verifies the status and vote power of the contributor after the repository creation. Assertions are made for various conditions such as the response codes and the existence of the repository.",
+        "sha256": "59cfceed6601e2de40d895d19eb6de617cdce43e415d0ec9c811291e9865cfc2"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/singleMajorityVoter.js_doc.md": {
+        "summary": "Based on the summary, this file is a test script written in Node.js that simulates a \"majority rules\" voting process on pull requests in a GitHub repository. It checks if a pull request can be successfully merged based on the votes and verifies the correctness of the vote tally. This script is likely used for testing the functionality and stability of the voting system in a continuous integration (CI) suite.",
+        "sha256": "b1ac061b9922d641719b73efb9802d344d50734318df73f849456db406fef4f4"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/integration/privaterepo/createSystem.js_doc.md": {
+        "summary": "The purpose of the `createSystem.js` file is to perform testing for a private repository. It tests token management by creating a demo repository, transferring tokens, and verifying the received amounts. It also checks the validity of contributor names and utilizes the Mocha testing framework with async calls and a custom 'snooze' function for managing delays.",
+        "sha256": "d1a620e5494a3007e7d44d8f9a80c01464cea30954f5226e30e045e98a1f3956"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/special/preTestCreatePRs.js_doc.md": {
+        "summary": "Based on the information provided, the purpose of the `preTestCreatePRs.js` file is to contain tests for creating repositories and GitHub pull requests. It imports various modules and includes functions such as `snooze`, `readDBfile`, and `getGithubUser` to handle different aspects of the testing process. The file runs tests to compare data from different databases and validates that the outputs match, while also checking for errors in fetching a GitHub user.",
+        "sha256": "ba7355fad8aa344ff65dbbe2500d3e2fd59fd71709f91db59eaee66bc09cef43"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/testing/special/twoVoters.js_doc.md": {
+        "summary": "The \"twoVoters.js\" file is a Node.js script that conducts unit tests for database functionality in a Github-based application. It compares process outcomes between a new and deprecated database to ensure their sameness, particularly for operations like creating pull requests, adjusting voted tokens, setting head commits, and accumulating \"yes\" votes. The script uses 'assert', 'fs', 'snooze', and 'mocha' for comparison assertions, file reading, preventing data race errors, and running tests, respectively.",
+        "sha256": "b4d5920447a52f7a9a57d714bad9eba3f04301b23b9d192356315b8d8a11961a"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/scripts/tests.sh_doc.md": {
+        "summary": "The purpose of this file is to provide a Bash script for repository management and test running in an application. It includes functions for deleting a repository, forking a repository, creating pull requests, running tests, and executing all operations except for tests. The script requires mandatory arguments for username and repository, and an optional argument to specify the function to execute.",
+        "sha256": "22afd0a73fa1f7e51b88b40ec329cdb0329997d8235ab8a8ed09c86a3d487512"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/lib/state.js_doc.md": {
+        "summary": "The file `state.js` is a JavaScript module that provides functionality for managing repositories, pull requests, and tokens in a database. It facilitates operations such as creating repositories, modifying token supply, transferring tokens between contributors, changing quorum values, creating pull requests, voting on pull requests, and retrieving data from the database. The module exports a single object containing all these functions.",
+        "sha256": "d71ab678fa06a8c337df747bc13a8f64092da292b0b613ff318331d74939ba36"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/lib/actions.js_doc.md": {
+        "summary": "The purpose of this file, `actions.js`, is to provide utility/helper functions for a backend service interacting with GitHub's API. It includes functions for tasks such as converting issue identifiers, creating pull requests, fetching voting status, updating PR status based on votes, transferring tokens between users, creating new users and repositories, and fetching various contributor and repository details. These functions likely support a code collaboration and version control application with additional features beyond standard Git.",
+        "sha256": "ff1d6b53e9a08548cfede97e72ad0177ec829d44edc591d8a2af40feb899c12c"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/gitHeadUtil.js_doc.md": {
+        "summary": "The purpose of the `gitHeadUtil.js` file is to provide utility for handling Git operations related to GitHub repositories. It exports a function called `gitHeadUtil` that fetches commit details from a specified repository. The function takes in parameters such as the repository owner, repository name, forked branch name, and commit index. It authenticates the requests using a GitHub Token obtained from the `gitHubUtil` file and uses the Octokit library for making API requests.",
+        "sha256": "4d2fe65381abf9ec219e36cf3be6eeedaf277d8506006e897792e54f2711e6c0"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/engineRequests.js_doc.md": {
+        "summary": "The purpose of this file, engineRequests.js, is to implement utility functions for making API requests to an external service. These functions cover a range of operations for processing tasks related to user repositories, such as creating users, repositories, pull requests, fetching repository status, transferring tokens, and retrieving contributor data. The functions use the 'superagent' module for HTTP requests and retrieve service endpoints from the 'config' module.",
+        "sha256": "a2a019b70bf1d9c6af10ce40dd803b716b759e09d43ffa207c9728f81fde6ed1"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/requests.js_doc.md": {
+        "summary": "The file `/app/filebot-store-000/turbosrc-service/src/utils/requests.js` contains JavaScript code with methods that make HTTP requests to interact with a GraphQL API for the TurboSrc service. These methods perform actions such as creating repositories, pulling forks, setting votes, retrieving user and pull request information, and more. The specific details and parameters for each method can be found by analyzing the GraphQL queries and mutations used in the requests.",
+        "sha256": "352ea6af4a31645ff2305332723e313cbd5615724e1aa20855e5e964b985bdec"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/ghServiceRequests.js_doc.md": {
+        "summary": "The `ghServiceRequests.js` file contains utility functions related to GitHub service. It includes functions for creating and retrieving issue IDs for both GitHub and Turbosrc repositories. The module uses the `superagent` library for HTTP requests and `config` module for service endpoint retrieval. The returned JSON data contains status, Turbosrc ID, GitHub issue ID, and a message.",
+        "sha256": "f93470d98598b660bc503cdf4f5da00da3fbbf4a5c5afc3fd680e004188b2140"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/nameSpaceRequests.js_doc.md": {
+        "summary": "This JavaScript file contains utility functions for sending HTTP requests to create and fetch user-related information. It uses the \"superagent\" library. The file includes functions to create new users, fetch contributor names, IDs, signatures, and user data. The targeted endpoint for these requests is retrieved from a service called \"namespace\" using a function defined in another module.",
+        "sha256": "5c7665ee2dfdf247e546dc4d54fe588f0067b60c0632080e8c81fa4ace45db3d"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/gitHubUtil.js_doc.md": {
+        "summary": "The `gitHubUtil.js` module provides utility functions for interacting with GitHub. It includes functions for retrieving GitHub API tokens, verifying token validity, checking permissions, retrieving pull requests, creating pull requests, closing pull requests, merging pull requests, and creating forks. This module relies on `jsonwebtoken`, `Octokit`, and `fs` for various operations.",
+        "sha256": "6fcfc0d775f534b74da00f83e40242b378100c97e425751233233192b17af8d7"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/config.js_doc.md": {
+        "summary": "This file, `config.js`, contains utility functions that read and parse JSON configurations from a specific `.config.json` file. These functions retrieve various configurations such as GitHub user, contributor address, repo address, turbosrc mode, JWT, service endpoint, and egressURLoption. Each function has error handling and logs the retrieved values to the console.",
+        "sha256": "1c569d019d54db26d90374b315f1a7548b4ecc7d38822de05ec0b61ccc6aaa69"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/src/utils/pullForkUtil.js_doc.md": {
+        "summary": "This file (`pullForkUtil.js`) is a JavaScript utility script used for handling pull requests and forks in a GitHub repository. It includes functions for executing shell commands, generating SHA-256 checksums, archiving repositories, and other related operations. The main exported object is `pullForkUtil` which contains all the functions.",
+        "sha256": "74534cd2ca9c89400a38e9e2cf540e759fe7b0a5dfc5d0be3c01322e30f6f6a3"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/docker/package.json_doc.md": {
+        "summary": "The purpose of the `/app/filebot-store-000/turbosrc-service/docker/package.json` file is to provide information about the project \"express-graphql-example\" at version 1.0.0. It includes dependencies such as 'express', 'graphql', 'mocha', and others essential for the project's functionality. It may require updates for documentation purposes or distributing the software package.",
+        "sha256": "00e3b1ed06b20f60c30fa75fba8c1cfb009285e6279b50f336acdd55f766c414"
+    },
+    "/app/filebot-store-000/turbosrc-service/.docubot/docker/docker-compose.yml_doc.md": {
+        "summary": "This file, `docker-compose.yml`, manages the deployment of two Docker services: `turbo-src-server` and `turbo-src-pfserver`. It defines the configurations for each service, such as the image, ports, environment variables, volumes, and launch commands. The file includes an external Docker volume, `turbo-src-server-node-modules-data-volume`, which is likely used to cache the Node modules directory for improved performance.",
+        "sha256": "8942d683f138407a47942f5ae5aa540c6841143cb0472731bf69e2f1da69de50"
+    },
+    "/app/filebot-store-000/turbosrc-service/docker/service.env": {
+        "summary": "This file appears to be a configuration file or script related to environment variables. It sets values for two environment variables, \"NODE_ENV\" and \"TSRC_ENV\", with the former set to \"dev\" and the latter set to \"local\".",
+        "sha256": "222d46b5cbe3f3d63eae46f1e1fb055d29e16fea69814891d10a3a1c33b3a1d7"
+    },
+    "/app/filebot-store-000/turbosrc-service/docker/dockerfile.pfserver": {
+        "summary": "This file is a Dockerfile for a Node.js application. It sets the working directory, installs the app dependencies, copies the app source code, exposes port 4001, and defines the command to start the server using \"node pullForkServer.js\".",
+        "sha256": "3cc04491eb4dcc99538b63619d2ddd0ea3ce9f14e5887dfcc2be8da96258d556"
+    },
+    "/app/filebot-store-000/turbosrc-service/docker/dockerfile.server": {
+        "summary": "This file is a Dockerfile for a Node.js application. It installs the app dependencies, sets the NODE_PATH environment variable, copies the package.json file to the container, runs npm install, copies a config file (config.json) to the container (only on deployment branches), and sets the working directory to /usr/src/app.",
+        "sha256": "72399e6f50d1a05cb674b390ec1558415199ca1359a9a6e6abd5385094396365"
+    }
+}

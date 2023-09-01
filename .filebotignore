@@ -1,0 +1,17 @@
+processed_files*
+.docubot/processed_files.txt
+.docubotignore
+yarn.lock
+package-lock.json
+.gitignore
+.prettierrc
+.eslintrc.json
+.env
+.travis.yml
+.eslintignore
+default.nix
+node-env.nix
+node-packages.nix
+images/
+testing/special
+testing/createUser.js

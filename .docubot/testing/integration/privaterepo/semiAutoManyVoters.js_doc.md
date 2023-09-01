@@ -1,0 +1,9 @@
+The `semiAutoManyVoters.js` file is an intricate integration test script concerning the voting mechanism, specifically designed to test scenarios where multiple contributors vote on a pull request. It implements a wide array of functionalities utilizing libraries like 'assert' and 'fs' promises as well as many internally defined utility functions.
+
+The main focus is on the `postSetVote` function that enables different testers to cast their vote for a specific issue in the 'demo' repository. The voting results are fetched continuously using the `postGetPRvoteTotals` throughout the process, ensuring the vote count is valid. Furthermore, the `postGetContributorID` function is used to obtain the IDs of the contributors for the voting mechanism.
+
+The test follows a logic where first the contributor name is fetched, then a variety of tokens are initialized for testers. Further on, for each tester, votes are posted and voting results are fetched after each vote while maintaining a delay `snooze`, for avoiding data races.
+
+In addition, the script uses the `socket.emit('vote cast')` method to signal the change in voting status. Toward the end of the voting process, the `postTransferTokens` function is used to transfer closing voting power for manual vote closing. At the end, through assertions, it checks whether the vote has been added successfully, also ensuring if a pull request is still open even though it was voted beyond pre-open.
+
+Given this information, it's used in scenarios where there needs to be rigorous testing of the voting feature in a multi-person environment, helping developers ensure proper function of vote-related functionalities.
