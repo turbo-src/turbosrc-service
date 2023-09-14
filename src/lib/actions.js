@@ -504,6 +504,8 @@ const root = {
     if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
     // Comment out line below to disable actual merging into the codebase. Status will still be merged in our db either way:
     // await mergePullRequest(args.owner, args.repo, Number(issueID))
+    } else if (prVoteStatus.status === 200 && prVoteStatus.state === "close") {
+    // await closePullRequest(args.owner, args.repo, Number(issueID))
     }
 
     return resSetVote;
