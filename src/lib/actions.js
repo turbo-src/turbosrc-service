@@ -328,7 +328,7 @@ const root = {
 
     console.log('getPR', status)
 
-    status.mergeableCodeHost = mergeableCodeHost
+    status.mergeableCodeHost = mergeableCodeHost || true
    
     return status;
   },
