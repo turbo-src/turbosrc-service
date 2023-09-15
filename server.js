@@ -1,7 +1,6 @@
 const fs = require('fs')
 const fsPromises = require('fs').promises;
 const express = require('express');
-const { Server } = require("socket.io");
 const { graphqlHTTP } = require('express-graphql');
 const { buildSchema } = require('graphql');
 const cors = require('cors');
@@ -552,14 +551,7 @@ var app = express();
 app.use(cors());
 const http = require('http');
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-      origin: "https://github.com",
-      methods: ["GET", "POST"],
-      allowedHeaders: ["my-custom-header"],
-      credentials: true
-    }
-});
+
 //app.use(loggingMiddleware);
 app.use(function (req, res, next) {
     let originalSend = res.send;
@@ -584,14 +576,6 @@ var way = false;
 //}
 app.get('/', (req, res) => {
   res.status(200).send();
-});
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  socket.on('vote cast', (user, repo, issueID) => {
-    io.emit('vote received', user, repo, issueID);
-  });
 });
 
 server.listen(4000, () => {
