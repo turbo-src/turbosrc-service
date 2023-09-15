@@ -106,13 +106,17 @@ async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
     return { head: head, mergeable: mergeable }
 }
 
-async function convertIssueID(owner, repo, issueID, write, contributor_id) {
+async function convertIssueID(repoID, issueID, write, contributor_id) {
 	// This will exchange the issueID (eg. issue_4) into a tsrcID (e.g. commit head sha256).
 	// It will also record the sha256 against the issueID for future reference.
 
 	// childDefaultHash is the most recent commit head sha256 of the pull request branch
 	// defaultHash is the next most recent commit head sha256 of the pull request branch
-	const repoID = `${owner}/${repo}`;
+
+  const { repoName } = await findOrCreateNameSpaceRepo(repoID)
+  const owner = repoName.split('/')[0]
+  const repo = repoName.split('/')[1]
+  
 	let head;
 	let ghService;
 	let res = {
@@ -156,7 +160,7 @@ async function convertIssueID(owner, repo, issueID, write, contributor_id) {
 		if (write) {
 			//If write is true, then create a new issue in the GH service for future reference
 			const resCreateIssue = await postCreateIssue(
-				`${owner}/${repo}`,
+				repoID,
 				issueID,
 				head
 			);
@@ -210,7 +214,7 @@ const root = {
   getPRvoteYesTotals: async function (args) {
     
     console.log('yes:', args.contributor_id)
-    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
@@ -221,7 +225,7 @@ const root = {
 
     const voteYes = postGetPRvoteYesTotals(
       args.owner,
-      `${args.owner}/${args.repo}`,
+      repo,
       args.defaultHash,
       args.contributor_id,
       ""
@@ -230,15 +234,16 @@ const root = {
     return voteYes;
   },
   getVotes: async (repoID, defaultHash, contributor_id) => {
-    const owner = repoID.split('/')[0]
-    const repo = repoID.split('/')[1]
+    const {repoName} = await findOrCreateNameSpaceRepo(repoID)
+    const owner = repoName.split('/')[0]
+    const repo = repoName.split('/')[1]
     const pull = defaultHash.split("_")[1] // issue_1 becomes 1 for github api
     let response = {}
     let convertedHash = {}
     // Step 1: convert the issue_id of the PR to the defaultHash, ie the head
     // default hash in the args here is the issue_id :)
     // If it is a brand new pr not in our db then it will return undefined so just use the default hash, er.. issue_id :)
-    convertedHash = await convertIssueID(owner, repo, defaultHash, false, contributor_id) || defaultHash
+    convertedHash = await convertIssueID(repoID, defaultHash, false, contributor_id) || defaultHash
 
     // Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
     response = await postGetVotes(repoID, convertedHash.defaultHash, contributor_id);
@@ -264,14 +269,14 @@ const root = {
   },
   getPRvoteNoTotals: async function (args) {
     console.log('no:', args.contributor_id)
-    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
     const voteNo = await postGetPRvoteNoTotals(
       args.owner,
-      `${args.owner}/${args.repo}`,
+      args.repo,
       args.defaultHash,
       args.contributor_id,
       ""
@@ -281,14 +286,14 @@ const root = {
   },
   getPRvoteTotals: async function (args) {
     console.log('totals:', args.contributor_id)
-    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.repo, args.defaultHash, false, args.contributor_id)
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
       args.childDefaultHash = convertedHashes.childDefaultHash
     }
     const vote = await postGetPRvoteTotals(
       args.owner,
-      `${args.owner}/${args.repo}`,
+      args.repo,
       args.defaultHash,
       args.contributor_id,
       ""
@@ -300,7 +305,7 @@ const root = {
     //const contributorTokenAmount = getVotePowerAmount(database, args)
     const contributorTokenAmount = await postGetVotePowerAmount(
       "",
-      `${args.owner}/${args.repo}`,
+      args.repo,
       args.defaultHash,
       args.contributor_id,
       args.side
@@ -309,7 +314,7 @@ const root = {
   },
   getPullRequest: async function (args) {
     console.log('pr:', args.contributor_id)
-    const convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, false, args.contributor_id)
+    const convertedHashes = await convertIssueID(args.repo, args.defaultHash, false, args.contributor_id)
     let mergeableCodeHost = true
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash
@@ -319,7 +324,7 @@ const root = {
     console.log('mergeableCodeHost', mergeableCodeHost)
     let status = await postGetPullRequest(
       args.owner,
-      `${args.owner}/${args.repo}`,
+      args.repo,
       args.defaultHash,
       "",
       ""
@@ -396,12 +401,18 @@ const root = {
     //}
   },
   setVote: async function (args) {
+    const {repoName} = await findOrCreateNameSpaceRepo(args.repo)
+    const owner = repoName.split('/')[0]
+    const repo = repoName.split('/')[1]
+
     // Need this for check gitHubPullRequest
     const issueID = (args.defaultHash).split('_')[1]
     const issue_id = args.defaultHash
     // If ran online, it will find the default hash's associated tsrcID in GH Service
-    convertedHashes = await convertIssueID(args.owner, args.repo, args.defaultHash, true, args.contributor_id)
+    convertedHashes = await convertIssueID(args.repo, args.defaultHash, true, args.contributor_id)
     
+
+
       if (convertedHashes.status === 201) {
         args.defaultHash = convertedHashes.defaultHash
         args.childDefaultHash = convertedHashes.childDefaultHash
@@ -410,13 +421,13 @@ const root = {
 
         let prVoteStatus = await postGetPullRequest(
         args.owner,
-        `${args.owner}/${args.repo}`,
+        args.repo,
         args.defaultHash,
         args.contributor_id,
         args.side
         );
 
-        const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), args.contributor_id)
+        const gitHubPullRequest = await getGitHubPullRequest(owner, repo, Number(issueID), args.contributor_id)
 
         if (gitHubPullRequest === undefined || gitHubPullRequest === null ) {
           console.log("Can't vote because trouble finding Github Pull request.")
@@ -438,7 +449,7 @@ const root = {
       if (prVoteStatus.status === 404) {
           await postCreatePullRequest(
           args.owner,
-          `${args.owner}/${args.repo}`,
+          args.repo,
           args.defaultHash,
           args.childDefaultHash,
           head, // get head
@@ -455,7 +466,7 @@ const root = {
          // The linked PR will inherit the votes from its parent PR
          const resLinkedPR = await createLinkedPullRequest(
            args.owner,
-           `${args.owner}/${args.repo}`,
+           args.repo,
            args.defaultHash,
            args.childDefaultHash,
            args.childDefaultHash,
@@ -482,7 +493,7 @@ const root = {
     // Now that is established which head of the PR we are voting on, we can create the vote:
      const resSetVote = await postSetVote(
        args.owner,
-       `${args.owner}/${args.repo}`,
+       args.repo,
        args.defaultHash,
        args.childDefaultHash,
        mergeable,
@@ -493,7 +504,7 @@ const root = {
     // Now get the vote totals for the PR:
     prVoteStatus = await postGetPullRequest(
     args.owner,
-    `${args.owner}/${args.repo}`,
+    args.repo,
     args.defaultHash,
     args.contributor_id,
     args.side
@@ -568,7 +579,7 @@ const root = {
     const resTransferTokens =
         await postTransferTokens(
           "",
-          `${args.owner}/${args.repo}`,
+         args.repo,
           args.from,
           args.to,
           args.amount,
@@ -648,9 +659,12 @@ const root = {
     return resGetContributorSignature;
   },
   createRepo: async (args) => {
+    const resCreateNameSpaceRepo = await findOrCreateNameSpaceRepo(
+      args.repo
+    )
     const resCreateRepo = await postCreateRepo(
       "",
-      `${args.owner}/${args.repo}`,
+      resCreateNameSpaceRepo.repoID,
       args.defaultHash,
       args.contributor_id,
       args.side
