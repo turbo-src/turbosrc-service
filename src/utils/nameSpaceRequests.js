@@ -110,6 +110,7 @@ var root = {
       })
       .set("accept", "json");
     const json = JSON.parse(res.text);
+    console.log('findorcreatenamespacerepo reqs json', json)
     return json.data.findOrCreateRepo;
   },
   getNameSpaceRepo: async (
