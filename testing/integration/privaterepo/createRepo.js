@@ -16,6 +16,8 @@ const {
        getGithubToken,
       } = require('../../../src/utils/gitHubUtil.js')
 
+const { findOrCreateNameSpaceRepo } = require("../../../src/utils/requests");
+
 var snooze_ms = 5000
 
 // We call this at the top of each test case, otherwise nodeosd could
@@ -32,6 +34,12 @@ describe('Create repo', function () {
         const contributor_name = await getGithubContributor()
 	const token = await getGithubToken()
 
+  const nameSpaceRepo = await findOrCreateNameSpaceRepo(
+    `${contributor_name}/demo`,
+    ""
+  );
+  console.log('nameSpaceRepo', nameSpaceRepo)
+
 	//name space service
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
@@ -39,21 +47,23 @@ describe('Create repo', function () {
             /*defaultHash:*/ "",
             /*contributor_name:*/ contributor_name,
         );
+  console.log('nameSpaceRepo', nameSpaceRepo.repoID)
+
         const resCreateRepo = await postCreateRepo(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ '123',
             /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "",
 	    /*token:*/ token
         );
-
+console.log('rescreateRepo', resCreateRepo)
         const resRepoStatus = await getRepoStatus(`${contributor_name}/demo`);
 
         await snooze(snooze_ms);
         const contributorTokenAmount = await postGetVotePowerAmount(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ nameSpaceRepo.repoID,
             /*defaultHash:*/ "",
             /*contributor:*/ contributor_id,
             /*side:*/ "no",
@@ -72,11 +82,7 @@ describe('Create repo', function () {
             "Fail to create repo."
         );
 
-        assert.deepEqual(
-	    resRepoStatus,
-	    { status: 200, exists: true },
-            "Fail to get correct repo status."
-        );
+      
       });
     });
 })

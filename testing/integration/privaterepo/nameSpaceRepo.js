@@ -12,7 +12,7 @@ describe("findOrCreateNameSpaceRepo", function () {
 		it("Should create a repo in the namespace server for indexing", async () => {
 			const contributorName = await getGithubContributor();
 			const nameSpaceRepo = await findOrCreateNameSpaceRepo(
-				`${contributorName}/demo`,
+				`${contributorName}/namespaceRepoTest`,
 				""
 			);
 			assert.equal(

@@ -671,7 +671,7 @@ var root = {
     repoName,
     repoID) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ findOrCreateNameSpaceRepo(repoName: "${repoName}", repoID: "${repoID}") {status, repoName, repoID, repoSignature, message}}`,
       })
@@ -682,7 +682,7 @@ var root = {
   getNameSpaceRepo: async (
     repoNameOrID) => {
     const res = await superagent
-      .post(`${port}/graphql`)
+      .post(url)
       .send({
         query: `{ getNameSpaceRepo(repoNameOrID: "${repoNameOrID}") {status, repoName, repoID, repoSignature, message}}`,
       })
