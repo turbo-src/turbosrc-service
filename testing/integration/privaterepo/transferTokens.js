@@ -5,6 +5,7 @@ const {
         postTransferTokens,
         postGetContributorID,
         postGetContributorName,
+        getNameSpaceRepo
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
@@ -54,6 +55,10 @@ before(async () => {
 	const testerTokenJ = await getGithubToken("j")
 	const testerTokenK = await getGithubToken("k")
 	const testerTokenL = await getGithubToken("l")
+
+    const { repoID } = await getNameSpaceRepo(
+        `${contributor_name}/demo`
+    );
 
     const tsrctester1ID = await postGetContributorID(
         /*owner:*/ contributor_name,
@@ -128,96 +133,96 @@ before(async () => {
         /*contributor_name:*/ "tester12tsrc",
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester1ID,
         /*amount:*/ 500_001,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester2ID,
         /*amount:*/ 15_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester3ID,
         /*amount:*/ 10_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester3ID,
         /*amount:*/ 75_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester4ID,
         /*amount:*/ 75_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester5ID,
         /*amount:*/ 5_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester6ID,
         /*amount:*/ 100_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester7ID,
         /*amount:*/ 50_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester8ID,
         /*amount:*/ 10_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester9ID,
         /*amount:*/ 50_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester10ID,
         /*amount:*/ 75_000,
         /*token:*/ token
     );
     await postTransferTokens(
-        /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*owner:*/ "",
+        /*repo:*/ repoID,
         /*from:*/ contributor_id,
         /*to:*/ tsrctester11ID,
         /*amount:*/ 999,
@@ -230,7 +235,7 @@ before(async () => {
 
     const tsrctester1ContributorToken = await postGetVotePowerAmount(
         /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*repo:*/ repoID,
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ tsrctester1ID,
         /*side:*/ "no",
@@ -239,7 +244,7 @@ before(async () => {
 
     const contributorToken = await postGetVotePowerAmount(
         /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*repo:*/ repoID,
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ contributor_id,
         /*side:*/ "no",
@@ -338,7 +343,7 @@ before(async () => {
 
     const kContributorToken = await postGetVotePowerAmount(
         /*owner:*/ contributor_name,
-        /*repo:*/ "demo",
+        /*repo:*/ repoID,
         /*defaultHash:*/ "defaultHash4",
         /*contributor:*/ tsrctester11ID,
         /*side:*/ "no",
