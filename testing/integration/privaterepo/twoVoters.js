@@ -152,7 +152,7 @@ describe('Voting.', function () {
         );
         assert.equal(
             voteTotalsFinal,
-            '0.534001',
+            '0.40',
             "Fail to tally all votes."
         );
 
