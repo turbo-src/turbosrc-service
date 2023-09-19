@@ -9,7 +9,8 @@ const { postSetVote,
         postGetContributorID,
         postGetContributorName,
         postGetVotePowerAmount,
-        postTransferTokens
+        postTransferTokens,
+        getNameSpaceRepo
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
@@ -41,6 +42,8 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_5",
             /*contributor_name:*/ contributor_name,
         );
+
+        const { repoID } = await getNameSpaceRepo(`${contributor_name}/demo`);
 
     // The main person in .config spinnning up turbosrc
 	const token = await getGithubToken()
@@ -133,7 +136,7 @@ describe('Vote.', function () {
         //jc
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -145,7 +148,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester2ID,
             /*side:*/ "yes",
@@ -154,7 +157,7 @@ describe('Vote.', function () {
         // pc
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -167,7 +170,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester3ID,
             /*side:*/ "yes",
@@ -176,7 +179,7 @@ describe('Vote.', function () {
         //mb
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -189,7 +192,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const mbVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester4ID,
             /*side:*/ "yes",
@@ -198,7 +201,7 @@ describe('Vote.', function () {
         // np
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -211,7 +214,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const npVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester5ID,
             /*side:*/ "yes",
@@ -220,7 +223,7 @@ describe('Vote.', function () {
         // nn
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -233,7 +236,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const nnVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester6ID,
             /*side:*/ "yes",
@@ -242,7 +245,7 @@ describe('Vote.', function () {
         // jp
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -255,7 +258,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const jpVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester7ID,
             /*side:*/ "yes",
@@ -264,7 +267,7 @@ describe('Vote.', function () {
         // ts
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -277,7 +280,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const tsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester8ID,
             /*side:*/ "yes",
@@ -286,7 +289,7 @@ describe('Vote.', function () {
         // af
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -299,7 +302,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester9ID,
             /*side:*/ "yes",
@@ -308,7 +311,7 @@ describe('Vote.', function () {
         // ds
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -321,7 +324,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester10ID,
             /*side:*/ "yes",
@@ -330,7 +333,7 @@ describe('Vote.', function () {
         // ri
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -343,7 +346,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester11ID,
             /*side:*/ "yes",
@@ -352,7 +355,7 @@ describe('Vote.', function () {
         // tester 12/L
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*childDefaultHash:*/ "issue_5",
 	    /*mergeable:*/ true,
@@ -364,7 +367,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const tester12tsrcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester12ID,
             /*side:*/ "yes",
@@ -425,7 +428,7 @@ describe('Vote.', function () {
 
         await postTransferTokens(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*from:*/ tsrctester1ID,
             /*to:*/ contributor_id,
             /*amount:*/ 499_999,
@@ -434,7 +437,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_5",
             /*contributor_id:*/ tsrctester11ID,
             /*side:*/ "yes",
@@ -449,7 +452,7 @@ describe('Vote.', function () {
         );
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "open", repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest5", "mergeableCodeHost": true, "childDefaultHash": "3baa5aec09d458cd1cd935ab144ef7f68462cd71", "defaultHash": "3baa5aec09d458cd1cd935ab144ef7f68462cd71" },
+         { status: 200, state: "open", repo_id: repoID,  fork_branch: "pullRequest5", "mergeableCodeHost": true, "childDefaultHash": "3baa5aec09d458cd1cd935ab144ef7f68462cd71", "defaultHash": "3baa5aec09d458cd1cd935ab144ef7f68462cd71" },
           "Fail to open even though it was voted beyond pre-open."
         );
       });

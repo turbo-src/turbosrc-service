@@ -8,6 +8,8 @@ const { postSetVote,
         postNewPullRequest,
         postGetContributorID,
         postGetContributorName,
+	    getGitHubPullRequest,
+        getNameSpaceRepo
       } = require('../../../src/utils/requests')
 const { Parser } = require('graphql/language/parser');
 const {
@@ -40,10 +42,12 @@ describe('Vote.', function () {
 
         const testerTokenA = await getGithubToken("a")
         await snooze(snooze_ms);
+       
+        const { repoID } = await getNameSpaceRepo(`${contributor_name}/demo`);
 
         await postSetVote(
             /*owner:*/ contributor_name,
-            /*repo: */ "demo",
+            /*repo: */ repoID,
             /*defaultHash:*/ "issue_2",
             /*childDefaultHash:*/ "issue_2",
 	    /*mergeable:*/ true,
@@ -64,12 +68,13 @@ describe('Vote.', function () {
             /*defaultHash:*/ "issue_2",
             /*contributor_name:*/ "tsrctester1",
         );
+        const { repoID } = await getNameSpaceRepo(`${contributor_name}/demo`);
 
         await snooze(snooze_ms);
 
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
-            /*repo: */ "demo",
+            /*repo: */ repoID,
             /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
@@ -77,7 +82,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const voteYesTotals = await postGetPRvoteYesTotals(
             /*owner:*/ contributor_name,
-            /*repo: */ "demo",
+            /*repo: */ repoID,
             /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
@@ -85,7 +90,7 @@ describe('Vote.', function () {
         await snooze(snooze_ms);
         const voteNoTotals = await postGetPRvoteNoTotals(
             /*owner:*/ contributor_name,
-            /*repo: */ "demo",
+            /*repo: */ repoID,
             /*defaultHash:*/ "issue_2",
             /*contributor_id:*/ tsrctester1ID,
             /*side:*/ "yes",
@@ -93,7 +98,7 @@ describe('Vote.', function () {
 
         assert.deepEqual(
           mergeStatus,
-         { status: 200, state: "merge", "mergeableCodeHost": true, repo_id: `${contributor_name}/demo`,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
+         { status: 200, state: "merge", "mergeableCodeHost": true, repo_id: repoID,  fork_branch: "pullRequest2", "childDefaultHash": "8fff757c05b091712c8f170673b74c19134c34c4", "defaultHash": "8fff757c05b091712c8f170673b74c19134c34c4" },
          { status: 200, type: 2 },
           "Fail to merge even though it was voted in."
         );
