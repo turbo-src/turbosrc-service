@@ -116,7 +116,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 	// childDefaultHash is the most recent commit head sha256 of the pull request branch
 	// defaultHash is the next most recent commit head sha256 of the pull request branch
 
-	const { repoName } = await findOrCreateNameSpaceRepo(repoID);
+	const { repoName } = await getNameSpaceRepo(repoID);
 	const owner = repoName.split("/")[0];
 	const repo = repoName.split("/")[1];
 
@@ -230,7 +230,7 @@ const root = {
 
 		const voteYes = postGetPRvoteYesTotals(
 			args.owner,
-			repo,
+			args.repo,
 			args.defaultHash,
 			args.contributor_id,
 			""
@@ -239,7 +239,7 @@ const root = {
 		return voteYes;
 	},
 	getVotes: async (repoID, defaultHash, contributor_id) => {
-		const { repoName } = await findOrCreateNameSpaceRepo(repoID);
+		const { repoName } = await getNameSpaceRepo(repoID);
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
 		const pull = defaultHash.split("_")[1]; // issue_1 becomes 1 for github api
@@ -368,7 +368,7 @@ const root = {
 
 		console.log("getPR", status);
 
-		status.mergeableCodeHost = mergeableCodeHost;
+		status.mergeableCodeHost = mergeableCodeHost || true;
 
 		return status;
 	},
@@ -437,7 +437,7 @@ const root = {
 		//}
 	},
 	setVote: async function (args) {
-		const { repoName } = await findOrCreateNameSpaceRepo(args.repo);
+		const { repoName } = await getNameSpaceRepo(args.repo);
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
 
@@ -459,8 +459,8 @@ const root = {
 			let mergeable;
 
 			let prVoteStatus = await postGetPullRequest(
-				args.owner,
-				args.repo,
+				owner,
+				repo,
 				args.defaultHash,
 				args.contributor_id,
 				args.side
