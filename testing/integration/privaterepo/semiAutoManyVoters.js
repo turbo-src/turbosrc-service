@@ -144,7 +144,7 @@ describe('Vote.', function () {
             /*side:*/ "no",
             /*token:*/ testerTokenB
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
         await snooze(snooze_ms);
         const jcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,
@@ -165,7 +165,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenC
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const pcVoteCumm = await postGetPRvoteTotals(
@@ -187,7 +187,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenD
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const mbVoteCumm = await postGetPRvoteTotals(
@@ -209,7 +209,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenE
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const npVoteCumm = await postGetPRvoteTotals(
@@ -231,7 +231,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenF
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const nnVoteCumm = await postGetPRvoteTotals(
@@ -253,7 +253,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenG
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const jpVoteCumm = await postGetPRvoteTotals(
@@ -275,7 +275,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
             /*token:*/ testerTokenH
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const tsVoteCumm = await postGetPRvoteTotals(
@@ -297,7 +297,7 @@ describe('Vote.', function () {
             /*side:*/ "no",
             /*token:*/ testerTokenI
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const afVoteCumm = await postGetPRvoteTotals(
@@ -319,7 +319,7 @@ describe('Vote.', function () {
             /*side:*/ "no",
             /*token:*/ testerTokenJ
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const dsVoteCumm = await postGetPRvoteTotals(
@@ -341,7 +341,7 @@ describe('Vote.', function () {
             /*side:*/ "no",
             /*token:*/ testerTokenK
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
 
         await snooze(snooze_ms);
         const riVoteCumm = await postGetPRvoteTotals(
@@ -363,7 +363,7 @@ describe('Vote.', function () {
             /*side:*/ "no",
             /*token:*/ testerTokenL
         );
-       socket.emit('vote cast', contributor_name, "demo", "issue_5")
+       socket.emit('vote cast', contributor_name, repoID, "issue_5")
         await snooze(snooze_ms);
         const tester12tsrcVoteCumm = await postGetPRvoteTotals(
             /*owner:*/ contributor_name,

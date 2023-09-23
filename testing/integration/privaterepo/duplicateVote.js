@@ -34,7 +34,7 @@ describe('vote', function () {
 	const token = await getGithubToken()
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "defaultHash4",
             /*contributor_name:*/ contributor_name,
         );
@@ -42,7 +42,7 @@ describe('vote', function () {
 
         const tsrctester1ID = await postGetContributorID(
             /*owner:*/ contributor_name,
-            /*repo:*/ "demo",
+            /*repo:*/ repoID,
             /*defaultHash:*/ "issue_2",
             /*contributor_name:*/ "tsrctester1",
         );
@@ -59,7 +59,7 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
-        socket.emit('vote cast', contributor_name, "demo", "issue_3")
+        socket.emit('vote cast', contributor_name, repoID, "issue_3")
 
         await snooze(snooze_ms);
         const openStatus = await postGetPullRequest(
@@ -81,7 +81,7 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ token
         );
-        socket.emit('vote cast', contributor_name, "demo", "issue_3")
+        socket.emit('vote cast', contributor_name, repoID, "issue_3")
 
         await snooze(snooze_ms);
         const duplicateStatus = await postGetPullRequest(
@@ -106,7 +106,7 @@ describe('vote', function () {
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
-        socket.emit('vote cast', contributor_name, "demo", "issue_3")
+        socket.emit('vote cast', contributor_name, repoID, "issue_3")
 
         await snooze(snooze_ms);
         const mergeStatus = await postGetPullRequest(
