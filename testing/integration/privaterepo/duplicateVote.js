@@ -34,7 +34,7 @@ describe('vote', function () {
 	const token = await getGithubToken()
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
-            /*repo:*/ repoID,
+            /*repo:*/ "demo",
             /*defaultHash:*/ "defaultHash4",
             /*contributor_name:*/ contributor_name,
         );
