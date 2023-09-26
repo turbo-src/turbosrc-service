@@ -279,8 +279,8 @@ const root = {
 				githubRes.head.sha || "unable to fetch pull request data";
 			response.childDefaultHash =
 				githubRes.head.sha || "unable to fetch pull request data";
-			response.state = githubRes.state || "unable to fetch pull request data";
-			response.mergeable = githubRes.mergeable || true;
+			response.mergeable = githubRes.mergeable;
+			response.state = response.mergeable ? "vote" : "conflict";
 		}
 		return response;
 	},
