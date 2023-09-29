@@ -329,6 +329,7 @@ var root = {
         owner,
         contributor_id,
         head,
+        inSession,
         quorum,
         contributor { 
           contributor_id,

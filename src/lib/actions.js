@@ -270,6 +270,9 @@ const root = {
 				pull,
 				contributor_id
 			);
+
+			const { inSession } = await postGetRepoData(repoID, contributor_id);
+				console.log('inSession:', inSession)
 			response.status = 200;
 			response.title = githubRes.title || "unable to fetch pull request data";
 			response.remoteURL =
@@ -283,7 +286,11 @@ const root = {
 			response.childDefaultHash =
 				githubRes.head.sha || "unable to fetch pull request data";
 			response.mergeable = githubRes.mergeable;
-			response.state = response.mergeable ? "vote" : "conflict";
+			response.state = inSession
+				? "frozen"
+				: githubRes.mergeable
+				? "vote"
+				: "conflict";
 		}
 		return response;
 	},

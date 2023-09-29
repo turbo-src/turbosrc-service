@@ -179,6 +179,7 @@ var schema = buildSchema(`
     owner: String!
     contributor_id: String!
     head: String!
+    inSession: Boolean!
     quorum: Float!
     contributor: RepoContributor!
     pullRequests: [GetVotes]! 
