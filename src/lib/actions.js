@@ -272,7 +272,7 @@ const root = {
 			);
 
 			const { inSession } = await postGetRepoData(repoID, contributor_id);
-				console.log('inSession:', inSession)
+
 			response.status = 200;
 			response.title = githubRes.title || "unable to fetch pull request data";
 			response.remoteURL =
