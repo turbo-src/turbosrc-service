@@ -218,7 +218,7 @@ var schema = buildSchema(`
     getVoteAll(turboSrcID: String, defaultHash: String): ghPullRequest,
     getVoteEverything: String,
     setVote(turboSrcID: String, owner: String, repo: String, defaultHash: String, childDefaultHash: String, mergeable: Boolean, contributor_id: String, side: String, token: String): String,
-    createRepo(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): String,
+    createRepo(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): NameSpaceRepo,
     newPullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
     getPullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): PullRequest,
     getGitHubPullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String): ghPullRequest,
