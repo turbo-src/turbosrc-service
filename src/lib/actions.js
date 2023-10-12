@@ -701,8 +701,9 @@ const root = {
 	},
 	createRepo: async (args) => {
 		// Create a namespace entry for the new repo:
+		repoName = `${args.owner}/${args.repo}`
 		const resCreateNameSpaceRepo = await findOrCreateNameSpaceRepo(
-			args.repo,
+			repoName,
 			""
 		);
 
