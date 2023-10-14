@@ -235,7 +235,7 @@ var schema = buildSchema(`
     fork(turboSrcID: String, owner: String, repo: String, org: String): String,
     getRepoData(turboSrcID: String, repo_id: String, contributor_id: String): RepoData,
     findOrCreateNameSpaceRepo(status: Int, message: String, repoName: String, repoID: String, repoSignature: String): NameSpaceRepo,
-    getNameSpaceRepo(repoNameOrID: String): NameSpaceRepo,
+    getNameSpaceRepo(turboSrcID: String, repoNameOrID: String): NameSpaceRepo,
   }
 `);
 
