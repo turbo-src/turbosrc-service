@@ -1,5 +1,8 @@
 const { getPRhead } = require("./../utils/pullForkUtil");
 const {
+        getContributorAddress,
+      } = require('./../utils/config')
+const {
 	getPullRequest,
 	getGitHubPullRequest,
 	mergePullRequest,
@@ -797,6 +800,10 @@ const root = {
 		const res = await getNameSpaceRepo(args.repoNameOrID);
 		return res;
 	},
+        getTurboSrcIDfromInstance: async function() {
+          const turboSrcID = await getContributorAddress()
+          return turboSrcID
+        },
 };
 
 module.exports = root;

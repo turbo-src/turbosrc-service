@@ -236,6 +236,7 @@ var schema = buildSchema(`
     getRepoData(turboSrcID: String, repo_id: String, contributor_id: String): RepoData,
     findOrCreateNameSpaceRepo(status: Int, message: String, repoName: String, repoID: String, repoSignature: String): NameSpaceRepo,
     getNameSpaceRepo(turboSrcID: String, repoNameOrID: String): NameSpaceRepo,
+    getTurboSrcIDfromInstance: String!,
   }
 `);
 
@@ -544,6 +545,12 @@ var root = {
   fork: async (args) => {
     await fork(args.owner, args.repo, args.org)
   },
+
+  getTurboSrcIDfromInstance: async () => {
+    turboSrcID = await getTurboSrcIDfromInstance();
+    return turboSrcID
+  },
+
   //End of GH server endpoints.
 }
 
