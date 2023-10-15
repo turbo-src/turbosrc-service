@@ -34,7 +34,7 @@ describe("Create repo", function () {
 
 			const resCreateRepo = await postCreateRepo(
 				/*owner:*/ contributor_name,
-				/*repo:*/ `${contributor_name}/demo`,
+				/*repo:*/ "demo",
 				/*defaultHash:*/ "",
 				/*contributor:*/ contributor_id,
 				/*side:*/ "",
@@ -68,7 +68,7 @@ describe("Create repo", function () {
 				"Fail to get amount."
 			);
 
-			assert.equal(Number(resCreateRepo), 201, "Fail to create repo.");
+			assert.equal(Number(resCreateRepo.status), 201, "Fail to create repo.");
 		});
 	});
 });
