@@ -275,8 +275,7 @@ const root = {
 
 			response.status = 200;
 			response.title = githubRes.title || "unable to fetch pull request data";
-			response.remoteURL =
-				githubRes.remoteURL || "unable to fetch pull request data";
+			response.remoteURL = githubRes.url || "unable to fetch pull request data";
 			response.baseBranch =
 				githubRes.base.ref || "unable to fetch pull request data";
 			response.forkBranch =
@@ -291,6 +290,23 @@ const root = {
 				: githubRes.mergeable
 				? "vote"
 				: "conflict";
+
+			// Map the issue id to its sha for future reference
+			await postCreateIssue(repoID, defaultHash, githubRes.head.sha);
+
+			await postCreatePullRequest(
+				"",
+				repoID,
+				githubRes.head.sha,
+				githubRes.head.sha,
+				githubRes.head.sha,
+				githubRes.head.sha,
+				githubRes.url,
+				githubRes.base.ref,
+				githubRes.head.ref,
+				githubRes.title,
+				defaultHash
+			);
 		}
 		return response;
 	},
