@@ -93,22 +93,14 @@ const {
 
 async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
 	issueID = issueID.split("_")[1]; // Need this for check gitHubPullRequest.
-	console.log("issueID ", issueID);
-	console.log("contributor_id 91", contributor_id);
-	console.log(owner, repo, issueID, contributor_id);
 	const gitHubPullRequest = await getGitHubPullRequest(
 		owner,
 		repo,
 		issueID,
 		contributor_id
 	);
-	console.log("github");
-	console.log("github", gitHubPullRequest);
-
 	const head = gitHubPullRequest.head.sha;
 	const mergeable = gitHubPullRequest.mergeable;
-	console.log("gHprHead", head);
-	console.log("gHprMergeable", mergeable);
 	return { head: head, mergeable: mergeable };
 }
 
