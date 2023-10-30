@@ -360,6 +360,7 @@ var root = {
         yesPercent,
         noPercent,
         totalVotes,
+        totalVotePercent,
         totalYesVotes,
         totalNoVotes,
       },
