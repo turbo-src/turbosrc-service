@@ -1,5 +1,5 @@
 # We start from a Node.js 16 image. You can adjust this to your project's needs
-FROM node:12
+FROM node:16
 
 # Create app directory
 WORKDIR /app
@@ -10,7 +10,7 @@ COPY package*.json ./
 
 # If you have production-specific dependencies, you can use --only=production
 # Also, using `npm ci` to install dependencies for more reliable and reproducible builds.
-RUN npm ci
+RUN npm install
 
 # Bundle app source
 COPY . .
