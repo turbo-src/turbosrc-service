@@ -113,80 +113,17 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
-    //let token = await module.exports.getGithubToken();
-    
-    console.log('contributor_id getGitHubPullRequest:', contributor_id)
-    let args = {}
-    args.contributor_id = contributor_id
-    console.log('args.contributor_id:', args.contributor_id)
-    let res
-    let token
     try {
-      res = await getUser(contributor_id)
-    } catch (error) {
-      console.log('Error in getUser:', error)
-    }
-    console.log('made it here after getUser ')
-    try {
-    token = res.token
-    console.log(typeof token)
-    console.log('token:', token)
-    } catch (error) {
-      console.log('Error in getUser:', error)
-    }
-
-    const jwtTokenFromConfig = await getJWT()
-    console.log('138')
-    console.log(token)
-    const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-    console.log('141')
-    console.log('tokenRes', tokenRes)
-
-    const octokit = new Octokit({ auth: tokenRes.githubToken });
-    console.log('token', token,'tokenRes:', tokenRes)
-    console.log('gh 19')
-    console.log(owner)
-    console.log(repo)
-    console.log(pull)
-    try {
-      const res = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)//, {
-        //, {
-      console.log('gh 21')
-      //await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
-      //  owner: 'octocat',
-      //  repo: 'hello-world',
-      //  pull_number: 42
-      //})
-      //console.log(res)
-      const data = res.data
-
+      const { data } = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)
       return data
     } catch (error) {
       return error
     }
   }, 
   getPullRequest: async function(owner, repo, pull) {
-    let token = await module.exports.getGithubToken();
 
-    const jwtTokenFromConfig = await getJWT()
-    const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-
-    const octokit = new Octokit({ auth: tokenRes.githubToken });
-
-    console.log('gh 19')
-    console.log(owner)
-    console.log(repo)
-    console.log(pull)
-    const res = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)//, {
-    console.log('gh 21')
-    //await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
-    //  owner: 'octocat',
-    //  repo: 'hello-world',
-    //  pull_number: 42
-    //})
-    //console.log(res)
-
-    const data = res.data
+    const { data } = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)
+ 
     const head = data.head
     const oid = head.sha
     const label = head.label.split(':')
