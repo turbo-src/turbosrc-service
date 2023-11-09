@@ -7,7 +7,7 @@ const {
 	getJWT,
         getTurbosrcMode
 } = require('./config')
-
+const axios = require('axios');
 const {
   getUser
 } = require("./nameSpaceRequests");
@@ -149,7 +149,8 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
     console.log(repo)
     console.log(pull)
     try {
-      const res = await octokit.request(`GET /repos/${owner}/${repo}/pulls/${pull}`)//, {
+      const res = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)//, {
+        //, {
       console.log('gh 21')
       //await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
       //  owner: 'octocat',
@@ -176,7 +177,7 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
     console.log(owner)
     console.log(repo)
     console.log(pull)
-    const res = await octokit.request(`GET /repos/${owner}/${repo}/pulls/${pull}`)//, {
+    const res = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)//, {
     console.log('gh 21')
     //await octokit.request('GET /repos/{owner}/{repo}/pulls/{pull_number}', {
     //  owner: 'octocat',
