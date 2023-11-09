@@ -112,20 +112,14 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
   }
 
 },
-  getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
-    const user = await getUser(contributor_id)
-    const token = user.token
-    const jwtTokenFromConfig = await getJWT()
-    const tokenRes = jwt.verify(token, jwtTokenFromConfig)
-    const octokit = new Octokit({ auth: tokenRes.githubToken });
-
-    try {
-      const res = await octokit.request(`GET /repos/${owner}/${repo}/pulls/${pull}`)
-      return res.data
-    } catch (error) {
-      return error
-    }
-  }, 
+getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
+  try {
+    const { data } = await axios.get(`https://api.github.com/repos/${owner}/${repo}/pulls/${pull}`)
+    return data
+  } catch (error) {
+    return error
+  }
+}, 
   getPullRequest: async function(owner, repo, pull) {
     let token = await module.exports.getGithubToken();
 
