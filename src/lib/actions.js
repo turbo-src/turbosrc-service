@@ -187,7 +187,8 @@ const root = {
 			args.baseBranch,
 			args.fork_branch,
 			args.title,
-			args.issue_id
+			args.issue_id,
+			args.state
 		);
 		return res;
 	},
