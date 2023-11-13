@@ -54,6 +54,13 @@ verify: async function(contributor_id, token){
     // Trade contributor_id for our contributor_name in our PG database
     // If contributor_name in ags above, then it is a createUser
     let githubUsername = await postGetContributorName("","","",contributor_id)
+
+    // Case if this is a turboSrc token
+    if (githubUsername === tokenRes.githubToken) {
+      console.log('verified token thru turbosrc');
+      return true;
+    } 
+
     const octokit = new Octokit({ auth: tokenRes.githubToken });
     // If res was successful and was querying the user associated with the contributor_id return true
     const res = await octokit.request(`GET /users/${githubUsername}`);
@@ -79,6 +86,14 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
   let octokit;
   const jwtTokenFromConfig = await getJWT()
   const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+
+	// Logic if using a turboSrcToken:
+	if (tokenRes.githubToken === contributor_name) {
+	permissions.push_permissions = true;
+	permissions.public_repo_scopes = true;
+	return permissions
+	}
+  
   try {
       octokit = new Octokit({ auth: tokenRes.githubToken });
       //Check if user has public_repo scope:
