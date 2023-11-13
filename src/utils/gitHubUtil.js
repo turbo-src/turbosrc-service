@@ -113,8 +113,7 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
-    const user = await getUser(contributor_id)
-    const token = user.token
+    const token = await module.exports.getGithubToken();
     const jwtTokenFromConfig = await getJWT()
     const tokenRes = jwt.verify(token, jwtTokenFromConfig)
     const octokit = new Octokit({ auth: tokenRes.githubToken });
