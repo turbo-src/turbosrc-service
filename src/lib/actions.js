@@ -285,7 +285,6 @@ const root = {
 
 			// Map the issue id to its sha for future reference
 			await postCreateIssue(repoID, defaultHash, githubRes.head.sha);
-
 			await postCreatePullRequest(
 				"",
 				repoID,
@@ -297,7 +296,8 @@ const root = {
 				githubRes.base.ref,
 				githubRes.head.ref,
 				githubRes.title,
-				defaultHash
+				defaultHash,
+				response.state
 			);
 		}
 		return response;
