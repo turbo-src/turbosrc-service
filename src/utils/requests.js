@@ -586,12 +586,13 @@ var root = {
     remoteURL,
     baseBranch,
     fork_branch,
-    title
+    title,
+    state
   ) => {
     const res = await superagent
       .post(url)
       .send({
-        query: `{ createTsrcPullRequest(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
+        query: `{ createTsrcPullRequest(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}", state: "${state}") }`,
       })
       .set("accept", "json");
 
