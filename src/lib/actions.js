@@ -522,7 +522,8 @@ const root = {
 					baseBranch, // get baseBranch
 					forkBranch, // get forkBranch
 					title, // get title
-					issue_id
+					issue_id,
+					"vote"
 				);
 			} else if (args.defaultHash !== args.childDefaultHash && mergeable) {
 				console.log("PR updated and is mergeable, not in conflict.");
