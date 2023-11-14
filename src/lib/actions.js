@@ -125,7 +125,6 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 	};
 
 	try {
-		// Get tsrcID from GH service
 		ghService = await postGetTsrcID(repoID, issueID);
 		// Get pull request from GitHub
 		const githubRes = await getGitHubPRhead(
