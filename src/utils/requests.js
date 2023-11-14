@@ -587,7 +587,7 @@ var root = {
     baseBranch,
     fork_branch,
     title,
-    state
+    state = "vote"
   ) => {
     const res = await superagent
       .post(url)
