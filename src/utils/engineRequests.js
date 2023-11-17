@@ -363,6 +363,7 @@ var root = {
         totalVotePercent,
         totalYesVotes,
         totalNoVotes,
+        quorum,
       },
       votes {
         contributor_id,
