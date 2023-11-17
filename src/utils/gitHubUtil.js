@@ -79,53 +79,69 @@ verify: async function(contributor_id, token){
 
 },
 checkGithubTokenPermissions: async function(owner, repo, contributor_name, token){
-  if (!repo || !owner) {
-    return;
-  }
-  let permissions = {}
-  let octokit;
-  const jwtTokenFromConfig = await getJWT()
-  const tokenRes = jwt.verify(token, jwtTokenFromConfig)
+	if (!repo || !owner) {
+		return;
+	}
+	let permissions = {};
+	let octokit;
+	const jwtTokenFromConfig = await getJWT();
+	const tokenRes = jwt.verify(token, jwtTokenFromConfig);
 
 	// Logic if using a turboSrcToken:
 	if (tokenRes.githubToken === contributor_name) {
-	permissions.push_permissions = true;
-	permissions.public_repo_scopes = true;
-	return permissions
+		if (owner === contributor_name) {
+			permissions.push_permissions = true;
+			permissions.public_repo_scopes = true;
+			return permissions;
+		}
+		// case if repo is an org:
+		token = await module.exports.getGithubToken();
+		const gitHubRepo = await octokit.request(`GET /repos/${owner}/${repo}`);
+		if (gitHubRepo.owner.type === "Organization") {
+			const members = await octokit.request(
+				`GET /orgs/${owner}/members`
+			);
+			for (let i = 0; i < members.length; i++) {
+				if (members[i].login === contributor_name) {
+					permissions.push_permissions = true;
+					break;
+				}
+			}
+		}
+		return permissions;
 	}
-  
-  try {
-      octokit = new Octokit({ auth: tokenRes.githubToken });
-      //Check if user has public_repo scope:
-      const scopesRes = await octokit.request(`GET /users/${contributor_name}`);
 
-    Promise.resolve(scopesRes).then(object => {
-      if (object.headers['x-oauth-scopes'].split(',').includes('public_repo')) {
-        permissions.public_repo_scopes = true
-      } else {
-        permissions.public_repo_scopes = false
-    }
-  });
+	try {
+		octokit = new Octokit({ auth: tokenRes.githubToken });
+		//Check if user has public_repo scope:
+		const scopesRes = await octokit.request(`GET /users/${contributor_name}`);
 
-      //Check if user has push permissions to this repo:
-    const permissionsRes = await octokit.request(`GET /repos/${owner}/${repo}`);
+		Promise.resolve(scopesRes).then((object) => {
+			if (object.headers["x-oauth-scopes"].split(",").includes("public_repo")) {
+				permissions.public_repo_scopes = true;
+			} else {
+				permissions.public_repo_scopes = false;
+			}
+		});
 
-    Promise.resolve(permissionsRes).then(object => {
-      if (object.data.permissions.push) {
-        permissions.push_permissions = true
-      } else {
-        permissions.push_permissions = false
-      }
-    });
+		//Check if user has push permissions to this repo:
+		const permissionsRes = await octokit.request(`GET /repos/${owner}/${repo}`);
 
-  return permissions
-  } catch (error) {
-    console.log('error checking permissions of github token', tokenRes)
-    permissions.public_repo_scopes = false
-    permissions.push_permissions = false
-    return permissions
-  }
+		Promise.resolve(permissionsRes).then((object) => {
+			if (object.data.permissions.push) {
+				permissions.push_permissions = true;
+			} else {
+				permissions.push_permissions = false;
+			}
+		});
 
+		return permissions;
+	} catch (error) {
+		console.log("error checking permissions of github token", tokenRes);
+		permissions.public_repo_scopes = false;
+		permissions.push_permissions = false;
+		return permissions;
+	}
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
     const token = await module.exports.getGithubToken();
