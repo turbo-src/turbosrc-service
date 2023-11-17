@@ -108,7 +108,7 @@ describe("Voting.", function () {
 				/*side:*/ "yes",
 				/*token:*/ testerTokenA
 			);
-			socket.emit("vote cast", contributor_name, repoID, "issue_1");
+			socket.emit("update repo", repoID);
 			await snooze(snooze_ms);
 			const mergeStatus = await postGetPullRequest(
 				/*owner:*/ contributor_name,

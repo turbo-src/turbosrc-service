@@ -55,7 +55,7 @@ describe('Vote.', function () {
             /*side:*/ "yes",
 	    /*token:*/ testerTokenA
         );
-        socket.emit('vote cast', contributor_name, repoID, "issue_2")
+        socket.emit("update repo", repoID);
         socket.disconnect()
 
     });
