@@ -82,65 +82,85 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 	if (!repo || !owner) {
 		return;
 	}
-	let permissions = {};
+	let permissions = {
+    push_permissions: false,
+    public_repo_scopes: false,
+  };
 	let octokit;
 	const jwtTokenFromConfig = await getJWT();
 	const tokenRes = jwt.verify(token, jwtTokenFromConfig);
 
-	// Logic if using a turboSrcToken:
+	/* Logic if using a turboSrcToken: bypass public_repo_scopes and just
+  check if contributor owns this repo or is a member of its organization */
 	if (tokenRes.githubToken === contributor_name) {
+  token = await module.exports.getGithubToken();
+	const instanceToken = jwt.verify(token, jwtTokenFromConfig);
+	octokit = new Octokit({ auth: instanceToken.githubToken });
+
+	permissions.public_repo_scopes = true;
+
 		if (owner === contributor_name) {
 			permissions.push_permissions = true;
-			permissions.public_repo_scopes = true;
 			return permissions;
 		}
-		// case if repo is an org:
-		token = await module.exports.getGithubToken();
-		const gitHubRepo = await octokit.request(`GET /repos/${owner}/${repo}`);
-		if (gitHubRepo.owner.type === "Organization") {
-			const members = await octokit.request(
-				`GET /orgs/${owner}/members`
-			);
-			for (let i = 0; i < members.length; i++) {
-				if (members[i].login === contributor_name) {
-					permissions.push_permissions = true;
-					break;
+
+		try {
+			// If the owner of this repo is an organization, check if the contributor is one of its members:
+			const { data } = await octokit.request(`GET /repos/${owner}/${repo}`);
+			const gitHubRepo = data;
+			if (gitHubRepo.owner.type === "Organization") {
+				const members = await octokit.request(`GET /orgs/${owner}/members`);
+
+				for (let i = 0; i < members.length; i++) {
+					let member = members[i];
+					if (member.login === contributor_name) {
+						permissions.push_permissions = true;
+						break;
+					}
 				}
 			}
+			console.log("->", gitHubRepo);
+			console.log("perms from backend:", permissions);
+			return permissions;
+		} catch (error) {
+			console.log("error fetching repo data from github:", error);
 		}
-		return permissions;
-	}
+	} else {
+		try {
+			octokit = new Octokit({ auth: tokenRes.githubToken });
+			//Check if user has public_repo scope:
+			const scopesRes = await octokit.request(`GET /users/${contributor_name}`);
 
-	try {
-		octokit = new Octokit({ auth: tokenRes.githubToken });
-		//Check if user has public_repo scope:
-		const scopesRes = await octokit.request(`GET /users/${contributor_name}`);
+			Promise.resolve(scopesRes).then((object) => {
+				if (
+					object.headers["x-oauth-scopes"].split(",").includes("public_repo")
+				) {
+					permissions.public_repo_scopes = true;
+				} else {
+					permissions.public_repo_scopes = false;
+				}
+			});
 
-		Promise.resolve(scopesRes).then((object) => {
-			if (object.headers["x-oauth-scopes"].split(",").includes("public_repo")) {
-				permissions.public_repo_scopes = true;
-			} else {
-				permissions.public_repo_scopes = false;
-			}
-		});
+			//Check if user has push permissions to this repo:
+			const permissionsRes = await octokit.request(
+				`GET /repos/${owner}/${repo}`
+			);
 
-		//Check if user has push permissions to this repo:
-		const permissionsRes = await octokit.request(`GET /repos/${owner}/${repo}`);
+			Promise.resolve(permissionsRes).then((object) => {
+				if (object.data.permissions.push) {
+					permissions.push_permissions = true;
+				} else {
+					permissions.push_permissions = false;
+				}
+			});
 
-		Promise.resolve(permissionsRes).then((object) => {
-			if (object.data.permissions.push) {
-				permissions.push_permissions = true;
-			} else {
-				permissions.push_permissions = false;
-			}
-		});
-
-		return permissions;
-	} catch (error) {
-		console.log("error checking permissions of github token", tokenRes);
-		permissions.public_repo_scopes = false;
-		permissions.push_permissions = false;
-		return permissions;
+			return permissions;
+		} catch (error) {
+			console.log("error checking permissions of github token", tokenRes);
+			permissions.public_repo_scopes = false;
+			permissions.push_permissions = false;
+			return permissions;
+		}
 	}
 },
   getGitHubPullRequest: async function(owner, repo, pull, contributor_id) {
