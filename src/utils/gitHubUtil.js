@@ -109,7 +109,8 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 			const { data } = await octokit.request(`GET /repos/${owner}/${repo}`);
 			const gitHubRepo = data;
 			if (gitHubRepo.owner.type === "Organization") {
-				const members = await octokit.request(`GET /orgs/${owner}/members`);
+				const res = await octokit.request(`GET /orgs/${owner}/members`);
+        const members = res.data
 
 				for (let i = 0; i < members.length; i++) {
 					let member = members[i];
@@ -119,8 +120,6 @@ checkGithubTokenPermissions: async function(owner, repo, contributor_name, token
 					}
 				}
 			}
-			console.log("->", gitHubRepo);
-			console.log("perms from backend:", permissions);
 			return permissions;
 		} catch (error) {
 			console.log("error fetching repo data from github:", error);
