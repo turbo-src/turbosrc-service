@@ -305,7 +305,25 @@ const root = {
 		return response;
 	},
 	getRepoData: async (repo_id, contributor_id) => {
+		const { repoName } = await getNameSpaceRepo(repo_id);
+		const owner = repoName.split("/")[0];
+		const repo = repoName.split("/")[1];
 		let response = await postGetRepoData(repo_id, contributor_id);
+		const prs = await Promise.all(
+			response.pullRequests.map(async (pr) => {
+				const pull = pr.issue_id.split("_")[1];
+				const gitHubRes = await getGitHubPullRequest(owner, repo, pull);
+				const mergeable = gitHubRes.mergeable;
+				const state = response.inSession
+					? "frozen"
+					: mergeable
+					? pr.state
+					: "conflict";
+				pr.state = state;
+				return pr;
+			})
+		);
+		response.pullRequests = prs;
 		return response;
 	},
 	getPRvoteNoTotals: async function (args) {
