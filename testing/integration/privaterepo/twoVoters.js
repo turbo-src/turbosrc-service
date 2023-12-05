@@ -20,6 +20,7 @@ const {
 const { getGithubToken } = require("../../../src/utils/gitHubUtil.js");
 const { socket } = require("../../../socketConfig");
 var snooze_ms = 3000;
+const content = require('./conflict.js')
 
 // We call this at the top of each test case, otherwise nodeosd could
 // throw duplication errors (ie, data races).
@@ -96,6 +97,37 @@ describe("Voting.", function () {
 				/*defaultHash:*/ "issue_1",
 				/*contributor:*/ "tsrctester1"
 			);
+			
+			/*
+			1. A new commit is merged to master:
+			 - It alters lsp.lua throwing the current Pr into conflict
+			2. Tests should see that this pr now has a state of conflict
+			3. A new commit is created which resolves the conflict, it is created in GH service and engine
+			4. Voting should not be possible
+			5. This is created in GH service and engine, the PR now has a state of pre-open
+			6. The tests continue as before, with new child/DefaultHashes
+			7. Vote totals for the old commit should be recorded
+			8. Vote totals for most recent commit should be recorded
+			*/
+			
+			const content = `[flake8]
+			max-line-length = 88 *`
+
+			const articleFiles = [
+				{
+				  path: "/demo/.flake8",
+				  content: content,
+				  encoding: "utf-8",
+				},
+			  ];
+		  
+		  await createGithubCommit(
+			githubAccessToken,
+			githubRepoFullName,
+			githubRepoBranchName,
+			commitTitle,
+			articleFiles
+		  );
 
 			//tsrctester1
 			await postSetVote(
