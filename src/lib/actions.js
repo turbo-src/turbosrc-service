@@ -303,7 +303,23 @@ const root = {
 		return response;
 	},
 	getRepoData: async (repo_id, contributor_id) => {
+		const { repoName } = await getNameSpaceRepo(repo_id);
+		const owner = repoName.split("/")[0];
+		const repo = repoName.split("/")[1];
 		let response = await postGetRepoData(repo_id, contributor_id);
+		const prs = await Promise.all(
+			response.pullRequests.map(async (pr) => {
+				const pull = pr.issue_id.split("_")[1];
+				const gitHubRes = await getGitHubPullRequest(owner, repo, pull);
+				const mergeable = gitHubRes.mergeable;
+				// If not mergeable and not currently 'frozen', then it needs to be 'conflict':
+				if (!mergeable && !response.inSession) {
+					pr.state = "conflict";
+				}
+				return pr;
+			})
+		);
+		response.pullRequests = prs;
 		return response;
 	},
 	getPRvoteNoTotals: async function (args) {
@@ -719,7 +735,7 @@ const root = {
 	},
 	createRepo: async (args) => {
 		// Create a namespace entry for the new repo:
-		repoName = `${args.owner}/${args.repo}`
+		repoName = `${args.owner}/${args.repo}`;
 		const resCreateNameSpaceRepo = await findOrCreateNameSpaceRepo(
 			repoName,
 			""
@@ -737,8 +753,7 @@ const root = {
 
 		//{"data":{"createRepo":{"status":201,"repoName":"7db9a/demo","repoID":"0x42d","repoSignature":"0x197e","message":"repo created"}}}
 
-
-		return resCreateNameSpaceRepo
+		return resCreateNameSpaceRepo;
 	},
 	newPullRequest: async (database, pullRequestsDB, args) => {
 		const prVoteStatus = module.exports.getPullRequest(database, args);
@@ -815,10 +830,10 @@ const root = {
 		const res = await getNameSpaceRepo(args.repoNameOrID);
 		return res;
 	},
-        getTurboSrcIDfromInstance: async function() {
-          const turboSrcID = await getContributorAddress()
-          return turboSrcID
-        },
+	getTurboSrcIDfromInstance: async function () {
+		const turboSrcID = await getContributorAddress();
+		return turboSrcID;
+	},
 };
 
 module.exports = root;
