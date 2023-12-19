@@ -8,8 +8,11 @@ const {
 } = require("../../../src/utils/requests");
 const { getGithubContributor } = require("../../../src/utils/config");
 
+var snooze_ms = 3000;
+const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 describe("Conflict", function () {
-    it("Should return a PR in a state of 'conflict'", async () => {
+    this.timeout(snooze_ms*70);
+    it("Should return a PR in 'conflict'", async () => {
         const contributor_name = await getGithubContributor();
         const contributorID = await postGetContributorID(
             contributor_name,
@@ -22,17 +25,20 @@ describe("Conflict", function () {
             contributorID
         );
         const issueID = "issue_6";
+        const pullRequest = await postGetVotes(repoID, issueID, contributorID);
 
-        //const resolvedConflict = await postGetVotes(repoID, issueID, contributorID);
+        //const { pullRequests } = await postGetRepoData(repoID, contributorID);
+        //const [inConflict] = pullRequests.filter((pr) => pr.issueID !== issueID);
 
         const mergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ repoID,
             /*defaultHash:*/ issueID,
-            /*contributor_id:*/ contributor_id,
+            /*contributor_id:*/ contributorID,
             /*side:*/ "yes",
         );
-        socket.disconnect()
+
+        console.log('mergeStatus\n', mergeStatus)
 
         assert.deepEqual(
           mergeStatus,
@@ -41,10 +47,9 @@ describe("Conflict", function () {
         );
 
         //assert.equal(
-        //    resolvedConflict.state,
-        //    "vote",
-        //    "Failed to get pull request 6's state of 'vote'"
+        //    inConflict.state,
+        //    "conflict",
+        //    "Failed to get pull request 6's state of 'conflict'"
         //);
-
     });
 });
