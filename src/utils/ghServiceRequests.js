@@ -45,6 +45,39 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getTsrcID;
   },
+  getGitHubPullRequest: async (owner, repo, pull, accessToken) => {
+    const endpoint = await getServiceEndpoint("gh")
+		const res = await superagent
+			.post(endpoint)
+			.send({
+				query: `{ getGitHubPullRequest(owner: "${owner}", repo: "${repo}", pull: ${pull}, accessToken: "${accessToken}")
+        {
+          status,
+          message,
+          issue_url,
+          number,
+          state,
+          title,
+          head {
+            label,
+            ref,
+            sha,
+          },
+          base {
+            label,
+            ref,
+            sha,
+          },
+          merged,
+          mergeable,
+        }
+      }`,
+			})
+			.set("accept", "json");
+		const json = JSON.parse(res.text);
+    console.log('gh service reqs res', json.data.getGitHubPullRequest)
+		return json.data.getGitHubPullRequest;
+	},
 };
 
 module.exports = root;

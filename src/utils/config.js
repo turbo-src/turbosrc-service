@@ -1,5 +1,6 @@
 const fsPromises = require('fs').promises;
 var path = require("path");
+const jwt = require("jsonwebtoken");
 
 var root = {
   getGithubContributor: async () => {
@@ -98,6 +99,28 @@ var root = {
       throw new Error("Failed to load endpoint mode " + endpoint.mode + " of " + serviceName);
     }
   },
+  getAccessToken: async function(user) {
+    let apiToken
+    const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
+                       .catch((err) => console.error('Failed to read file', err));
+
+    let json = JSON.parse(data);
+    if (user === undefined) {
+       apiToken = json.github.apiToken
+       user = json.github.user
+    } else {
+       apiToken = json.testers[user].apiToken
+       user = json.testers[user].user
+    }
+    if (apiToken === undefined) {
+      throw new Error("Failed to load Github user " + user + "'s api key.");
+    } else {
+      console.log("Successfully read Github " + user  + "'s api key.");
+    }
+    const jwtTokenFromConfig = await module.exports.getJWT()
+    const tokenRes = jwt.verify(apiToken, jwtTokenFromConfig)
+   return tokenRes.githubToken
+},
 }
 
 module.exports = root

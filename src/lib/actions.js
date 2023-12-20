@@ -4,7 +4,6 @@ const {
       } = require('./../utils/config')
 const {
 	getPullRequest,
-	getGitHubPullRequest,
 	mergePullRequest,
 	closePullRequest,
 } = require("./../utils/gitHubUtil");
@@ -50,9 +49,10 @@ const {
 	postCreateIssue,
 	postGetIssueID,
 	postGetTsrcID,
+	getGitHubPullRequest,
 } = require("./../utils/ghServiceRequests");
 
-const { getTurbosrcMode } = require("./../utils/config");
+const { getTurbosrcMode, getAccessToken } = require("./../utils/config");
 
 const {
 	//createRepo,
@@ -91,19 +91,6 @@ const {
 	//getVotePowerAmount
 } = require("./state");
 
-async function getGitHubPRhead(owner, repo, issueID, contributor_id) {
-	issueID = issueID.split("_")[1]; // Need this for check gitHubPullRequest.
-	const gitHubPullRequest = await getGitHubPullRequest(
-		owner,
-		repo,
-		issueID,
-		contributor_id
-	);
-	const head = gitHubPullRequest.head.sha;
-	const mergeable = gitHubPullRequest.mergeable;
-	return { head: head, mergeable: mergeable };
-}
-
 async function convertIssueID(repoID, issueID, write, contributor_id) {
 	// This will exchange the issueID (eg. issue_4) into a tsrcID (e.g. commit head sha256).
 	// It will also record the sha256 against the issueID for future reference.
@@ -114,7 +101,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 	const { repoName } = await getNameSpaceRepo(repoID);
 	const owner = repoName.split("/")[0];
 	const repo = repoName.split("/")[1];
-
+	const accessToken = await getAccessToken()
 	let head;
 	let ghService;
 	let res = {
@@ -128,14 +115,14 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 		// Get tsrcID from GH service
 		ghService = await postGetTsrcID(repoID, issueID);
 		// Get pull request from GitHub
-		const githubRes = await getGitHubPRhead(
+		const pull = Number(issueID.split("_")[1])
+		const githubRes = await getGitHubPullRequest(
 			owner,
 			repo,
-			issueID,
-			contributor_id
+			pull,
+			accessToken
 		);
-		head = githubRes.head;
-		res.mergeable = githubRes.mergeable;
+		head = githubRes.head.sha;
 
 		// Error handling
 		if (head === null || head === undefined) {
@@ -156,7 +143,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 		}
 
 		if (write) {
-			//If write is true, then create a new issue in the GH service for future reference
+			// If write is true, then create a new issue in the GH service for future reference
 			const resCreateIssue = await postCreateIssue(repoID, issueID, head);
 			if (resCreateIssue.status === 201) {
 				res.defaultHash = head;
@@ -167,6 +154,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 			}
 		}
 	} catch (error) {
+		console.log(' error:',error)
 		res.status = 500;
 		res.defaultHash = issueID;
 		res.childDefaultHash = issueID;
@@ -235,9 +223,10 @@ const root = {
 	},
 	getVotes: async (repoID, defaultHash, contributor_id) => {
 		const { repoName } = await getNameSpaceRepo(repoID);
+		const accessToken = await getAccessToken()
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
-		const pull = defaultHash.split("_")[1]; // issue_1 becomes 1 for github api
+		const pull = Number(defaultHash.split("_")[1]); // issue_1 becomes 1 for github api
 		let response = {};
 		let convertedHash = {};
 		// Step 1: convert the issue_id of the PR to the defaultHash, ie the head
@@ -246,7 +235,6 @@ const root = {
 		convertedHash =
 			(await convertIssueID(repoID, defaultHash, false, contributor_id)) ||
 			defaultHash;
-
 		// Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
 		response = await postGetVotes(
 			repoID,
@@ -260,9 +248,8 @@ const root = {
 				owner,
 				repo,
 				pull,
-				contributor_id
+				accessToken
 			);
-
 			const { inSession } = await postGetRepoData(repoID, contributor_id);
 
 			response.status = 200;
@@ -283,7 +270,7 @@ const root = {
 				? "vote"
 				: "conflict";
 
-			// Map the issue id to its sha for future reference
+			// // Map the issue id to its sha for future reference
 			await postCreateIssue(repoID, defaultHash, githubRes.head.sha);
 
 			await postCreatePullRequest(
@@ -458,7 +445,7 @@ const root = {
 		const { repoName } = await getNameSpaceRepo(args.repo);
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
-
+		const accessToken = await getAccessToken()
 		// Need this for check gitHubPullRequest
 		const issueID = args.defaultHash.split("_")[1];
 		const issue_id = args.defaultHash;
@@ -488,7 +475,7 @@ const root = {
 				owner,
 				repo,
 				Number(issueID),
-				args.contributor_id
+				accessToken
 			);
 
 			if (gitHubPullRequest === undefined || gitHubPullRequest === null) {
