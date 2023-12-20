@@ -5,14 +5,17 @@ const {
     postGetContributorID,
     postGetVotes,
     postGetPullRequest,
+	postSetVote,
 } = require("../../../src/utils/requests");
 const { getGithubContributor } = require("../../../src/utils/config");
+const { getGithubToken } = require("../../../src/utils/gitHubUtil.js");
 
 var snooze_ms = 3000;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 describe("Conflict", function () {
     this.timeout(snooze_ms*70);
     it("Should return a PR in 'conflict'", async () => {
+		const token = await getGithubToken();
         const contributor_name = await getGithubContributor();
         const contributorID = await postGetContributorID(
             contributor_name,
@@ -25,12 +28,11 @@ describe("Conflict", function () {
             contributorID
         );
         const issueID = "issue_6";
+
+        // Creates a tsrc pull request.
         const pullRequest = await postGetVotes(repoID, issueID, contributorID);
 
-        //const { pullRequests } = await postGetRepoData(repoID, contributorID);
-        //const [inConflict] = pullRequests.filter((pr) => pr.issueID !== issueID);
-
-        const mergeStatus = await postGetPullRequest(
+        const beforeVoteMergeStatus = await postGetPullRequest(
             /*owner:*/ contributor_name,
             /*repo:*/ repoID,
             /*defaultHash:*/ issueID,
@@ -38,18 +40,37 @@ describe("Conflict", function () {
             /*side:*/ "yes",
         );
 
-        console.log('mergeStatus\n', mergeStatus)
+		const voteRes = await postSetVote(
+			/*owner:*/ contributor_name,
+			/*repo:*/ repoID,
+			/*defaultHash:*/ issueID,
+			/*childDefaultHash:*/ issueID,
+			/*mergeable:*/ true,
+			/*contributor:*/ contributorID,
+			/*side:*/ "yes",
+			/*token:*/ token
+		);
 
-        assert.deepEqual(
-          mergeStatus,
-         { status: 200, state: "pre-open", repo_id: repoID,  fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940", "defaultHash": "f69d18f0fde201d83ce5de571168d7649aabc940" },
-          "Fail open on initial vote below quorum"
+        const afterVoteMergeStatus = await postGetPullRequest(
+            /*owner:*/ contributor_name,
+            /*repo:*/ repoID,
+            /*defaultHash:*/ issueID,
+            /*contributor_id:*/ contributorID,
+            /*side:*/ "yes",
         );
 
-        //assert.equal(
-        //    inConflict.state,
-        //    "conflict",
-        //    "Failed to get pull request 6's state of 'conflict'"
-        //);
+        assert.equal(voteRes, '403', 'voted on conflicted pull request')
+
+        assert.deepEqual(
+          beforeVoteMergeStatus,
+         { status: 200, state: "vote", repo_id: repoID,  fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+          "Fail to find out status of pull request."
+        );
+
+        assert.deepEqual(
+          afterVoteMergeStatus,
+         { status: 200, state: "vote", repo_id: repoID,  fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+          "Fail to find out status of pull request."
+        );
     });
 });
