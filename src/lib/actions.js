@@ -111,6 +111,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 	// childDefaultHash is the most recent commit head sha256 of the pull request branch
 	// defaultHash is the next most recent commit head sha256 of the pull request branch
 
+	console.log('repoID in convertIssueID\n\n', repoID)
 	const { repoName } = await getNameSpaceRepo(repoID);
 	const owner = repoName.split("/")[0];
 	const repo = repoName.split("/")[1];
@@ -134,6 +135,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 			issueID,
 			contributor_id
 		);
+		console.log('githubRes in convertIssueID\n\n', githubRes)
 		head = githubRes.head;
 		res.mergeable = githubRes.mergeable;
 
@@ -163,6 +165,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 				res.childDefaultHash = head;
 				return res;
 			} else {
+			    console.log('resCreateIssue in convertIssueID\n\n', resCreateIssue)
 				throw new Error();
 			}
 		}
@@ -254,14 +257,20 @@ const root = {
 			contributor_id
 		);
 
+		const githubRes = await getGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			contributor_id
+		);
+
+		if (githubRes.mergeable === false && (response.state === "open" || response.state === "pre-open" || response.state === "vote")) {
+			response.state = "conflict"
+		}
+		response.mergeable = githubRes.mergeable
+
 		if (response.status === 404) {
 			// Step 3: Set pull request meta data from Github if pr is not in our db
-			const githubRes = await getGitHubPullRequest(
-				owner,
-				repo,
-				pull,
-				contributor_id
-			);
 
 			const { inSession } = await postGetRepoData(repoID, contributor_id);
 
@@ -386,7 +395,11 @@ const root = {
 
 		console.log("getPR", status);
 
-		status.mergeableCodeHost = mergeableCodeHost || true;
+		if (mergeableCodeHost === true || mergeableCodeHost === false) {
+			status.mergeableCodeHost = mergeableCodeHost;
+		} else {
+			status.mergeableCodeHost = true;
+		}
 
 		return status;
 	},
@@ -491,6 +504,8 @@ const root = {
 				args.contributor_id
 			);
 
+			console.log('gitHupPullRequest', gitHubPullRequest)
+
 			if (gitHubPullRequest === undefined || gitHubPullRequest === null) {
 				console.log("Can't vote because trouble finding Github Pull request.");
 			}
@@ -509,6 +524,7 @@ const root = {
 			//Pull requests only exist in our db if they have been voted on
 			//If this is a pull request which has not been voted on yet, create it:
 			if (prVoteStatus.status === 404) {
+				console.log("theory: postCreatePullRequest")
 				await postCreatePullRequest(
 					args.owner,
 					args.repo,
@@ -561,6 +577,9 @@ const root = {
 				args.contributor_id,
 				args.side
 			);
+			console.log("theory: resSetVote")
+			console.log(args)
+			console.log(resSetVote)
 
 			// Now get the vote totals for the PR:
 			prVoteStatus = await postGetPullRequest(
@@ -571,6 +590,9 @@ const root = {
 				args.side
 			);
 
+			console.log("theory: postGetPullRequest")
+			console.log(prVoteStatus)
+
 			// Merge if turborsc pull request status says there are enough votes to merge.
 			if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
 				// Comment out line below to disable actual merging into the codebase. Status will still be merged in our db either way:
@@ -579,6 +601,8 @@ const root = {
 
 			return resSetVote;
 		} else {
+			console.log('args converIssueID called\n\n', args)
+			console.log('conertedHashes converIssueID called\n\n', args.convertedHashes)
 			return 403;
 		}
 	},
