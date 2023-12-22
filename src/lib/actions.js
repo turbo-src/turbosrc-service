@@ -265,7 +265,7 @@ const root = {
 		);
 
 		if (githubRes.mergeable === false && (response.state === "open" || response.state === "pre-open" || response.state === "vote")) {
-			response.state = "conflict"
+			//response.state = "conflict"
 		}
 		response.mergeable = githubRes.mergeable
 
