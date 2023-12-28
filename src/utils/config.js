@@ -121,6 +121,11 @@ var root = {
     const tokenRes = jwt.verify(apiToken, jwtTokenFromConfig)
    return tokenRes.githubToken
 },
+decryptAccessToken: async function(accessToken) {
+  const jwtTokenFromConfig = await module.exports.getJWT()
+  const tokenRes = jwt.verify(accessToken, jwtTokenFromConfig)
+  return tokenRes.githubToken
+},
 }
 
 module.exports = root

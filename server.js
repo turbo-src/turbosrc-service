@@ -36,7 +36,8 @@ const {
   getRepoData,
   findOrCreateNameSpaceRepo,
   getNameSpaceRepo,
-  getTurboSrcIDfromInstance
+  getTurboSrcIDfromInstance,
+  checkGitHubAccessTokenPermissions
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -45,7 +46,6 @@ const {
        mergePullRequest,
        fork,
        verify,
-       checkGithubTokenPermissions
       } = require('./src/utils/gitHubUtil');
 
 // defaultHash is the defaultHash, which are the same for now.
@@ -113,6 +113,8 @@ var schema = buildSchema(`
   }
 
   type Permissions {
+    status: Int!
+    message: String!
     public_repo_scopes: Boolean!
     push_permissions: Boolean!
   }
@@ -337,7 +339,7 @@ var root = {
     return res
   },
   checkGithubTokenPermissions: async (args) => {
-    const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
+    const permissions = await checkGitHubAccessTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
     return permissions
   },
   getVotePowerAmount: async (args) => {

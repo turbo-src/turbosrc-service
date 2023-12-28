@@ -46,11 +46,11 @@ var root = {
     return json.data.getTsrcID;
   },
   getGitHubPullRequest: async (owner, repo, pull, accessToken) => {
-    const endpoint = await getServiceEndpoint("gh")
-		const res = await superagent
-			.post(endpoint)
-			.send({
-				query: `{ getGitHubPullRequest(owner: "${owner}", repo: "${repo}", pull: ${pull}, accessToken: "${accessToken}")
+    const endpoint = await getServiceEndpoint("gh");
+    const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `{ getGitHubPullRequest(owner: "${owner}", repo: "${repo}", pull: ${pull}, accessToken: "${accessToken}")
         {
           status,
           message,
@@ -72,12 +72,50 @@ var root = {
           mergeable,
         }
       }`,
-			})
-			.set("accept", "json");
-		const json = JSON.parse(res.text);
-    console.log('gh service reqs res', json.data.getGitHubPullRequest)
-		return json.data.getGitHubPullRequest;
-	},
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.getGitHubPullRequest;
+  },
+  mergeGitHubPullRequest: async (owner, repo, pull, accessToken) => {
+    const endpoint = await getServiceEndpoint("gh");
+    const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `{ mergeGitHubPullRequest(owner: "${owner}", repo: "${repo}", pull: "${pull}", accessToken: "${accessToken}") {status, message} }`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.mergeGitHubPullRequest;
+  },
+  closeGitHubPullRequest: async (owner, repo, pull, accessToken) => {
+    const endpoint = await getServiceEndpoint("gh");
+    const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `{ closeGitHubPullRequest(owner: "${owner}", repo: "${repo}", pull: "${pull}", accessToken: "${accessToken}") {status, message} }`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.mergeGitHubPullRequest;
+  },
+  checkGitHubAccessTokenPermissions: async (
+    owner,
+    repo,
+    accessToken,
+    contributorName,
+    instanceToken
+  ) => {
+    const endpoint = await getServiceEndpoint("gh");
+    const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `{ checkGitHubAccessTokenPermissions(owner: "${owner}", repo: "${repo}", accessToken: "${accessToken}", contributorName: "${contributorName}", instanceToken: "${instanceToken}") { status, message, public_repo_scopes, push_permissions } }`,
+      })
+      .set("accept", "json");
+    const json = JSON.parse(res.text);
+    return json.data.checkGitHubAccessTokenPermissions;
+  },
 };
 
 module.exports = root;

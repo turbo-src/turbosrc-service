@@ -1,6 +1,6 @@
 const { getPRhead } = require("./../utils/pullForkUtil");
 const {
-        getContributorAddress,
+        getContributorAddress
       } = require('./../utils/config')
 const {
 	getPullRequest,
@@ -50,9 +50,12 @@ const {
 	postGetIssueID,
 	postGetTsrcID,
 	getGitHubPullRequest,
+	mergeGitHubPullRequest,
+	closeGitHubPullRequest,
+	checkGitHubAccessTokenPermissions
 } = require("./../utils/ghServiceRequests");
 
-const { getTurbosrcMode, getAccessToken } = require("./../utils/config");
+const { getTurbosrcMode, getAccessToken, decryptAccessToken } = require("./../utils/config");
 
 const {
 	//createRepo,
@@ -223,7 +226,7 @@ const root = {
 	},
 	getVotes: async (repoID, defaultHash, contributor_id) => {
 		const { repoName } = await getNameSpaceRepo(repoID);
-		const accessToken = await getAccessToken()
+		const accessToken = await getAccessToken();
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
 		const pull = Number(defaultHash.split("_")[1]); // issue_1 becomes 1 for github api
@@ -445,7 +448,7 @@ const root = {
 		const { repoName } = await getNameSpaceRepo(args.repo);
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
-		const accessToken = await getAccessToken()
+		const accessToken = await getAccessToken();
 		// Need this for check gitHubPullRequest
 		const issueID = args.defaultHash.split("_")[1];
 		const issue_id = args.defaultHash;
@@ -561,7 +564,7 @@ const root = {
 			// Merge if turborsc pull request status says there are enough votes to merge.
 			if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
 				// Comment out line below to disable actual merging into the codebase. Status will still be merged in our db either way:
-				// await mergePullRequest(args.owner, args.repo, Number(issueID))
+				// await mergeGitHubPullRequest(args.owner, args.repo, Number(issueID))
 			}
 
 			return resSetVote;
@@ -706,7 +709,7 @@ const root = {
 	},
 	createRepo: async (args) => {
 		// Create a namespace entry for the new repo:
-		repoName = `${args.owner}/${args.repo}`
+		repoName = `${args.owner}/${args.repo}`;
 		const resCreateNameSpaceRepo = await findOrCreateNameSpaceRepo(
 			repoName,
 			""
@@ -724,8 +727,7 @@ const root = {
 
 		//{"data":{"createRepo":{"status":201,"repoName":"7db9a/demo","repoID":"0x42d","repoSignature":"0x197e","message":"repo created"}}}
 
-
-		return resCreateNameSpaceRepo
+		return resCreateNameSpaceRepo;
 	},
 	newPullRequest: async (database, pullRequestsDB, args) => {
 		const prVoteStatus = module.exports.getPullRequest(database, args);
@@ -802,10 +804,30 @@ const root = {
 		const res = await getNameSpaceRepo(args.repoNameOrID);
 		return res;
 	},
-        getTurboSrcIDfromInstance: async function() {
-          const turboSrcID = await getContributorAddress()
-          return turboSrcID
-        },
+	getTurboSrcIDfromInstance: async function () {
+		const turboSrcID = await getContributorAddress();
+		return turboSrcID;
+	},
+	checkGitHubAccessTokenPermissions: async function (
+		owner,
+		repo,
+		contributorName,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		let instanceToken = "";
+		if (decryptedToken === contributorName) {
+			instanceToken = await getAccessToken();
+		}
+		const res = await checkGitHubAccessTokenPermissions(
+			owner,
+			repo,
+			decryptedToken,
+			contributorName,
+			instanceToken
+		);
+		return res;
+	},
 };
 
 module.exports = root;
