@@ -2,11 +2,6 @@ const { getPRhead } = require("./../utils/pullForkUtil");
 const {
         getContributorAddress
       } = require('./../utils/config')
-const {
-	getPullRequest,
-	mergePullRequest,
-	closePullRequest,
-} = require("./../utils/gitHubUtil");
 const { gitHeadUtil } = require("./../utils/gitHeadUtil");
 const {
 	postCreateRepoTestDB,

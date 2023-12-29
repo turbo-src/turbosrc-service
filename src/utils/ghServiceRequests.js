@@ -127,6 +127,28 @@ var root = {
 		const json = JSON.parse(res.text);
 		return json.data.verify;
 	},
+  createGitHubPullRequest: async (owner, repo, title, body, forkBranch, base, accessToken) => {
+    const endpoint = await getServiceEndpoint("gh");
+		const res = await superagent
+			.post(endpoint)
+			.send({
+				query: `{ createGitHubPullRequest(owner: "${owner}", repo: "${repo}", title: "${title}", body: "${body}", forkBranch: "${forkBranch}", base: "${base}", accessToken: "${accessToken}") { status, message } }`,
+			})
+			.set("accept", "json");
+		const json = JSON.parse(res.text);
+		return json.data.createGitHubPullRequest;
+	},
+  createGitHubRepoFork: async (owner, repo, organization, name, defaultBranchOnly, accessToken) => {
+    const endpoint = await getServiceEndpoint("gh");
+		const res = await superagent
+			.post(endpoint)
+			.send({
+				query: `{ createGitHubRepoFork(owner: "${owner}", repo: "${repo}", organization: "${organization}", name: "${name}", defaultBranchOnly: ${defaultBranchOnly}, accessToken: "${accessToken}") { status, message } }`,
+			})
+			.set("accept", "json");
+		const json = JSON.parse(res.text);
+		return json.data.createGitHubRepoFork;
+	},
 };
 
 module.exports = root;
