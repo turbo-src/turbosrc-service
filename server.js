@@ -37,7 +37,8 @@ const {
   findOrCreateNameSpaceRepo,
   getNameSpaceRepo,
   getTurboSrcIDfromInstance,
-  checkGitHubAccessTokenPermissions
+  checkGitHubAccessTokenPermissions,
+  verify
 } = require('./src/lib/actions')
 const {
        getGitHubPullRequest,
@@ -45,7 +46,6 @@ const {
        closePullRequest,
        mergePullRequest,
        fork,
-       verify,
       } = require('./src/utils/gitHubUtil');
 
 // defaultHash is the defaultHash, which are the same for now.

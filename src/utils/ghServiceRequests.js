@@ -116,6 +116,17 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.checkGitHubAccessTokenPermissions;
   },
+  verify: async (contributorName, token) => {
+    const endpoint = await getServiceEndpoint("gh");
+		const res = await superagent
+			.post(endpoint)
+			.send({
+				query: `{ verify(contributorName: "${contributorName}", token: "${token}") { status, verified } }`,
+			})
+			.set("accept", "json");
+		const json = JSON.parse(res.text);
+		return json.data.verify;
+	},
 };
 
 module.exports = root;

@@ -52,7 +52,8 @@ const {
 	getGitHubPullRequest,
 	mergeGitHubPullRequest,
 	closeGitHubPullRequest,
-	checkGitHubAccessTokenPermissions
+	checkGitHubAccessTokenPermissions,
+	verify
 } = require("./../utils/ghServiceRequests");
 
 const { getTurbosrcMode, getAccessToken, decryptAccessToken } = require("./../utils/config");
@@ -827,6 +828,14 @@ const root = {
 			instanceToken
 		);
 		return res;
+	},
+	verify: async function (contributorID, token) {
+		const decryptedAccessToken = await decryptAccessToken(token)
+		const contributorName = await postGetContributorName("", "", "", contributorID)
+
+		const { verified } = await verify(contributorName, decryptedAccessToken)
+
+		return verified
 	},
 };
 
