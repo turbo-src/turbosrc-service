@@ -4,8 +4,7 @@ const {
 	postCreateRepo,
 	postGetContributorID,
 } = require("../../../src/utils/requests");
-const { getGithubContributor } = require("../../../src/utils/config");
-const { getGithubToken } = require("../../../src/utils/gitHubUtil.js");
+const { getGithubContributor, getAccessToken } = require("../../../src/utils/config");
 
 const { getNameSpaceRepo } = require("../../../src/utils/requests");
 
@@ -22,7 +21,7 @@ describe("Create repo", function () {
 	describe.only("Create repo", function () {
 		it("Should create a turbosrc-namespace entry and create 1_000_000 VotePower in the turbosrc-engine with the ID from namespace", async () => {
 			const contributor_name = await getGithubContributor();
-			const token = await getGithubToken();
+			const token = await getAccessToken();
 
 			//name space service
 			const contributor_id = await postGetContributorID(

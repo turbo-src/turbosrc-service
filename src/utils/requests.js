@@ -236,7 +236,6 @@ var root = {
     //});
     console.log("gqlr 145");
     const json = JSON.parse(res.text);
-    console.log(json);
     return json.data.getContributorSignature;
   },
   postCreateRepo: async (owner, repo, defaultHash, contributor_id, side, token) => {

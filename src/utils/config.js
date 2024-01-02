@@ -117,9 +117,7 @@ var root = {
     } else {
       console.log("Successfully read Github " + user  + "'s api key.");
     }
-    const jwtTokenFromConfig = await module.exports.getJWT()
-    const tokenRes = jwt.verify(apiToken, jwtTokenFromConfig)
-   return tokenRes.githubToken
+   return apiToken
 },
 decryptAccessToken: async function(accessToken) {
   const jwtTokenFromConfig = await module.exports.getJWT()

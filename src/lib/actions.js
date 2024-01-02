@@ -100,7 +100,8 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 	const { repoName } = await getNameSpaceRepo(repoID);
 	const owner = repoName.split("/")[0];
 	const repo = repoName.split("/")[1];
-	const accessToken = await getAccessToken()
+	const token = await getAccessToken()
+	const accessToken = await decryptAccessToken(token)
 	let head;
 	let ghService;
 	let res = {
@@ -222,7 +223,8 @@ const root = {
 	},
 	getVotes: async (repoID, defaultHash, contributor_id) => {
 		const { repoName } = await getNameSpaceRepo(repoID);
-		const accessToken = await getAccessToken();
+		const token = await getAccessToken()
+		const accessToken = await decryptAccessToken(token)
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
 		const pull = Number(defaultHash.split("_")[1]); // issue_1 becomes 1 for github api
@@ -444,7 +446,8 @@ const root = {
 		const { repoName } = await getNameSpaceRepo(args.repo);
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
-		const accessToken = await getAccessToken();
+		const token = await getAccessToken()
+		const accessToken = await decryptAccessToken(token)
 		// Need this for check gitHubPullRequest
 		const issueID = args.defaultHash.split("_")[1];
 		const issue_id = args.defaultHash;
@@ -722,7 +725,6 @@ const root = {
 		);
 
 		//{"data":{"createRepo":{"status":201,"repoName":"7db9a/demo","repoID":"0x42d","repoSignature":"0x197e","message":"repo created"}}}
-
 		return resCreateNameSpaceRepo;
 	},
 	newPullRequest: async (database, pullRequestsDB, args) => {
@@ -813,7 +815,8 @@ const root = {
 		const decryptedToken = await decryptAccessToken(token);
 		let instanceToken = "";
 		if (decryptedToken === contributorName) {
-			instanceToken = await getAccessToken();
+			const encryptedToken = await getAccessToken()
+			instanceToken = await decryptAccessToken(encryptedToken)
 		}
 		const res = await checkGitHubAccessTokenPermissions(
 			owner,
@@ -828,9 +831,51 @@ const root = {
 		const decryptedAccessToken = await decryptAccessToken(token)
 		const contributorName = await postGetContributorName("", "", "", contributorID)
 
-		const { verified } = await verify(contributorName, decryptedAccessToken)
-
-		return verified
+		const res = await verify(contributorName, decryptedAccessToken)
+		return res.verified
+	},
+	mergeGitHubPullRequest: async function (
+		owner,
+		repo,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		const res = await mergeGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			decryptedToken,
+		);
+		return res;
+	},
+	closeGitHubPullRequest: async function (
+		owner,
+		repo,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		const res = await closeGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			decryptedToken,
+		);
+		return res;
+	},
+	getGitHubPullRequest: async function (
+		owner,
+		repo,
+		pull,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		const res = await getGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			decryptedToken,
+		);
+		return res;
 	},
 };
 

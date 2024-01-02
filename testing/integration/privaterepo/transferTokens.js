@@ -11,10 +11,8 @@ const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
+        getAccessToken,
       } = require('../../../src/utils/config')
-const {
-       getGithubToken,
-      } = require('../../../src/utils/gitHubUtil.js')
 
 async function readDBfile(file) {
     const data = await fsPromises.readFile(file)
@@ -35,7 +33,7 @@ before(async () => {
 });
   it("Should transfer tokens", async () => {
     const contributor_name = await getGithubContributor()
-    const token = await getGithubToken()
+    const token = await getAccessToken()
     const contributor_id = await postGetContributorID(
         /*owner:*/ contributor_name,
         /*repo:*/ "demo",
@@ -43,18 +41,18 @@ before(async () => {
         /*contributor_name:*/ contributor_name,
     );
     console.log("contributor id: " + contributor_id)
-    const testerTokenA = await getGithubToken("a")
-	const testerTokenB = await getGithubToken("b")
-	const testerTokenC = await getGithubToken("c")
-	const testerTokenD = await getGithubToken("d")
-	const testerTokenE = await getGithubToken("e")
-	const testerTokenF = await getGithubToken("f")
-	const testerTokenG = await getGithubToken("g")
-	const testerTokenH = await getGithubToken("h")
-	const testerTokenI = await getGithubToken("i")
-	const testerTokenJ = await getGithubToken("j")
-	const testerTokenK = await getGithubToken("k")
-	const testerTokenL = await getGithubToken("l")
+    const testerTokenA = await getAccessToken("a")
+	const testerTokenB = await getAccessToken("b")
+	const testerTokenC = await getAccessToken("c")
+	const testerTokenD = await getAccessToken("d")
+	const testerTokenE = await getAccessToken("e")
+	const testerTokenF = await getAccessToken("f")
+	const testerTokenG = await getAccessToken("g")
+	const testerTokenH = await getAccessToken("h")
+	const testerTokenI = await getAccessToken("i")
+	const testerTokenJ = await getAccessToken("j")
+	const testerTokenK = await getAccessToken("k")
+	const testerTokenL = await getAccessToken("l")
 
     const { repoID } = await getNameSpaceRepo(
         `${contributor_name}/demo`

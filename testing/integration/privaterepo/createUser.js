@@ -11,11 +11,8 @@ const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
+        getAccessToken,
       } = require('../../../src/utils/config')
-const {
-       getGithubToken,
-      } = require('../../../src/utils/gitHubUtil.js')
-
 
 var snooze_ms = 5000
 
@@ -32,7 +29,7 @@ describe('Create users', function () {
         //Gets it from .config.json
 
         const contributor_name = await getGithubContributor()
-	const token = await getGithubToken()
+	const token = await getAccessToken()
         const contributor_id = await getContributorAddress()
         await postCreateUser(
             /*owner:*/ "",
@@ -43,18 +40,18 @@ describe('Create users', function () {
             /*token:*/ token
         );
 
-	const testerTokenA = await getGithubToken("a")
-	const testerTokenB = await getGithubToken("b")
-	const testerTokenC = await getGithubToken("c")
-	const testerTokenD = await getGithubToken("d")
-	const testerTokenE = await getGithubToken("e")
-	const testerTokenF = await getGithubToken("f")
-	const testerTokenG = await getGithubToken("g")
-	const testerTokenH = await getGithubToken("h")
-	const testerTokenI = await getGithubToken("i")
-	const testerTokenJ = await getGithubToken("j")
-	const testerTokenK = await getGithubToken("k")
-    const testerTokenL = await getGithubToken("l")
+	const testerTokenA = await getAccessToken("a")
+	const testerTokenB = await getAccessToken("b")
+	const testerTokenC = await getAccessToken("c")
+	const testerTokenD = await getAccessToken("d")
+	const testerTokenE = await getAccessToken("e")
+	const testerTokenF = await getAccessToken("f")
+	const testerTokenG = await getAccessToken("g")
+	const testerTokenH = await getAccessToken("h")
+	const testerTokenI = await getAccessToken("i")
+	const testerTokenJ = await getAccessToken("j")
+	const testerTokenK = await getAccessToken("k")
+    const testerTokenL = await getAccessToken("l")
 
         await postCreateUser(
             /*owner:*/ "",

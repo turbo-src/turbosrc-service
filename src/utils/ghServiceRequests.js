@@ -62,6 +62,9 @@ var root = {
             label,
             ref,
             sha,
+          repo {
+            git_url,
+          },
           },
           base {
             label,

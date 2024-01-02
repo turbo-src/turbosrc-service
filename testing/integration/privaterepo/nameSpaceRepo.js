@@ -1,7 +1,6 @@
 const assert = require("assert");
 const { findOrCreateNameSpaceRepo } = require("../../../src/utils/requests");
 const { getGithubContributor } = require("../../../src/utils/config");
-const { getGithubToken } = require("../../../src/utils/gitHubUtil.js");
 
 var snooze_ms = 5000;
 
