@@ -51,7 +51,7 @@ const {
 	verify
 } = require("./../utils/ghServiceRequests");
 
-const { getTurbosrcMode, getAccessToken, decryptAccessToken } = require("./../utils/config");
+const { getTurbosrcMode, getGithubToken, decryptAccessToken } = require("./../utils/config");
 
 const {
 	//createRepo,
@@ -100,7 +100,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 	const { repoName } = await getNameSpaceRepo(repoID);
 	const owner = repoName.split("/")[0];
 	const repo = repoName.split("/")[1];
-	const token = await getAccessToken()
+	const token = await getGithubToken()
 	const accessToken = await decryptAccessToken(token)
 	let head;
 	let ghService;
@@ -223,7 +223,7 @@ const root = {
 	},
 	getVotes: async (repoID, defaultHash, contributor_id) => {
 		const { repoName } = await getNameSpaceRepo(repoID);
-		const token = await getAccessToken()
+		const token = await getGithubToken()
 		const accessToken = await decryptAccessToken(token)
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
@@ -446,7 +446,7 @@ const root = {
 		const { repoName } = await getNameSpaceRepo(args.repo);
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
-		const token = await getAccessToken()
+		const token = await getGithubToken()
 		const accessToken = await decryptAccessToken(token)
 		// Need this for check gitHubPullRequest
 		const issueID = args.defaultHash.split("_")[1];
@@ -815,7 +815,7 @@ const root = {
 		const decryptedToken = await decryptAccessToken(token);
 		let instanceToken = "";
 		if (decryptedToken === contributorName) {
-			const encryptedToken = await getAccessToken()
+			const encryptedToken = await getGithubToken()
 			instanceToken = await decryptAccessToken(encryptedToken)
 		}
 		const res = await checkGitHubAccessTokenPermissions(

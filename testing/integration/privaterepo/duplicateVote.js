@@ -13,7 +13,7 @@ const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
-       getAccessToken,
+       getGithubToken,
       } = require('../../../src/utils/config')
       const {socket} = require("../../../socketConfig")
 
@@ -29,7 +29,7 @@ describe('vote', function () {
     describe('Vote duplicate with minority voter', function () {
       it("Prevent duplicate vote", async () => {
         const contributor_name = await getGithubContributor()
-	const token = await getAccessToken()
+	const token = await getGithubToken()
         const contributor_id = await postGetContributorID(
             /*owner:*/ contributor_name,
             /*repo:*/ "demo",
@@ -44,7 +44,7 @@ describe('vote', function () {
             /*defaultHash:*/ "issue_2",
             /*contributor_name:*/ "tsrctester1",
         );
-        const testerTokenA = await getAccessToken("a")
+        const testerTokenA = await getGithubToken("a")
 
         await snooze(snooze_ms);
         await postSetVote(

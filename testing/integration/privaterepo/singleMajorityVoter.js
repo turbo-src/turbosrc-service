@@ -15,7 +15,7 @@ const { Parser } = require('graphql/language/parser');
 const {
         getContributorAddress,
         getGithubContributor,
-        getAccessToken,
+        getGithubToken,
       } = require('../../../src/utils/config')
       const {socket} = require("../../../socketConfig")
 
@@ -38,7 +38,7 @@ describe('Vote.', function () {
             /*contributor_name:*/ "tsrctester1",
         );
 
-        const testerTokenA = await getAccessToken("a")
+        const testerTokenA = await getGithubToken("a")
         await snooze(snooze_ms);
        
         const { repoID } = await getNameSpaceRepo(`${contributor_name}/demo`);

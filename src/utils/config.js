@@ -99,7 +99,7 @@ var root = {
       throw new Error("Failed to load endpoint mode " + endpoint.mode + " of " + serviceName);
     }
   },
-  getAccessToken: async function(user) {
+  getGithubToken: async function(user) {
     let apiToken
     const data = await fsPromises.readFile(path.resolve(__dirname, '../../.config.json'))
                        .catch((err) => console.error('Failed to read file', err));

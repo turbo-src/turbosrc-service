@@ -16,7 +16,7 @@ const { Parser } = require("graphql/language/parser");
 const {
 	getContributorAddress,
 	getGithubContributor,
-	getAccessToken
+	getGithubToken
 } = require("../../../src/utils/config");
 const { socket } = require("../../../socketConfig");
 var snooze_ms = 3000;
@@ -32,7 +32,7 @@ describe("Voting.", function () {
 	describe("Two voters vote - exceed quorum.", function () {
 		it("Should close open and close vote, then merge.", async () => {
 			const contributor_name = await getGithubContributor();
-			const token = await getAccessToken();
+			const token = await getGithubToken();
 			await snooze(snooze_ms);
 			const contributor_id = await postGetContributorID(
 				/*owner:*/ contributor_name,
@@ -89,7 +89,7 @@ describe("Voting.", function () {
 			);
 			await snooze(snooze_ms);
 
-			const testerTokenA = await getAccessToken("a");
+			const testerTokenA = await getGithubToken("a");
 			const tsrctester1ID = await postGetContributorID(
 				/*owner:*/ contributor_name,
 				/*repo:*/ "demo",
