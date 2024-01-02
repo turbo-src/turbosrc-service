@@ -143,7 +143,7 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 		}
 
 		if (write) {
-			// If write is true, then create a new issue in the GH service for future reference
+			//If write is true, then create a new issue in the GH service for future reference
 			const resCreateIssue = await postCreateIssue(repoID, issueID, head);
 			if (resCreateIssue.status === 201) {
 				res.defaultHash = head;
@@ -154,7 +154,6 @@ async function convertIssueID(repoID, issueID, write, contributor_id) {
 			}
 		}
 	} catch (error) {
-		console.log(' error:',error)
 		res.status = 500;
 		res.defaultHash = issueID;
 		res.childDefaultHash = issueID;
@@ -236,6 +235,7 @@ const root = {
 		convertedHash =
 			(await convertIssueID(repoID, defaultHash, false, contributor_id)) ||
 			defaultHash;
+		
 		// Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
 		response = await postGetVotes(
 			repoID,
@@ -251,6 +251,7 @@ const root = {
 				pull,
 				accessToken
 			);
+
 			const { inSession } = await postGetRepoData(repoID, contributor_id);
 
 			response.status = 200;
@@ -271,7 +272,7 @@ const root = {
 				? "vote"
 				: "conflict";
 
-			// // Map the issue id to its sha for future reference
+			// Map the issue id to its sha for future reference
 			await postCreateIssue(repoID, defaultHash, githubRes.head.sha);
 
 			await postCreatePullRequest(
@@ -712,7 +713,7 @@ const root = {
 		const resCreateNameSpaceRepo = await findOrCreateNameSpaceRepo(
 			repoName,
 			""
-		);
+		)
 
 		// Create the repo with the unique ID generated from namespace:
 		const resCreateRepo = await postCreateRepo(
@@ -803,8 +804,8 @@ const root = {
 		return res;
 	},
 	getTurboSrcIDfromInstance: async function () {
-		const turboSrcID = await getContributorAddress();
-		return turboSrcID;
+	const turboSrcID = await getContributorAddress();
+	return turboSrcID;
 	},
 	checkGitHubAccessTokenPermissions: async function (
 		owner,
