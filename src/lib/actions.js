@@ -226,7 +226,7 @@ const root = {
 		const accessToken = await decryptAccessToken(token)
 		const owner = repoName.split("/")[0];
 		const repo = repoName.split("/")[1];
-		const pull = Number(defaultHash.split("_")[1]); // issue_1 becomes 1 for github api
+		const pull = defaultHash.split("_")[1]; // issue_1 becomes 1 for github api
 		let response = {};
 		let convertedHash = {};
 		// Step 1: convert the issue_id of the PR to the defaultHash, ie the head
@@ -235,7 +235,7 @@ const root = {
 		convertedHash =
 			(await convertIssueID(repoID, defaultHash, false, contributor_id)) ||
 			defaultHash;
-		
+
 		// Step 2: If there is no PR in our db, we just set pull request contributor data from our db and pr meta data below from github
 		response = await postGetVotes(
 			repoID,
@@ -709,11 +709,11 @@ const root = {
 	},
 	createRepo: async (args) => {
 		// Create a namespace entry for the new repo:
-		repoName = `${args.owner}/${args.repo}`;
+		repoName = `${args.owner}/${args.repo}`
 		const resCreateNameSpaceRepo = await findOrCreateNameSpaceRepo(
 			repoName,
 			""
-		)
+		);
 
 		// Create the repo with the unique ID generated from namespace:
 		const resCreateRepo = await postCreateRepo(
@@ -804,8 +804,8 @@ const root = {
 		return res;
 	},
 	getTurboSrcIDfromInstance: async function () {
-	const turboSrcID = await getContributorAddress();
-	return turboSrcID;
+	  const turboSrcID = await getContributorAddress();
+	  return turboSrcID;
 	},
 	checkGitHubAccessTokenPermissions: async function (
 		owner,
