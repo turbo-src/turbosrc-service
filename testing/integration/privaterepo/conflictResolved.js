@@ -32,7 +32,7 @@ describe("Conflict", function () {
 	    const token = await getGithubToken()
 
         const testerTokenA = await getGithubToken("a")
-	const testerTokenB = await getGithubToken("b")
+	    const testerTokenB = await getGithubToken("b")
         const testerTokenC = await getGithubToken("c")
 
         const tsrctester1ID = await postGetContributorID(
@@ -152,39 +152,40 @@ describe("Conflict", function () {
             /*side:*/ "no",
         );
 
-        console.log(firstVoteRes, '201', 'unable to vote in mergeable')
-        console.log(secondVoteRes, '201', 'unable to vote in mergeable')
-        console.log(thirdVoteRes, '201', 'unable to vote in mergeable')
+        assert.equal(
+            firstVoteCumm, "0.000002", "Fail to add votes."
+        );
 
-        console.log('beforeVoteStats', beforeVoteStats)
+        assert.equal(
+            secondVoteCumm, "0.015002", "Fail to add votes."
+        );
 
-        console.log('voteStatsAfterFirstVote', voteStatsAfterFirstVote)
-        console.log('firstVoteCumm', firstVoteCumm)
-        console.log('voteStatsAfterSecondVote', voteStatsAfterSecondVote)
-        console.log('secondVoteCumm', secondVoteCumm)
-        console.log('voteStatsAfterThirdVote', voteStatsAfterThirdVote)
-        console.log('thirdVoteCumm', thirdVoteCumm)
+        assert.equal(
+            thirdVoteCumm, "0.100002", "Fail to add votes."
+        );
 
-        //assert.deepEqual(
-        //    beforeVoteMergeStatus,
-        //    { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
-        //    "Fail to find out status of pull request."
-        //);
+        assert.deepEqual(
+            beforeVoteStats,
+            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            "Fail to find out status of pull request."
+        );
 
-        //assert.deepEqual(
-        //    voteStatsAfterFirstVote,
-        //    { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
-        //    "Fail to find out status of pull request."
-        //);
-        //assert.deepEqual(
-        //    voteStatsAfterSecondVote,
-        //    { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
-        //    "Fail to find out status of pull request."
-        //);
-        //assert.deepEqual(
-        //    voteStatsAfterThirdVote,
-        //    { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
-        //    "Fail to find out status of pull request."
-        //);
+        assert.deepEqual(
+            voteStatsAfterFirstVote,
+            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            "Fail to find out status of pull request."
+        );
+
+        assert.deepEqual(
+            voteStatsAfterSecondVote,
+            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            "Fail to find out status of pull request."
+        );
+
+        assert.deepEqual(
+            voteStatsAfterThirdVote,
+            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            "Fail to find out status of pull request."
+        );
     });
 });
