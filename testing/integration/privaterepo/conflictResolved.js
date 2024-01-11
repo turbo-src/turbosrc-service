@@ -172,19 +172,19 @@ describe("Conflict", function () {
 
         assert.deepEqual(
             voteStatsAfterFirstVote,
-            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            { status: 200, state: "pre-open", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
             "Fail to find out status of pull request."
         );
 
         assert.deepEqual(
             voteStatsAfterSecondVote,
-            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            { status: 200, state: "pre-open", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
             "Fail to find out status of pull request."
         );
 
         assert.deepEqual(
             voteStatsAfterThirdVote,
-            { status: 200, state: "vote", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
+            { status: 200, state: "open", repo_id: repoID, fork_branch: "pullRequest6", "mergeableCodeHost": true, "childDefaultHash": "b22871b5c66fed0b8969453151e93f40d014434c", "defaultHash": "4534afa8b4ce247d2f538f98651e34d0ceb223e9" },
             "Fail to find out status of pull request."
         );
     });
