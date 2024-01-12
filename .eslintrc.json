@@ -9,5 +9,15 @@
         "ecmaVersion": "latest"
     },
     "rules": {
+        "indent": ["error", 2],
+        "max-len": ["error", { "code": 100 }],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "comma-dangle": ["error", "never"],
+        "keyword-spacing": ["error", { "before": true, "after": true }],
+        "no-unused-vars": ["error"],
+        "space-before-function-paren": ["error", "always"],
+        "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": true }],
+        "array-element-newline": ["error", "consistent"]
     }
 }
