@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs');
 const fsPromises = require('fs').promises;
 const express = require('express');
 const { graphqlHTTP } = require('express-graphql');
@@ -37,16 +37,16 @@ const {
   findOrCreateNameSpaceRepo,
   getNameSpaceRepo,
   getTurboSrcIDfromInstance
-} = require('./src/lib/actions')
+} = require('./src/lib/actions');
 const {
-       getGitHubPullRequest,
-       createPullRequest,
-       closePullRequest,
-       mergePullRequest,
-       fork,
-       verify,
-       checkGithubTokenPermissions
-      } = require('./src/utils/gitHubUtil');
+  getGitHubPullRequest,
+  createPullRequest,
+  closePullRequest,
+  mergePullRequest,
+  fork,
+  verify,
+  checkGithubTokenPermissions
+} = require('./src/utils/gitHubUtil');
 
 // defaultHash is the defaultHash, which are the same for now.
 // defaultHash !== pr_uid in the future.
@@ -55,20 +55,20 @@ const {
 
 // side is refers to the said of the vote, yes or no.
 // The vote_code is $(contributor_id)%$(side). In the future it will be an object that includes the contributors signature for the blockchain action (e.g. smart contract vote).
-async function getGithubUser() {
-    const data = await fsPromises.readFile('/usr/src/app/.config.json')
-                       .catch((err) => console.error('Failed to read file', err));
+async function getGithubUser () {
+  const data = await fsPromises.readFile('/usr/src/app/.config.json')
+    .catch((err) => console.error('Failed to read file', err));
 
-    let json = JSON.parse(data);
-    let user = json.github.user
-    if (user === undefined) {
-      throw new Error("Failed to load Github user " + user);
+  let json = JSON.parse(data);
+  let user = json.github.user;
+  if (user === undefined) {
+    throw new Error('Failed to load Github user ' + user);
 
-    } else {
-      console.log("Successfully read Github " + user);
-    }
+  } else {
+    console.log('Successfully read Github ' + user);
+  }
 
-    return user
+  return user;
 
 }
 
@@ -243,8 +243,8 @@ var schema = buildSchema(`
 `);
 
 // Basically this will be a database service until we put this on ipfs or something.
-var pullRequestsVoteCloseHistory = []
-var pullRequestsVoteMergeHistory = []
+var pullRequestsVoteCloseHistory = [];
+var pullRequestsVoteMergeHistory = [];
 
 // From extension/src/utils/commonUtil.js
 //getUsernameWithReponameFromGithubURL()
@@ -257,26 +257,26 @@ var pullRequestsVoteMergeHistory = []
 var nameSpaceDB = {
   // contributor_id: name
   'contributors': [
-  ],
+  ]
 };
 
-function getContributorsByContributorID(contributors, id) {
+function getContributorsByContributorID (contributors, id) {
   return contributors.filter(
-      function(contributors){ return contributors.id == id }
+    function (contributors){ return contributors.id == id; }
   );
 }
 
-function getContributorsByName(contributors, name) {
+function getContributorsByName (contributors, name) {
   return contributors.filter(
-      function(contributors){ return contributors.name == name }
+    function (contributors){ return contributors.name == name; }
   );
 }
 
 var fakeTurboSrcReposDB = {};
 //const head = await gitHeadUtil('turbo-src', 'extension', 0)
 const repoAccounts = [
-  'default/default',
-]
+  'default/default'
+];
 //const contributors = ['emmanuel','mary', 'joseph', 'john', '7db9a']
 
 const fakeAuthorizedContributors = {
@@ -287,17 +287,17 @@ const fakeAuthorizedContributors = {
   'vim/vim': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john', 'am', 'jc', 'pc', 'mb', 'np', 'nn', 'jp', 'ts', 'af', 'aj', 'ds', 'ri' ],
   'NixOS/nix': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john'],
   'NixOS/nixpkgs': ['7db9a', 'Yoshgunn', 'emmanuel','mary', 'joseph', 'john']
-}
+};
 
 // The object representing authorized repos and contributors.
 var pullRequestsDB = {
-   'default/default': ['vote_code']
+  'default/default': ['vote_code']
 };
 
- const loggingMiddleware = (req, res, next) => {
-    console.log('vote:', req.data);
-    next();
- }
+const loggingMiddleware = (req, res, next) => {
+  console.log('vote:', req.data);
+  next();
+};
 
 // The root provides the top-level API endpoints
 
@@ -310,11 +310,11 @@ var root = {
   //},
   createTsrcPullRequest: async (args) => {
     const res = await createTsrcPullRequest(args);
-    return res
+    return res;
   },
   createUser: async (args) => {
-    const res = await createUser(args)
-    return res
+    const res = await createUser(args);
+    return res;
   },
   getUser: async (args) => {
     const res = await getUser(args);
@@ -325,48 +325,48 @@ var root = {
     return res;
   },
   getContributorName: async (args) => {
-    const res = getContributorName(args)
-    return res
+    const res = getContributorName(args);
+    return res;
   },
   getContributorID: async (args) => {
-    const res =  await getContributorID(args)
-    return res
+    const res =  await getContributorID(args);
+    return res;
   },
   getContributorSignature: async (args) => {
-    const res = await getContributorSignature(args)
-    return res
+    const res = await getContributorSignature(args);
+    return res;
   },
   checkGithubTokenPermissions: async (args) => {
-    const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
-    return permissions
+    const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token);
+    return permissions;
   },
   getVotePowerAmount: async (args) => {
-    const contributorTokenAmount = await getVotePowerAmount(fakeTurboSrcReposDB, args)
+    const contributorTokenAmount = await getVotePowerAmount(fakeTurboSrcReposDB, args);
 
-    return contributorTokenAmount
+    return contributorTokenAmount;
   },
   transferTokens: async (args) => {
-    const verified = await verify(args.from, args.token)
-    console.log("")
-    console.log("235 server")
-    console.log("")
+    const verified = await verify(args.from, args.token);
+    console.log('');
+    console.log('235 server');
+    console.log('');
 
-    if(verified === true) {
+    if (verified === true) {
     //const from = nameSpaceDB['users'][args.from]
     //const to = nameSpaceDB['users'][args.to]
     //if (from === args.from && to === args.to) {
-   console.log("to: " + args.to)
-    // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
-   const contributorName = await getContributorName(
-     {contributor_id: args.to}
-    )
-    if (contributorName !== null) {
-      console.log("contributor name: " + contributorName)
-      const resTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args)
-      fakeTurboSrcReposDB = resTransferTokens.db
-      return resTransferTokens
+      console.log('to: ' + args.to);
+      // If not found, error is "There was an error: TypeError: Cannot read properties of null (reading 'contributor_name')"
+      const contributorName = await getContributorName(
+        {contributor_id: args.to}
+      );
+      if (contributorName !== null) {
+        console.log('contributor name: ' + contributorName);
+        const resTransferTokens = await transferTokens(fakeTurboSrcReposDB, pullRequestsDB, args);
+        fakeTurboSrcReposDB = resTransferTokens.db;
+        return resTransferTokens;
+      }
     }
-  }
   },
   verifyPullRequest: async (arg) => {
     // Check if it's in our database
@@ -378,84 +378,84 @@ var root = {
     //return fakeTurboSrcReposDB.includes(arg.repo_id)
   },
   getRepoStatus: async (args) => {
-    const res = await getRepoStatus(args)
+    const res = await getRepoStatus(args);
 
-    return res
+    return res;
   },
   getAuthorizedContributor: async (args) => {
-    const res = await getAuthorizedContributor(args)
+    const res = await getAuthorizedContributor(args);
 
-    return res
+    return res;
   },
   getVoteAll: async (defaultHash) => {
-    return pullRequestsDB[defaultHash]
+    return pullRequestsDB[defaultHash];
   },
   getVoteEverything: async () => {
-    return JSON.stringify(pullRequestsDB)
+    return JSON.stringify(pullRequestsDB);
   },
   getPullRequest: async (args) => {
-    const status = await getPullRequest(args)
+    const status = await getPullRequest(args);
 
-    return status
+    return status;
   },
   getGitHubPullRequest: async (args) => {
-    const contributor_id = args.contributor_id
-    const defaultHash = (args.defaultHash)
-    const issueID = (args.defaultHash).split('_')[1] // Need this for check gitHubPullRequest.
-    console.log('before try catch')
+    const contributor_id = args.contributor_id;
+    const defaultHash = (args.defaultHash);
+    const issueID = (args.defaultHash).split('_')[1]; // Need this for check gitHubPullRequest.
+    console.log('before try catch');
     if (contributor_id === undefined || contributor_id === 'undefined' || contributor_id === '') {
-      debugger
+      debugger;
 
     } else if (defaultHash === undefined || defaultHash === 'undefined' || defaultHash === '') {
-      debugger
+      debugger;
     }
     try {
-      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), contributor_id)
+      const gitHubPullRequest = await getGitHubPullRequest(args.owner, args.repo, Number(issueID), contributor_id);
 
-      console.log('try catch')
-      mergeable = gitHubPullRequest.mergeable
-      const baseBranch = gitHubPullRequest.base.ref
-      const forkBranch = gitHubPullRequest.head.ref
-      const head =  gitHubPullRequest.head.sha
-      const remoteURL = gitHubPullRequest.head.repo.git_url
-      const title = gitHubPullRequest.title
-      console.log('baseBranch ', baseBranch)
-      console.log('title ', title)
+      console.log('try catch');
+      mergeable = gitHubPullRequest.mergeable;
+      const baseBranch = gitHubPullRequest.base.ref;
+      const forkBranch = gitHubPullRequest.head.ref;
+      const head =  gitHubPullRequest.head.sha;
+      const remoteURL = gitHubPullRequest.head.repo.git_url;
+      const title = gitHubPullRequest.title;
+      console.log('baseBranch ', baseBranch);
+      console.log('title ', title);
       if (mergeable === null) {
-          mergeable = false
+        mergeable = false;
       }
 
-      var mergeCommitSha
-      const state = gitHubPullRequest.state
+      var mergeCommitSha;
+      const state = gitHubPullRequest.state;
       if (gitHubPullRequest.merge_commit_sha === null) {
-         mergeCommitSha = ""
+        mergeCommitSha = '';
       } else {
-         mergeCommitSha = gitHubPullRequest.merge_commit_sha
+        mergeCommitSha = gitHubPullRequest.merge_commit_sha;
       }
       if (mergeable === null) {
-          mergeable = false
+        mergeable = false;
       }
 
       return {
-              status: 200,
-              mergeable: mergeable,
-              mergeCommitSha: mergeCommitSha,
-              state: state,
-              baseBranch: baseBranch
-      }
+        status: 200,
+        mergeable: mergeable,
+        mergeCommitSha: mergeCommitSha,
+        state: state,
+        baseBranch: baseBranch
+      };
     } catch (error) {
       return {
-              status: 500,
-              mergeable: false,
-              mergeCommitSha: "",
-              state: "",
-              baseBranch: ""
-      }
+        status: 500,
+        mergeable: false,
+        mergeCommitSha: '',
+        state: '',
+        baseBranch: ''
+      };
     }
   },
   getPRpercentVotedQuorum: async (args) => {
-    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args)
-    return voteTotals.percentVotedQuorum
+    const voteTotals = getPRvoteTotals(fakeTurboSrcReposDB, args);
+    return voteTotals.percentVotedQuorum;
   },
   getVotes: async (args) => {
     return await getVotes(
@@ -471,19 +471,19 @@ var root = {
     );
   },
   getPRvoteYesTotals: async (args) => {
-    const voteYesTotals = await getPRvoteYesTotals(args)
+    const voteYesTotals = await getPRvoteYesTotals(args);
 
-    return voteYesTotals
+    return voteYesTotals;
   },
   getPRvoteNoTotals: async (args) => {
-    const voteNoTotals = await getPRvoteNoTotals(args)
+    const voteNoTotals = await getPRvoteNoTotals(args);
 
-    return voteNoTotals
+    return voteNoTotals;
   },
   getPRvoteTotals: async (args) => {
-    const voteTotals = await getPRvoteTotals(args)
+    const voteTotals = await getPRvoteTotals(args);
 
-    return voteTotals
+    return voteTotals;
   },
   pullFork: async (args) => {
     superagent
@@ -495,31 +495,31 @@ var root = {
       .end((err, res) => {
         // Calling the end function will send the request
       });
-    return "something"
+    return 'something';
   },
   setVote: async (args) => {
-      const verified = await verify(args.contributor_id, args.token)
+    const verified = await verify(args.contributor_id, args.token);
 
-    if(verified === true) {
-      const resultSetVote = await setVote(args)
+    if (verified === true) {
+      const resultSetVote = await setVote(args);
 
-      return resultSetVote
+      return resultSetVote;
     }
   },
   newPullRequest: async (args) => {
-    const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args)
+    const resNewPullRequest = await newPullRequest(fakeTurboSrcReposDB, pullRequestsDB, args);
 
-    fakeTurboSrcReposDB = resNewPullRequest.db
-    pullRequestsDB = resNewPullRequest.pullRequestsDB
+    fakeTurboSrcReposDB = resNewPullRequest.db;
+    pullRequestsDB = resNewPullRequest.pullRequestsDB;
 
-    return pullRequestsDB[args.defaultHash]
+    return pullRequestsDB[args.defaultHash];
   },
   createRepo: async (args) => {
     // name space server
-    const verified = await verify(args.contributor_id, args.token)
+    const verified = await verify(args.contributor_id, args.token);
 
-    if(verified === true) {
-      return await createRepo(args)
+    if (verified === true) {
+      return await createRepo(args);
     }
   },
   findOrCreateNameSpaceRepo: async (args) => {
@@ -536,25 +536,25 @@ var root = {
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
-    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title, args.issue_id)
+    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title, args.issue_id);
   },
   closePullRequest: async (args) => {
-    await closePullRequest(args.owner, args.repo, args.defaultHash)
+    await closePullRequest(args.owner, args.repo, args.defaultHash);
   },
   mergePullRequest: async (args) => {
-    await mergePullRequest(args.owner, args.repo, args.defaultHash)
+    await mergePullRequest(args.owner, args.repo, args.defaultHash);
   },
   fork: async (args) => {
-    await fork(args.owner, args.repo, args.org)
+    await fork(args.owner, args.repo, args.org);
   },
 
   getTurboSrcIDfromInstance: async () => {
     turboSrcID = await getTurboSrcIDfromInstance();
-    return turboSrcID
-  },
+    return turboSrcID;
+  }
 
   //End of GH server endpoints.
-}
+};
 
 var app = express();
 app.use(cors());
@@ -563,17 +563,17 @@ const server = http.createServer(app);
 
 //app.use(loggingMiddleware);
 app.use(function (req, res, next) {
-    let originalSend = res.send;
-    res.send = function (data) {
-        console.log(data + "\n");
-        originalSend.apply(res, Array.from(arguments));
-    }
-    next();
+  let originalSend = res.send;
+  res.send = function (data) {
+    console.log(data + '\n');
+    originalSend.apply(res, Array.from(arguments));
+  };
+  next();
 });
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
-  graphiql: true,
+  graphiql: true
 }));
 var way = false;
 //if (way === true) {

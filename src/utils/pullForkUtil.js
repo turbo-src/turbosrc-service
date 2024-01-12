@@ -1,9 +1,9 @@
 const simpleGit = require('simple-git');
 const sha256 = require('crypto-js/sha256');
-const fs = require('fs')
+const fs = require('fs');
 const tar = require('tar');
 const { exec } = require('child_process');
-const childProcess = require("child_process");
+const childProcess = require('child_process');
 const { getPullRequest } = require('./gitHubUtil');
 const { gitHeadUtil } = require('./gitHeadUtil');
 
@@ -13,20 +13,20 @@ const { gitHeadUtil } = require('./gitHeadUtil');
  * @return {Promise<string>} A promise that resolve to the output of the shell command, or an error
  * @example const output = await execute("ls -alh");
  */
-function execute(command) {
+function execute (command) {
   /**
    * @param {Function} resolve A function that resolves the promise
    * @param {Function} reject A function that fails the promise
    * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
    */
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     /**
      * @param {Error} error An error triggered during the execution of the childProcess.exec command
      * @param {string|Buffer} standardOutput The result of the shell command execution
      * @param {string|Buffer} standardError The error resulting of the shell command execution
      * @see https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
      */
-    childProcess.exec(command, function(error, standardOutput, standardError) {
+    childProcess.exec(command, function (error, standardOutput, standardError) {
       if (error) {
         reject();
 
@@ -44,88 +44,88 @@ function execute(command) {
   });
 }
 
-async function getSha256Fork(baseDir, fork) {
-  let result = await execute(`sha256sum ${baseDir}/${fork}.tgz`)
-  let forkSha256 = result.split(' ')[0]
-  return forkSha256
+async function getSha256Fork (baseDir, fork) {
+  let result = await execute(`sha256sum ${baseDir}/${fork}.tgz`);
+  let forkSha256 = result.split(' ')[0];
+  return forkSha256;
 }
 
-async function tarRepo(baseDir, fork) {
+async function tarRepo (baseDir, fork) {
   await execute(`tar --sort=name \
       --mtime='1999-12-25 00:00:00' \
       --owner=0 --group=0 --numeric-owner \
       --pax-option=exthdr.name=%d/PaxHeaders/%f,delete=atime,delete=ctime \
-      -cf ${baseDir}/${fork}.tgz ${baseDir}/${fork}`)
+      -cf ${baseDir}/${fork}.tgz ${baseDir}/${fork}`);
 }
 
 //Right now it just makes the dir with oid as a name.
 const pullForkUtil = {
   // Fork is the defaultHash or other uuid of fork from pull request.
-  pullForkUtil: async function(repo, forkOid, url, branch) {
-    const baseDir = 'repos/' + repo
+  pullForkUtil: async function (repo, forkOid, url, branch) {
+    const baseDir = 'repos/' + repo;
     const dir = baseDir + '/' + forkOid;
 
     if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
+      fs.mkdirSync(dir, { recursive: true });
     }
 
     const options = {
-       baseDir: process.cwd() + '/' + dir,
-       binary: 'git',
-       maxConcurrentProcesses: 6,
+      baseDir: process.cwd() + '/' + dir,
+      binary: 'git',
+      maxConcurrentProcesses: 6
     };
 
     const git = simpleGit(options);
 
     await git.init();
-    console.log(url)
-    console.log(branch)
+    console.log(url);
+    console.log(branch);
     try {
-       await git.addRemote('origin', url)
+      await git.addRemote('origin', url);
     } catch {
-      console.log('remote may already exist')
+      console.log('remote may already exist');
     }
     try {
       await git.fetch(['origin', branch]);
     } catch {
-      console.log('fetch failed')
+      console.log('fetch failed');
     }
     await git.checkout(branch);
 
-    const gitDir = dir + '/.git'
+    const gitDir = dir + '/.git';
     // delete directory recursively
     await fs.promises.rm(gitDir, { recursive: true }, (err) => {
       if (err) {
-          throw err;
+        throw err;
       }
 
       console.log(`${gitDir} is deleted!`);
     });
 
     //await new Promise(resolve => setTimeout(resolve, 3000));
-    await tarRepo(baseDir, forkOid)
+    await tarRepo(baseDir, forkOid);
     //await new Promise(resolve => setTimeout(resolve, 5000));
-    const forkSha256 = await getSha256Fork(baseDir, forkOid)
+    const forkSha256 = await getSha256Fork(baseDir, forkOid);
 
 
-    return forkSha256
+    return forkSha256;
   },
-  getPullRequestSha256: async function(repo, fork, branch) {
-     // sha256
+  getPullRequestSha256: async function (repo, fork, branch) {
+    // sha256
   },
-  getPRhead: async(args) => {
-    const defaultHash = args.defaultHash
+  getPRhead: async (args) => {
+    const defaultHash = args.defaultHash;
     // User should do this instead and pass it in request so we don't overuse our github api.
-    console.log('owner ' + args.owner)
-    console.log('repo ' + args.repo)
-    console.log('defaultHash ' + defaultHash)
-    var baseRepoName = args.repo
-    var baseRepoOwner = args.owner
-    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, defaultHash)
-    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0)
+    console.log('owner ' + args.owner);
+    console.log('repo ' + args.repo);
+    console.log('defaultHash ' + defaultHash);
+    var baseRepoName = args.repo;
+    var baseRepoOwner = args.owner;
+    var resGetPR = await getPullRequest(baseRepoOwner, baseRepoName, defaultHash);
+    var pullReqRepoHead = await gitHeadUtil(resGetPR.contributor, baseRepoName, resGetPR.forkBranch, 0);
 
-    return [resGetPR, pullReqRepoHead]
+    return [resGetPR, pullReqRepoHead];
   }
-}
+};
 
-module.exports = pullForkUtil
+module.exports = pullForkUtil;

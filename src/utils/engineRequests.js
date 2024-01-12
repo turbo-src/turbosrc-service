@@ -1,7 +1,7 @@
-const superagent = require("superagent");
+const superagent = require('superagent');
 
 
-const { getServiceEndpoint } = require('./config')
+const { getServiceEndpoint } = require('./config');
 
 //const privateStore =
 //  process.env.NODE_ENV === "fly"
@@ -16,13 +16,13 @@ var root = {
     contributor_name,
     contributor_signature
   ) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     superagent
       .post(privateStore)
       .send({
-        query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}") }`,
+        query: `{ createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}") }`
       })
-      .set("accept", "json")
+      .set('accept', 'json')
       .end((err, res) => {
         //Calling the end function will send the request
         const json = JSON.parse(res.text);
@@ -30,13 +30,13 @@ var root = {
       });
   },
   postCreateRepo: async (owner, repo, defaultHash, contributor_id, side) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ createRepo(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
 
     const json = JSON.parse(res.text);
     return json.data.createRepo;
@@ -54,13 +54,13 @@ var root = {
     title,
     issue_id
   ) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}", fork_branch: "${fork_branch}", title: "${title}", issue_id: "${issue_id}") }`,
+        query: `{ createPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}", fork_branch: "${fork_branch}", title: "${title}", issue_id: "${issue_id}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
 
     const json = JSON.parse(res.text);
     return json.data.createPullRequest;
@@ -78,25 +78,25 @@ var root = {
     fork_branch,
     title
   ) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ createLinkedPullRequest(owner: "${owner}", repo: "${repo}", parentDefaultHash: "${parentDefaultHash}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`,
+        query: `{ createLinkedPullRequest(owner: "${owner}", repo: "${repo}", parentDefaultHash: "${parentDefaultHash}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", head: "${head}", branchDefaultHash: "${branchDefaultHash}", remoteURL: "${remoteURL}", baseBranch: "${baseBranch}"fork_branch: "${fork_branch}", title: "${title}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
 
     const json = JSON.parse(res.text);
     return json.data.createLinkedPullRequest;
   },
   postGetContributorName: async (owner, repo, defaultHash, contributor_id) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorName(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`,
+        query: `{ getContributorName(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     // .end((err, res) => {
     //   const json = JSON.parse(res.text);
     //   return json.data.getContributorName;
@@ -105,13 +105,13 @@ var root = {
     return json.data.getContributorName;
   },
   postGetContributorID: async (owner, repo, defaultHash, contributor_name) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorID(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -119,13 +119,13 @@ var root = {
     return json.data.getContributorID;
   },
   postGetContributorSignature: async (owner, repo, defaultHash, contributor_name) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`,
+        query: `{ getContributorSignature(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_name: "${contributor_name}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -133,13 +133,13 @@ var root = {
     return json.data.getContributorSignature;
   },
   getRepoStatus: async (repo_id) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
         query: `{ getRepoStatus(repo_id: "${repo_id}" ) { status, exists } }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -147,13 +147,13 @@ var root = {
     return json.data.getRepoStatus;
   },
   postGetAuthorizedContributor: async (contributor_id, repo_id) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`,
+        query: `{ getAuthorizedContributor(contributor_id: "${contributor_id}", repo_id: "${repo_id}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -167,13 +167,13 @@ var root = {
     contributor_id,
     side
   ) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getVotePowerAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`,
+        query: `{ getVotePowerAmount(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, amount } }`
       }) // sends a JSON post body
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -181,13 +181,13 @@ var root = {
     return json.data.getVotePowerAmount;
   },
   postTransferTokens: async (owner, repo, from, to, amount) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: ${amount}) { status, repo, from, to, amount, createdAt, network, id } }`,
+        query: `{ transferTokens(owner: "${owner}", repo: "${repo}", from: "${from}", to: "${to}", amount: ${amount}) { status, repo, from, to, amount, createdAt, network, id } }`
       }) // sends a JSON post body
-      .set("accept", "json");
+      .set('accept', 'json');
     //   .end((err, res) => {
     // Calling the end function will send the request
     //   });
@@ -195,13 +195,13 @@ var root = {
     return json.data.transferTokens;
   },
   postSetVote: async (owner, repo, defaultHash, childDefaultHash, mergeable, contributor_id, side) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-	      query: `{ setVote(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", mergeable: ${mergeable}, contributor_id: "${contributor_id}", side: "${side}") }`,
+	      query: `{ setVote(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", childDefaultHash: "${childDefaultHash}", mergeable: ${mergeable}, contributor_id: "${contributor_id}", side: "${side}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //   .end((err, res) => {
     //      Calling the end function will send the request
     //   });
@@ -209,13 +209,13 @@ var root = {
     return json.data.setVote;
   },
   postGetPullRequest: async (owner, repo, defaultHash, contributor_id, side) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getMostRecentLinkedPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash, head, branchDefaultHash, remoteURL, baseBranch } }`,
+        query: `{ getMostRecentLinkedPullRequest(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") { status, state, repo_id, fork_branch, defaultHash, childDefaultHash, head, branchDefaultHash, remoteURL, baseBranch } }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -223,13 +223,13 @@ var root = {
     return json.data.getMostRecentLinkedPullRequest;
   },
   postSetQuorum: async (repo, contributor_id, quorum) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ setQuorum(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`,
+        query: `{ setQuorum(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}", quorum: "${quorum}") }`
       })
-      .set("accept", "json")
+      .set('accept', 'json')
       .end((err, res) => {
         // Calling the end function will send the request
       });
@@ -237,13 +237,13 @@ var root = {
     return json.data.setQuorum;
   },
   postGetQuorum: async (repo) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getQuorum(repo: "${repo}") }`,
+        query: `{ getQuorum(repo: "${repo}") }`
       })
-      .set("accept", "json")
+      .set('accept', 'json')
       .end((err, res) => {
         // Calling the end function will send the request
       });
@@ -251,13 +251,13 @@ var root = {
     return json.data.getQuorum;
   },
   postGetPRvoteTotals: async (owner, repo, defaultHash, contributor_id, side) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -265,13 +265,13 @@ var root = {
     return json.data.getPRvoteTotals;
   },
   postGetPRvoteYesTotals: async (owner, repo, defaultHash, contributor_id, side) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteYesTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -279,13 +279,13 @@ var root = {
     return json.data.getPRvoteYesTotals;
   },
   postGetPRvoteNoTotals: async (owner, repo, defaultHash, contributor_id, side) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-        query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`,
+        query: `{ getPRvoteNoTotals(owner: "${owner}", repo: "${repo}", defaultHash: "${defaultHash}", contributor_id: "${contributor_id}", side: "${side}") }`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     //.end((err, res) => {
     // Calling the end function will send the request
     //});
@@ -293,7 +293,7 @@ var root = {
     return json.data.getPRvoteNoTotals;
   },
   postGetVotes: async (repo, defaultHash, contributor_id) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
@@ -311,18 +311,18 @@ var root = {
               },
             }
 }
-      `,
+      `
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     const json = JSON.parse(res.text);
     return json.data.getVotes;
   },
   postGetRepoData: async (repo_id, contributor_id) => {
-    const privateStore = await getServiceEndpoint("offchain")
+    const privateStore = await getServiceEndpoint('offchain');
     const res = await superagent
       .post(privateStore)
       .send({
-      query: `{ getRepoData(repo_id: "${repo_id}", contributor_id: "${contributor_id}")
+        query: `{ getRepoData(repo_id: "${repo_id}", contributor_id: "${contributor_id}")
       {   
         status, 
         repo_id,
@@ -372,12 +372,12 @@ var root = {
     }
   } 
 } 
-}`,
+}`
       })
-      .set("accept", "json");
+      .set('accept', 'json');
     const json = JSON.parse(res.text);
     return json.data.getRepoData;
-  },
+  }
 };
 
 module.exports = root;

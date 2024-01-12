@@ -1,11 +1,11 @@
 const assert = require('assert');
 const { postSetVote,
-        postGetPullRequest,
-        postGetPRvoteYesTotals,
-        postGetPRvoteNoTotals,
-        postCreateRepo,
-        postNewPullRequest
-      } = require('../../../src/utils/requests')
+  postGetPullRequest,
+  postGetPRvoteYesTotals,
+  postGetPRvoteNoTotals,
+  postCreateRepo,
+  postNewPullRequest
+} = require('../../../src/utils/requests');
 const { Parser } = require('graphql/language/parser');
 
 var snooze_ms = 1000;
@@ -15,35 +15,35 @@ var snooze_ms = 1000;
 const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('Open pull requests', function () {
-    this.timeout(15000);
-    // Increase mocha(testing framework) time, otherwise tests fails
-    before(async () => {
-        await postCreateRepo(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*defaultHash:*/ "defaultHash4955",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-    });
-    describe.only('Duplicate pull request.', function () {
-      it("Should not allow reopen a closed pull request.", async () => {
-        await snooze(1500);
-        await postNewPullRequest(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*defaultHash:*/ "defaultHash4955",
-            /*contributor_id:*/ "7db9a",
-            /*side:*/ "yes",
-        );
-        await snooze(1500);
-        const status = await postGetPullRequest(
-            /*owner:*/ "vim",
-            /*repo:*/ "vim",
-            /*defaultHash:*/ "defaultHash4955",
-            /*contributor_id:*/ "mary",
-            /*side:*/ "yes",
-        );
+  this.timeout(15000);
+  // Increase mocha(testing framework) time, otherwise tests fails
+  before(async () => {
+    await postCreateRepo(
+      /*owner:*/ 'vim',
+      /*repo:*/ 'vim',
+      /*defaultHash:*/ 'defaultHash4955',
+      /*contributor_id:*/ '7db9a',
+      /*side:*/ 'yes'
+    );
+  });
+  describe.only('Duplicate pull request.', function () {
+    it('Should not allow reopen a closed pull request.', async () => {
+      await snooze(1500);
+      await postNewPullRequest(
+        /*owner:*/ 'vim',
+        /*repo:*/ 'vim',
+        /*defaultHash:*/ 'defaultHash4955',
+        /*contributor_id:*/ '7db9a',
+        /*side:*/ 'yes'
+      );
+      await snooze(1500);
+      const status = await postGetPullRequest(
+        /*owner:*/ 'vim',
+        /*repo:*/ 'vim',
+        /*defaultHash:*/ 'defaultHash4955',
+        /*contributor_id:*/ 'mary',
+        /*side:*/ 'yes'
+      );
         //await snooze(1500);
         //await postNewPullRequest(
         //    /*owner:*/ "vim",
@@ -61,18 +61,18 @@ describe('Open pull requests', function () {
         //    /*side:*/ "yes",
         //);
 
-        assert.equal(
-            status,
-            "closed",
-            "Fail to stay close even the votes exceed the quorum"
-        );
+      assert.equal(
+        status,
+        'closed',
+        'Fail to stay close even the votes exceed the quorum'
+      );
 
-        //assert.equal(
-        //    statusDuplicatePR,
-        //    "closed",
-        //    "Duplicate pull request."
-        //);
+      //assert.equal(
+      //    statusDuplicatePR,
+      //    "closed",
+      //    "Duplicate pull request."
+      //);
 
-      });
     });
+  });
 });
