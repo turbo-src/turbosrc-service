@@ -64,7 +64,7 @@ describe('Voting.', function () {
         /*contributor_id:*/ '0x232b9E710e897aEb18FEbe410526B987641BaE5f',
         /*side:*/ 'yes'
       );
-      socket.emit('vote cast', contributor_name, 'demo', 'defaultHash1');
+      //socket.emit('vote cast', contributor_name, 'demo', 'defaultHash1');
 
       await snooze(snooze_ms);
       const afterMergeStatus = await postGetPullRequest(
@@ -92,7 +92,14 @@ describe('Voting.', function () {
 
       assert.deepEqual(
         mergeStatus,
-        { status: 200, state: 'merge', repo_id: `${contributor_name}/demo`,  fork_branch: 'pullRequest1', 'childDefaultHash': 'defaultHash1', 'defaultHash': 'defaultHash1' },
+        {
+          status: 200,
+          state: 'merge',
+          repo_id: `${contributor_name}/demo`,
+          fork_branch: 'pullRequest1',
+          childDefaultHash: 'defaultHash1',
+          defaultHash: 'defaultHash1'
+        },
         'Fail to merge even though it was voted in.'
       );
 
@@ -110,7 +117,14 @@ describe('Voting.', function () {
 
       assert.deepEqual(
         afterMergeVoteRes,
-        { status: 200, state: 'merge', repo_id: `${contributor_name}/demo`,  fork_branch: 'pullRequest1', 'childDefaultHash': 'defaultHash1', 'defaultHash': 'defaultHash1' },
+        {
+          status: 200,
+          state: 'merge',
+          repo_id: `${contributor_name}/demo`,
+          fork_branch: 'pullRequest1',
+          childDefaultHash: 'defaultHash1',
+          defaultHash: 'defaultHash1'
+        },
         'Fail to merge even though it was voted in.'
       );
     });

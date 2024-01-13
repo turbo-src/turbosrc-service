@@ -50,7 +50,7 @@ describe('Vote.', function () {
       /*side:*/ 'no',
       /*token:*/ contributor_token
     );
-    socket.emit('vote cast', contributor_name, repoID, 'issue_5');
+    //socket.emit('vote cast', contributor_name, repoID, 'issue_5');
     socket.disconnect();
 
   });
@@ -93,7 +93,15 @@ describe('Vote.', function () {
 
       assert.deepEqual(
         mergeStatus,
-        { status: 200, state: 'close', 'mergeableCodeHost': true, repo_id: repoID,  fork_branch: 'pullRequest5', 'childDefaultHash': '3baa5aec09d458cd1cd935ab144ef7f68462cd71', 'defaultHash': '3baa5aec09d458cd1cd935ab144ef7f68462cd71' },
+        {
+          status: 200,
+          state: 'close',
+          mergeableCodeHost: true,
+          repo_id: repoID,
+          fork_branch: 'pullRequest5',
+          childDefaultHash: '3baa5aec09d458cd1cd935ab144ef7f68462cd71',
+          defaultHash: '3baa5aec09d458cd1cd935ab144ef7f68462cd71'
+        },
         'Fail to close even though it was voted out.'
       );
 

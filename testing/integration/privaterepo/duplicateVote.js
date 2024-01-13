@@ -1,17 +1,13 @@
 const assert = require('assert');
 const fsPromises = require('fs').promises;
 const {
-  postCreateRepo,
   postSetVote,
   postGetPullRequest,
-  postNewPullRequest,
   postGetContributorID,
-  postGetContributorName,
   getNameSpaceRepo
 } = require('../../../src/utils/requests');
 const { Parser } = require('graphql/language/parser');
 const {
-  getContributorAddress,
   getGithubContributor
 } = require('../../../src/utils/config');
 const {
@@ -54,12 +50,12 @@ describe('vote', function () {
         /*repo:*/ repoID,
         /*defaultHash:*/ 'issue_3',
         /*childDefaultHash:*/ 'issue_3',
-	    /*mergeable:*/ true,
+        /*mergeable:*/ true,
         /*contributor_id:*/ contributor_id,
         /*side:*/ 'yes',
-	    /*token:*/ token
+        /*token:*/ token
       );
-      socket.emit('vote cast', contributor_name, repoID, 'issue_3');
+      //socket.emit('vote cast', contributor_name, repoID, 'issue_3');
 
       await snooze(snooze_ms);
       const openStatus = await postGetPullRequest(
@@ -76,12 +72,12 @@ describe('vote', function () {
         /*repo:*/ repoID,
         /*defaultHash:*/ 'issue_3',
         /*childDefaultHash:*/ 'issue_3',
-	    /*mergeable:*/ true,
+        /*mergeable:*/ true,
         /*contributor_id:*/ contributor_id,
         /*side:*/ 'yes',
-	    /*token:*/ token
+        /*token:*/ token
       );
-      socket.emit('vote cast', contributor_name, repoID, 'issue_3');
+      //socket.emit('vote cast', contributor_name, repoID, 'issue_3');
 
       await snooze(snooze_ms);
       const duplicateStatus = await postGetPullRequest(
@@ -101,12 +97,12 @@ describe('vote', function () {
         /*repo:*/ repoID,
         /*defaultHash:*/ 'issue_3',
         /*childDefaultHash:*/ 'issue_3',
-	    /*mergeable:*/ true,
+        /*mergeable:*/ true,
         /*contributor_id:*/ tsrctester1ID,
         /*side:*/ 'yes',
-	    /*token:*/ testerTokenA
+        /*token:*/ testerTokenA
       );
-      socket.emit('vote cast', contributor_name, repoID, 'issue_3');
+      //socket.emit('vote cast', contributor_name, repoID, 'issue_3');
 
       await snooze(snooze_ms);
       const mergeStatus = await postGetPullRequest(
@@ -120,18 +116,42 @@ describe('vote', function () {
 
       assert.deepEqual(
         openStatus,
-        { status: 200, state: 'pre-open', repo_id: repoID,  fork_branch: 'pullRequest3', 'mergeableCodeHost': true, 'childDefaultHash': 'f69d18f0fde201d83ce5de571168d7649aabc940', 'defaultHash': 'f69d18f0fde201d83ce5de571168d7649aabc940' },
+        {
+          status: 200,
+          state: 'pre-open',
+          repo_id: repoID,
+          fork_branch: 'pullRequest3',
+          mergeableCodeHost: true,
+          childDefaultHash: 'f69d18f0fde201d83ce5de571168d7649aabc940',
+          defaultHash: 'f69d18f0fde201d83ce5de571168d7649aabc940'
+        },
         'Fail open on initial vote below quorum'
       );
 
       assert.deepEqual(
         duplicateStatus,
-        { status: 200, state: 'pre-open', repo_id: repoID,  fork_branch: 'pullRequest3', 'mergeableCodeHost': true, 'childDefaultHash': 'f69d18f0fde201d83ce5de571168d7649aabc940', 'defaultHash': 'f69d18f0fde201d83ce5de571168d7649aabc940' },
+        {
+          status: 200,
+          state: 'pre-open',
+          repo_id: repoID,
+          fork_branch: 'pullRequest3',
+          mergeableCodeHost: true,
+          childDefaultHash: 'f69d18f0fde201d83ce5de571168d7649aabc940',
+          defaultHash: 'f69d18f0fde201d83ce5de571168d7649aabc940'
+        },
         'Fail keep open even though initial vote below quorum'
       );
       assert.deepEqual(
         mergeStatus,
-        { status: 200, state: 'merge', repo_id: repoID,  fork_branch: 'pullRequest3', 'mergeableCodeHost': true, 'childDefaultHash': 'f69d18f0fde201d83ce5de571168d7649aabc940', 'defaultHash': 'f69d18f0fde201d83ce5de571168d7649aabc940' },
+        {
+          status: 200,
+          state: 'merge',
+          repo_id: repoID,
+          fork_branch: 'pullRequest3',
+          mergeableCodeHost: true,
+          childDefaultHash: 'f69d18f0fde201d83ce5de571168d7649aabc940',
+          defaultHash: 'f69d18f0fde201d83ce5de571168d7649aabc940'
+        },
         'Fail to merge even though it was voted in.'
       );
     });

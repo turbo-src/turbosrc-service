@@ -4,16 +4,11 @@ const { postSetVote,
   postGetPullRequest,
   postGetPRvoteYesTotals,
   postGetPRvoteNoTotals,
-  postCreateRepo,
-  postNewPullRequest,
   postGetContributorID,
-  postGetContributorName,
-	    getGitHubPullRequest,
   getNameSpaceRepo
 } = require('../../../src/utils/requests');
 const { Parser } = require('graphql/language/parser');
 const {
-  getContributorAddress,
   getGithubContributor
 } = require('../../../src/utils/config');
 const {
@@ -42,7 +37,7 @@ describe('Vote.', function () {
 
     const testerTokenA = await getGithubToken('a');
     await snooze(snooze_ms);
-       
+
     const { repoID } = await getNameSpaceRepo(`${contributor_name}/demo`);
 
     await postSetVote(
@@ -50,12 +45,12 @@ describe('Vote.', function () {
       /*repo: */ repoID,
       /*defaultHash:*/ 'issue_2',
       /*childDefaultHash:*/ 'issue_2',
-	    /*mergeable:*/ true,
+      /*mergeable:*/ true,
       /*contributor_id:*/ tsrctester1ID,
       /*side:*/ 'yes',
-	    /*token:*/ testerTokenA
+      /*token:*/ testerTokenA
     );
-    socket.emit('vote cast', contributor_name, repoID, 'issue_2');
+    //socket.emit('vote cast', contributor_name, repoID, 'issue_2');
     socket.disconnect();
 
   });
@@ -98,8 +93,15 @@ describe('Vote.', function () {
 
       assert.deepEqual(
         mergeStatus,
-        { status: 200, state: 'merge', 'mergeableCodeHost': true, repo_id: repoID,  fork_branch: 'pullRequest2', 'childDefaultHash': '8fff757c05b091712c8f170673b74c19134c34c4', 'defaultHash': '8fff757c05b091712c8f170673b74c19134c34c4' },
-        { status: 200, type: 2 },
+        {
+          status: 200,
+          state: 'merge',
+          mergeableCodeHost: true,
+          repo_id: repoID,
+          fork_branch: 'pullRequest2',
+          childDefaultHash: '8fff757c05b091712c8f170673b74c19134c34c4',
+          defaultHash: '8fff757c05b091712c8f170673b74c19134c34c4'
+        },
         'Fail to merge even though it was voted in.'
       );
 
