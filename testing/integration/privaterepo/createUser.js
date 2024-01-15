@@ -27,10 +27,6 @@ describe('Create users', function () {
   this.timeout(snooze_ms*24);
   // Increase mocha(testing framework) time, otherwise tests fails
   before(async () => {
-    //const userAddr = await getContributorAddress()
-
-    //Gets it from .config.json
-
     const contributor_name = await getGithubContributor();
     const token = await getGithubToken();
     const contributor_id = await getContributorAddress();
@@ -56,25 +52,45 @@ describe('Create users', function () {
     const testerTokenK = await getGithubToken('k');
     const testerTokenL = await getGithubToken('l');
 
-    await postCreateUser(
-      /*owner:*/ '',
-      /*repo:*/ '',
-      /*contributor_id:*/ '0x09D56A39599Dd81e213EB2A9Bd6785945B662662',
-      /*contributor_name:*/ 'tsrctester1',
-      /*contributor_signature:*/ 'e0c911adbce919ea366cdeb5015b18b0e7980e659c3a89cd962a29ff743370b8',
-      /*token:*/ testerTokenA
-    );
+    // tester a
+    assert.deepEqual(
+      await postCreateUser(
+        /*owner:*/ '',
+        /*repo:*/ '',
+        /*contributor_id:*/ '0x09D56A39599Dd81e213EB2A9Bd6785945B662662',
+        /*contributor_name:*/ 'tsrctester1',
+        /*contributor_signature:*/ 'e0c911adbce919ea366cdeb5015b18b0e7980e659c3a89cd962a29ff743370b8',
+        /*token:*/ testerTokenA
+      ),
+      {
+        status: "success",
+        message: "User created successfully",
+        info: {
+          contributor_id: "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
+          contributor_name: "tsrctester1"
+        }
+      }
+    )
 
     // tester b
-    await postCreateUser(
-      /*owner:*/ '',
-      /*repo:*/ '',
-      /*contributor_id:*/ '0xafC193df9bB3d6d6062029b3E67243C00C17d534',
-      /*contributor_name:*/ 'tsrctester2',
-      /*contributor_signature:*/ '257be612b5cb88dfe83a82d04ba8d7a79fadba81ea46c87ce33f51c5beeb6a34',
-      /*token:*/ token,
-      /*token:*/ testerTokenB
-    );
+    assert.deepEqual(
+      await postCreateUser(
+        /*owner:*/ '',
+        /*repo:*/ '',
+        /*contributor_id:*/ '0xafC193df9bB3d6d6062029b3E67243C00C17d534',
+        /*contributor_name:*/ 'tsrctester2',
+        /*contributor_signature:*/ '257be612b5cb88dfe83a82d04ba8d7a79fadba81ea46c87ce33f51c5beeb6a34',
+        /*token:*/ testerTokenB
+      ),
+      {
+        status: "success",
+        message: "User created successfully",
+        info: {
+          contributor_id: "0xafC193df9bB3d6d6062029b3E67243C00C17d534",
+          contributor_name: "tsrctester2"
+        }
+      }
+    )
 
     // tester c
     await postCreateUser(
@@ -176,6 +192,53 @@ describe('Create users', function () {
       /*token:*/ testerTokenL
     );
 
+  });
+  describe.only('User already exists.', function () {
+    it('Should throw an error createUsers because the users already exists', async () => {
+      const testerTokenA = await getGithubToken('a');
+      const testerTokenB = await getGithubToken('b');
+
+      // tester a
+      assert.deepEqual(
+        await postCreateUser(
+          /*owner:*/ '',
+          /*repo:*/ '',
+          /*contributor_id:*/ '0x09D56A39599Dd81e213EB2A9Bd6785945B662662',
+          /*contributor_name:*/ 'tsrctester1',
+          /*contributor_signature:*/ 'e0c911adbce919ea366cdeb5015b18b0e7980e659c3a89cd962a29ff743370b8',
+          /*token:*/ testerTokenA
+        ),
+        {
+          status: "error",
+          message: "Error creating user: SequelizeUniqueConstraintError: Validation error",
+          info: {
+            contributor_id: "0x09D56A39599Dd81e213EB2A9Bd6785945B662662",
+            contributor_name: "tsrctester1"
+          }
+        }
+      )
+
+      // tester b
+      assert.deepEqual(
+        await postCreateUser(
+          /*owner:*/ '',
+          /*repo:*/ '',
+          /*contributor_id:*/ '0xafC193df9bB3d6d6062029b3E67243C00C17d534',
+          /*contributor_name:*/ 'tsrctester2',
+          /*contributor_signature:*/ '257be612b5cb88dfe83a82d04ba8d7a79fadba81ea46c87ce33f51c5beeb6a34',
+          /*token:*/ testerTokenB
+        ),
+        {
+          status: "error",
+          message: "Error creating user: SequelizeUniqueConstraintError: Validation error",
+          info: {
+            contributor_id: "0xafC193df9bB3d6d6062029b3E67243C00C17d534",
+            contributor_name: "tsrctester2"
+          }
+        }
+      )
+
+    });
   });
   describe.only('Get contributor name.', function () {
     it('Should do something', async () => {
