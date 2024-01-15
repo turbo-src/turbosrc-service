@@ -73,6 +73,17 @@ async function getGithubUser () {
 }
 
 var schema = buildSchema(`
+  type CreateUserResponse {
+    status: String!
+    message: String!
+    info: UserInfo
+  }
+
+  type UserInfo {
+    contributor_id: String!
+    contributor_name: String!
+  }
+
   type PullRequest {
     status: Int!
     state: String!
@@ -174,7 +185,7 @@ var schema = buildSchema(`
   }
 
   type RepoData {
-    status: Int!  
+    status: Int!
     repo_id: String!
     owner: String!
     contributor_id: String!
@@ -182,7 +193,7 @@ var schema = buildSchema(`
     inSession: Boolean!
     quorum: Float!
     contributor: RepoContributor!
-    pullRequests: [GetVotes]! 
+    pullRequests: [GetVotes]!
   }
 
   type TransferReceipt {
@@ -207,7 +218,7 @@ var schema = buildSchema(`
   type Query {
     createTsrcPullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, childDefaultHash: String, head: String, branchDefaultHash: String, remoteURL: String, baseBranch: String, fork_branch: String, title: String, issue_id: String): String,
     getVotePowerAmount(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String, token: String): ContributorTokenAmount,
-    createUser(turboSrcID: String, owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): String,
+    createUser(turboSrcID: String, owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): CreateUserResponse,
     getUser(turboSrcID: String, contributor_id: String): User,
     findOrCreateUser(turboSrcID: String, owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): User,
     checkGithubTokenPermissions(turboSrcID: String, owner: String, repo: String, contributor_name: String, token: String): Permissions,

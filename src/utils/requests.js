@@ -158,9 +158,20 @@ var root = {
     const res = await superagent
       .post(url)
       .send({
-        query: `{ createUser(turboSrcID: "${turboSrcID}", owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") }`
+        query: `
+          {
+            createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") {
+              status
+              message
+              info {
+                contributor_id
+                contributor_name
+              }
+            }
+          }
+        `,
       })
-      .set('accept', 'json');
+      .set("accept", "json");
 
     const json = JSON.parse(res.text);
     return json.data.createUser;
