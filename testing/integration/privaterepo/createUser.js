@@ -193,7 +193,7 @@ describe('Create users', function () {
     );
 
   });
-  describe.only('User already exists.', function () {
+  describe('User already exists.', function () {
     it('Should throw an error createUsers because the users already exists', async () => {
       const testerTokenA = await getGithubToken('a');
       const testerTokenB = await getGithubToken('b');
@@ -240,7 +240,7 @@ describe('Create users', function () {
 
     });
   });
-  describe.only('Get contributor name.', function () {
+  describe('Get contributor name.', function () {
     it('Should do something', async () => {
       const contributor_name = await getGithubContributor();
       await snooze(snooze_ms);
