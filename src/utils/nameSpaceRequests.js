@@ -9,8 +9,6 @@ const { getServiceEndpoint } = require('./config');
 
 var root = {
   postCreateUser: async (
-    owner,
-    repo,
     contributor_id,
     contributor_name,
     contributor_signature,
@@ -22,7 +20,7 @@ var root = {
       .send({
         query: `
           {
-            createUser(owner: "${owner}", repo: "${repo}", contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") {
+            createUser(contributor_id: "${contributor_id}", contributor_name: "${contributor_name}", contributor_signature: "${contributor_signature}", token: "${token}") {
               status
               message
               info {

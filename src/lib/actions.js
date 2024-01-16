@@ -673,8 +673,6 @@ const root = {
   },
   createUser: async (args) => {
     const resCreateUser = await postCreateUser(
-      '',
-      '',
       args.contributor_id,
       args.contributor_name,
       args.contributor_signature,
