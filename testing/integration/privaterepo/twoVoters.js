@@ -14,11 +14,11 @@ const {
 } = require('../../../src/utils/requests');
 const { Parser } = require('graphql/language/parser');
 const {
-  getContributorAddress,
-  getGithubContributor
-} = require('../../../src/utils/config');
-const { getGithubToken } = require('../../../src/utils/gitHubUtil.js');
-const { socket } = require('../../../socketConfig');
+	getContributorAddress,
+	getGithubContributor,
+	getGithubToken
+} = require("../../../src/utils/config");
+const { socket } = require("../../../socketConfig");
 var snooze_ms = 3000;
 
 // We call this at the top of each test case, otherwise nodeosd could

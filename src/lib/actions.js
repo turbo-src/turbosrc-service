@@ -1,14 +1,8 @@
 const { getPRhead } = require('./../utils/pullForkUtil');
 const {
-  getContributorAddress
-} = require('./../utils/config');
-const {
-  getPullRequest,
-  getGitHubPullRequest,
-  mergePullRequest,
-  closePullRequest
-} = require('./../utils/gitHubUtil');
-const { gitHeadUtil } = require('./../utils/gitHeadUtil');
+        getContributorAddress
+      } = require('./../utils/config')
+const { gitHeadUtil } = require("./../utils/gitHeadUtil");
 const {
   postCreateRepoTestDB,
   postCreateTokenSupplyTestDB,
@@ -47,12 +41,18 @@ const {
 } = require('./../utils/nameSpaceRequests');
 
 const {
-  postCreateIssue,
-  postGetIssueID,
-  postGetTsrcID
-} = require('./../utils/ghServiceRequests');
+	postCreateIssue,
+	postGetIssueID,
+	postGetTsrcID,
+	getGitHubPullRequest,
+	mergeGitHubPullRequest,
+	closeGitHubPullRequest,
+	checkGitHubAccessTokenPermissions,
+  createGitHubPullRequest,
+	verify
+} = require("./../utils/ghServiceRequests");
 
-const { getTurbosrcMode } = require('./../utils/config');
+const { getTurbosrcMode, getGithubToken, decryptAccessToken } = require("./../utils/config");
 
 const {
   //createRepo,
@@ -91,53 +91,39 @@ const {
   //getVotePowerAmount
 } = require('./state');
 
-async function getGitHubPRhead (owner, repo, issueID, contributor_id) {
-  issueID = issueID.split('_')[1]; // Need this for check gitHubPullRequest.
-  const gitHubPullRequest = await getGitHubPullRequest(
-    owner,
-    repo,
-    issueID,
-    contributor_id
-  );
-  const head = gitHubPullRequest.head.sha;
-  const mergeable = gitHubPullRequest.mergeable;
-  return { head: head, mergeable: mergeable };
-}
-
-async function convertIssueID (repoID, issueID, write, contributor_id) {
-  // This will exchange the issueID (eg. issue_4) into a tsrcID (e.g. commit head sha256).
-  // It will also record the sha256 against the issueID for future reference.
+async function convertIssueID(repoID, issueID, write, contributor_id) {
+	// This will exchange the issueID (eg. issue_4) into a tsrcID (e.g. commit head sha256).
+	// It will also record the sha256 against the issueID for future reference.
 
   // childDefaultHash is the most recent commit head sha256 of the pull request branch
   // defaultHash is the next most recent commit head sha256 of the pull request branch
 
-  console.log('repoID in convertIssueID\n\n', repoID);
-  const { repoName } = await getNameSpaceRepo(repoID);
-  const owner = repoName.split('/')[0];
-  const repo = repoName.split('/')[1];
+	const { repoName } = await getNameSpaceRepo(repoID);
+	const owner = repoName.split("/")[0];
+	const repo = repoName.split("/")[1];
+	const token = await getGithubToken()
+	const accessToken = await decryptAccessToken(token)
+	let head;
+	let ghService;
+	let res = {
+		status: 201,
+		mergeable: true,
+		defaultHash: "",
+		childDefaultHash: "",
+	};
 
-  let head;
-  let ghService;
-  let res = {
-    status: 201,
-    mergeable: true,
-    defaultHash: '',
-    childDefaultHash: ''
-  };
-
-  try {
-    // Get tsrcID from GH service
-    ghService = await postGetTsrcID(repoID, issueID);
-    // Get pull request from GitHub
-    const githubRes = await getGitHubPRhead(
-      owner,
-      repo,
-      issueID,
-      contributor_id
-    );
-    console.log('githubRes in convertIssueID\n\n', githubRes);
-    head = githubRes.head;
-    res.mergeable = githubRes.mergeable;
+	try {
+		// Get tsrcID from GH service
+		ghService = await postGetTsrcID(repoID, issueID);
+		// Get pull request from GitHub
+		const pull = Number(issueID.split("_")[1])
+		const githubRes = await getGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			accessToken
+		);
+		head = githubRes.head.sha;
 
     // Error handling
     if (head === null || head === undefined) {
@@ -234,19 +220,21 @@ const root = {
       ''
     );
 
-    return voteYes;
-  },
-  getVotes: async (repoID, defaultHash, contributor_id) => {
-    const { repoName } = await getNameSpaceRepo(repoID);
-    const owner = repoName.split('/')[0];
-    const repo = repoName.split('/')[1];
-    const pull = defaultHash.split('_')[1]; // issue_1 becomes 1 for github api
-    let response = {};
-    let convertedHash = {};
-    // Step 1: convert the issue_id of the PR to the defaultHash, ie the head
-    // default hash in the args here is the issue_id :)
-    // If it is a brand new pr not in our db then it will return undefined so just use the default hash, er.. issue_id :)
-    convertedHash =
+		return voteYes;
+	},
+	getVotes: async (repoID, defaultHash, contributor_id) => {
+		const { repoName } = await getNameSpaceRepo(repoID);
+		const token = await getGithubToken()
+		const accessToken = await decryptAccessToken(token)
+		const owner = repoName.split("/")[0];
+		const repo = repoName.split("/")[1];
+		const pull = defaultHash.split("_")[1]; // issue_1 becomes 1 for github api
+		let response = {};
+		let convertedHash = {};
+		// Step 1: convert the issue_id of the PR to the defaultHash, ie the head
+		// default hash in the args here is the issue_id :)
+		// If it is a brand new pr not in our db then it will return undefined so just use the default hash, er.. issue_id :)
+		convertedHash =
 			(await convertIssueID(repoID, defaultHash, false, contributor_id)) ||
 			defaultHash;
 
@@ -257,13 +245,15 @@ const root = {
       contributor_id
     );
 
-    const githubRes = await getGitHubPullRequest(
-      owner,
-      repo,
-      pull,
-      contributor_id
-    );
-
+		if (response.status === 404) {
+			// Step 3: Set pull request meta data from Github if pr is not in our db
+			const githubRes = await getGitHubPullRequest(
+				owner,
+				repo,
+				pull,
+				accessToken
+			);
+      }
     if (githubRes.mergeable === false && (response.state === 'open' || response.state === 'pre-open' || response.state === 'vote')) {
       //response.state = "conflict"
     }
@@ -456,32 +446,33 @@ const root = {
     const pullAndVoteStatus =
 			!closedMerge && !votedAlready && openPullRequestStatus && !alreadyHead;
 
-    return {
-      pullAndVoteStatus: pullAndVoteStatus,
-      db: database
-    };
-    //return {
-    //         prVoteStatusNow: prVoteStatusNow,
-    //         votedAlready: votedAlready,
-    //         openPullRequestStatus: openPullRequestStatus,
-    //         alreadyHead: alreadyHead
-    //}
-  },
-  setVote: async function (args) {
-    const { repoName } = await getNameSpaceRepo(args.repo);
-    const owner = repoName.split('/')[0];
-    const repo = repoName.split('/')[1];
-
-    // Need this for check gitHubPullRequest
-    const issueID = args.defaultHash.split('_')[1];
-    const issue_id = args.defaultHash;
-    // If ran online, it will find the default hash's associated tsrcID in GH Service
-    convertedHashes = await convertIssueID(
-      args.repo,
-      args.defaultHash,
-      true,
-      args.contributor_id
-    );
+		return {
+			pullAndVoteStatus: pullAndVoteStatus,
+			db: database,
+		};
+		//return {
+		//         prVoteStatusNow: prVoteStatusNow,
+		//         votedAlready: votedAlready,
+		//         openPullRequestStatus: openPullRequestStatus,
+		//         alreadyHead: alreadyHead
+		//}
+	},
+	setVote: async function (args) {
+		const { repoName } = await getNameSpaceRepo(args.repo);
+		const owner = repoName.split("/")[0];
+		const repo = repoName.split("/")[1];
+		const token = await getGithubToken()
+		const accessToken = await decryptAccessToken(token)
+		// Need this for check gitHubPullRequest
+		const issueID = args.defaultHash.split("_")[1];
+		const issue_id = args.defaultHash;
+		// If ran online, it will find the default hash's associated tsrcID in GH Service
+		convertedHashes = await convertIssueID(
+			args.repo,
+			args.defaultHash,
+			true,
+			args.contributor_id
+		);
 
     if (convertedHashes.status === 201) {
       args.defaultHash = convertedHashes.defaultHash;
@@ -497,12 +488,12 @@ const root = {
         args.side
       );
 
-      const gitHubPullRequest = await getGitHubPullRequest(
-        owner,
-        repo,
-        Number(issueID),
-        args.contributor_id
-      );
+			const gitHubPullRequest = await getGitHubPullRequest(
+				owner,
+				repo,
+				Number(issueID),
+				accessToken
+			);
 
       console.log('gitHupPullRequest', gitHubPullRequest);
 
@@ -589,6 +580,11 @@ const root = {
         args.contributor_id,
         args.side
       );
+			// Merge if turborsc pull request status says there are enough votes to merge.
+			if (prVoteStatus.status === 200 && prVoteStatus.state === "merge") {
+				// Comment out line below to disable actual merging into the codebase. Status will still be merged in our db either way:
+				// await mergeGitHubPullRequest(args.owner, args.repo, Number(issueID))
+			}
 
       console.log('theory: postGetPullRequest');
       console.log(prVoteStatus);
@@ -764,6 +760,11 @@ const root = {
   },
   newPullRequest: async (database, pullRequestsDB, args) => {
     const prVoteStatus = module.exports.getPullRequest(database, args);
+		//{"data":{"createRepo":{"status":201,"repoName":"7db9a/demo","repoID":"0x42d","repoSignature":"0x197e","message":"repo created"}}}
+		return resCreateNameSpaceRepo;
+	},
+	newPullRequest: async (database, pullRequestsDB, args) => {
+		const prVoteStatus = module.exports.getPullRequest(database, args);
 
     const resNewPullRequest = newPullRequest(
       database,
@@ -827,20 +828,91 @@ const root = {
       args
     );
 
-    return status;
-  },
-  findOrCreateNameSpaceRepo: async function (args) {
-    const res = await findOrCreateNameSpaceRepo(args.repoName, args.repoID);
-    return res;
-  },
-  getNameSpaceRepo: async function (args) {
-    const res = await getNameSpaceRepo(args.repoNameOrID);
-    return res;
-  },
-  getTurboSrcIDfromInstance: async function () {
-    const turboSrcID = await getContributorAddress();
-    return turboSrcID;
-  }
+		return status;
+	},
+	findOrCreateNameSpaceRepo: async function (args) {
+		const res = await findOrCreateNameSpaceRepo(args.repoName, args.repoID);
+		return res;
+	},
+	getNameSpaceRepo: async function (args) {
+		const res = await getNameSpaceRepo(args.repoNameOrID);
+		return res;
+	},
+	getTurboSrcIDfromInstance: async function () {
+	  const turboSrcID = await getContributorAddress();
+	  return turboSrcID;
+	},
+	checkGitHubAccessTokenPermissions: async function (
+		owner,
+		repo,
+		contributorName,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		let instanceToken = "";
+		if (decryptedToken === contributorName) {
+			const encryptedToken = await getGithubToken()
+			instanceToken = await decryptAccessToken(encryptedToken)
+		}
+		const res = await checkGitHubAccessTokenPermissions(
+			owner,
+			repo,
+			decryptedToken,
+			contributorName,
+			instanceToken
+		);
+		return res;
+	},
+	verify: async function (contributorID, token) {
+		const decryptedAccessToken = await decryptAccessToken(token)
+		const contributorName = await postGetContributorName("", "", "", contributorID)
+
+		const res = await verify(contributorName, decryptedAccessToken)
+		return res.verified
+	},
+	mergeGitHubPullRequest: async function (
+		owner,
+		repo,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		const res = await mergeGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			decryptedToken,
+		);
+		return res;
+	},
+	closeGitHubPullRequest: async function (
+		owner,
+		repo,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		const res = await closeGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			decryptedToken,
+		);
+		return res;
+	},
+	getGitHubPullRequest: async function (
+		owner,
+		repo,
+		pull,
+		token
+	) {
+		const decryptedToken = await decryptAccessToken(token);
+		const res = await getGitHubPullRequest(
+			owner,
+			repo,
+			pull,
+			decryptedToken,
+		);
+		return res;
+	},
 };
 
 module.exports = root;

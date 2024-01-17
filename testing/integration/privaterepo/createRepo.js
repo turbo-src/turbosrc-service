@@ -1,11 +1,10 @@
 const assert = require('assert');
 const {
-  postGetVotePowerAmount,
-  postCreateRepo,
-  postGetContributorID
-} = require('../../../src/utils/requests');
-const { getGithubContributor } = require('../../../src/utils/config');
-const { getGithubToken } = require('../../../src/utils/gitHubUtil.js');
+	postGetVotePowerAmount,
+	postCreateRepo,
+	postGetContributorID,
+} = require("../../../src/utils/requests");
+const { getGithubContributor, getGithubToken } = require("../../../src/utils/config");
 
 const { getNameSpaceRepo } = require('../../../src/utils/requests');
 

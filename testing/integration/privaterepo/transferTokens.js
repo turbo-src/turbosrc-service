@@ -9,12 +9,10 @@ const {
 } = require('../../../src/utils/requests');
 const { Parser } = require('graphql/language/parser');
 const {
-  getContributorAddress,
-  getGithubContributor
-} = require('../../../src/utils/config');
-const {
-  getGithubToken
-} = require('../../../src/utils/gitHubUtil.js');
+        getContributorAddress,
+        getGithubContributor,
+        getGithubToken,
+      } = require('../../../src/utils/config')
 
 async function readDBfile (file) {
   const data = await fsPromises.readFile(file)

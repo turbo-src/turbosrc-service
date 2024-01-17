@@ -1,10 +1,9 @@
 const { Octokit, App } = require('octokit');
 const fsPromises = require('fs').promises;
 const fs = require('fs').promises;
-var path = require('path');
-const { getGithubToken } = require('./gitHubUtil');
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
+var path = require("path");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const gitHeadUtil = {
   gitHeadUtil: async function (owner, repo, forkBranch, headMinusNum) {

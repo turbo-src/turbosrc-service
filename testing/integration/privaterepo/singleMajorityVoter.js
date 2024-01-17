@@ -9,12 +9,11 @@ const { postSetVote,
 } = require('../../../src/utils/requests');
 const { Parser } = require('graphql/language/parser');
 const {
-  getGithubContributor
-} = require('../../../src/utils/config');
-const {
-  getGithubToken
-} = require('../../../src/utils/gitHubUtil.js');
-const {socket} = require('../../../socketConfig');
+        getContributorAddress,
+        getGithubContributor,
+        getGithubToken,
+      } = require('../../../src/utils/config')
+      const {socket} = require("../../../socketConfig")
 
 var snooze_ms = 1500;
 

@@ -9,13 +9,10 @@ const {
 const { Parser } = require('graphql/language/parser');
 
 const {
-  getContributorAddress,
-  getGithubContributor
-} = require('../../../src/utils/config');
-const {
-  getGithubToken
-} = require('../../../src/utils/gitHubUtil.js');
-
+        getContributorAddress,
+        getGithubContributor,
+        getGithubToken,
+      } = require('../../../src/utils/config')
 
 var snooze_ms = 5000;
 

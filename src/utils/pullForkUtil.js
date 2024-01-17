@@ -3,8 +3,7 @@ const sha256 = require('crypto-js/sha256');
 const fs = require('fs');
 const tar = require('tar');
 const { exec } = require('child_process');
-const childProcess = require('child_process');
-const { getPullRequest } = require('./gitHubUtil');
+const childProcess = require("child_process");
 const { gitHeadUtil } = require('./gitHeadUtil');
 
 

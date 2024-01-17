@@ -36,17 +36,14 @@ const {
   getRepoData,
   findOrCreateNameSpaceRepo,
   getNameSpaceRepo,
-  getTurboSrcIDfromInstance
-} = require('./src/lib/actions');
-const {
-  getGitHubPullRequest,
-  createPullRequest,
-  closePullRequest,
-  mergePullRequest,
-  fork,
+  getTurboSrcIDfromInstance,
+  checkGitHubAccessTokenPermissions,
   verify,
-  checkGithubTokenPermissions
-} = require('./src/utils/gitHubUtil');
+  createGitHubPullRequest,
+  getGitHubPullRequest,
+  closeGitHubPullRequest,
+  mergeGitHubPullRequest,
+} = require('./src/lib/actions')
 
 // defaultHash is the defaultHash, which are the same for now.
 // defaultHash !== pr_uid in the future.
@@ -124,6 +121,8 @@ var schema = buildSchema(`
   }
 
   type Permissions {
+    status: Int!
+    message: String!
     public_repo_scopes: Boolean!
     push_permissions: Boolean!
   }
@@ -242,10 +241,10 @@ var schema = buildSchema(`
     getRepoStatus(turboSrcID: String, repo_id: String): RepoStatus,
     getAuthorizedContributor(turboSrcID: String, contributor_id: String, repo_id: String): Boolean,
     verifyPullRequest(turboSrcID: String, defaultHash: String): String,
-    createPullRequest(turboSrcID: String, owner: String, repo: String, fork_branch: String, defaultHash: String, title: String): String,
-    closePullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
-    mergePullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String, side: String): String,
-    fork(turboSrcID: String, owner: String, repo: String, org: String): String,
+    createPullRequest(turboSrcID: String, owner: String, repo: String, fork_branch: String, defaultHash: String, title: String, token: String): String,
+    closePullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, token: String): String,
+    mergePullRequest(turboSrcID: String, owner: String, repo: String, defaultHash: String, token: String): String,
+    fork(turboSrcID: String, owner: String, repo: String, org: String, name: String, defaultBranchOnly: Boolean, token: String): String,
     getRepoData(turboSrcID: String, repo_id: String, contributor_id: String): RepoData,
     findOrCreateNameSpaceRepo(status: Int, message: String, repoName: String, repoID: String, repoSignature: String): NameSpaceRepo,
     getNameSpaceRepo(turboSrcID: String, repoNameOrID: String): NameSpaceRepo,
@@ -348,8 +347,8 @@ var root = {
     return res;
   },
   checkGithubTokenPermissions: async (args) => {
-    const permissions = await checkGithubTokenPermissions(args.owner, args.repo, args.contributor_name, args.token);
-    return permissions;
+    const permissions = await checkGitHubAccessTokenPermissions(args.owner, args.repo, args.contributor_name, args.token)
+    return permissions
   },
   getVotePowerAmount: async (args) => {
     const contributorTokenAmount = await getVotePowerAmount(fakeTurboSrcReposDB, args);
@@ -547,16 +546,16 @@ var root = {
   },
   //GH Server endpoints below
   createPullRequest: async (args) => {
-    await createPullRequest(args.owner, args.repo, args.fork_branch, args.defaultHash, args.title, args.issue_id);
+    await createGitHubPullRequest(args.owner, args.repo, args.title, args.fork_branch, args.defaultHash, args.token)
   },
   closePullRequest: async (args) => {
-    await closePullRequest(args.owner, args.repo, args.defaultHash);
+    await closeGitHubPullRequest(args.owner, args.repo, args.pull, args.token)
   },
   mergePullRequest: async (args) => {
-    await mergePullRequest(args.owner, args.repo, args.defaultHash);
+    await mergeGitHubPullRequest(args.owner, args.repo, args.pull, args.token)
   },
   fork: async (args) => {
-    await fork(args.owner, args.repo, args.org);
+    await createGitHubRepoFork(args.owner, args.repo, args.organization, args.name, args.defaultBranchOnly, args.token)
   },
 
   getTurboSrcIDfromInstance: async () => {
