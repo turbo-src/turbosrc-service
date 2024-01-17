@@ -18,10 +18,6 @@ let turboSrcID;
 
 console.log('requests to: ', turboSrcID);
 
-//const port =
-//  process.env.NODE_ENV === "fly"
-//    ? "https://turbosrc-service.fly.dev"
-//    : "http://localhost:4000";
 
 var root = {
   postCreateRepoTestDB: async (owner, repo, defaultHash, contributor_id, side) => {
