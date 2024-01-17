@@ -98,10 +98,6 @@ var root = {
     } else {
       throw new Error('Failed to load endpoint mode ' + endpoint.mode + ' of ' + serviceName);
     }
-<<<<<<< HEAD
-  }
-};
-=======
   },
   getGithubToken: async function(user) {
     let apiToken
@@ -129,6 +125,5 @@ decryptAccessToken: async function(accessToken) {
   return tokenRes.githubToken
 },
 }
->>>>>>> refactor/codehost
 
 module.exports = root;

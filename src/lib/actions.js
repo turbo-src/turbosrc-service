@@ -253,10 +253,7 @@ const root = {
 				pull,
 				accessToken
 			);
-      }
-    if (githubRes.mergeable === false && (response.state === 'open' || response.state === 'pre-open' || response.state === 'vote')) {
-      //response.state = "conflict"
-    }
+    
     response.mergeable = githubRes.mergeable;
 
     if (response.status === 404) {
@@ -299,6 +296,7 @@ const root = {
         defaultHash
       );
     }
+  }
     return response;
   },
   getRepoData: async (repo_id, contributor_id) => {
