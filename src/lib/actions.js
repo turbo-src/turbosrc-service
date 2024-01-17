@@ -566,9 +566,6 @@ const root = {
         args.contributor_id,
         args.side
       );
-      console.log('theory: resSetVote');
-      console.log(args);
-      console.log(resSetVote);
 
       // Now get the vote totals for the PR:
       prVoteStatus = await postGetPullRequest(
