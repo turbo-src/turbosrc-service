@@ -675,8 +675,7 @@ const root = {
     const resCreateUser = await postCreateUser(
       args.contributor_id,
       args.contributor_name,
-      args.contributor_signature,
-      args.token
+      args.contributor_password
     );
 
     // May need to implement in privateStore
