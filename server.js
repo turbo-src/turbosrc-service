@@ -73,7 +73,7 @@ async function getGithubUser () {
 }
 
 var schema = buildSchema(`
-  type CreateUserResponse {
+  type UserResponse {
     status: String!
     message: String!
     info: UserInfo
@@ -222,7 +222,7 @@ var schema = buildSchema(`
       contributor_id: String,
       contributor_name: String,
       contributor_password: String,
-    ): CreateUserResponse,
+    ): UserResponse,
     getUser(turboSrcID: String, contributor_id: String): User,
     findOrCreateUser(turboSrcID: String, owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): User,
     checkGithubTokenPermissions(turboSrcID: String, owner: String, repo: String, contributor_name: String, token: String): Permissions,
