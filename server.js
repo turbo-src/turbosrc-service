@@ -223,7 +223,7 @@ var schema = buildSchema(`
       contributor_name: String,
       contributor_password: String,
     ): UserResponse,
-    getUser(turboSrcID: String, contributor_id: String): User,
+    getUser(contributor_id: String): UserResponse,
     findOrCreateUser(turboSrcID: String, owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): User,
     checkGithubTokenPermissions(turboSrcID: String, owner: String, repo: String, contributor_name: String, token: String): Permissions,
     getContributorName(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String): String,

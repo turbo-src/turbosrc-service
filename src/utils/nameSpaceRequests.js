@@ -83,12 +83,23 @@ var root = {
     return json.data.getContributorSignature;
   },
   getUser: async (contributor_id) => {
-    console.log('made it to getUser');
     const endpoint = await getServiceEndpoint('namespace');
     const res = await superagent
       .post(endpoint)
       .send({
-        query: `{ getUser(contributor_id: "${contributor_id}") {contributor_name, contributor_id, contributor_signature, token}}`
+        query: `
+	{
+	  getUser(contributor_id: "${contributor_id}")
+	  {
+              status
+              message
+              info {
+                contributor_id
+                contributor_name
+              }
+            }
+          }
+        `,
       })
       .set('accept', 'json');
     const json = JSON.parse(res.text);
