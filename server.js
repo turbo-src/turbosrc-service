@@ -80,8 +80,8 @@ var schema = buildSchema(`
   }
 
   type UserInfo {
-    contributor_id: String!
-    contributor_name: String!
+    contributor_id: String
+    contributor_name: String
   }
 
   type PullRequest {
