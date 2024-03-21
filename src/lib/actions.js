@@ -41,6 +41,7 @@ const {
   postGetContributorName,
   postGetContributorSignature,
   getUser,
+  getUserByName,
   findOrCreateUser,
   findOrCreateNameSpaceRepo,
   getNameSpaceRepo
@@ -685,6 +686,10 @@ const root = {
   },
   getUser: async (args) => {
     const resgetUser = await getUser(args.contributor_id);
+    return resgetUser;
+  },
+  getUserByName: async (args) => {
+    const resgetUser = await getUserByName(args.contributor_name);
     return resgetUser;
   },
   findOrCreateUser: async (args) => {

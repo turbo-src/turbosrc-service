@@ -31,6 +31,7 @@ const {
   checkRejectPullRequestHistory,
   getVotePowerAmount,
   getUser,
+  getUserByName,
   findOrCreateUser,
   getVotes,
   getRepoData,
@@ -224,6 +225,7 @@ var schema = buildSchema(`
       contributor_password: String,
     ): UserResponse,
     getUser(contributor_id: String): UserResponse,
+    getUserByName(contributor_name: String): UserResponse,
     findOrCreateUser(turboSrcID: String, owner: String, repo: String, contributor_id: String, contributor_name: String, contributor_signature: String, token: String): User,
     checkGithubTokenPermissions(turboSrcID: String, owner: String, repo: String, contributor_name: String, token: String): Permissions,
     getContributorName(turboSrcID: String, owner: String, repo: String, defaultHash: String, contributor_id: String): String,
@@ -333,6 +335,10 @@ var root = {
   },
   getUser: async (args) => {
     const res = await getUser(args);
+    return res;
+  },
+  getUserByName: async (args) => {
+    const res = await getUserByName(args);
     return res;
   },
   findOrCreateUser: async (args) => {

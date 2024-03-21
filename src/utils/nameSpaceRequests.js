@@ -105,6 +105,29 @@ var root = {
     const json = JSON.parse(res.text);
     return json.data.getUser;
   },
+  getUserByName: async (contributor_name) => {
+    const endpoint = await getServiceEndpoint('namespace');
+    const res = await superagent
+      .post(endpoint)
+      .send({
+        query: `
+	{
+	  getUserByName(contributor_name: "${contributor_name}")
+	  {
+              status
+              message
+              info {
+                contributor_id
+                contributor_name
+              }
+            }
+          }
+        `,
+      })
+      .set('accept', 'json');
+    const json = JSON.parse(res.text);
+    return json.data.getUserByName;
+  },
   findOrCreateUser: async (
     owner,
     repo,
